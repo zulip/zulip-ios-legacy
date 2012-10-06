@@ -14,10 +14,6 @@
 		C31673911620DB6B00CE9FE5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C31673901620DB6B00CE9FE5 /* main.m */; };
 		C31673951620DB6B00CE9FE5 /* HumbugAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C31673941620DB6B00CE9FE5 /* HumbugAppDelegate.m */; };
 		C31673981620DB6B00CE9FE5 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = C31673961620DB6B00CE9FE5 /* MainWindow.xib */; };
-		C316739B1620DB6B00CE9FE5 /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C316739A1620DB6B00CE9FE5 /* FirstViewController.m */; };
-		C316739E1620DB6B00CE9FE5 /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C316739D1620DB6B00CE9FE5 /* SecondViewController.m */; };
-		C31673A11620DB6B00CE9FE5 /* FirstView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C316739F1620DB6B00CE9FE5 /* FirstView.xib */; };
-		C31673A41620DB6B00CE9FE5 /* SecondView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C31673A21620DB6B00CE9FE5 /* SecondView.xib */; };
 		C31673AC1620DB6C00CE9FE5 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673AB1620DB6C00CE9FE5 /* SenTestingKit.framework */; };
 		C31673AD1620DB6C00CE9FE5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673841620DB6B00CE9FE5 /* UIKit.framework */; };
 		C31673AE1620DB6C00CE9FE5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673861620DB6B00CE9FE5 /* Foundation.framework */; };
@@ -25,6 +21,20 @@
 		C31673B71620DB6C00CE9FE5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C31673B51620DB6C00CE9FE5 /* InfoPlist.strings */; };
 		C31673B91620DB6C00CE9FE5 /* HumbugTests.h in Resources */ = {isa = PBXBuildFile; fileRef = C31673B81620DB6C00CE9FE5 /* HumbugTests.h */; };
 		C31673BB1620DB6C00CE9FE5 /* HumbugTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C31673BA1620DB6C00CE9FE5 /* HumbugTests.m */; };
+		E50D7573163318DA00251D1F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E50D7572163318D900251D1F /* Security.framework */; };
+		E50D757616331B6600251D1F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E50D757516331B6600251D1F /* Security.framework */; };
+		E50D757916331D7A00251D1F /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = E50D757816331D7A00251D1F /* KeychainItemWrapper.m */; };
+		E5726A2816332BF800ED8BB1 /* StreamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5726A2616332BF800ED8BB1 /* StreamViewController.m */; };
+		E5726A2916332BF800ED8BB1 /* StreamViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E5726A2716332BF800ED8BB1 /* StreamViewController.xib */; };
+		E577A7441620F2BE002D9651 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E577A7431620F2BE002D9651 /* Default-568h@2x.png */; };
+		E577A74616224B8D002D9651 /* robot_gravatar.png in Resources */ = {isa = PBXBuildFile; fileRef = E577A74516224B8D002D9651 /* robot_gravatar.png */; };
+		E577A74A16224C37002D9651 /* robot_gravatar.png in Resources */ = {isa = PBXBuildFile; fileRef = E577A74916224C37002D9651 /* robot_gravatar.png */; };
+		E577A74D16226AC4002D9651 /* MessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E577A74C16226AC4002D9651 /* MessageCell.m */; };
+		E577A74F16226AFF002D9651 /* MessageCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E577A74E16226AFF002D9651 /* MessageCellView.xib */; };
+		E598E78A1634A9950022BF4A /* ErrorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E598E7881634A9940022BF4A /* ErrorViewController.m */; };
+		E598E78B1634A9950022BF4A /* ErrorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E598E7891634A9940022BF4A /* ErrorViewController.xib */; };
+		E5CDE07C162C88A800BBD773 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5CDE07A162C88A800BBD773 /* LoginViewController.m */; };
+		E5CDE07D162C88A800BBD773 /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E5CDE07B162C88A800BBD773 /* LoginViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,25 +52,38 @@
 		C31673841620DB6B00CE9FE5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C31673861620DB6B00CE9FE5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C31673881620DB6B00CE9FE5 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		C316738C1620DB6B00CE9FE5 /* Humbug-Info.plist */ = {isa = PBXFileReference; path = "Humbug-Info.plist"; sourceTree = "<group>"; };
+		C316738C1620DB6B00CE9FE5 /* Humbug-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Humbug-Info.plist"; sourceTree = "<group>"; };
 		C316738E1620DB6B00CE9FE5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C31673901620DB6B00CE9FE5 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		C31673921620DB6B00CE9FE5 /* Humbug-Prefix.pch */ = {isa = PBXFileReference; path = "Humbug-Prefix.pch"; sourceTree = "<group>"; };
-		C31673931620DB6B00CE9FE5 /* HumbugAppDelegate.h */ = {isa = PBXFileReference; path = HumbugAppDelegate.h; sourceTree = "<group>"; };
+		C31673921620DB6B00CE9FE5 /* Humbug-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Humbug-Prefix.pch"; sourceTree = "<group>"; };
+		C31673931620DB6B00CE9FE5 /* HumbugAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HumbugAppDelegate.h; sourceTree = "<group>"; };
 		C31673941620DB6B00CE9FE5 /* HumbugAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HumbugAppDelegate.m; sourceTree = "<group>"; };
 		C31673971620DB6B00CE9FE5 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
-		C31673991620DB6B00CE9FE5 /* FirstViewController.h */ = {isa = PBXFileReference; path = FirstViewController.h; sourceTree = "<group>"; };
-		C316739A1620DB6B00CE9FE5 /* FirstViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FirstViewController.m; sourceTree = "<group>"; };
-		C316739C1620DB6B00CE9FE5 /* SecondViewController.h */ = {isa = PBXFileReference; path = SecondViewController.h; sourceTree = "<group>"; };
-		C316739D1620DB6B00CE9FE5 /* SecondViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SecondViewController.m; sourceTree = "<group>"; };
-		C31673A01620DB6B00CE9FE5 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/FirstView.xib; sourceTree = "<group>"; };
-		C31673A31620DB6B00CE9FE5 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SecondView.xib; sourceTree = "<group>"; };
 		C31673AA1620DB6C00CE9FE5 /* HumbugTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HumbugTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C31673AB1620DB6C00CE9FE5 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
-		C31673B41620DB6C00CE9FE5 /* HumbugTests-Info.plist */ = {isa = PBXFileReference; path = "HumbugTests-Info.plist"; sourceTree = "<group>"; };
+		C31673B41620DB6C00CE9FE5 /* HumbugTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HumbugTests-Info.plist"; sourceTree = "<group>"; };
 		C31673B61620DB6C00CE9FE5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C31673B81620DB6C00CE9FE5 /* HumbugTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HumbugTests.h; sourceTree = "<group>"; };
 		C31673BA1620DB6C00CE9FE5 /* HumbugTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HumbugTests.m; sourceTree = "<group>"; };
+		E50D7572163318D900251D1F /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		E50D757516331B6600251D1F /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		E50D757716331D7A00251D1F /* KeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainItemWrapper.h; sourceTree = "<group>"; };
+		E50D757816331D7A00251D1F /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
+		E5726A2516332BF800ED8BB1 /* StreamViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamViewController.h; sourceTree = "<group>"; };
+		E5726A2616332BF800ED8BB1 /* StreamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreamViewController.m; sourceTree = "<group>"; };
+		E5726A2716332BF800ED8BB1 /* StreamViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StreamViewController.xib; sourceTree = "<group>"; };
+		E577A7431620F2BE002D9651 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		E577A74516224B8D002D9651 /* robot_gravatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = robot_gravatar.png; sourceTree = "<group>"; };
+		E577A74916224C37002D9651 /* robot_gravatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = robot_gravatar.png; sourceTree = "<group>"; };
+		E577A74B16226AC4002D9651 /* MessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageCell.h; sourceTree = "<group>"; };
+		E577A74C16226AC4002D9651 /* MessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageCell.m; sourceTree = "<group>"; };
+		E577A74E16226AFF002D9651 /* MessageCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MessageCellView.xib; sourceTree = "<group>"; };
+		E598E7871634A9940022BF4A /* ErrorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ErrorViewController.h; sourceTree = "<group>"; };
+		E598E7881634A9940022BF4A /* ErrorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ErrorViewController.m; sourceTree = "<group>"; };
+		E598E7891634A9940022BF4A /* ErrorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ErrorViewController.xib; sourceTree = "<group>"; };
+		E5CDE079162C88A800BBD773 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		E5CDE07A162C88A800BBD773 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		E5CDE07B162C88A800BBD773 /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,9 +91,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E50D7573163318DA00251D1F /* Security.framework in Frameworks */,
 				C31673851620DB6B00CE9FE5 /* UIKit.framework in Frameworks */,
 				C31673871620DB6B00CE9FE5 /* Foundation.framework in Frameworks */,
 				C31673891620DB6B00CE9FE5 /* CoreGraphics.framework in Frameworks */,
+				E50D757616331B6600251D1F /* Security.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,6 +116,9 @@
 		C31673751620DB6A00CE9FE5 = {
 			isa = PBXGroup;
 			children = (
+				E50D7572163318D900251D1F /* Security.framework */,
+				E577A74916224C37002D9651 /* robot_gravatar.png */,
+				E577A7431620F2BE002D9651 /* Default-568h@2x.png */,
 				C316738A1620DB6B00CE9FE5 /* Humbug */,
 				C31673B21620DB6C00CE9FE5 /* HumbugTests */,
 				C31673831620DB6B00CE9FE5 /* Frameworks */,
@@ -110,6 +138,7 @@
 		C31673831620DB6B00CE9FE5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E50D757516331B6600251D1F /* Security.framework */,
 				C31673841620DB6B00CE9FE5 /* UIKit.framework */,
 				C31673861620DB6B00CE9FE5 /* Foundation.framework */,
 				C31673881620DB6B00CE9FE5 /* CoreGraphics.framework */,
@@ -121,15 +150,24 @@
 		C316738A1620DB6B00CE9FE5 /* Humbug */ = {
 			isa = PBXGroup;
 			children = (
+				E50D757716331D7A00251D1F /* KeychainItemWrapper.h */,
+				E50D757816331D7A00251D1F /* KeychainItemWrapper.m */,
+				E5CDE079162C88A800BBD773 /* LoginViewController.h */,
+				E5CDE07A162C88A800BBD773 /* LoginViewController.m */,
+				E5CDE07B162C88A800BBD773 /* LoginViewController.xib */,
 				C31673931620DB6B00CE9FE5 /* HumbugAppDelegate.h */,
 				C31673941620DB6B00CE9FE5 /* HumbugAppDelegate.m */,
 				C31673961620DB6B00CE9FE5 /* MainWindow.xib */,
-				C31673991620DB6B00CE9FE5 /* FirstViewController.h */,
-				C316739A1620DB6B00CE9FE5 /* FirstViewController.m */,
-				C316739C1620DB6B00CE9FE5 /* SecondViewController.h */,
-				C316739D1620DB6B00CE9FE5 /* SecondViewController.m */,
-				C316739F1620DB6B00CE9FE5 /* FirstView.xib */,
-				C31673A21620DB6B00CE9FE5 /* SecondView.xib */,
+				E5726A2516332BF800ED8BB1 /* StreamViewController.h */,
+				E5726A2616332BF800ED8BB1 /* StreamViewController.m */,
+				E5726A2716332BF800ED8BB1 /* StreamViewController.xib */,
+				E577A74B16226AC4002D9651 /* MessageCell.h */,
+				E577A74C16226AC4002D9651 /* MessageCell.m */,
+				E577A74E16226AFF002D9651 /* MessageCellView.xib */,
+				E598E7871634A9940022BF4A /* ErrorViewController.h */,
+				E598E7881634A9940022BF4A /* ErrorViewController.m */,
+				E598E7891634A9940022BF4A /* ErrorViewController.xib */,
+				E577A74516224B8D002D9651 /* robot_gravatar.png */,
 				C316738B1620DB6B00CE9FE5 /* Supporting Files */,
 			);
 			path = Humbug;
@@ -209,6 +247,9 @@
 /* Begin PBXProject section */
 		C31673771620DB6A00CE9FE5 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0450;
+			};
 			buildConfigurationList = C316737A1620DB6A00CE9FE5 /* Build configuration list for PBXProject "Humbug" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
@@ -234,8 +275,13 @@
 			files = (
 				C316738F1620DB6B00CE9FE5 /* InfoPlist.strings in Resources */,
 				C31673981620DB6B00CE9FE5 /* MainWindow.xib in Resources */,
-				C31673A11620DB6B00CE9FE5 /* FirstView.xib in Resources */,
-				C31673A41620DB6B00CE9FE5 /* SecondView.xib in Resources */,
+				E577A7441620F2BE002D9651 /* Default-568h@2x.png in Resources */,
+				E577A74616224B8D002D9651 /* robot_gravatar.png in Resources */,
+				E577A74A16224C37002D9651 /* robot_gravatar.png in Resources */,
+				E577A74F16226AFF002D9651 /* MessageCellView.xib in Resources */,
+				E5CDE07D162C88A800BBD773 /* LoginViewController.xib in Resources */,
+				E5726A2916332BF800ED8BB1 /* StreamViewController.xib in Resources */,
+				E598E78B1634A9950022BF4A /* ErrorViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -273,8 +319,11 @@
 			files = (
 				C31673911620DB6B00CE9FE5 /* main.m in Sources */,
 				C31673951620DB6B00CE9FE5 /* HumbugAppDelegate.m in Sources */,
-				C316739B1620DB6B00CE9FE5 /* FirstViewController.m in Sources */,
-				C316739E1620DB6B00CE9FE5 /* SecondViewController.m in Sources */,
+				E577A74D16226AC4002D9651 /* MessageCell.m in Sources */,
+				E5CDE07C162C88A800BBD773 /* LoginViewController.m in Sources */,
+				E50D757916331D7A00251D1F /* KeychainItemWrapper.m in Sources */,
+				E5726A2816332BF800ED8BB1 /* StreamViewController.m in Sources */,
+				E598E78A1634A9950022BF4A /* ErrorViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -311,22 +360,6 @@
 				C31673971620DB6B00CE9FE5 /* en */,
 			);
 			name = MainWindow.xib;
-			sourceTree = "<group>";
-		};
-		C316739F1620DB6B00CE9FE5 /* FirstView.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				C31673A01620DB6B00CE9FE5 /* en */,
-			);
-			name = FirstView.xib;
-			sourceTree = "<group>";
-		};
-		C31673A21620DB6B00CE9FE5 /* SecondView.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				C31673A31620DB6B00CE9FE5 /* en */,
-			);
-			name = SecondView.xib;
 			sourceTree = "<group>";
 		};
 		C31673B51620DB6C00CE9FE5 /* InfoPlist.strings */ = {
@@ -388,7 +421,9 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Humbug/Humbug-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "Humbug/Humbug-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -399,7 +434,9 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Humbug/Humbug-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "Humbug/Humbug-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -415,6 +452,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Humbug/Humbug-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "HumbugTests/HumbugTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
@@ -432,6 +470,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Humbug/Humbug-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "HumbugTests/HumbugTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
@@ -458,6 +497,7 @@
 				C31673C01620DB6C00CE9FE5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C31673C11620DB6C00CE9FE5 /* Build configuration list for PBXNativeTarget "HumbugTests" */ = {
 			isa = XCConfigurationList;
@@ -466,6 +506,7 @@
 				C31673C31620DB6C00CE9FE5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

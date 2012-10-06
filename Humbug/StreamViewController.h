@@ -1,7 +1,8 @@
 #import <UIKit/UIKit.h>
 #import "MessageCell.h"
+#import "HumbugAppDelegate.h"
 
-@interface FirstViewController : UITableViewController {
+@interface StreamViewController : UITableViewController {
     NSMutableArray *listData;
     NSMutableData *responseData;
     NSMutableDictionary *gravatars;
@@ -11,6 +12,7 @@
 
 @property(nonatomic,retain) NSMutableArray *listData;
 @property(nonatomic,retain) NSMutableDictionary *gravatars;
+@property(nonatomic,retain) HumbugAppDelegate *delegate;
 
 @property(assign) int first;
 @property(assign) int last;
