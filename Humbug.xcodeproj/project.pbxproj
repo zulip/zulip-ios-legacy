@@ -1,0 +1,473 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C31673851620DB6B00CE9FE5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673841620DB6B00CE9FE5 /* UIKit.framework */; };
+		C31673871620DB6B00CE9FE5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673861620DB6B00CE9FE5 /* Foundation.framework */; };
+		C31673891620DB6B00CE9FE5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673881620DB6B00CE9FE5 /* CoreGraphics.framework */; };
+		C316738F1620DB6B00CE9FE5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C316738D1620DB6B00CE9FE5 /* InfoPlist.strings */; };
+		C31673911620DB6B00CE9FE5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C31673901620DB6B00CE9FE5 /* main.m */; };
+		C31673951620DB6B00CE9FE5 /* HumbugAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C31673941620DB6B00CE9FE5 /* HumbugAppDelegate.m */; };
+		C31673981620DB6B00CE9FE5 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = C31673961620DB6B00CE9FE5 /* MainWindow.xib */; };
+		C316739B1620DB6B00CE9FE5 /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C316739A1620DB6B00CE9FE5 /* FirstViewController.m */; };
+		C316739E1620DB6B00CE9FE5 /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C316739D1620DB6B00CE9FE5 /* SecondViewController.m */; };
+		C31673A11620DB6B00CE9FE5 /* FirstView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C316739F1620DB6B00CE9FE5 /* FirstView.xib */; };
+		C31673A41620DB6B00CE9FE5 /* SecondView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C31673A21620DB6B00CE9FE5 /* SecondView.xib */; };
+		C31673AC1620DB6C00CE9FE5 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673AB1620DB6C00CE9FE5 /* SenTestingKit.framework */; };
+		C31673AD1620DB6C00CE9FE5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673841620DB6B00CE9FE5 /* UIKit.framework */; };
+		C31673AE1620DB6C00CE9FE5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673861620DB6B00CE9FE5 /* Foundation.framework */; };
+		C31673AF1620DB6C00CE9FE5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673881620DB6B00CE9FE5 /* CoreGraphics.framework */; };
+		C31673B71620DB6C00CE9FE5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C31673B51620DB6C00CE9FE5 /* InfoPlist.strings */; };
+		C31673B91620DB6C00CE9FE5 /* HumbugTests.h in Resources */ = {isa = PBXBuildFile; fileRef = C31673B81620DB6C00CE9FE5 /* HumbugTests.h */; };
+		C31673BB1620DB6C00CE9FE5 /* HumbugTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C31673BA1620DB6C00CE9FE5 /* HumbugTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C31673B01620DB6C00CE9FE5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C31673771620DB6A00CE9FE5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C316737F1620DB6B00CE9FE5;
+			remoteInfo = Humbug;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		C31673801620DB6B00CE9FE5 /* Humbug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Humbug.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C31673841620DB6B00CE9FE5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		C31673861620DB6B00CE9FE5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		C31673881620DB6B00CE9FE5 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		C316738C1620DB6B00CE9FE5 /* Humbug-Info.plist */ = {isa = PBXFileReference; path = "Humbug-Info.plist"; sourceTree = "<group>"; };
+		C316738E1620DB6B00CE9FE5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		C31673901620DB6B00CE9FE5 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		C31673921620DB6B00CE9FE5 /* Humbug-Prefix.pch */ = {isa = PBXFileReference; path = "Humbug-Prefix.pch"; sourceTree = "<group>"; };
+		C31673931620DB6B00CE9FE5 /* HumbugAppDelegate.h */ = {isa = PBXFileReference; path = HumbugAppDelegate.h; sourceTree = "<group>"; };
+		C31673941620DB6B00CE9FE5 /* HumbugAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HumbugAppDelegate.m; sourceTree = "<group>"; };
+		C31673971620DB6B00CE9FE5 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
+		C31673991620DB6B00CE9FE5 /* FirstViewController.h */ = {isa = PBXFileReference; path = FirstViewController.h; sourceTree = "<group>"; };
+		C316739A1620DB6B00CE9FE5 /* FirstViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FirstViewController.m; sourceTree = "<group>"; };
+		C316739C1620DB6B00CE9FE5 /* SecondViewController.h */ = {isa = PBXFileReference; path = SecondViewController.h; sourceTree = "<group>"; };
+		C316739D1620DB6B00CE9FE5 /* SecondViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SecondViewController.m; sourceTree = "<group>"; };
+		C31673A01620DB6B00CE9FE5 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/FirstView.xib; sourceTree = "<group>"; };
+		C31673A31620DB6B00CE9FE5 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SecondView.xib; sourceTree = "<group>"; };
+		C31673AA1620DB6C00CE9FE5 /* HumbugTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HumbugTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C31673AB1620DB6C00CE9FE5 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		C31673B41620DB6C00CE9FE5 /* HumbugTests-Info.plist */ = {isa = PBXFileReference; path = "HumbugTests-Info.plist"; sourceTree = "<group>"; };
+		C31673B61620DB6C00CE9FE5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		C31673B81620DB6C00CE9FE5 /* HumbugTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HumbugTests.h; sourceTree = "<group>"; };
+		C31673BA1620DB6C00CE9FE5 /* HumbugTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HumbugTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C316737D1620DB6B00CE9FE5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C31673851620DB6B00CE9FE5 /* UIKit.framework in Frameworks */,
+				C31673871620DB6B00CE9FE5 /* Foundation.framework in Frameworks */,
+				C31673891620DB6B00CE9FE5 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C31673A61620DB6C00CE9FE5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C31673AC1620DB6C00CE9FE5 /* SenTestingKit.framework in Frameworks */,
+				C31673AD1620DB6C00CE9FE5 /* UIKit.framework in Frameworks */,
+				C31673AE1620DB6C00CE9FE5 /* Foundation.framework in Frameworks */,
+				C31673AF1620DB6C00CE9FE5 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C31673751620DB6A00CE9FE5 = {
+			isa = PBXGroup;
+			children = (
+				C316738A1620DB6B00CE9FE5 /* Humbug */,
+				C31673B21620DB6C00CE9FE5 /* HumbugTests */,
+				C31673831620DB6B00CE9FE5 /* Frameworks */,
+				C31673811620DB6B00CE9FE5 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C31673811620DB6B00CE9FE5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C31673801620DB6B00CE9FE5 /* Humbug.app */,
+				C31673AA1620DB6C00CE9FE5 /* HumbugTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C31673831620DB6B00CE9FE5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C31673841620DB6B00CE9FE5 /* UIKit.framework */,
+				C31673861620DB6B00CE9FE5 /* Foundation.framework */,
+				C31673881620DB6B00CE9FE5 /* CoreGraphics.framework */,
+				C31673AB1620DB6C00CE9FE5 /* SenTestingKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C316738A1620DB6B00CE9FE5 /* Humbug */ = {
+			isa = PBXGroup;
+			children = (
+				C31673931620DB6B00CE9FE5 /* HumbugAppDelegate.h */,
+				C31673941620DB6B00CE9FE5 /* HumbugAppDelegate.m */,
+				C31673961620DB6B00CE9FE5 /* MainWindow.xib */,
+				C31673991620DB6B00CE9FE5 /* FirstViewController.h */,
+				C316739A1620DB6B00CE9FE5 /* FirstViewController.m */,
+				C316739C1620DB6B00CE9FE5 /* SecondViewController.h */,
+				C316739D1620DB6B00CE9FE5 /* SecondViewController.m */,
+				C316739F1620DB6B00CE9FE5 /* FirstView.xib */,
+				C31673A21620DB6B00CE9FE5 /* SecondView.xib */,
+				C316738B1620DB6B00CE9FE5 /* Supporting Files */,
+			);
+			path = Humbug;
+			sourceTree = "<group>";
+		};
+		C316738B1620DB6B00CE9FE5 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C316738C1620DB6B00CE9FE5 /* Humbug-Info.plist */,
+				C316738D1620DB6B00CE9FE5 /* InfoPlist.strings */,
+				C31673901620DB6B00CE9FE5 /* main.m */,
+				C31673921620DB6B00CE9FE5 /* Humbug-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C31673B21620DB6C00CE9FE5 /* HumbugTests */ = {
+			isa = PBXGroup;
+			children = (
+				C31673B81620DB6C00CE9FE5 /* HumbugTests.h */,
+				C31673BA1620DB6C00CE9FE5 /* HumbugTests.m */,
+				C31673B31620DB6C00CE9FE5 /* Supporting Files */,
+			);
+			path = HumbugTests;
+			sourceTree = "<group>";
+		};
+		C31673B31620DB6C00CE9FE5 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C31673B41620DB6C00CE9FE5 /* HumbugTests-Info.plist */,
+				C31673B51620DB6C00CE9FE5 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C316737F1620DB6B00CE9FE5 /* Humbug */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C31673BE1620DB6C00CE9FE5 /* Build configuration list for PBXNativeTarget "Humbug" */;
+			buildPhases = (
+				C316737C1620DB6B00CE9FE5 /* Sources */,
+				C316737D1620DB6B00CE9FE5 /* Frameworks */,
+				C316737E1620DB6B00CE9FE5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Humbug;
+			productName = Humbug;
+			productReference = C31673801620DB6B00CE9FE5 /* Humbug.app */;
+			productType = "com.apple.product-type.application";
+		};
+		C31673A91620DB6C00CE9FE5 /* HumbugTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C31673C11620DB6C00CE9FE5 /* Build configuration list for PBXNativeTarget "HumbugTests" */;
+			buildPhases = (
+				C31673A51620DB6C00CE9FE5 /* Sources */,
+				C31673A61620DB6C00CE9FE5 /* Frameworks */,
+				C31673A71620DB6C00CE9FE5 /* Resources */,
+				C31673A81620DB6C00CE9FE5 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C31673B11620DB6C00CE9FE5 /* PBXTargetDependency */,
+			);
+			name = HumbugTests;
+			productName = HumbugTests;
+			productReference = C31673AA1620DB6C00CE9FE5 /* HumbugTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C31673771620DB6A00CE9FE5 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = C316737A1620DB6A00CE9FE5 /* Build configuration list for PBXProject "Humbug" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = C31673751620DB6A00CE9FE5;
+			productRefGroup = C31673811620DB6B00CE9FE5 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C316737F1620DB6B00CE9FE5 /* Humbug */,
+				C31673A91620DB6C00CE9FE5 /* HumbugTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C316737E1620DB6B00CE9FE5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C316738F1620DB6B00CE9FE5 /* InfoPlist.strings in Resources */,
+				C31673981620DB6B00CE9FE5 /* MainWindow.xib in Resources */,
+				C31673A11620DB6B00CE9FE5 /* FirstView.xib in Resources */,
+				C31673A41620DB6B00CE9FE5 /* SecondView.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C31673A71620DB6C00CE9FE5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C31673B71620DB6C00CE9FE5 /* InfoPlist.strings in Resources */,
+				C31673B91620DB6C00CE9FE5 /* HumbugTests.h in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		C31673A81620DB6C00CE9FE5 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C316737C1620DB6B00CE9FE5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C31673911620DB6B00CE9FE5 /* main.m in Sources */,
+				C31673951620DB6B00CE9FE5 /* HumbugAppDelegate.m in Sources */,
+				C316739B1620DB6B00CE9FE5 /* FirstViewController.m in Sources */,
+				C316739E1620DB6B00CE9FE5 /* SecondViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C31673A51620DB6C00CE9FE5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C31673BB1620DB6C00CE9FE5 /* HumbugTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C31673B11620DB6C00CE9FE5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C316737F1620DB6B00CE9FE5 /* Humbug */;
+			targetProxy = C31673B01620DB6C00CE9FE5 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		C316738D1620DB6B00CE9FE5 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C316738E1620DB6B00CE9FE5 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		C31673961620DB6B00CE9FE5 /* MainWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C31673971620DB6B00CE9FE5 /* en */,
+			);
+			name = MainWindow.xib;
+			sourceTree = "<group>";
+		};
+		C316739F1620DB6B00CE9FE5 /* FirstView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C31673A01620DB6B00CE9FE5 /* en */,
+			);
+			name = FirstView.xib;
+			sourceTree = "<group>";
+		};
+		C31673A21620DB6B00CE9FE5 /* SecondView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C31673A31620DB6B00CE9FE5 /* en */,
+			);
+			name = SecondView.xib;
+			sourceTree = "<group>";
+		};
+		C31673B51620DB6C00CE9FE5 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C31673B61620DB6C00CE9FE5 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C31673BC1620DB6C00CE9FE5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		C31673BD1620DB6C00CE9FE5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C31673BF1620DB6C00CE9FE5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Humbug/Humbug-Prefix.pch";
+				INFOPLIST_FILE = "Humbug/Humbug-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		C31673C01620DB6C00CE9FE5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Humbug/Humbug-Prefix.pch";
+				INFOPLIST_FILE = "Humbug/Humbug-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		C31673C21620DB6C00CE9FE5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Humbug.app/Humbug";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Humbug/Humbug-Prefix.pch";
+				INFOPLIST_FILE = "HumbugTests/HumbugTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		C31673C31620DB6C00CE9FE5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Humbug.app/Humbug";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Humbug/Humbug-Prefix.pch";
+				INFOPLIST_FILE = "HumbugTests/HumbugTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C316737A1620DB6A00CE9FE5 /* Build configuration list for PBXProject "Humbug" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C31673BC1620DB6C00CE9FE5 /* Debug */,
+				C31673BD1620DB6C00CE9FE5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C31673BE1620DB6C00CE9FE5 /* Build configuration list for PBXNativeTarget "Humbug" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C31673BF1620DB6C00CE9FE5 /* Debug */,
+				C31673C01620DB6C00CE9FE5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		C31673C11620DB6C00CE9FE5 /* Build configuration list for PBXNativeTarget "HumbugTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C31673C21620DB6C00CE9FE5 /* Debug */,
+				C31673C31620DB6C00CE9FE5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C31673771620DB6A00CE9FE5 /* Project object */;
+}
