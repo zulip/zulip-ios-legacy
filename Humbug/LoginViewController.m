@@ -33,7 +33,6 @@
 {
     bool loggedIn = [appDelegate login:email.text password:password.text];
     if (loggedIn) {
-        [appDelegate.loginViewController.view removeFromSuperview];
         [appDelegate viewStream];
     } else {
         NSLog(@"Failed to login!");

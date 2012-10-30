@@ -22,6 +22,10 @@
     NSString *storedApiKey = [keychainItem objectForKey:kSecValueData];
     NSString *storedEmail = [keychainItem objectForKey:kSecAttrAccount];
 
+    self.streamViewController = [[StreamViewController alloc] init];
+    // Bottom padding so you can see new messages arrive.
+    self.streamViewController.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, 200.0, 0.0);
+
     if (storedApiKey == @"") {
         // No credentials stored; we need to log in.
         self.loginViewController = [[LoginViewController alloc] init];
@@ -30,10 +34,6 @@
         // We have credentials, so try to reuse them. We may still have to log in if they are stale.
         self.apiKey = storedApiKey;
         self.email = storedEmail;
-
-        self.streamViewController = [[StreamViewController alloc] init];
-        // Bottom padding so you can see new messages arrive.
-        self.streamViewController.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, 200.0, 0.0);
         [self.window setRootViewController:self.streamViewController];
     }
     self.clientID = @"";
@@ -152,6 +152,7 @@
 
 - (void)viewStream
 {
+    [self.loginViewController.view removeFromSuperview];
     [self.window addSubview:self.streamViewController.view];
 }
 

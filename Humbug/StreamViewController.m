@@ -21,7 +21,10 @@
     self.listData = [[NSMutableArray alloc] init];
     self.gravatars = [[NSMutableDictionary alloc] init];
     self.delegate = (HumbugAppDelegate *)[UIApplication sharedApplication].delegate;
+}
 
+- (void)viewWillAppear:(BOOL)animated
+{
     dispatch_queue_t downloadQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(downloadQueue, ^{
 
