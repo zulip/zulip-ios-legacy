@@ -127,20 +127,25 @@
 {
     NSHTTPURLResponse *response;
     NSData *responseData;
-    NSString *content;
 
     NSMutableDictionary *postFields = [NSMutableDictionary dictionaryWithObjectsAndKeys:username,
                                        @"username", password, @"password", nil];
     responseData = [self makePOST:&response resource_path:@"fetch_api_key" postFields:postFields useAPICredentials:FALSE];
 
-    content = [[NSString alloc] initWithBytes:[responseData bytes]
-                                       length:[responseData length]
-                                     encoding: NSUTF8StringEncoding];
-
     if ([response statusCode] != 200) {
         return false;
     }
-    self.apiKey = content;
+
+    NSError *e = nil;
+    NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData: responseData
+                                                             options: NSJSONReadingMutableContainers
+                                                               error: &e];
+    if (!jsonDict) {
+        NSLog(@"Error parsing JSON: %@", e);
+        return false;
+    }
+
+    self.apiKey = [jsonDict objectForKey:@"api_key"];
     self.email = username;
 
     KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"HumbugLogin" accessGroup:nil];
