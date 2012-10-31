@@ -7,6 +7,8 @@
 @synthesize first, last;
 @synthesize gravatars;
 @synthesize delegate;
+@synthesize lastRequestTime;
+@synthesize waitingOnErrorRecovery;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -18,6 +20,9 @@
     [super viewDidLoad];
     self.first = -1;
     self.last = -1;
+    self.backoff = 0;
+    self.lastRequestTime = 0;
+    self.waitingOnErrorRecovery = FALSE;
     self.listData = [[NSMutableArray alloc] init];
     self.gravatars = [[NSMutableDictionary alloc] init];
     self.delegate = (HumbugAppDelegate *)[UIApplication sharedApplication].delegate;
@@ -168,17 +173,45 @@ numberOfRowsInSection:(NSInteger)section
     return fmax(77.0, labelSize.height + 45);
 }
 
+- (void) adjustRequestBackoff
+{
+    if (self.backoff > 4) {
+        return;
+    }
+
+    if (self.backoff == 0) {
+        self.backoff = .5;
+    } else {
+        self.backoff *= 2;
+    }
+    self.backoff = 10;
+}
+
 - (NSDictionary *) makeJSONMessagesPOST:(NSString *)resource_path
                              postFields:(NSMutableDictionary *)postFields
 {
     NSHTTPURLResponse *response = nil;
     NSData *data;
 
+    while (([[NSDate date] timeIntervalSince1970] - self.lastRequestTime) < self.backoff) {
+        [NSThread sleepForTimeInterval:.5];
+    }
+
     data = [self.delegate makePOST:&response resource_path:resource_path postFields:postFields useAPICredentials:TRUE];
 
+    self.lastRequestTime = [[NSDate date] timeIntervalSince1970];
+
     if ([response statusCode] == 500) {
-        // The service is having problems, possibly indicate this to the user and back off requests.
-        [self.delegate showErrorScreen:self.view errorMessage:@"Unable to login. Please try again."];
+        // The service is having problems; possibly indicate this to the user and back off requests.
+        [self adjustRequestBackoff];
+        if (self.waitingOnErrorRecovery == FALSE) {
+            self.waitingOnErrorRecovery = TRUE;
+            [self.delegate showErrorScreen:self.view
+                              errorMessage:@"Error getting messages. Please try again in a few minutes."];
+        }
+    } else {
+        self.waitingOnErrorRecovery = FALSE;
+        self.backoff = 0;
     }
 
     if (!data) {
@@ -271,8 +304,7 @@ numberOfRowsInSection:(NSInteger)section
     [self performSelectorInBackground:@selector(longPoll) withObject: nil];
 }
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
+- (void) updatePointer {
     [self.tableView visibleCells];
     NSIndexPath *indexPath = [self.tableView indexPathForCell:
                               [self.tableView.visibleCells objectAtIndex:0]];
@@ -282,6 +314,11 @@ numberOfRowsInSection:(NSInteger)section
     NSMutableDictionary *postFields = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                        [pointedCell valueForKey:@"id"], @"pointer", nil];
     [self makeJSONMessagesPOST:@"update_pointer" postFields:postFields];
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    [self performSelectorInBackground:@selector(updatePointer) withObject: nil];
 }
 
 - (BOOL) fetchPointer {
