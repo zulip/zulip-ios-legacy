@@ -163,8 +163,8 @@
 
 - (void)showErrorScreen:(UIView *)view errorMessage:(NSString *)errorMessage
 {
-    [view removeFromSuperview];
-    [view addSubview:self.errorViewController.view];
+    [self.window addSubview:self.errorViewController.view];
+    self.errorViewController.whereWeCameFrom = view;
     self.errorViewController.errorMessage.text = errorMessage;
 }
 

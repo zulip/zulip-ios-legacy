@@ -36,7 +36,7 @@
         [appDelegate viewStream];
     } else {
         NSLog(@"Failed to login!");
-        [appDelegate showErrorScreen:self.view errorMessage:@"Unable to login"];
+        [appDelegate showErrorScreen:self.view errorMessage:@"Unable to login. Please try again."];
     }
 }
 
