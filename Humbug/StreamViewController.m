@@ -168,61 +168,78 @@ numberOfRowsInSection:(NSInteger)section
     return fmax(77.0, labelSize.height + 45);
 }
 
-- (void) dataReceived: (NSData*) pollingResponseData {
-    if (!pollingResponseData) {
-        return;
+- (NSDictionary *) makeJSONMessagesPOST:(NSString *)resource_path
+                             postFields:(NSMutableDictionary *)postFields
+{
+    NSHTTPURLResponse *response = nil;
+    NSData *data;
+
+    data = [self.delegate makePOST:&response resource_path:resource_path postFields:postFields useAPICredentials:TRUE];
+
+    if ([response statusCode] == 500) {
+        // The service is having problems, possibly indicate this to the user and back off requests.
+        [self.delegate showErrorScreen:self.view errorMessage:@"Unable to login. Please try again."];
     }
+
+    if (!data) {
+        // Sometimes we get no data back. I'm not sure why.
+        return nil;
+    }
+
     NSError *e = nil;
-    NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData: pollingResponseData
+    NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData: data
                                                              options: NSJSONReadingMutableContainers
                                                                error: &e];
     if (!jsonDict) {
         NSLog(@"Error parsing JSON: %@", e);
-    } else {
-        for(NSDictionary *item in [jsonDict objectForKey:@"messages"]) {
-            int message_id = [[item objectForKey:@"id"] intValue];
+    }
 
-            // We've already processed these. The API is inconsistent about bounds
-            // and should be fixed so we don't have to do these checks.
-            if ((message_id <= self.first) || (message_id == self.last)) {
-                continue;
-            }
-            NSArray *newIndexPaths = [NSArray arrayWithObjects:
-                                      [NSIndexPath indexPathForRow:[self.listData count]
-                                                         inSection:0], nil];
-            [self.listData addObject: item];
+    return jsonDict;
+}
 
-            [self.tableView insertRowsAtIndexPaths:newIndexPaths
-                                  withRowAnimation:UITableViewRowAnimationTop];
-            self.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, 200.0, 0.0);
+- (void) dataReceived: (NSDictionary*) messageData {
+    if (!messageData) {
+        return;
+    }
 
-            if (message_id < self.first) {
-                self.first = message_id;
-            }
-            if (message_id > self.last) {
-                self.last = message_id;
-            }
+    for (NSDictionary *item in [messageData objectForKey:@"messages"]) {
+        int message_id = [[item objectForKey:@"id"] intValue];
+
+        // We've already processed these. The API is inconsistent about bounds
+        // and should be fixed so we don't have to do these checks.
+        if ((message_id <= self.first) || (message_id == self.last)) {
+            continue;
+        }
+        NSArray *newIndexPaths = [NSArray arrayWithObjects:
+                                  [NSIndexPath indexPathForRow:[self.listData count]
+                                                     inSection:0], nil];
+        [self.listData addObject: item];
+
+        [self.tableView insertRowsAtIndexPaths:newIndexPaths
+                              withRowAnimation:UITableViewRowAnimationTop];
+        self.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, 200.0, 0.0);
+
+        if (message_id < self.first) {
+            self.first = message_id;
+        }
+        if (message_id > self.last) {
+            self.last = message_id;
         }
     }
 }
 
 - (void) getOldMessages {
-    NSHTTPURLResponse* response = nil;
     NSMutableDictionary *postFields = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                       self.delegate.email, @"email",
-                                       self.delegate.apiKey, @"api-key",
                                        [NSString stringWithFormat:@"%i", self.last], @"start",
                                        @"newer", @"which",
                                        [NSString stringWithFormat:@"%i", 6], @"number", nil];
 
-    NSData *pollingResponseData = [self.delegate makePOST:&response
-                                            resource_path:@"get_old_messages"
-                                               postFields:postFields
-                                        useAPICredentials:TRUE];
+    NSDictionary *messageData = [self makeJSONMessagesPOST:@"get_old_messages"
+                                                postFields:postFields];
 
     int old_last = self.last;
     [self performSelectorOnMainThread:@selector(dataReceived:)
-                           withObject:pollingResponseData waitUntilDone:YES];
+                           withObject:messageData waitUntilDone:YES];
 
     if (self.last != old_last) {
         // There are still historical messages to fetch.
@@ -235,16 +252,12 @@ numberOfRowsInSection:(NSInteger)section
 - (void) longPoll {
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
 
-    NSHTTPURLResponse* response = nil;
     NSMutableDictionary *postFields = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                        [NSString stringWithFormat:@"%i", self.first], @"first",
                                        [NSString stringWithFormat:@"%i", self.last], @"last",
                                        nil];
-
-    NSData *pollingResponseData = [self.delegate makePOST:&response
-                                            resource_path:@"get_messages"
-                                               postFields:postFields
-                                        useAPICredentials:TRUE];
+    NSDictionary *pollingResponseData = [self makeJSONMessagesPOST:@"get_messages"
+                                                        postFields:postFields];
 
     [self performSelectorOnMainThread:@selector(dataReceived:)
                            withObject:pollingResponseData waitUntilDone:YES];
@@ -265,41 +278,26 @@ numberOfRowsInSection:(NSInteger)section
                               [self.tableView.visibleCells objectAtIndex:0]];
     NSUInteger lastIndex = [indexPath indexAtPosition:[indexPath length] - 1];
     MessageCell *pointedCell = [self.listData objectAtIndex:lastIndex];
+
     NSMutableDictionary *postFields = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                        [pointedCell valueForKey:@"id"], @"pointer", nil];
-    NSHTTPURLResponse* response = nil;
-
-    [self.delegate makePOST:&response resource_path:@"update_pointer" postFields:postFields
-          useAPICredentials:TRUE];
+    [self makeJSONMessagesPOST:@"update_pointer" postFields:postFields];
 }
 
 - (BOOL) fetchPointer {
-    NSHTTPURLResponse *response;
-    NSData *pointerData;
-
     NSMutableDictionary *postFields = [NSMutableDictionary dictionary];
-    pointerData = [self.delegate makePOST:&response resource_path:@"get_profile"
-                          postFields:postFields useAPICredentials:TRUE];
+    NSDictionary *resultDict = [self makeJSONMessagesPOST:@"get_profile" postFields:postFields];
 
-    if ([response statusCode] != 200) {
-        NSLog(@"Error fetching pointer: %d", [response statusCode]);
+    if (!resultDict) {
         return FALSE;
     }
-    NSError *e = nil;
-    NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData: pointerData
-                                                             options: NSJSONReadingMutableContainers
-                                                               error: &e];
-    if (!jsonDict) {
-        NSLog(@"Error parsing JSON: %@", e);
-        return FALSE;
-    } else {
-        int pointer = [[jsonDict objectForKey:@"pointer"] intValue];
-        // Add a few messages of context before the current message.
-        self.first = pointer - 3;
-        self.last = pointer - 3;
 
-        self.delegate.clientID = [jsonDict objectForKey:@"client_id"];
-    }
+    int pointer = [[resultDict objectForKey:@"pointer"] intValue];
+    // Add a few messages of context before the current message.
+    self.first = pointer - 3;
+    self.last = pointer - 3;
+
+    self.delegate.clientID = [resultDict objectForKey:@"client_id"];
     return TRUE;
 }
 
