@@ -95,18 +95,18 @@ numberOfRowsInSection:(NSInteger)section
 {
     MessageCell *my_cell = (MessageCell *)cell;
     if ([my_cell.type isEqualToString:@"stream"]) {
-        my_cell.header.backgroundColor = [UIColor colorWithRed:187.0/255
-                                                         green:187.0/255
-                                                          blue:187.0/255
-                                                         alpha:1];
+        my_cell.headerBar.backgroundColor = [UIColor colorWithRed:187.0/255
+                                                            green:187.0/255
+                                                             blue:187.0/255
+                                                            alpha:1];
     } else {
         // For non-stream messages, color cell background pale yellow (#FEFFE0).
-        cell.backgroundColor = [UIColor colorWithRed:255.0/255 green:254.0/255
-                                                blue:224.0/255 alpha:1];
-        my_cell.header.backgroundColor = [UIColor colorWithRed:51.0/255
-                                                         green:51.0/255
-                                                          blue:51.0/255
-                                                         alpha:1];
+        my_cell.backgroundColor = [UIColor colorWithRed:255.0/255 green:254.0/255
+                                                   blue:224.0/255 alpha:1];
+        my_cell.headerBar.backgroundColor = [UIColor colorWithRed:51.0/255
+                                                            green:51.0/255
+                                                             blue:51.0/255
+                                                            alpha:1];
         my_cell.header.textColor = [UIColor whiteColor];
     }
 }
@@ -166,10 +166,10 @@ numberOfRowsInSection:(NSInteger)section
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *cellText = [[self.listData objectAtIndex:indexPath.row] valueForKey:@"content"];
     UIFont *cellFont = [UIFont systemFontOfSize:12];
-    CGSize constraintSize = CGSizeMake(267.0, CGFLOAT_MAX); // Cell width from xib = 267.
+    CGSize constraintSize = CGSizeMake(262.0, CGFLOAT_MAX); // content width from xib = 267.
     CGSize labelSize = [cellText sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:UILineBreakModeWordWrap];
 
-    // Full cell height of 77 - default content width of 36 = 41. + a little bit of bottom padding.
+    // Full cell height of 77 - default content height of 36 = 41. + a little bit of bottom padding.
     return fmax(77.0, labelSize.height + 45);
 }
 
