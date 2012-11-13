@@ -263,9 +263,9 @@ numberOfRowsInSection:(NSInteger)section
 
 - (void) getOldMessages {
     NSMutableDictionary *postFields = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                       [NSString stringWithFormat:@"%i", self.last], @"start",
-                                       @"newer", @"which",
-                                       [NSString stringWithFormat:@"%i", 6], @"number", nil];
+                                       [NSString stringWithFormat:@"%i", self.last], @"anchor",
+                                       [NSString stringWithFormat:@"%i", 6], @"num_before",
+                                       [NSString stringWithFormat:@"%i", 0], @"num_after", nil];
 
     NSDictionary *messageData = [self makeJSONMessagesPOST:@"get_old_messages"
                                                 postFields:postFields];
