@@ -140,8 +140,14 @@ numberOfRowsInSection:(NSInteger)section
         }
         cell.header.text = [@"You and " stringByAppendingString:[recipient_array componentsJoinedByString:@", "]];
     } else {
-        cell.header.text = [@"You and " stringByAppendingString:
-                            [dict objectForKey:@"sender_full_name"]];
+        // In a one-on-one, display whichever recipient is not you.
+        if ([[dict objectForKey:@"sender_email"] isEqualToString:self.delegate.email]) {
+            cell.header.text = [@"You and " stringByAppendingString:
+                                [[dict objectForKey:@"display_recipient"] objectForKey:@"full_name"]];
+        } else {
+            cell.header.text = [@"You and " stringByAppendingString:
+                                [dict objectForKey:@"sender_full_name"]];
+        }
     }
 
     cell.sender.text = [dict objectForKey:@"sender_full_name"];
