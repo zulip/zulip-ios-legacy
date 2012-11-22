@@ -33,12 +33,11 @@
                                       initWithBarButtonSystemItem:UIBarButtonSystemItemAction
                                       target:self
                                       action:@selector(composeButtonPressed)];
-    NSLog(@"here");
     [[self navigationItem] setRightBarButtonItem:composeButton];
     [composeButton release];
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)viewDidAppear:(BOOL)animated
 {
     dispatch_queue_t downloadQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(downloadQueue, ^{
@@ -243,6 +242,9 @@ numberOfRowsInSection:(NSInteger)section
         NSLog(@"Error parsing JSON: %@", e);
     }
 
+    if ([response statusCode] == 400) {
+        NSLog(@"Forbidden: %@", jsonDict);
+    }
     return jsonDict;
 }
 
@@ -281,7 +283,8 @@ numberOfRowsInSection:(NSInteger)section
     NSMutableDictionary *postFields = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                        [NSString stringWithFormat:@"%i", self.last], @"anchor",
                                        [NSString stringWithFormat:@"%i", 6], @"num_before",
-                                       [NSString stringWithFormat:@"%i", 0], @"num_after", nil];
+                                       [NSString stringWithFormat:@"%i", 0], @"num_after",
+                                       [NSDictionary dictionary], @"narrow", nil];
 
     NSDictionary *messageData = [self makeJSONMessagesPOST:@"get_old_messages"
                                                 postFields:postFields];
@@ -304,7 +307,7 @@ numberOfRowsInSection:(NSInteger)section
     NSMutableDictionary *postFields = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                        [NSString stringWithFormat:@"%i", self.first], @"first",
                                        [NSString stringWithFormat:@"%i", self.last], @"last",
-                                       nil];
+                                       [NSDictionary dictionary], @"narrow", nil];
     NSDictionary *pollingResponseData = [self makeJSONMessagesPOST:@"get_messages"
                                                         postFields:postFields];
 
@@ -350,12 +353,18 @@ numberOfRowsInSection:(NSInteger)section
     self.first = pointer - 3;
     self.last = pointer - 3;
 
+    if (self.first < 0) {
+        self.first = 0;
+    }
+    if (self.last < 0) {
+        self.last = 0;
+    }
+
     self.delegate.clientID = [resultDict objectForKey:@"client_id"];
     return TRUE;
 }
 
 -(void)composeButtonPressed {
-    NSLog(@"Pressed button");
     UIViewController *composeView = [[ComposeViewController alloc]
                                     initWithNibName:@"ComposeViewController"
                                     bundle:nil];
