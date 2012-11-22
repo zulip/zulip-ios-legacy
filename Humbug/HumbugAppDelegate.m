@@ -100,7 +100,7 @@
 
     request = [[[NSMutableURLRequest alloc]
                 initWithURL:[NSURL URLWithString:
-                             [@"http://localhost:9991/api/v1/" stringByAppendingString:resource_path]]
+                             [@"https://app.humbughq.com/api/v1/" stringByAppendingString:resource_path]]
                 cachePolicy:NSURLRequestReloadIgnoringCacheData
                 timeoutInterval:60] autorelease];
     [request setHTTPMethod:@"POST"];

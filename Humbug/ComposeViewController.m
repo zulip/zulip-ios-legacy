@@ -8,9 +8,10 @@
 
 @implementation ComposeViewController
 
-@synthesize stream;
+@synthesize recipient;
 @synthesize subject;
 @synthesize content;
+@synthesize type;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -19,6 +20,11 @@
         // Custom initialization
     }
     return self;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    NSLog(@"view will appear %@", self.type);
 }
 
 - (void)viewDidLoad
@@ -30,6 +36,13 @@
     [self.content.layer setBorderColor:[[[UIColor grayColor] colorWithAlphaComponent:0.5] CGColor]];
     [self.content.layer setBorderWidth:2.0];
     self.content.delegate = self;
+
+    if ([self.type isEqualToString:@"stream"]) {
+        [self.subject setHidden:NO];
+    } else if ([self.type isEqualToString:@"private"] || [self.type isEqualToString:@"personal"] || [self.type isEqualToString:@"huddle"]) {
+        [self.subject setHidden:YES];
+        [self.recipient setPlaceholder:@"one or more people..."];
+    }
 
     self.delegate = (HumbugAppDelegate *)[UIApplication sharedApplication].delegate;
 
@@ -43,14 +56,29 @@
 
 - (IBAction)send
 {
-    if([self.content isFirstResponder]) {
-        [self.content resignFirstResponder];
-    };
+    [self.content resignFirstResponder];
 
-    NSMutableDictionary *postFields = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                       @"stream", @"type", self.stream, @"stream",
-                                       self.subject, @"to", self.content, @"content", nil];
+    NSMutableDictionary *postFields;
+    if ([self.type isEqualToString:@"stream"]) {
+        postFields = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                      @"stream", @"type", self.recipient.text, @"to",
+                      self.subject.text, @"subject", self.content.text, @"content",
+                      nil];
+    } else if ([self.type isEqualToString:@"private"] || [self.type isEqualToString:@"personal"] || [self.type isEqualToString:@"huddle"]) {
+        NSArray* recipient_array = [self.recipient.text componentsSeparatedByString: @","];
+
+        NSError *error = nil;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:recipient_array options:NSJSONWritingPrettyPrinted error:&error];
+        NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+
+        postFields = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                      @"private", @"type", jsonString, @"to",
+                      self.content.text, @"content", nil];
+    } else {
+        NSLog(@"Invalid message type");
+    }
     [self makeJSONMessagePOST:@"send_message" postFields:postFields];
+    [self.delegate.navController popViewControllerAnimated:YES];
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
@@ -95,6 +123,10 @@
                                                                error: &e];
     if (!jsonDict) {
         NSLog(@"Error parsing JSON: %@", e);
+    }
+
+    if ([response statusCode] == 400) {
+        NSLog(@"Forbidden: %@", jsonDict);
     }
 
     return jsonDict;

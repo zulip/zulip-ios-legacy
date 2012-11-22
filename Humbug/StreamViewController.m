@@ -35,19 +35,28 @@
                                       action:@selector(composeButtonPressed)];
     [[self navigationItem] setRightBarButtonItem:composeButton];
     [composeButton release];
+    
+    UIBarButtonItem *composePMButton = [[UIBarButtonItem alloc]
+                                      initWithBarButtonSystemItem:UIBarButtonSystemItemAction
+                                      target:self
+                                      action:@selector(composePMButtonPressed)];
+    [[self navigationItem] setLeftBarButtonItem:composePMButton];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    dispatch_queue_t downloadQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    dispatch_async(downloadQueue, ^{
+    // This function gets called whenever the stream view appears, including returning to the view after popping another view. We only want to backfill old messages on the very first load.
+    if (self.last == -1) {
+        dispatch_queue_t downloadQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+        dispatch_async(downloadQueue, ^{
 
-        if ([self fetchPointer] != TRUE) {
-            [self.delegate showErrorScreen:self.view
-                              errorMessage:@"Unable to fetch messages. Please try again in a few minutes."];
-        }
-        [self getOldMessages];
-    });
+            if ([self fetchPointer] != TRUE) {
+                [self.delegate showErrorScreen:self.view
+                                  errorMessage:@"Unable to fetch messages. Please try again in a few minutes."];
+            }
+            [self getOldMessages];
+        });
+    }
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -93,11 +102,6 @@ numberOfRowsInSection:(NSInteger)section
     [self.gravatars setObject:gravatar forKey:gravatarHash];
 
     return gravatar;
-}
-
-- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return nil;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -200,6 +204,43 @@ numberOfRowsInSection:(NSInteger)section
         self.backoff *= 2;
     }
     self.backoff = 10;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    ComposeViewController *composeView = [[ComposeViewController alloc]
+                                          initWithNibName:@"ComposeViewController"
+                                          bundle:nil];
+
+    NSDictionary *dict = [listData objectAtIndex:indexPath.row];
+    composeView.type = [dict objectForKey:@"type"];
+    [[self navigationController] pushViewController:composeView animated:YES];
+
+    if ([[dict objectForKey:@"type"] isEqualToString:@"stream"]) {
+        composeView.recipient.text = [dict valueForKey:@"display_recipient"];
+        [composeView.subject setHidden:NO];
+        composeView.subject.text = [dict valueForKey:@"subject"];
+    } else if ([[dict objectForKey:@"type"] isEqualToString:@"huddle"]) {
+        [composeView.subject setHidden:YES];
+
+        NSArray *recipients = [dict objectForKey:@"display_recipient"];
+        NSMutableArray *recipient_array = [[NSMutableArray alloc] init];
+        for (NSDictionary *recipient in recipients) {
+            if (![[recipient valueForKey:@"email"] isEqualToString:self.delegate.email]) {
+                [recipient_array addObject:[recipient valueForKey:@"email"]];
+            }
+        }
+        composeView.recipient.text = [recipient_array componentsJoinedByString:@", "];
+    } else {
+        // In a one-on-one, display whichever recipient is not you.
+        if ([[dict objectForKey:@"sender_email"] isEqualToString:self.delegate.email]) {
+            composeView.recipient.text =[[dict objectForKey:@"display_recipient"] objectForKey:@"email"];
+        } else {
+            composeView.recipient.text = [dict objectForKey:@"sender_email"];
+        }
+    }
+
+    [composeView release];
 }
 
 - (NSDictionary *) makeJSONMessagesPOST:(NSString *)resource_path
@@ -365,9 +406,19 @@ numberOfRowsInSection:(NSInteger)section
 }
 
 -(void)composeButtonPressed {
-    UIViewController *composeView = [[ComposeViewController alloc]
+    ComposeViewController *composeView = [[ComposeViewController alloc]
                                     initWithNibName:@"ComposeViewController"
                                     bundle:nil];
+    composeView.type = @"stream";
+    [[self navigationController] pushViewController:composeView animated:YES];
+    [composeView release];
+}
+
+-(void)composePMButtonPressed {
+    ComposeViewController *composeView = [[ComposeViewController alloc]
+                                     initWithNibName:@"ComposeViewController"
+                                     bundle:nil];
+    composeView.type = @"private";
     [[self navigationController] pushViewController:composeView animated:YES];
     [composeView release];
 }
