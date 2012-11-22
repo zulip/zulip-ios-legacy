@@ -5,6 +5,7 @@
 
 @synthesize window = _window;
 @synthesize tabBarController = _tabBarController;
+@synthesize navController = _navController;
 @synthesize loginViewController = _loginViewController;
 @synthesize streamViewController = _streamViewController;
 @synthesize errorViewController = _errorViewController;
@@ -25,21 +26,23 @@
     self.streamViewController = [[StreamViewController alloc] init];
     // Bottom padding so you can see new messages arrive.
     self.streamViewController.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, 200.0, 0.0);
+    self.navController = [[UINavigationController alloc] initWithRootViewController:self.streamViewController];
+    [[self window] setRootViewController:self.navController];
 
     if (storedApiKey == @"") {
         // No credentials stored; we need to log in.
         self.loginViewController = [[LoginViewController alloc] init];
-        [self.window setRootViewController:self.loginViewController];
+        [self.navController pushViewController:self.loginViewController animated:YES];
     } else {
         // We have credentials, so try to reuse them. We may still have to log in if they are stale.
         self.apiKey = storedApiKey;
         self.email = storedEmail;
-        [self.window setRootViewController:self.streamViewController];
     }
     self.clientID = @"";
 
     [self.window makeKeyAndVisible];
-
+    [self.navController release];
+    
     return YES;
 }
 
@@ -97,7 +100,7 @@
 
     request = [[[NSMutableURLRequest alloc]
                 initWithURL:[NSURL URLWithString:
-                             [@"https://app.humbughq.com/api/v1/" stringByAppendingString:resource_path]]
+                             [@"http://localhost:9991/api/v1/" stringByAppendingString:resource_path]]
                 cachePolicy:NSURLRequestReloadIgnoringCacheData
                 timeoutInterval:60] autorelease];
     [request setHTTPMethod:@"POST"];
@@ -157,8 +160,7 @@
 
 - (void)viewStream
 {
-    [self.loginViewController.view removeFromSuperview];
-    [self.window addSubview:self.streamViewController.view];
+    [self.navController popViewControllerAnimated:YES];
 }
 
 - (void)showErrorScreen:(UIView *)view errorMessage:(NSString *)errorMessage

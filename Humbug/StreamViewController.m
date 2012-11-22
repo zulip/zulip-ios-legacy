@@ -1,5 +1,6 @@
 #import "FirstViewController.h"
 #import "HumbugAppDelegate.h"
+#import "ComposeViewController.h"
 
 @implementation StreamViewController
 @synthesize listData;
@@ -18,6 +19,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self setTitle:@"Humbug"];
     self.first = -1;
     self.last = -1;
     self.backoff = 0;
@@ -26,6 +28,14 @@
     self.listData = [[NSMutableArray alloc] init];
     self.gravatars = [[NSMutableDictionary alloc] init];
     self.delegate = (HumbugAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    UIBarButtonItem *composeButton = [[UIBarButtonItem alloc]
+                                      initWithBarButtonSystemItem:UIBarButtonSystemItemAction
+                                      target:self
+                                      action:@selector(composeButtonPressed)];
+    NSLog(@"here");
+    [[self navigationItem] setRightBarButtonItem:composeButton];
+    [composeButton release];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -342,6 +352,15 @@ numberOfRowsInSection:(NSInteger)section
 
     self.delegate.clientID = [resultDict objectForKey:@"client_id"];
     return TRUE;
+}
+
+-(void)composeButtonPressed {
+    NSLog(@"Pressed button");
+    UIViewController *composeView = [[ComposeViewController alloc]
+                                    initWithNibName:@"ComposeViewController"
+                                    bundle:nil];
+    [[self navigationController] pushViewController:composeView animated:YES];
+    [composeView release];
 }
 
 @end

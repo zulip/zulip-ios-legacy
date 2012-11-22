@@ -35,6 +35,8 @@
 		E598E78B1634A9950022BF4A /* ErrorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E598E7891634A9940022BF4A /* ErrorViewController.xib */; };
 		E5CDE07C162C88A800BBD773 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5CDE07A162C88A800BBD773 /* LoginViewController.m */; };
 		E5CDE07D162C88A800BBD773 /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E5CDE07B162C88A800BBD773 /* LoginViewController.xib */; };
+		E5DC806C165D347D008B53F9 /* ComposeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5DC806A165D347D008B53F9 /* ComposeViewController.m */; };
+		E5DC806D165D347D008B53F9 /* ComposeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E5DC806B165D347D008B53F9 /* ComposeViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,6 +86,9 @@
 		E5CDE079162C88A800BBD773 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		E5CDE07A162C88A800BBD773 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		E5CDE07B162C88A800BBD773 /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
+		E5DC8069165D347D008B53F9 /* ComposeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComposeViewController.h; sourceTree = "<group>"; };
+		E5DC806A165D347D008B53F9 /* ComposeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComposeViewController.m; sourceTree = "<group>"; };
+		E5DC806B165D347D008B53F9 /* ComposeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ComposeViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +166,9 @@
 				E5726A2516332BF800ED8BB1 /* StreamViewController.h */,
 				E5726A2616332BF800ED8BB1 /* StreamViewController.m */,
 				E5726A2716332BF800ED8BB1 /* StreamViewController.xib */,
+				E5DC8069165D347D008B53F9 /* ComposeViewController.h */,
+				E5DC806A165D347D008B53F9 /* ComposeViewController.m */,
+				E5DC806B165D347D008B53F9 /* ComposeViewController.xib */,
 				E577A74B16226AC4002D9651 /* MessageCell.h */,
 				E577A74C16226AC4002D9651 /* MessageCell.m */,
 				E577A74E16226AFF002D9651 /* MessageCellView.xib */,
@@ -282,6 +290,7 @@
 				E5CDE07D162C88A800BBD773 /* LoginViewController.xib in Resources */,
 				E5726A2916332BF800ED8BB1 /* StreamViewController.xib in Resources */,
 				E598E78B1634A9950022BF4A /* ErrorViewController.xib in Resources */,
+				E5DC806D165D347D008B53F9 /* ComposeViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -324,6 +333,7 @@
 				E50D757916331D7A00251D1F /* KeychainItemWrapper.m in Sources */,
 				E5726A2816332BF800ED8BB1 /* StreamViewController.m in Sources */,
 				E598E78A1634A9950022BF4A /* ErrorViewController.m in Sources */,
+				E5DC806C165D347D008B53F9 /* ComposeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

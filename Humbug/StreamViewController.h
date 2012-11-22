@@ -20,4 +20,6 @@
 @property(assign) double backoff;
 @property(assign) BOOL waitingOnErrorRecovery;
 
+-(void)composeButtonPressed;
+
 @end
