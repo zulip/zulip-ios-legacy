@@ -10,6 +10,7 @@
 @synthesize email;
 @synthesize password;
 @synthesize loginButton;
+@synthesize entryFields;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -22,6 +23,16 @@
     [super viewDidLoad];
     self.password.secureTextEntry = TRUE;
     appDelegate = (HumbugAppDelegate *)[[UIApplication sharedApplication] delegate];
+
+    self.entryFields = [[NSMutableArray alloc] init];
+    NSInteger tag = 1;
+    UIView *aView;
+    while ((aView = [self.view viewWithTag:tag])) {
+        if (aView && [[aView class] isSubclassOfClass:[UIResponder class]]) {
+            [self.entryFields addObject:aView];
+        }
+        tag++;
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -40,10 +51,39 @@
     }
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+	// Find the next entry field
+	for (UIView *view in self.entryFields) {
+		if (view.tag == (textField.tag + 1)) {
+			[view becomeFirstResponder];
+			break;
+		}
+	}
+	return NO;
+}
+
+- (void) animateTextField: (UITextField *) textField up: (BOOL) up
 {
-    [textField resignFirstResponder];
-    return YES;
+    const int movementDistance = 140; // tweak as needed
+    const float movementDuration = 0.3f; // tweak as needed
+
+    int movement = (up ? -movementDistance : movementDistance);
+
+    [UIView beginAnimations: @"anim" context: nil];
+    [UIView setAnimationBeginsFromCurrentState: YES];
+    [UIView setAnimationDuration: movementDuration];
+    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
+    [UIView commitAnimations];
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    [self animateTextField: textField up: YES];
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    [self animateTextField: textField up: NO];
 }
 
 @end

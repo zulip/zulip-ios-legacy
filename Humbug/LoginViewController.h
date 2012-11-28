@@ -14,6 +14,8 @@
 @property (strong, nonatomic) IBOutlet UITextField *password;
 @property (strong, nonatomic) IBOutlet UIButton *loginButton;
 
+@property (nonatomic, retain) NSMutableArray *entryFields;
+
 - (IBAction) login: (id) sender;
 
 @end
