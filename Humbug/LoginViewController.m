@@ -33,6 +33,9 @@
         }
         tag++;
     }
+
+    // Focus on email field.
+    [self.email becomeFirstResponder];
 }
 
 - (void)didReceiveMemoryWarning
