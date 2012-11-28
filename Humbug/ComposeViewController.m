@@ -12,6 +12,7 @@
 @synthesize subject;
 @synthesize content;
 @synthesize type;
+@synthesize entryFields;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -36,6 +37,8 @@
     [self.content.layer setBorderColor:[[[UIColor grayColor] colorWithAlphaComponent:0.5] CGColor]];
     [self.content.layer setBorderWidth:2.0];
     self.content.delegate = self;
+    self.recipient.delegate = self;
+    self.subject.delegate = self;
 
     if ([self.type isEqualToString:@"stream"]) {
         [self.subject setHidden:NO];
@@ -46,6 +49,15 @@
 
     self.delegate = (HumbugAppDelegate *)[UIApplication sharedApplication].delegate;
 
+    self.entryFields = [[NSMutableArray alloc] init];
+    NSInteger tag = 1;
+    UIView *aView;
+    while ((aView = [self.view viewWithTag:tag])) {
+        if (aView && [[aView class] isSubclassOfClass:[UIResponder class]]) {
+            [self.entryFields addObject:aView];
+        }
+        tag++;
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -130,6 +142,17 @@
     }
 
     return jsonDict;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+	// Find the next entry field
+	for (UIView *view in self.entryFields) {
+		if (view.tag == (textField.tag + 1)) {
+			[view becomeFirstResponder];
+			break;
+		}
+	}
+	return NO;
 }
 
 @end
