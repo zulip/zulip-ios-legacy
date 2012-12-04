@@ -143,7 +143,7 @@ numberOfRowsInSection:(NSInteger)section
         cell.header.text = [NSString stringWithFormat:@"%@ | %@",
                             [dict objectForKey:@"display_recipient"],
                             [dict objectForKey:@"subject"]];
-    } else if ([cell.type isEqualToString:@"huddle"]) {
+    } else if ([cell.type isEqualToString:@"private"]) {
         NSArray *recipients = [dict objectForKey:@"display_recipient"];
         NSMutableArray *recipient_array = [[NSMutableArray alloc] init];
         for (NSDictionary *recipient in recipients) {
@@ -152,15 +152,6 @@ numberOfRowsInSection:(NSInteger)section
             }
         }
         cell.header.text = [@"You and " stringByAppendingString:[recipient_array componentsJoinedByString:@", "]];
-    } else {
-        // In a one-on-one, display whichever recipient is not you.
-        if ([[dict objectForKey:@"sender_email"] isEqualToString:self.delegate.email]) {
-            cell.header.text = [@"You and " stringByAppendingString:
-                                [[dict objectForKey:@"display_recipient"] objectForKey:@"full_name"]];
-        } else {
-            cell.header.text = [@"You and " stringByAppendingString:
-                                [dict objectForKey:@"sender_full_name"]];
-        }
     }
 
     cell.sender.text = [dict objectForKey:@"sender_full_name"];
@@ -220,7 +211,7 @@ numberOfRowsInSection:(NSInteger)section
         composeView.recipient.text = [dict valueForKey:@"display_recipient"];
         [composeView.subject setHidden:NO];
         composeView.subject.text = [dict valueForKey:@"subject"];
-    } else if ([[dict objectForKey:@"type"] isEqualToString:@"huddle"]) {
+    } else if ([[dict objectForKey:@"type"] isEqualToString:@"private"]) {
         [composeView.subject setHidden:YES];
 
         NSArray *recipients = [dict objectForKey:@"display_recipient"];
@@ -231,13 +222,6 @@ numberOfRowsInSection:(NSInteger)section
             }
         }
         composeView.recipient.text = [recipient_array componentsJoinedByString:@", "];
-    } else {
-        // In a one-on-one, display whichever recipient is not you.
-        if ([[dict objectForKey:@"sender_email"] isEqualToString:self.delegate.email]) {
-            composeView.recipient.text =[[dict objectForKey:@"display_recipient"] objectForKey:@"email"];
-        } else {
-            composeView.recipient.text = [dict objectForKey:@"sender_email"];
-        }
     }
 
     [composeView release];

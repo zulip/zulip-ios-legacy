@@ -42,7 +42,7 @@
 
     if ([self.type isEqualToString:@"stream"]) {
         [self.subject setHidden:NO];
-    } else if ([self.type isEqualToString:@"private"] || [self.type isEqualToString:@"personal"] || [self.type isEqualToString:@"huddle"]) {
+    } else if ([self.type isEqualToString:@"private"]) {
         [self.subject setHidden:YES];
         [self.recipient setPlaceholder:@"one or more people..."];
     }
@@ -76,7 +76,7 @@
                       @"stream", @"type", self.recipient.text, @"to",
                       self.subject.text, @"subject", self.content.text, @"content",
                       nil];
-    } else if ([self.type isEqualToString:@"private"] || [self.type isEqualToString:@"personal"] || [self.type isEqualToString:@"huddle"]) {
+    } else if ([self.type isEqualToString:@"private"]) {
         NSArray* recipient_array = [self.recipient.text componentsSeparatedByString: @","];
 
         NSError *error = nil;
