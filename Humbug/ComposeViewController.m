@@ -95,12 +95,12 @@
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
-    [self animateTextView: textView up: YES];
+    //[self animateTextView: textView up: YES];
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
-    [self animateTextView: textView up: NO];
+    //[self animateTextView: textView up: NO];
 }
 
 - (void) animateTextView: (UITextView *) textView up: (BOOL) up

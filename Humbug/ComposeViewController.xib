@@ -40,7 +40,7 @@
 					<object class="IBUITextField" id="203898552">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{13, 61}, {295, 30}}</string>
+						<string key="NSFrame">{{13, 11}, {121, 30}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="75460088"/>
@@ -79,7 +79,7 @@
 					<object class="IBUITextField" id="75460088">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{13, 106}, {295, 30}}</string>
+						<string key="NSFrame">{{142, 11}, {166, 30}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="520176885"/>
@@ -110,7 +110,7 @@
 					<object class="IBUIButton" id="520176885">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{178, 144}, {130, 44}}</string>
+						<string key="NSFrame">{{13, 143}, {295, 44}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="133463430"/>
@@ -146,7 +146,7 @@
 					<object class="IBUITextView" id="133463430">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{13, 195}, {295, 128}}</string>
+						<string key="NSFrame">{{13, 49}, {295, 86}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
@@ -256,8 +256,8 @@
 						<array class="NSMutableArray" key="children">
 							<reference ref="203898552"/>
 							<reference ref="75460088"/>
-							<reference ref="520176885"/>
 							<reference ref="133463430"/>
+							<reference ref="520176885"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
