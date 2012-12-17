@@ -5,6 +5,7 @@
 
 @property (strong, nonatomic) IBOutlet UITextField *subject;
 @property (strong, nonatomic) IBOutlet UITextField *recipient;
+@property (strong, nonatomic) IBOutlet UITextField *privateRecipient;
 @property (strong, nonatomic) IBOutlet UITextView *content;
 
 @property(nonatomic,retain) HumbugAppDelegate *delegate;

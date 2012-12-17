@@ -9,6 +9,7 @@
 @implementation ComposeViewController
 
 @synthesize recipient;
+@synthesize privateRecipient;
 @synthesize subject;
 @synthesize content;
 @synthesize type;
@@ -42,9 +43,12 @@
 
     if ([self.type isEqualToString:@"stream"]) {
         [self.subject setHidden:NO];
+        [self.recipient setHidden:NO];
+        [self.privateRecipient setHidden:YES];
     } else if ([self.type isEqualToString:@"private"]) {
         [self.subject setHidden:YES];
-        [self.recipient setPlaceholder:@"one or more people..."];
+        [self.recipient setHidden:YES];
+        [self.privateRecipient setHidden:NO];
     }
 
     self.delegate = (HumbugAppDelegate *)[UIApplication sharedApplication].delegate;
@@ -77,7 +81,7 @@
                       self.subject.text, @"subject", self.content.text, @"content",
                       nil];
     } else if ([self.type isEqualToString:@"private"]) {
-        NSArray* recipient_array = [self.recipient.text componentsSeparatedByString: @","];
+        NSArray* recipient_array = [self.privateRecipient.text componentsSeparatedByString: @","];
 
         NSError *error = nil;
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:recipient_array options:NSJSONWritingPrettyPrinted error:&error];

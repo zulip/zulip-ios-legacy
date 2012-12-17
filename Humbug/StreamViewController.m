@@ -227,7 +227,7 @@ numberOfRowsInSection:(NSInteger)section
                 [recipient_array addObject:[recipient valueForKey:@"email"]];
             }
         }
-        composeView.recipient.text = [recipient_array componentsJoinedByString:@", "];
+        composeView.privateRecipient.text = [recipient_array componentsJoinedByString:@", "];
     }
 
     [composeView release];
