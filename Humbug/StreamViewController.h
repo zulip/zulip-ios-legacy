@@ -20,9 +20,12 @@
 @property(assign) BOOL pollingStarted;
 @property(assign) double backoff;
 @property(assign) BOOL waitingOnErrorRecovery;
+@property(assign) double timeWhenBackgrounded;
+@property(assign) BOOL backgrounded;
 
 -(void)composeButtonPressed;
 -(void)initialPopulate;
 -(void)reset;
+-(int)rowWithId:(int)messageId;
 
 @end

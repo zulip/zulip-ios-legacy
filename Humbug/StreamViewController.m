@@ -10,6 +10,7 @@
 @synthesize delegate;
 @synthesize lastRequestTime;
 @synthesize waitingOnErrorRecovery;
+@synthesize timeWhenBackgrounded;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -24,6 +25,7 @@
     self.last = -1;
     self.backoff = 0;
     self.lastRequestTime = 0;
+    self.backgrounded = FALSE;
     self.pollingStarted = FALSE;
     self.waitingOnErrorRecovery = FALSE;
     self.listData = [[NSMutableArray alloc] init];
@@ -64,7 +66,7 @@
         dispatch_queue_t downloadQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
         dispatch_async(downloadQueue, ^{
 
-            if ([self fetchPointer] != TRUE) {
+            if ([self initializePointer] != TRUE) {
                 [self.delegate showErrorScreen:self.view
                                   errorMessage:@"Unable to fetch messages. Please try again in a few minutes."];
             }
@@ -291,15 +293,15 @@ numberOfRowsInSection:(NSInteger)section
     if (!messageData) {
         return;
     }
+    
+    BOOL backfill = FALSE;
+    if ([self.listData count] == 0) {
+        backfill = TRUE;
+    }
 
     for (NSDictionary *item in [messageData objectForKey:@"messages"]) {
         int message_id = [[item objectForKey:@"id"] intValue];
 
-        // We've already processed these. The API is inconsistent about bounds
-        // and should be fixed so we don't have to do these checks.
-        if ((message_id <= self.first) || (message_id == self.last)) {
-            continue;
-        }
         NSArray *newIndexPaths = [NSArray arrayWithObjects:
                                   [NSIndexPath indexPathForRow:[self.listData count]
                                                      inSection:0], nil];
@@ -315,6 +317,16 @@ numberOfRowsInSection:(NSInteger)section
         if (message_id > self.last) {
             self.last = message_id;
         }
+    }
+    
+    if (backfill) {
+        // If we are backfilling old messages, these are messages you've necessarily already
+        // seen that are just being fetched as context, so scroll to the bottom of them.
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath
+                                                indexPathForRow:[self.listData count] - 1
+                                                inSection:0]
+                              atScrollPosition:UITableViewScrollPositionMiddle
+                                      animated:NO];
     }
 }
 
@@ -335,9 +347,12 @@ numberOfRowsInSection:(NSInteger)section
     if (self.last != old_last) {
         // There are still historical messages to fetch.
         [self performSelectorInBackground:@selector(getOldMessages) withObject: nil];
-    } else if (!self.pollingStarted) {
-        self.pollingStarted = TRUE;
-        [self startPoll];
+    } else {
+        self.backgrounded = FALSE;
+        if (!self.pollingStarted) {
+            self.pollingStarted = TRUE;
+            [self startPoll];
+        }
     }
 }
 
@@ -351,8 +366,10 @@ numberOfRowsInSection:(NSInteger)section
     NSDictionary *pollingResponseData = [self makeJSONMessagesPOST:@"get_messages"
                                                         postFields:postFields];
 
-    [self performSelectorOnMainThread:@selector(dataReceived:)
-                           withObject:pollingResponseData waitUntilDone:YES];
+    if (!self.backgrounded) {
+        [self performSelectorOnMainThread:@selector(dataReceived:)
+                               withObject:pollingResponseData waitUntilDone:YES];
+    }
 
     [pool drain];
 
@@ -383,7 +400,20 @@ numberOfRowsInSection:(NSInteger)section
     [self performSelectorInBackground:@selector(updatePointer) withObject: nil];
 }
 
-- (BOOL) fetchPointer {
+- (int) fetchPointer
+{
+    NSMutableDictionary *postFields = [NSMutableDictionary dictionary];
+    NSDictionary *resultDict = [self makeJSONMessagesPOST:@"get_profile" postFields:postFields];
+    
+    if (!resultDict) {
+        return FALSE;
+    }
+    
+    return [[resultDict objectForKey:@"pointer"] intValue];
+}
+
+- (BOOL) initializePointer
+{
     NSMutableDictionary *postFields = [NSMutableDictionary dictionary];
     NSDictionary *resultDict = [self makeJSONMessagesPOST:@"get_profile" postFields:postFields];
 
@@ -392,9 +422,8 @@ numberOfRowsInSection:(NSInteger)section
     }
 
     int pointer = [[resultDict objectForKey:@"pointer"] intValue];
-    // Add a few messages of context before the current message.
-    self.first = pointer - 3;
-    self.last = pointer - 3;
+    self.first = pointer;
+    self.last = pointer;
 
     if (self.first < 0) {
         self.first = 0;
@@ -425,7 +454,37 @@ numberOfRowsInSection:(NSInteger)section
     [composeView release];
 }
 
+-(int) rowWithId: (int)messageId
+{
+    int i = 0;
+    for (i = 0; i < [self.listData count]; i++) {
+        if ([[self.listData[i] objectForKey:@"id"] intValue] == messageId) {
+            return i;
+        }
+    }
+    return FALSE;
+}
+
 -(void)reset {
+    int pointer = [self fetchPointer];
+
+    if ((pointer != FALSE) && (pointer != -1)) {
+        int pointerRowNum = [self rowWithId:pointer];
+        if (pointerRowNum) {
+            // If the pointer is already in our table, but not visible, scroll to it
+            // but don't try to clear and refetch messages.
+            [self.tableView scrollToRowAtIndexPath:[NSIndexPath
+                                                    indexPathForRow:pointerRowNum
+                                                    inSection:0]
+                                    atScrollPosition:UITableViewScrollPositionMiddle
+                                            animated:NO];
+            self.backgrounded = FALSE;
+            return;
+        }
+    }
+
+    // If the pointer has moved because messages were consumed on another device, clear
+    // the list and re-populate it.
     [self.listData removeAllObjects];
     self.first = -1;
     self.last = -1;
