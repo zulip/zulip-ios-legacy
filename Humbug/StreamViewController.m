@@ -30,18 +30,26 @@
     self.gravatars = [[NSMutableDictionary alloc] init];
     self.delegate = (HumbugAppDelegate *)[UIApplication sharedApplication].delegate;
     
-    UIBarButtonItem *composeButton = [[UIBarButtonItem alloc]
-                                      initWithBarButtonSystemItem:UIBarButtonSystemItemAction
-                                      target:self
-                                      action:@selector(composeButtonPressed)];
-    [[self navigationItem] setRightBarButtonItem:composeButton];
+    UIImage *composeButtonImage = [UIImage imageNamed:@"glyphicons_355_bullhorn.png"];
+    UIButton *composeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [composeButton setImage:composeButtonImage forState:UIControlStateNormal];
+    composeButton.frame = CGRectMake(0.0, 0.0, composeButtonImage.size.width + 40,
+                                     composeButtonImage.size.height);
+    [composeButton addTarget:self action:@selector(composeButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *uiBarComposeButton = [[UIBarButtonItem alloc] initWithCustomView:composeButton];
+    [[self navigationItem] setRightBarButtonItem:uiBarComposeButton];
     [composeButton release];
     
-    UIBarButtonItem *composePMButton = [[UIBarButtonItem alloc]
-                                      initWithBarButtonSystemItem:UIBarButtonSystemItemAction
-                                      target:self
-                                      action:@selector(composePMButtonPressed)];
-    [[self navigationItem] setLeftBarButtonItem:composePMButton];
+    UIImage *composePMButtonImage = [UIImage imageNamed:@"glyphicons_003_user.png"];
+    UIButton *composePMButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [composePMButton setImage:composePMButtonImage forState:UIControlStateNormal];
+    composePMButton.frame = CGRectMake(0.0, 0.0, composeButtonImage.size.width + 40,
+                                       composeButtonImage.size.height);
+    [composePMButton addTarget:self action:@selector(composePMButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *uiBarComposePMButton = [[UIBarButtonItem alloc] initWithCustomView:composePMButton];
+    [[self navigationItem] setLeftBarButtonItem:uiBarComposePMButton];
+    [composePMButton release];
+    [uiBarComposePMButton release];
 }
 
 - (void)viewDidAppear:(BOOL)animated

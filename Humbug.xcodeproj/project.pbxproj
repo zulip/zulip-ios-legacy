@@ -31,6 +31,8 @@
 		E577A74A16224C37002D9651 /* robot_gravatar.png in Resources */ = {isa = PBXBuildFile; fileRef = E577A74916224C37002D9651 /* robot_gravatar.png */; };
 		E577A74D16226AC4002D9651 /* MessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E577A74C16226AC4002D9651 /* MessageCell.m */; };
 		E577A74F16226AFF002D9651 /* MessageCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E577A74E16226AFF002D9651 /* MessageCellView.xib */; };
+		E58E3003167ED90F0076E3D8 /* glyphicons_003_user.png in Resources */ = {isa = PBXBuildFile; fileRef = E58E3002167ED90F0076E3D8 /* glyphicons_003_user.png */; };
+		E58E3006167ED9350076E3D8 /* glyphicons_355_bullhorn.png in Resources */ = {isa = PBXBuildFile; fileRef = E58E3005167ED9350076E3D8 /* glyphicons_355_bullhorn.png */; };
 		E598E78A1634A9950022BF4A /* ErrorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E598E7881634A9940022BF4A /* ErrorViewController.m */; };
 		E598E78B1634A9950022BF4A /* ErrorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E598E7891634A9940022BF4A /* ErrorViewController.xib */; };
 		E5CDE07C162C88A800BBD773 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5CDE07A162C88A800BBD773 /* LoginViewController.m */; };
@@ -80,6 +82,8 @@
 		E577A74B16226AC4002D9651 /* MessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageCell.h; sourceTree = "<group>"; };
 		E577A74C16226AC4002D9651 /* MessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageCell.m; sourceTree = "<group>"; };
 		E577A74E16226AFF002D9651 /* MessageCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MessageCellView.xib; sourceTree = "<group>"; };
+		E58E3002167ED90F0076E3D8 /* glyphicons_003_user.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = glyphicons_003_user.png; path = ../../../../../Downloads/glyphicons_free/glyphicons/png/glyphicons_003_user.png; sourceTree = "<group>"; };
+		E58E3005167ED9350076E3D8 /* glyphicons_355_bullhorn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = glyphicons_355_bullhorn.png; path = ../../../../../Downloads/glyphicons_free/glyphicons/png/glyphicons_355_bullhorn.png; sourceTree = "<group>"; };
 		E598E7871634A9940022BF4A /* ErrorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ErrorViewController.h; sourceTree = "<group>"; };
 		E598E7881634A9940022BF4A /* ErrorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ErrorViewController.m; sourceTree = "<group>"; };
 		E598E7891634A9940022BF4A /* ErrorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ErrorViewController.xib; sourceTree = "<group>"; };
@@ -176,6 +180,8 @@
 				E598E7881634A9940022BF4A /* ErrorViewController.m */,
 				E598E7891634A9940022BF4A /* ErrorViewController.xib */,
 				E577A74516224B8D002D9651 /* robot_gravatar.png */,
+				E58E3002167ED90F0076E3D8 /* glyphicons_003_user.png */,
+				E58E3005167ED9350076E3D8 /* glyphicons_355_bullhorn.png */,
 				C316738B1620DB6B00CE9FE5 /* Supporting Files */,
 			);
 			path = Humbug;
@@ -291,6 +297,8 @@
 				E5726A2916332BF800ED8BB1 /* StreamViewController.xib in Resources */,
 				E598E78B1634A9950022BF4A /* ErrorViewController.xib in Resources */,
 				E5DC806D165D347D008B53F9 /* ComposeViewController.xib in Resources */,
+				E58E3003167ED90F0076E3D8 /* glyphicons_003_user.png in Resources */,
+				E58E3006167ED9350076E3D8 /* glyphicons_355_bullhorn.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
