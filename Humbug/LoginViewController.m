@@ -81,12 +81,16 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    [self animateTextField: textField up: YES];
+    if (textField == self.password) {
+        [self animateTextField: textField up: YES];
+    }
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    [self animateTextField: textField up: NO];
+    if (textField == self.password) {
+        [self animateTextField: textField up: NO];
+    }
 }
 
 @end
