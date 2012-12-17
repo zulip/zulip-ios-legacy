@@ -17,9 +17,12 @@
 @property(assign) int first;
 @property(assign) int last;
 @property(assign) double lastRequestTime;
+@property(assign) BOOL pollingStarted;
 @property(assign) double backoff;
 @property(assign) BOOL waitingOnErrorRecovery;
 
 -(void)composeButtonPressed;
+-(void)initialPopulate;
+-(void)reset;
 
 @end

@@ -24,6 +24,7 @@
     self.last = -1;
     self.backoff = 0;
     self.lastRequestTime = 0;
+    self.pollingStarted = FALSE;
     self.waitingOnErrorRecovery = FALSE;
     self.listData = [[NSMutableArray alloc] init];
     self.gravatars = [[NSMutableDictionary alloc] init];
@@ -46,6 +47,11 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     // This function gets called whenever the stream view appears, including returning to the view after popping another view. We only want to backfill old messages on the very first load.
+    [self initialPopulate];
+}
+
+- (void)initialPopulate
+{
     if (self.last == -1) {
         dispatch_queue_t downloadQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
         dispatch_async(downloadQueue, ^{
@@ -321,7 +327,8 @@ numberOfRowsInSection:(NSInteger)section
     if (self.last != old_last) {
         // There are still historical messages to fetch.
         [self performSelectorInBackground:@selector(getOldMessages) withObject: nil];
-    } else {
+    } else if (!self.pollingStarted) {
+        self.pollingStarted = TRUE;
         [self startPoll];
     }
 }
@@ -350,6 +357,9 @@ numberOfRowsInSection:(NSInteger)section
 
 - (void) updatePointer {
     [self.tableView visibleCells];
+    if ([self.listData count] == 0) {
+        return;
+    }
     NSIndexPath *indexPath = [self.tableView indexPathForCell:
                               [self.tableView.visibleCells objectAtIndex:0]];
     NSUInteger lastIndex = [indexPath indexAtPosition:[indexPath length] - 1];
@@ -405,6 +415,13 @@ numberOfRowsInSection:(NSInteger)section
     composeView.type = @"private";
     [[self navigationController] pushViewController:composeView animated:YES];
     [composeView release];
+}
+
+-(void)reset {
+    [self.listData removeAllObjects];
+    self.first = -1;
+    self.last = -1;
+    [self initialPopulate];
 }
 
 @end
