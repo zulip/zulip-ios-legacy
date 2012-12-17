@@ -16,6 +16,7 @@
 @property (nonatomic, retain) NSString *apiKey;
 @property (nonatomic, retain) NSString *email;
 @property (nonatomic, retain) NSString *clientID;
+@property (nonatomic, retain) NSString *apiURL;
 
 - (NSData *) makePOST:(NSHTTPURLResponse **)response resource_path:(NSString *)resource_path
            postFields:(NSMutableDictionary *)postFields useAPICredentials:(BOOL)useAPICredentials;

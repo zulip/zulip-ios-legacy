@@ -38,6 +38,18 @@
         self.apiKey = storedApiKey;
         self.email = storedEmail;
     }
+
+    BOOL debug = YES;
+
+    if (debug == YES) {
+        self.apiURL = @"http://localhost:9991";
+    } else if ([[self.email lowercaseString] hasSuffix:@"humbughq.com"]) {
+        self.apiURL = @"https://staging.humbughq.com";
+    } else {
+        self.apiURL = @"https://humbughq.com";
+    }
+    self.apiURL = [self.apiURL stringByAppendingString:@"/api/v1/"];
+
     self.clientID = @"";
 
     [self.window makeKeyAndVisible];
@@ -102,7 +114,7 @@
 
     request = [[[NSMutableURLRequest alloc]
                 initWithURL:[NSURL URLWithString:
-                             [@"https://app.humbughq.com/api/v1/" stringByAppendingString:resource_path]]
+                             [self.apiURL stringByAppendingString:resource_path]]
                 cachePolicy:NSURLRequestReloadIgnoringCacheData
                 timeoutInterval:60] autorelease];
     [request setHTTPMethod:@"POST"];
