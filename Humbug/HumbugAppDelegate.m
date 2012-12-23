@@ -39,7 +39,7 @@
         self.email = storedEmail;
     }
 
-    BOOL debug = NO;
+    BOOL debug = YES;
 
     if (debug == YES) {
         self.apiURL = @"http://localhost:9991";

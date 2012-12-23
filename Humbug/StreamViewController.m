@@ -70,7 +70,11 @@
                 [self.delegate showErrorScreen:self.view
                                   errorMessage:@"Unable to fetch messages. Please try again in a few minutes."];
             }
-            [self getOldMessages];
+            NSDictionary * args = [NSDictionary dictionaryWithObjectsAndKeys:
+                                   [NSNumber numberWithInteger:6], @"num_before",
+                                   [NSNumber numberWithInteger:0], @"num_after",
+                                   nil];
+            [self getOldMessages:args];
         });
     }
 }
@@ -319,7 +323,7 @@ numberOfRowsInSection:(NSInteger)section
         }
     }
     
-    if (backfill) {
+    if (backfill && [self.listData count]) {
         // If we are backfilling old messages, these are messages you've necessarily already
         // seen that are just being fetched as context, so scroll to the bottom of them.
         [self.tableView scrollToRowAtIndexPath:[NSIndexPath
@@ -330,23 +334,34 @@ numberOfRowsInSection:(NSInteger)section
     }
 }
 
-- (void) getOldMessages {
+- (void) getOldMessages: (NSDictionary *)args {
+    int anchor = [[args objectForKey:@"anchor"] integerValue];
+    if (!anchor) {
+        anchor = self.last;
+    }
     NSMutableDictionary *postFields = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                       [NSString stringWithFormat:@"%i", self.last], @"anchor",
-                                       [NSString stringWithFormat:@"%i", 6], @"num_before",
-                                       [NSString stringWithFormat:@"%i", 0], @"num_after",
+                                       [NSString stringWithFormat:@"%i", anchor], @"anchor",
+                                       [NSString stringWithFormat:@"%i",
+                                        [[args objectForKey:@"num_before"] integerValue]], @"num_before",
+                                       [NSString stringWithFormat:@"%i",
+                                        [[args objectForKey:@"num_after"] integerValue]], @"num_after",
                                        [NSDictionary dictionary], @"narrow", nil];
 
     NSDictionary *messageData = [self makeJSONMessagesPOST:@"get_old_messages"
                                                 postFields:postFields];
 
-    int old_last = self.last;
+    int old_count = [self.listData count];
     [self performSelectorOnMainThread:@selector(dataReceived:)
                            withObject:messageData waitUntilDone:YES];
 
-    if (self.last != old_last) {
+    if (old_count != [self.listData count]) {
         // There are still historical messages to fetch.
-        [self performSelectorInBackground:@selector(getOldMessages) withObject: nil];
+        NSDictionary *args = [NSDictionary dictionaryWithObjectsAndKeys:
+                               [NSNumber numberWithInteger:self.last + 1], @"anchor",
+                               [NSNumber numberWithInteger:0], @"num_before",
+                               [NSNumber numberWithInteger:20], @"num_after",
+                               nil];
+        [self performSelectorInBackground:@selector(getOldMessages:) withObject:args];
     } else {
         self.backgrounded = FALSE;
         if (!self.pollingStarted) {
