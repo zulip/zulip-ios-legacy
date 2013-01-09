@@ -345,7 +345,7 @@ numberOfRowsInSection:(NSInteger)section
                                         [[args objectForKey:@"num_before"] integerValue]], @"num_before",
                                        [NSString stringWithFormat:@"%i",
                                         [[args objectForKey:@"num_after"] integerValue]], @"num_after",
-                                       [NSDictionary dictionary], @"narrow", nil];
+                                       nil];
 
     NSDictionary *messageData = [self makeJSONMessagesPOST:@"get_old_messages"
                                                 postFields:postFields];
@@ -376,8 +376,7 @@ numberOfRowsInSection:(NSInteger)section
 
     NSMutableDictionary *postFields = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                        [NSString stringWithFormat:@"%i", self.first], @"first",
-                                       [NSString stringWithFormat:@"%i", self.last], @"last",
-                                       [NSDictionary dictionary], @"narrow", nil];
+                                       [NSString stringWithFormat:@"%i", self.last], @"last", nil];
     NSDictionary *pollingResponseData = [self makeJSONMessagesPOST:@"get_messages"
                                                         postFields:postFields];
 
