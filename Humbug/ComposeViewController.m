@@ -93,7 +93,10 @@
     } else {
         NSLog(@"Invalid message type");
     }
-    [self makeJSONMessagePOST:@"send_message" postFields:postFields];
+    dispatch_queue_t downloadQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_async(downloadQueue, ^{
+        [self makeJSONMessagePOST:@"send_message" postFields:postFields];
+    });
     [self.delegate.navController popViewControllerAnimated:YES];
 }
 
