@@ -345,7 +345,7 @@ numberOfRowsInSection:(NSInteger)section
                                         [[args objectForKey:@"num_before"] integerValue]], @"num_before",
                                        [NSString stringWithFormat:@"%i",
                                         [[args objectForKey:@"num_after"] integerValue]], @"num_after",
-                                       nil];
+                                       @"{}", @"narrow", nil];
 
     NSDictionary *messageData = [self makeJSONMessagesPOST:@"get_old_messages"
                                                 postFields:postFields];
