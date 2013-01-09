@@ -405,7 +405,9 @@ numberOfRowsInSection:(NSInteger)section
     MessageCell *pointedCell = [self.listData objectAtIndex:lastIndex];
 
     NSMutableDictionary *postFields = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                       [pointedCell valueForKey:@"id"], @"pointer", nil];
+                                       [NSString stringWithFormat:@"%@",
+                                        [pointedCell valueForKey:@"id"]],
+                                       @"pointer", nil];
     [self makeJSONMessagesPOST:@"update_pointer" postFields:postFields];
 }
 
