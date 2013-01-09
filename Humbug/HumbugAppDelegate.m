@@ -132,7 +132,8 @@
         [postFields addEntriesFromDictionary:[NSDictionary
                                               dictionaryWithObjectsAndKeys:self.email, @"email",
                                               self.apiKey, @"api-key",
-                                              self.clientID, @"client_id", nil]];
+                                              self.clientID, @"client_id",
+                                              @"iPhone", @"client", nil]];
     }
 
     NSMutableString *postString = [[NSMutableString alloc] init];
