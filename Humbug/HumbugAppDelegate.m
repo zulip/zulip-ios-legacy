@@ -1,5 +1,6 @@
 #import "HumbugAppDelegate.h"
 #import "KeychainItemWrapper.h"
+#import "NSString+Encode.h"
 
 @implementation HumbugAppDelegate
 
@@ -108,6 +109,12 @@
     [super dealloc];
 }
 
+- (NSMutableString *)encodeString:(NSStringEncoding)encoding
+{
+    return (NSMutableString *) CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)self,
+                                                                NULL, (CFStringRef)@";/?:@&=$+{}<>,",
+                                                                CFStringConvertNSStringEncodingToEncoding(encoding));
+}
 
 - (NSData *) makePOST:(NSHTTPURLResponse **)response resource_path:(NSString *)resource_path postFields:(NSMutableDictionary *)postFields useAPICredentials:(BOOL)useAPICredentials
 {
@@ -130,7 +137,7 @@
 
     NSMutableString *postString = [[NSMutableString alloc] init];
     for (id key in postFields) {
-        [postString appendFormat:@"%@=%@&", key, [postFields objectForKey:key]];
+        [postString appendFormat:@"%@=%@&", key, [[postFields objectForKey:key] encodeString:NSUTF8StringEncoding]];
     }
 
     [request setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]];

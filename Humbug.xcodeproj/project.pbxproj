@@ -24,6 +24,7 @@
 		E50D7573163318DA00251D1F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E50D7572163318D900251D1F /* Security.framework */; };
 		E50D757616331B6600251D1F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E50D757516331B6600251D1F /* Security.framework */; };
 		E50D757916331D7A00251D1F /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = E50D757816331D7A00251D1F /* KeychainItemWrapper.m */; };
+		E570A8BF169DF81E0072BC7E /* NSString+Encode.m in Sources */ = {isa = PBXBuildFile; fileRef = E570A8BE169DF81E0072BC7E /* NSString+Encode.m */; };
 		E5726A2816332BF800ED8BB1 /* StreamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5726A2616332BF800ED8BB1 /* StreamViewController.m */; };
 		E5726A2916332BF800ED8BB1 /* StreamViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E5726A2716332BF800ED8BB1 /* StreamViewController.xib */; };
 		E577A7441620F2BE002D9651 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E577A7431620F2BE002D9651 /* Default-568h@2x.png */; };
@@ -73,6 +74,8 @@
 		E50D757516331B6600251D1F /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		E50D757716331D7A00251D1F /* KeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainItemWrapper.h; sourceTree = "<group>"; };
 		E50D757816331D7A00251D1F /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
+		E570A8BD169DF81E0072BC7E /* NSString+Encode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Encode.h"; sourceTree = "<group>"; };
+		E570A8BE169DF81E0072BC7E /* NSString+Encode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Encode.m"; sourceTree = "<group>"; };
 		E5726A2516332BF800ED8BB1 /* StreamViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamViewController.h; sourceTree = "<group>"; };
 		E5726A2616332BF800ED8BB1 /* StreamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreamViewController.m; sourceTree = "<group>"; };
 		E5726A2716332BF800ED8BB1 /* StreamViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StreamViewController.xib; sourceTree = "<group>"; };
@@ -183,6 +186,8 @@
 				E58E3002167ED90F0076E3D8 /* glyphicons_003_user.png */,
 				E58E3005167ED9350076E3D8 /* glyphicons_355_bullhorn.png */,
 				C316738B1620DB6B00CE9FE5 /* Supporting Files */,
+				E570A8BD169DF81E0072BC7E /* NSString+Encode.h */,
+				E570A8BE169DF81E0072BC7E /* NSString+Encode.m */,
 			);
 			path = Humbug;
 			sourceTree = "<group>";
@@ -342,6 +347,7 @@
 				E5726A2816332BF800ED8BB1 /* StreamViewController.m in Sources */,
 				E598E78A1634A9950022BF4A /* ErrorViewController.m in Sources */,
 				E5DC806C165D347D008B53F9 /* ComposeViewController.m in Sources */,
+				E570A8BF169DF81E0072BC7E /* NSString+Encode.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
