@@ -505,6 +505,7 @@ numberOfRowsInSection:(NSInteger)section
     self.first = -1;
     self.last = -1;
     [self initialPopulate];
+    [self.tableView reloadData];
 }
 
 @end
