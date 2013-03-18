@@ -11,6 +11,7 @@
 @synthesize lastRequestTime;
 @synthesize waitingOnErrorRecovery;
 @synthesize timeWhenBackgrounded;
+@synthesize streams;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -65,6 +66,8 @@
     if (self.last == -1) {
         dispatch_queue_t downloadQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
         dispatch_async(downloadQueue, ^{
+            // Fetch stream information
+            [self getAllSubscriptions];
 
             if ([self initializePointer] != TRUE) {
                 [self.delegate showErrorScreen:self.view
@@ -247,31 +250,26 @@ numberOfRowsInSection:(NSInteger)section
     [composeView release];
 }
 
-- (NSDictionary *) makeJSONMessagesPOST:(NSString *)resource_path
-                             postFields:(NSMutableDictionary *)postFields
+- (NSDictionary *) makeJSONPOST:(NSString *)resource_path
+                     postFields:(NSMutableDictionary *)postFields
+                    withBackoff:(BOOL)backoff
 {
     NSHTTPURLResponse *response = nil;
-    NSData *data;
+    NSData *data = [self.delegate makePOST:&response resource_path:resource_path postFields:postFields useAPICredentials:TRUE];
 
-    while (([[NSDate date] timeIntervalSince1970] - self.lastRequestTime) < self.backoff) {
-        [NSThread sleepForTimeInterval:.5];
-    }
-
-    data = [self.delegate makePOST:&response resource_path:resource_path postFields:postFields useAPICredentials:TRUE];
-
-    self.lastRequestTime = [[NSDate date] timeIntervalSince1970];
-
-    if ([response statusCode] == 500) {
-        // The service is having problems; possibly indicate this to the user and back off requests.
-        [self adjustRequestBackoff];
-        if (self.waitingOnErrorRecovery == FALSE) {
-            self.waitingOnErrorRecovery = TRUE;
-            [self.delegate showErrorScreen:self.view
-                              errorMessage:@"Error getting messages. Please try again in a few minutes."];
+    if (backoff) {
+        if ([response statusCode] == 500) {
+            // The service is having problems; possibly indicate this to the user and back off requests.
+            [self adjustRequestBackoff];
+            if (self.waitingOnErrorRecovery == FALSE) {
+                self.waitingOnErrorRecovery = TRUE;
+                [self.delegate showErrorScreen:self.view
+                                  errorMessage:@"Error getting messages. Please try again in a few minutes."];
+            }
+        } else {
+            self.waitingOnErrorRecovery = FALSE;
+            self.backoff = 0;
         }
-    } else {
-        self.waitingOnErrorRecovery = FALSE;
-        self.backoff = 0;
     }
 
     if (!data) {
@@ -293,11 +291,23 @@ numberOfRowsInSection:(NSInteger)section
     return jsonDict;
 }
 
+- (NSDictionary *) makeJSONMessagesPOST:(NSString *)resource_path
+                             postFields:(NSMutableDictionary *)postFields
+{
+    while (([[NSDate date] timeIntervalSince1970] - self.lastRequestTime) < self.backoff) {
+        [NSThread sleepForTimeInterval:.5];
+    }
+
+    self.lastRequestTime = [[NSDate date] timeIntervalSince1970];
+
+    return [self makeJSONPOST:resource_path postFields:postFields withBackoff:YES];
+}
+
 - (void) dataReceived: (NSDictionary*) messageData {
     if (!messageData) {
         return;
     }
-    
+
     BOOL backfill = FALSE;
     if ([self.listData count] == 0) {
         backfill = TRUE;
@@ -305,6 +315,13 @@ numberOfRowsInSection:(NSInteger)section
 
     for (NSDictionary *item in [messageData objectForKey:@"messages"]) {
         int message_id = [[item objectForKey:@"id"] intValue];
+
+        if ([[item objectForKey:@"type"] isEqualToString:@"stream"]) {
+            NSString* stream = [item objectForKey:@"display_recipient"];
+            if (![self streamInHome:stream]) {
+                continue;
+            }
+        }
 
         NSArray *newIndexPaths = [NSArray arrayWithObjects:
                                   [NSIndexPath indexPathForRow:[self.listData count]
@@ -369,6 +386,31 @@ numberOfRowsInSection:(NSInteger)section
             [self startPoll];
         }
     }
+}
+
+- (void) getAllSubscriptions {
+    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+
+    NSDictionary *dict = [self makeJSONPOST:@"subscriptions/list" postFields:[[NSMutableDictionary alloc] init] withBackoff:NO];
+    NSArray *streamList = [dict objectForKey:@"subscriptions"];
+    NSMutableDictionary *streamdict = [[NSMutableDictionary alloc] init];
+    for (NSDictionary* stream in streamList) {
+        [streamdict setObject:stream forKey:[stream objectForKey:@"name"]];
+    }
+    [self setStreams:streamdict];
+
+    [pool drain];
+}
+
+- (BOOL) streamInHome:(NSString *)stream
+{
+    NSDictionary *streamInfo = [[self streams] objectForKey:stream];
+
+    if (!streamInfo) {
+        return YES;
+    }
+
+    return [[streamInfo objectForKey:@"in_home_view"] boolValue];
 }
 
 - (void) longPoll {

@@ -13,6 +13,7 @@
 @property(nonatomic,retain) NSMutableArray *listData;
 @property(nonatomic,retain) NSMutableDictionary *gravatars;
 @property(nonatomic,retain) HumbugAppDelegate *delegate;
+@property(nonatomic,retain) NSDictionary *streams;
 
 @property(assign) int first;
 @property(assign) int last;
