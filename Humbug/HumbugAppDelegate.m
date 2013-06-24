@@ -30,7 +30,7 @@
     self.navController = [[UINavigationController alloc] initWithRootViewController:self.streamViewController];
     [[self window] setRootViewController:self.navController];
 
-    if (storedApiKey == @"") {
+    if ([storedApiKey isEqual: @""]) {
         // No credentials stored; we need to log in.
         self.loginViewController = [[LoginViewController alloc] init];
         [self.navController pushViewController:self.loginViewController animated:YES];
