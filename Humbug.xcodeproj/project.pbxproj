@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B3733CCF1778C75300714B6E /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B3733CCB1778C75300714B6E /* Default-568h@2x.png */; };
+		B3733CD01778C75300714B6E /* glyphicons_003_user.png in Resources */ = {isa = PBXBuildFile; fileRef = B3733CCC1778C75300714B6E /* glyphicons_003_user.png */; };
+		B3733CD11778C75300714B6E /* glyphicons_355_bullhorn.png in Resources */ = {isa = PBXBuildFile; fileRef = B3733CCD1778C75300714B6E /* glyphicons_355_bullhorn.png */; };
+		B3733CD21778C75300714B6E /* robot_gravatar.png in Resources */ = {isa = PBXBuildFile; fileRef = B3733CCE1778C75300714B6E /* robot_gravatar.png */; };
 		C31673851620DB6B00CE9FE5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673841620DB6B00CE9FE5 /* UIKit.framework */; };
 		C31673871620DB6B00CE9FE5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673861620DB6B00CE9FE5 /* Foundation.framework */; };
 		C31673891620DB6B00CE9FE5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673881620DB6B00CE9FE5 /* CoreGraphics.framework */; };
@@ -24,14 +28,9 @@
 		E50D7573163318DA00251D1F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E50D7572163318D900251D1F /* Security.framework */; };
 		E50D757616331B6600251D1F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E50D757516331B6600251D1F /* Security.framework */; };
 		E50D757916331D7A00251D1F /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = E50D757816331D7A00251D1F /* KeychainItemWrapper.m */; };
-		E53D5BD816A9F5BD009CAE51 /* glyphicons_003_user.png in Resources */ = {isa = PBXBuildFile; fileRef = E53D5BD616A9F5BD009CAE51 /* glyphicons_003_user.png */; };
-		E53D5BD916A9F5BD009CAE51 /* glyphicons_355_bullhorn.png in Resources */ = {isa = PBXBuildFile; fileRef = E53D5BD716A9F5BD009CAE51 /* glyphicons_355_bullhorn.png */; };
 		E570A8BF169DF81E0072BC7E /* NSString+Encode.m in Sources */ = {isa = PBXBuildFile; fileRef = E570A8BE169DF81E0072BC7E /* NSString+Encode.m */; };
 		E5726A2816332BF800ED8BB1 /* StreamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5726A2616332BF800ED8BB1 /* StreamViewController.m */; };
 		E5726A2916332BF800ED8BB1 /* StreamViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E5726A2716332BF800ED8BB1 /* StreamViewController.xib */; };
-		E577A7441620F2BE002D9651 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E577A7431620F2BE002D9651 /* Default-568h@2x.png */; };
-		E577A74616224B8D002D9651 /* robot_gravatar.png in Resources */ = {isa = PBXBuildFile; fileRef = E577A74516224B8D002D9651 /* robot_gravatar.png */; };
-		E577A74A16224C37002D9651 /* robot_gravatar.png in Resources */ = {isa = PBXBuildFile; fileRef = E577A74916224C37002D9651 /* robot_gravatar.png */; };
 		E577A74D16226AC4002D9651 /* MessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E577A74C16226AC4002D9651 /* MessageCell.m */; };
 		E577A74F16226AFF002D9651 /* MessageCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E577A74E16226AFF002D9651 /* MessageCellView.xib */; };
 		E598E78A1634A9950022BF4A /* ErrorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E598E7881634A9940022BF4A /* ErrorViewController.m */; };
@@ -53,6 +52,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B3733CCB1778C75300714B6E /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "Resources/Default-568h@2x.png"; sourceTree = "<group>"; };
+		B3733CCC1778C75300714B6E /* glyphicons_003_user.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = glyphicons_003_user.png; path = Resources/glyphicons_003_user.png; sourceTree = "<group>"; };
+		B3733CCD1778C75300714B6E /* glyphicons_355_bullhorn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = glyphicons_355_bullhorn.png; path = Resources/glyphicons_355_bullhorn.png; sourceTree = "<group>"; };
+		B3733CCE1778C75300714B6E /* robot_gravatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = robot_gravatar.png; path = Resources/robot_gravatar.png; sourceTree = "<group>"; };
 		C31673801620DB6B00CE9FE5 /* Humbug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Humbug.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C31673841620DB6B00CE9FE5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C31673861620DB6B00CE9FE5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -74,16 +77,11 @@
 		E50D757516331B6600251D1F /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		E50D757716331D7A00251D1F /* KeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainItemWrapper.h; sourceTree = "<group>"; };
 		E50D757816331D7A00251D1F /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
-		E53D5BD616A9F5BD009CAE51 /* glyphicons_003_user.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = glyphicons_003_user.png; sourceTree = SOURCE_ROOT; };
-		E53D5BD716A9F5BD009CAE51 /* glyphicons_355_bullhorn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = glyphicons_355_bullhorn.png; sourceTree = SOURCE_ROOT; };
 		E570A8BD169DF81E0072BC7E /* NSString+Encode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Encode.h"; sourceTree = "<group>"; };
 		E570A8BE169DF81E0072BC7E /* NSString+Encode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Encode.m"; sourceTree = "<group>"; };
 		E5726A2516332BF800ED8BB1 /* StreamViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamViewController.h; sourceTree = "<group>"; };
 		E5726A2616332BF800ED8BB1 /* StreamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreamViewController.m; sourceTree = "<group>"; };
 		E5726A2716332BF800ED8BB1 /* StreamViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StreamViewController.xib; sourceTree = "<group>"; };
-		E577A7431620F2BE002D9651 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		E577A74516224B8D002D9651 /* robot_gravatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = robot_gravatar.png; sourceTree = "<group>"; };
-		E577A74916224C37002D9651 /* robot_gravatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = robot_gravatar.png; sourceTree = "<group>"; };
 		E577A74B16226AC4002D9651 /* MessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageCell.h; sourceTree = "<group>"; };
 		E577A74C16226AC4002D9651 /* MessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageCell.m; sourceTree = "<group>"; };
 		E577A74E16226AFF002D9651 /* MessageCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MessageCellView.xib; sourceTree = "<group>"; };
@@ -125,12 +123,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B3733CCA1778C63400714B6E /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B3733CCB1778C75300714B6E /* Default-568h@2x.png */,
+				B3733CCC1778C75300714B6E /* glyphicons_003_user.png */,
+				B3733CCD1778C75300714B6E /* glyphicons_355_bullhorn.png */,
+				B3733CCE1778C75300714B6E /* robot_gravatar.png */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		C31673751620DB6A00CE9FE5 = {
 			isa = PBXGroup;
 			children = (
+				B3733CCA1778C63400714B6E /* Resources */,
 				E50D7572163318D900251D1F /* Security.framework */,
-				E577A74916224C37002D9651 /* robot_gravatar.png */,
-				E577A7431620F2BE002D9651 /* Default-568h@2x.png */,
 				C316738A1620DB6B00CE9FE5 /* Humbug */,
 				C31673B21620DB6C00CE9FE5 /* HumbugTests */,
 				C31673831620DB6B00CE9FE5 /* Frameworks */,
@@ -162,8 +170,6 @@
 		C316738A1620DB6B00CE9FE5 /* Humbug */ = {
 			isa = PBXGroup;
 			children = (
-				E53D5BD616A9F5BD009CAE51 /* glyphicons_003_user.png */,
-				E53D5BD716A9F5BD009CAE51 /* glyphicons_355_bullhorn.png */,
 				E50D757716331D7A00251D1F /* KeychainItemWrapper.h */,
 				E50D757816331D7A00251D1F /* KeychainItemWrapper.m */,
 				E5CDE079162C88A800BBD773 /* LoginViewController.h */,
@@ -184,7 +190,6 @@
 				E598E7871634A9940022BF4A /* ErrorViewController.h */,
 				E598E7881634A9940022BF4A /* ErrorViewController.m */,
 				E598E7891634A9940022BF4A /* ErrorViewController.xib */,
-				E577A74516224B8D002D9651 /* robot_gravatar.png */,
 				C316738B1620DB6B00CE9FE5 /* Supporting Files */,
 				E570A8BD169DF81E0072BC7E /* NSString+Encode.h */,
 				E570A8BE169DF81E0072BC7E /* NSString+Encode.m */,
@@ -294,16 +299,15 @@
 			files = (
 				C316738F1620DB6B00CE9FE5 /* InfoPlist.strings in Resources */,
 				C31673981620DB6B00CE9FE5 /* MainWindow.xib in Resources */,
-				E577A7441620F2BE002D9651 /* Default-568h@2x.png in Resources */,
-				E577A74616224B8D002D9651 /* robot_gravatar.png in Resources */,
-				E577A74A16224C37002D9651 /* robot_gravatar.png in Resources */,
 				E577A74F16226AFF002D9651 /* MessageCellView.xib in Resources */,
 				E5CDE07D162C88A800BBD773 /* LoginViewController.xib in Resources */,
 				E5726A2916332BF800ED8BB1 /* StreamViewController.xib in Resources */,
 				E598E78B1634A9950022BF4A /* ErrorViewController.xib in Resources */,
 				E5DC806D165D347D008B53F9 /* ComposeViewController.xib in Resources */,
-				E53D5BD816A9F5BD009CAE51 /* glyphicons_003_user.png in Resources */,
-				E53D5BD916A9F5BD009CAE51 /* glyphicons_355_bullhorn.png in Resources */,
+				B3733CCF1778C75300714B6E /* Default-568h@2x.png in Resources */,
+				B3733CD01778C75300714B6E /* glyphicons_003_user.png in Resources */,
+				B3733CD11778C75300714B6E /* glyphicons_355_bullhorn.png in Resources */,
+				B3733CD21778C75300714B6E /* robot_gravatar.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
