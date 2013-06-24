@@ -29,4 +29,6 @@
 -(void)reset;
 -(int)rowWithId:(int)messageId;
 
++ (UIColor *)defaultStreamColor;
+
 @end

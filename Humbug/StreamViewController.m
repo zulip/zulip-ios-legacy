@@ -1,6 +1,7 @@
 #import "FirstViewController.h"
 #import "HumbugAppDelegate.h"
 #import "ComposeViewController.h"
+#import "UIColor+HexColor.h"
 
 @implementation StreamViewController
 @synthesize listData;
@@ -110,6 +111,13 @@ numberOfRowsInSection:(NSInteger)section
     return [self.listData count];
 }
 
++ (UIColor *)defaultStreamColor {
+    return [UIColor colorWithRed:187.0/255
+                           green:187.0/255
+                            blue:187.0/255
+                           alpha:1];
+}
+
 - (UIImage *)getCachedGravatar:(NSString *)gravatarHash
 {
     return[self.gravatars objectForKey:gravatarHash];
@@ -136,10 +144,7 @@ numberOfRowsInSection:(NSInteger)section
 {
     MessageCell *my_cell = (MessageCell *)cell;
     if ([my_cell.type isEqualToString:@"stream"]) {
-        my_cell.headerBar.backgroundColor = [UIColor colorWithRed:187.0/255
-                                                            green:187.0/255
-                                                             blue:187.0/255
-                                                            alpha:1];
+        my_cell.headerBar.backgroundColor = [self streamColor:my_cell.recipient];
     } else {
         // For non-stream messages, color cell background pale yellow (#FEFFE0).
         my_cell.backgroundColor = [UIColor colorWithRed:255.0/255 green:254.0/255
@@ -167,6 +172,7 @@ numberOfRowsInSection:(NSInteger)section
     }
 
     cell.type = [dict objectForKey:@"type"];
+    cell.recipient = [dict objectForKey:@"display_recipient"];
     if ([cell.type isEqualToString:@"stream"]) {
         cell.header.text = [NSString stringWithFormat:@"%@ > %@",
                             [dict objectForKey:@"display_recipient"],
@@ -582,6 +588,21 @@ numberOfRowsInSection:(NSInteger)section
     self.last = -1;
     [self initialPopulate];
     [self.tableView reloadData];
+}
+
+- (UIColor *)streamColor:(NSString *)withName {
+    NSDictionary *stream = [[self streams] objectForKey:withName];
+    if (stream == NULL) {
+        NSLog(@"Error loading stream data to fetch color, %@", withName);
+        return [StreamViewController defaultStreamColor];
+    }
+    NSString* colorHex = [stream objectForKey:@"color"];
+    if (colorHex == NULL || [colorHex isEqualToString:@""]) {
+        NSLog(@"Got no color for stream %@", withName);
+        return [StreamViewController defaultStreamColor];
+    }
+
+    return [UIColor colorWithHexString:colorHex defaultColor:[StreamViewController defaultStreamColor]];
 }
 
 @end

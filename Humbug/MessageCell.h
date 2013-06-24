@@ -11,5 +11,6 @@
 @property (strong, nonatomic) IBOutlet UIImageView *gravatar;
 
 @property (strong, nonatomic) NSString *type;
+@property (strong, nonatomic) NSString *recipient;
 
 @end
