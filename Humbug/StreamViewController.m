@@ -163,7 +163,7 @@ numberOfRowsInSection:(NSInteger)section
 
     cell.type = [dict objectForKey:@"type"];
     if ([cell.type isEqualToString:@"stream"]) {
-        cell.header.text = [NSString stringWithFormat:@"%@ | %@",
+        cell.header.text = [NSString stringWithFormat:@"%@ > %@",
                             [dict objectForKey:@"display_recipient"],
                             [dict objectForKey:@"subject"]];
     } else if ([cell.type isEqualToString:@"private"]) {
