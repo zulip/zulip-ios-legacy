@@ -110,6 +110,11 @@ numberOfRowsInSection:(NSInteger)section
     return [self.listData count];
 }
 
+- (UIImage *)getCachedGravatar:(NSString *)gravatarHash
+{
+    return[self.gravatars objectForKey:gravatarHash];
+}
+
 - (UIImage *)getGravatar:(NSString *)gravatarHash
 {
     UIImage *gravatar = [self.gravatars objectForKey:gravatarHash];
@@ -183,6 +188,35 @@ numberOfRowsInSection:(NSInteger)section
     cell.content.lineBreakMode = UILineBreakModeWordWrap;
     cell.content.numberOfLines = 0;
 
+    // Asynchronously load gravatar if needed
+    NSString *ghash = [dict objectForKey:@"gravatar_hash"];
+    UIImage *gravatar = [self getCachedGravatar:ghash];
+    if (gravatar != NULL) {
+        cell.gravatar.image = gravatar;
+    } else {
+        // Load our gravatar image on a high-priority background thread
+        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+
+        dispatch_async(queue, ^{
+            // Fetch image from gravatar & cache it
+            UIImage *image = [self getGravatar:ghash];
+
+            // Ask the UITableView for the cell at this index path again
+            // to make sure we get the latest version---meanwhile the
+            // cell might have been recycled by iOS
+            MessageCell *newCell = (MessageCell *)[tableView cellForRowAtIndexPath:indexPath];
+
+            // Make sure the cell is still visible, otherwise don't bother
+            if ([[tableView visibleCells] containsObject: newCell]){
+                // We need to set the image on the cell in the main thread, so async dispatch
+                // to there
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    newCell.gravatar.image = image;
+                    [newCell setNeedsLayout];
+                });
+            }
+        });
+    }
     cell.gravatar.image = [self getGravatar:[dict objectForKey:@"gravatar_hash"]];
 
     NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
