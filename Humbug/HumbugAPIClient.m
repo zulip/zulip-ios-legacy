@@ -51,4 +51,21 @@ static NSString *email = nil;
     return self;
 }
 
+- (AFHTTPRequestOperation *)HTTPRequestOperationWithRequest:(NSURLRequest *)urlRequest success:(void ( ^ ) ( AFHTTPRequestOperation *operation , id responseObject ))success failure:(void ( ^ ) ( AFHTTPRequestOperation *operation , NSError *error ))failure {
+    // Reimplement to print out error messages from JSON content
+    id my_failure = ^( AFHTTPRequestOperation *operation , NSError *error ) {
+        failure(operation, error);
+
+        // Log 'msg' key from JSON payload if it exists
+        if ([operation isKindOfClass:[AFJSONRequestOperation class]]) {
+            NSDictionary *json = (NSDictionary *)[(AFJSONRequestOperation *)operation responseJSON];
+            NSString *errorMsg = [json objectForKey:@"msg"];
+            if (errorMsg) {
+                NSLog(@"Humbug API Error Message: %@", errorMsg);
+            }
+        }
+    };
+
+    return [super HTTPRequestOperationWithRequest:urlRequest success:success failure:my_failure];
+}
 @end
