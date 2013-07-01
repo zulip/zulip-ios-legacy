@@ -1,6 +1,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "ComposeViewController.h"
 #import "HumbugAppDelegate.h"
+#import "HumbugAPIClient.h"
 
 @interface ComposeViewController ()
 
@@ -93,10 +94,11 @@
     } else {
         NSLog(@"Invalid message type");
     }
-    dispatch_queue_t downloadQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    dispatch_async(downloadQueue, ^{
-        [self makeJSONMessagePOST:@"send_message" postFields:postFields];
-    });
+
+    [[HumbugAPIClient sharedClient] postPath:@"messages" parameters:postFields success:nil failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error posting message: %@", [error localizedDescription]);
+    }];
+
     [self.delegate.navController popViewControllerAnimated:YES];
 }
 
@@ -122,33 +124,6 @@
     [UIView setAnimationDuration: movementDuration];
     self.view.frame = CGRectOffset(self.view.frame, 0, movement);
     [UIView commitAnimations];
-}
-
-- (NSDictionary *) makeJSONMessagePOST:(NSString *)resource_path
-                            postFields:(NSMutableDictionary *)postFields
-{
-    NSHTTPURLResponse *response = nil;
-    NSData *data;
-
-    data = [self.delegate makePOST:&response resource_path:resource_path postFields:postFields useAPICredentials:TRUE];
-
-    if ([response statusCode] != 200) {
-        NSLog(@"error sending");
-    }
-
-    NSError *e = nil;
-    NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData: data
-                                                             options: NSJSONReadingMutableContainers
-                                                               error: &e];
-    if (!jsonDict) {
-        NSLog(@"Error parsing JSON: %@", e);
-    }
-
-    if ([response statusCode] == 400) {
-        NSLog(@"Forbidden: %@", jsonDict);
-    }
-
-    return jsonDict;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {

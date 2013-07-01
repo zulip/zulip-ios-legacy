@@ -3,6 +3,7 @@
 #import "FirstViewController.h"
 #import "StreamViewController.h"
 #import "ErrorViewController.h"
+#import "AFHTTPRequestOperation.h"
 
 @interface HumbugAppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate>
 
@@ -18,10 +19,9 @@
 @property (nonatomic, retain) NSString *clientID;
 @property (nonatomic, retain) NSString *apiURL;
 
-- (NSData *) makePOST:(NSHTTPURLResponse **)response resource_path:(NSString *)resource_path
-           postFields:(NSMutableDictionary *)postFields useAPICredentials:(BOOL)useAPICredentials;
-- (bool) login:(NSString *)email password:(NSString *)password;
+- (void) login:(NSString *)email password:(NSString *)password result:(void (^) (bool success))result;
 - (void) viewStream;
 - (void) showErrorScreen:(UIView *)view errorMessage:(NSString *)errorMessage;
+- (void) dismissErrorScreen;
 
 @end

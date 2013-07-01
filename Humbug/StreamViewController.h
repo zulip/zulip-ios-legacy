@@ -15,8 +15,13 @@
 @property(nonatomic,retain) HumbugAppDelegate *delegate;
 @property(nonatomic,retain) NSDictionary *streams;
 
-@property(assign) int first;
-@property(assign) int last;
+// User-specific info from the server
+@property(assign) int lastEventId;
+@property(assign) int maxMessageId;
+@property(assign) int pointer;
+@property(nonatomic, retain) NSString *queueId;
+
+// Internally used variables
 @property(assign) double lastRequestTime;
 @property(assign) BOOL pollingStarted;
 @property(assign) double backoff;

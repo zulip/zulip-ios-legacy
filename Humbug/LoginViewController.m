@@ -45,13 +45,14 @@
 
 - (IBAction) login: (id) sender
 {
-    bool loggedIn = [appDelegate login:email.text password:password.text];
-    if (loggedIn) {
-        [appDelegate viewStream];
-    } else {
-        NSLog(@"Failed to login!");
-        [appDelegate showErrorScreen:self.view errorMessage:@"Unable to login. Please try again."];
-    }
+    [appDelegate login:email.text password:password.text result:^(bool loggedIn) {
+        if (loggedIn) {
+            [appDelegate viewStream];
+        } else {
+            NSLog(@"Failed to login!");
+            [appDelegate showErrorScreen:self.view errorMessage:@"Unable to login. Please try again."];
+        }
+    }];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {

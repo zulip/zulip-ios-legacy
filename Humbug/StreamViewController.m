@@ -1,12 +1,15 @@
 #import "FirstViewController.h"
 #import "HumbugAppDelegate.h"
+#import "HumbugAPIClient.h"
 #import "ComposeViewController.h"
 #import "UIColor+HexColor.h"
+
+#import "AFJSONRequestOperation.h"
 
 @implementation StreamViewController
 @synthesize listData;
 @synthesize messageCell = _messageCell;
-@synthesize first, last;
+@synthesize lastEventId, maxMessageId, pointer, queueId;
 @synthesize gravatars;
 @synthesize delegate;
 @synthesize lastRequestTime;
@@ -23,9 +26,11 @@
 {
     [super viewDidLoad];
     [self setTitle:@"Humbug"];
-    self.first = -1;
-    self.last = -1;
+    self.pointer = -1;
+    self.lastEventId = -1;
+    self.maxMessageId = -1;
     self.backoff = 0;
+    self.queueId = @"";
     self.lastRequestTime = 0;
     self.backgrounded = FALSE;
     self.pollingStarted = FALSE;
@@ -62,24 +67,43 @@
     [self initialPopulate];
 }
 
+- (void)loadSubscriptionData:(NSArray *)subscriptions
+{
+    NSMutableDictionary *streamdict = [[NSMutableDictionary alloc] init];
+    for (NSDictionary* stream in subscriptions) {
+        [streamdict setObject:stream forKey:[stream objectForKey:@"name"]];
+    }
+    [self setStreams:streamdict];
+}
+
 - (void)initialPopulate
 {
-    if (self.last == -1) {
-        dispatch_queue_t downloadQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-        dispatch_async(downloadQueue, ^{
-            // Fetch stream information
-            [self getAllSubscriptions];
+    if (self.maxMessageId == -1) {
+        // Register for events, then fetch messages
+        [[HumbugAPIClient sharedClient] postPath:@"register" parameters:[NSDictionary dictionaryWithObjectsAndKeys:@"false", @"apply_markdown", nil]
+        success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            NSDictionary *json = (NSDictionary *)responseObject;
 
-            if ([self initializePointer] != TRUE) {
-                [self.delegate showErrorScreen:self.view
-                                  errorMessage:@"Unable to fetch messages. Please try again in a few minutes."];
-            }
+            NSArray *subscriptions = [json objectForKey:@"subscriptions"];
+            [self loadSubscriptionData:subscriptions];
+
+            self.queueId = [json objectForKey:@"queue_id"];
+            self.lastEventId = [json objectForKey:@"last_event_id"];
+            self.maxMessageId = [json objectForKey:@"max_message_id"];
+            self.pointer = [json objectForKey:@"pointer"];
+
+            // Load old messages
             NSDictionary * args = [NSDictionary dictionaryWithObjectsAndKeys:
                                    [NSNumber numberWithInteger:6], @"num_before",
                                    [NSNumber numberWithInteger:0], @"num_after",
                                    nil];
             [self getOldMessages:args];
-        });
+            
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSLog(@"Failure doing initialPopulate...retrying %@", [error localizedDescription]);
+
+            [self performSelector:@selector(initialPopulate) withObject:self afterDelay:1];
+        }];
     }
 }
 
@@ -253,11 +277,12 @@ numberOfRowsInSection:(NSInteger)section
     }
 
     if (self.backoff == 0) {
-        self.backoff = .5;
-    } else {
+        self.backoff = .8;
+    } else if (self.backoff < 10) {
         self.backoff *= 2;
+    } else {
+        self.backoff = 10;
     }
-    self.backoff = 10;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -290,61 +315,8 @@ numberOfRowsInSection:(NSInteger)section
     [composeView release];
 }
 
-- (NSDictionary *) makeJSONPOST:(NSString *)resource_path
-                     postFields:(NSMutableDictionary *)postFields
-                    withBackoff:(BOOL)backoff
-{
-    NSHTTPURLResponse *response = nil;
-    NSData *data = [self.delegate makePOST:&response resource_path:resource_path postFields:postFields useAPICredentials:TRUE];
-
-    if (backoff) {
-        if ([response statusCode] == 500) {
-            // The service is having problems; possibly indicate this to the user and back off requests.
-            [self adjustRequestBackoff];
-            if (self.waitingOnErrorRecovery == FALSE) {
-                self.waitingOnErrorRecovery = TRUE;
-                [self.delegate showErrorScreen:self.view
-                                  errorMessage:@"Error getting messages. Please try again in a few minutes."];
-            }
-        } else {
-            self.waitingOnErrorRecovery = FALSE;
-            self.backoff = 0;
-        }
-    }
-
-    if (!data) {
-        // Sometimes we get no data back. I'm not sure why.
-        return nil;
-    }
-
-    NSError *e = nil;
-    NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData: data
-                                                             options: NSJSONReadingMutableContainers
-                                                               error: &e];
-    if (!jsonDict) {
-        NSLog(@"Error parsing JSON: %@", e);
-    }
-
-    if ([response statusCode] == 400) {
-        NSLog(@"Forbidden: %@", jsonDict);
-    }
-    return jsonDict;
-}
-
-- (NSDictionary *) makeJSONMessagesPOST:(NSString *)resource_path
-                             postFields:(NSMutableDictionary *)postFields
-{
-    while (([[NSDate date] timeIntervalSince1970] - self.lastRequestTime) < self.backoff) {
-        [NSThread sleepForTimeInterval:.5];
-    }
-
-    self.lastRequestTime = [[NSDate date] timeIntervalSince1970];
-
-    return [self makeJSONPOST:resource_path postFields:postFields withBackoff:YES];
-}
-
-- (void) dataReceived: (NSDictionary*) messageData {
-    if (!messageData) {
+- (void) addMessages: (NSArray*) messages {
+    if (!messages) {
         return;
     }
 
@@ -353,11 +325,9 @@ numberOfRowsInSection:(NSInteger)section
         backfill = TRUE;
     }
 
-    for (NSDictionary *item in [messageData objectForKey:@"messages"]) {
-        int message_id = [[item objectForKey:@"id"] intValue];
-
-        if ([[item objectForKey:@"type"] isEqualToString:@"stream"]) {
-            NSString* stream = [item objectForKey:@"display_recipient"];
+    for (NSDictionary *message in messages) {
+        if ([[message objectForKey:@"type"] isEqualToString:@"stream"]) {
+            NSString* stream = [message objectForKey:@"display_recipient"];
             if (![self streamInHome:stream]) {
                 continue;
             }
@@ -366,18 +336,11 @@ numberOfRowsInSection:(NSInteger)section
         NSArray *newIndexPaths = [NSArray arrayWithObjects:
                                   [NSIndexPath indexPathForRow:[self.listData count]
                                                      inSection:0], nil];
-        [self.listData addObject: item];
+        [self.listData addObject: message];
 
         [self.tableView insertRowsAtIndexPaths:newIndexPaths
                               withRowAnimation:UITableViewRowAnimationTop];
         self.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, 200.0, 0.0);
-
-        if (message_id < self.first) {
-            self.first = message_id;
-        }
-        if (message_id > self.last) {
-            self.last = message_id;
-        }
     }
     
     if (backfill && [self.listData count]) {
@@ -394,9 +357,10 @@ numberOfRowsInSection:(NSInteger)section
 - (void) getOldMessages: (NSDictionary *)args {
     int anchor = [[args objectForKey:@"anchor"] integerValue];
     if (!anchor) {
-        anchor = self.last;
+        anchor = self.pointer;
     }
     NSMutableDictionary *postFields = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                       @"false", @"apply_markdown",
                                        [NSString stringWithFormat:@"%i", anchor], @"anchor",
                                        [NSString stringWithFormat:@"%i",
                                         [[args objectForKey:@"num_before"] integerValue]], @"num_before",
@@ -404,42 +368,33 @@ numberOfRowsInSection:(NSInteger)section
                                         [[args objectForKey:@"num_after"] integerValue]], @"num_after",
                                        @"{}", @"narrow", nil];
 
-    NSDictionary *messageData = [self makeJSONMessagesPOST:@"get_old_messages"
-                                                postFields:postFields];
 
-    int old_count = [self.listData count];
-    [self performSelectorOnMainThread:@selector(dataReceived:)
-                           withObject:messageData waitUntilDone:YES];
+    [[HumbugAPIClient sharedClient] getPath:@"messages" parameters:postFields success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary *json = (NSDictionary *)responseObject;
 
-    if (old_count != [self.listData count]) {
-        // There are still historical messages to fetch.
-        NSDictionary *args = [NSDictionary dictionaryWithObjectsAndKeys:
-                               [NSNumber numberWithInteger:self.last + 1], @"anchor",
-                               [NSNumber numberWithInteger:0], @"num_before",
-                               [NSNumber numberWithInteger:20], @"num_after",
-                               nil];
-        [self performSelectorInBackground:@selector(getOldMessages:) withObject:args];
-    } else {
-        self.backgrounded = FALSE;
-        if (!self.pollingStarted) {
-            self.pollingStarted = TRUE;
-            [self startPoll];
+        int old_count = [self.listData count];
+        [self performSelectorOnMainThread:@selector(addMessages:)
+                               withObject:[json objectForKey:@"messages"] waitUntilDone:YES];
+
+        if (old_count != [self.listData count]) {
+            // There are still historical messages to fetch.
+            NSDictionary *args = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  @"false", @"apply_markdown",
+                                  [NSNumber numberWithInteger:self.pointer + 1], @"anchor",
+                                  [NSNumber numberWithInteger:0], @"num_before",
+                                  [NSNumber numberWithInteger:20], @"num_after",
+                                  nil];
+            [self getOldMessages:args];
+        } else {
+            self.backgrounded = FALSE;
+            if (!self.pollingStarted) {
+                self.pollingStarted = TRUE;
+                [self startPoll];
+            }
         }
-    }
-}
-
-- (void) getAllSubscriptions {
-    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-
-    NSDictionary *dict = [self makeJSONPOST:@"subscriptions/list" postFields:[[NSMutableDictionary alloc] init] withBackoff:NO];
-    NSArray *streamList = [dict objectForKey:@"subscriptions"];
-    NSMutableDictionary *streamdict = [[NSMutableDictionary alloc] init];
-    for (NSDictionary* stream in streamList) {
-        [streamdict setObject:stream forKey:[stream objectForKey:@"name"]];
-    }
-    [self setStreams:streamdict];
-
-    [pool drain];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Failed to load old messages: %@", [error localizedDescription]);
+    }];
 }
 
 - (BOOL) streamInHome:(NSString *)stream
@@ -454,22 +409,73 @@ numberOfRowsInSection:(NSInteger)section
 }
 
 - (void) longPoll {
-    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-
-    NSMutableDictionary *postFields = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                       [NSString stringWithFormat:@"%i", self.first], @"first",
-                                       [NSString stringWithFormat:@"%i", self.last], @"last", nil];
-    NSDictionary *pollingResponseData = [self makeJSONMessagesPOST:@"get_messages"
-                                                        postFields:postFields];
-
-    if (!self.backgrounded) {
-        [self performSelectorOnMainThread:@selector(dataReceived:)
-                               withObject:pollingResponseData waitUntilDone:YES];
+    while (([[NSDate date] timeIntervalSince1970] - self.lastRequestTime) < self.backoff) {
+        [NSThread sleepForTimeInterval:.5];
     }
 
-    [pool drain];
+    self.lastRequestTime = [[NSDate date] timeIntervalSince1970];
 
-    [self performSelectorInBackground:@selector(longPoll) withObject: nil];
+
+    NSMutableDictionary *postFields = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                       @"false", @"apply_markdown",
+                                       queueId, @"queue_id",
+                                       [NSString stringWithFormat:@"%i", self.lastEventId], @"last_event_id",
+                                       nil];
+
+    [[HumbugAPIClient sharedClient] getPath:@"events" parameters:postFields success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary *json = (NSDictionary *)responseObject;
+
+        self.waitingOnErrorRecovery = FALSE;
+        self.backoff = 0;
+
+        NSMutableArray *messages = [[NSMutableArray alloc] init];
+        for (NSDictionary *event in [json objectForKey:@"events"]) {
+            NSString *eventType = [event objectForKey:@"type"];
+            if ([eventType isEqualToString:@"message"]) {
+                NSMutableDictionary *msg = [[event objectForKey:@"message"] mutableCopy];
+                [msg setValue:[event objectForKey:@"flags"] forKey:@"flags"];
+                [messages addObject:msg];
+            }
+
+            self.lastEventId = MAX(self.lastEventId, [[event objectForKey:@"id"] intValue]);
+
+        }
+
+
+        // If we're not hidden/in the background, load the new messages immediately
+        if (!self.backgrounded) {
+            [self performSelectorOnMainThread:@selector(addMessages:)
+                                   withObject:messages waitUntilDone:YES];
+        }
+
+        [self performSelectorInBackground:@selector(longPoll) withObject: nil];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Failed to do long poll: %@", [error localizedDescription]);
+
+        if ([operation isKindOfClass:[AFJSONRequestOperation class]]) {
+            NSDictionary *json = (NSDictionary *)[(AFJSONRequestOperation *)operation responseJSON];
+            NSString *errorMsg = [json objectForKey:@"msg"];
+            if ([[operation response] statusCode] == 400 &&
+                ([errorMsg rangeOfString:@"too old"].location != NSNotFound ||
+                 [errorMsg rangeOfString:@"Bad event queue id"].location != NSNotFound)) {
+                // Reload our data if we've been GCed
+                self.pollingStarted = NO;
+                [self reset];
+                return;
+            }
+        }
+
+
+        [self adjustRequestBackoff];
+        if (self.waitingOnErrorRecovery == FALSE) {
+            self.waitingOnErrorRecovery = TRUE;
+            [self.delegate showErrorScreen:self.view
+                              errorMessage:@"Error getting messages. Please try again in a few minutes."];
+        }
+
+        // Continue polling regardless
+        [self performSelectorInBackground:@selector(longPoll) withObject: nil];
+    }];
 }
 
 - (void) startPoll {
@@ -490,48 +496,13 @@ numberOfRowsInSection:(NSInteger)section
                                        [NSString stringWithFormat:@"%@",
                                         [pointedCell valueForKey:@"id"]],
                                        @"pointer", nil];
-    [self makeJSONMessagesPOST:@"update_pointer" postFields:postFields];
+
+    [[HumbugAPIClient sharedClient] postPath:@"users/me/pointer" parameters:postFields success:nil failure:nil];
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     [self performSelectorInBackground:@selector(updatePointer) withObject: nil];
-}
-
-- (int) fetchPointer
-{
-    NSMutableDictionary *postFields = [NSMutableDictionary dictionary];
-    NSDictionary *resultDict = [self makeJSONMessagesPOST:@"get_profile" postFields:postFields];
-    
-    if (!resultDict) {
-        return FALSE;
-    }
-    
-    return [[resultDict objectForKey:@"pointer"] intValue];
-}
-
-- (BOOL) initializePointer
-{
-    NSMutableDictionary *postFields = [NSMutableDictionary dictionary];
-    NSDictionary *resultDict = [self makeJSONMessagesPOST:@"get_profile" postFields:postFields];
-
-    if (!resultDict) {
-        return FALSE;
-    }
-
-    int pointer = [[resultDict objectForKey:@"pointer"] intValue];
-    self.first = pointer;
-    self.last = pointer;
-
-    if (self.first < 0) {
-        self.first = 0;
-    }
-    if (self.last < 0) {
-        self.last = 0;
-    }
-
-    self.delegate.clientID = [resultDict objectForKey:@"client_id"];
-    return TRUE;
 }
 
 -(void)composeButtonPressed {
@@ -563,31 +534,48 @@ numberOfRowsInSection:(NSInteger)section
     return FALSE;
 }
 
--(void)reset {
-    int pointer = [self fetchPointer];
-
-    if ((pointer != FALSE) && (pointer != -1)) {
-        int pointerRowNum = [self rowWithId:pointer];
-        if (pointerRowNum) {
-            // If the pointer is already in our table, but not visible, scroll to it
-            // but don't try to clear and refetch messages.
-            [self.tableView scrollToRowAtIndexPath:[NSIndexPath
-                                                    indexPathForRow:pointerRowNum
-                                                    inSection:0]
-                                    atScrollPosition:UITableViewScrollPositionMiddle
-                                            animated:NO];
-            self.backgrounded = FALSE;
-            return;
-        }
-    }
-
+-(void)repopulateList
+{
     // If the pointer has moved because messages were consumed on another device, clear
     // the list and re-populate it.
     [self.listData removeAllObjects];
-    self.first = -1;
-    self.last = -1;
+    self.pointer = -1;
+    self.maxMessageId = -1;
+    self.queueId = @"";
     [self initialPopulate];
     [self.tableView reloadData];
+}
+
+-(void)reset {
+    // Hide any error screens if visible
+    [self.delegate dismissErrorScreen];
+
+    // Fetch the pointer, then reset
+    [[HumbugAPIClient sharedClient] getPath:@"users/me" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary *json = (NSDictionary *)responseObject;
+        int updatedPointer = [[json objectForKey:@"pointer"] intValue];
+
+        if (updatedPointer != -1) {
+            int pointerRowNum = [self rowWithId:updatedPointer];
+            if (pointerRowNum) {
+                // If the pointer is already in our table, but not visible, scroll to it
+                // but don't try to clear and refetch messages.
+                [self.tableView scrollToRowAtIndexPath:[NSIndexPath
+                                                        indexPathForRow:pointerRowNum
+                                                        inSection:0]
+                                      atScrollPosition:UITableViewScrollPositionMiddle
+                                              animated:NO];
+                self.backgrounded = FALSE;
+            }
+
+            pointer = updatedPointer;
+        }
+
+        [self repopulateList];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Failed to fetch pointer: %@", [error localizedDescription]);
+        [self repopulateList];
+    }];
 }
 
 - (UIColor *)streamColor:(NSString *)withName {

@@ -1,6 +1,11 @@
 #import "HumbugAppDelegate.h"
 #import "KeychainItemWrapper.h"
 #import "NSString+Encode.h"
+#import "HumbugAPIClient.h"
+
+// AFNetworking
+#import "AFNetworkActivityIndicatorManager.h"
+#import "AFJSONRequestOperation.h"
 
 @implementation HumbugAppDelegate
 
@@ -38,18 +43,17 @@
         // We have credentials, so try to reuse them. We may still have to log in if they are stale.
         self.apiKey = storedApiKey;
         self.email = storedEmail;
+
+        [HumbugAPIClient setCredentials:self.email withAPIKey:self.apiKey];
     }
 
-    BOOL debug = NO;
+    // Set out NSURLCache settings
+    NSURLCache *URLCache = [[NSURLCache alloc] initWithMemoryCapacity:4 * 1024 * 1024 diskCapacity:20 * 1024 * 1024 diskPath:nil];
+    [NSURLCache setSharedURLCache:URLCache];
 
-    if (debug == YES) {
-        self.apiURL = @"http://localhost:9991";
-    } else if ([[self.email lowercaseString] hasSuffix:@"humbughq.com"]) {
-        self.apiURL = @"https://staging.humbughq.com";
-    } else {
-        self.apiURL = @"https://humbughq.com";
-    }
-    self.apiURL = [self.apiURL stringByAppendingString:@"/api/v1/"];
+    // Tornado responses are coming in with text/html content-type even though they are JSON,
+    // so accept them explicitly
+    [AFJSONRequestOperation addAcceptableContentTypes:[NSSet setWithObject:@"text/html"]];
 
     self.clientID = @"";
 
@@ -115,70 +119,29 @@
                                                                 CFStringConvertNSStringEncodingToEncoding(encoding));
 }
 
-- (NSData *) makePOST:(NSHTTPURLResponse **)response resource_path:(NSString *)resource_path postFields:(NSMutableDictionary *)postFields useAPICredentials:(BOOL)useAPICredentials
+- (void) login:(NSString *)username password:(NSString *)password result:(void (^) (bool success))result;
 {
-    NSError *error;
-    NSMutableURLRequest *request;
+    NSMutableDictionary *postFields = [NSMutableDictionary dictionaryWithObjectsAndKeys:username, @"username",
+                                       password, @"password", nil];
+    
+    [[HumbugAPIClient sharedClient] postPath:@"fetch_api_key" parameters:postFields success:^(AFHTTPRequestOperation *operation , id responseObject) {
+        NSDictionary *jsonDict = (NSDictionary *)responseObject;
 
-    request = [[[NSMutableURLRequest alloc]
-                initWithURL:[NSURL URLWithString:
-                             [self.apiURL stringByAppendingString:resource_path]]
-                cachePolicy:NSURLRequestReloadIgnoringCacheData
-                timeoutInterval:60] autorelease];
-    [request setHTTPMethod:@"POST"];
+        self.apiKey = [jsonDict objectForKey:@"api_key"];
+        self.email = username;
 
-    if (useAPICredentials) {
-        [postFields addEntriesFromDictionary:[NSDictionary
-                                              dictionaryWithObjectsAndKeys:self.email, @"email",
-                                              self.apiKey, @"api-key",
-                                              self.clientID, @"client_id",
-                                              @"iPhone", @"client", nil]];
-    }
+        [HumbugAPIClient setCredentials:self.email withAPIKey:self.apiKey];
 
-    NSMutableString *postString = [[NSMutableString alloc] init];
-    for (id key in postFields) {
-        [postString appendFormat:@"%@=%@&", key, [[postFields objectForKey:key] encodeString:NSUTF8StringEncoding]];
-    }
+        KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"HumbugLogin" accessGroup:nil];
+        [keychainItem setObject:self.apiKey forKey:kSecValueData];
+        [keychainItem setObject:self.email forKey:kSecAttrAccount];
 
-    [request setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]];
+        result(YES);
+    } failure: ^( AFHTTPRequestOperation *operation , NSError *error ){
+        NSLog(@"Failed to fetch_api_key %@", [error localizedDescription]);
 
-    NSString* requestDataLengthString = [[NSString alloc] initWithFormat:@"%d", [postString length]];
-    [request setValue:requestDataLengthString forHTTPHeaderField:@"Content-Length"];
-
-    return [NSURLConnection sendSynchronousRequest:request
-                                 returningResponse:response error:&error];
-}
-
-- (bool) login:(NSString *)username password:(NSString *)password
-{
-    NSHTTPURLResponse *response;
-    NSData *responseData;
-
-    NSMutableDictionary *postFields = [NSMutableDictionary dictionaryWithObjectsAndKeys:username,
-                                       @"username", password, @"password", nil];
-    responseData = [self makePOST:&response resource_path:@"fetch_api_key" postFields:postFields useAPICredentials:FALSE];
-
-    if ([response statusCode] != 200) {
-        return false;
-    }
-
-    NSError *e = nil;
-    NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData: responseData
-                                                             options: NSJSONReadingMutableContainers
-                                                               error: &e];
-    if (!jsonDict) {
-        NSLog(@"Error parsing JSON: %@", e);
-        return false;
-    }
-
-    self.apiKey = [jsonDict objectForKey:@"api_key"];
-    self.email = username;
-
-    KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"HumbugLogin" accessGroup:nil];
-    [keychainItem setObject:self.apiKey forKey:kSecValueData];
-    [keychainItem setObject:self.email forKey:kSecAttrAccount];
-
-    return true;
+        result(NO);
+    }];
 }
 
 - (void)viewStream
@@ -191,6 +154,11 @@
     [self.window addSubview:self.errorViewController.view];
     self.errorViewController.whereWeCameFrom = view;
     self.errorViewController.errorMessage.text = errorMessage;
+}
+
+- (void)dismissErrorScreen
+{
+    [self.errorViewController.view removeFromSuperview];
 }
 
 @end
