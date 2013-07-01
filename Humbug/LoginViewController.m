@@ -50,6 +50,8 @@
             [appDelegate viewStream];
         } else {
             NSLog(@"Failed to login!");
+            [self.email resignFirstResponder];
+            [self.password resignFirstResponder];
             [appDelegate showErrorScreen:self.view errorMessage:@"Unable to login. Please try again."];
         }
     }];
