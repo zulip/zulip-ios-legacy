@@ -51,10 +51,6 @@
     NSURLCache *URLCache = [[NSURLCache alloc] initWithMemoryCapacity:4 * 1024 * 1024 diskCapacity:20 * 1024 * 1024 diskPath:nil];
     [NSURLCache setSharedURLCache:URLCache];
 
-    // Tornado responses are coming in with text/html content-type even though they are JSON,
-    // so accept them explicitly
-    [AFJSONRequestOperation addAcceptableContentTypes:[NSSet setWithObject:@"text/html"]];
-
     self.clientID = @"";
 
     [self.window makeKeyAndVisible];
