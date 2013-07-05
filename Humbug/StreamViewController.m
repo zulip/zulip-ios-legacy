@@ -5,12 +5,12 @@
 #import "UIColor+HexColor.h"
 
 #import "AFJSONRequestOperation.h"
+#import "UIImageView+AFNetworking.h"
 
 @implementation StreamViewController
 @synthesize listData;
 @synthesize messageCell = _messageCell;
 @synthesize lastEventId, maxMessageId, pointer, queueId;
-@synthesize gravatars;
 @synthesize delegate;
 @synthesize lastRequestTime;
 @synthesize waitingOnErrorRecovery;
@@ -36,7 +36,6 @@
     self.pollingStarted = FALSE;
     self.waitingOnErrorRecovery = FALSE;
     self.listData = [[NSMutableArray alloc] init];
-    self.gravatars = [[NSMutableDictionary alloc] init];
     self.delegate = (HumbugAppDelegate *)[UIApplication sharedApplication].delegate;
     
     UIImage *composeButtonImage = [UIImage imageNamed:@"glyphicons_355_bullhorn.png"];
@@ -142,26 +141,12 @@ numberOfRowsInSection:(NSInteger)section
                            alpha:1];
 }
 
-- (UIImage *)getCachedGravatar:(NSString *)gravatarHash
+- (NSURL *)gravatarUrl:(NSString *)gravatarHash
 {
-    return[self.gravatars objectForKey:gravatarHash];
-}
-
-- (UIImage *)getGravatar:(NSString *)gravatarHash
-{
-    UIImage *gravatar = [self.gravatars objectForKey:gravatarHash];
-    if (gravatar != nil) {
-        return gravatar;
-    }
-
-    NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:
-                                                       [NSString stringWithFormat:
-                                                        @"https://secure.gravatar.com/avatar/%@?d=identicon&s=30",
-                                                        gravatarHash]]];
-    gravatar = [UIImage imageWithData:imageData];
-    [self.gravatars setObject:gravatar forKey:gravatarHash];
-
-    return gravatar;
+    return [NSURL URLWithString:
+            [NSString stringWithFormat:
+             @"https://secure.gravatar.com/avatar/%@?d=identicon&s=30",
+             gravatarHash]];
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -220,34 +205,7 @@ numberOfRowsInSection:(NSInteger)section
 
     // Asynchronously load gravatar if needed
     NSString *ghash = [dict objectForKey:@"gravatar_hash"];
-    UIImage *gravatar = [self getCachedGravatar:ghash];
-    if (gravatar != NULL) {
-        cell.gravatar.image = gravatar;
-    } else {
-        // Load our gravatar image on a high-priority background thread
-        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-
-        dispatch_async(queue, ^{
-            // Fetch image from gravatar & cache it
-            UIImage *image = [self getGravatar:ghash];
-
-            // Ask the UITableView for the cell at this index path again
-            // to make sure we get the latest version---meanwhile the
-            // cell might have been recycled by iOS
-            MessageCell *newCell = (MessageCell *)[tableView cellForRowAtIndexPath:indexPath];
-
-            // Make sure the cell is still visible, otherwise don't bother
-            if ([[tableView visibleCells] containsObject: newCell]){
-                // We need to set the image on the cell in the main thread, so async dispatch
-                // to there
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    newCell.gravatar.image = image;
-                    [newCell setNeedsLayout];
-                });
-            }
-        });
-    }
-    cell.gravatar.image = [self getGravatar:[dict objectForKey:@"gravatar_hash"]];
+    [cell.gravatar setImageWithURL:[self gravatarUrl:ghash]];
 
     NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
     [dateFormatter setLocale:[[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]

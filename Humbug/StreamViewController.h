@@ -11,7 +11,6 @@
 @property(assign, nonatomic) IBOutlet MessageCell *messageCell;
 
 @property(nonatomic,retain) NSMutableArray *listData;
-@property(nonatomic,retain) NSMutableDictionary *gravatars;
 @property(nonatomic,retain) HumbugAppDelegate *delegate;
 @property(nonatomic,retain) NSDictionary *streams;
 
