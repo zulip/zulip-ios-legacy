@@ -497,7 +497,7 @@ numberOfRowsInSection:(NSInteger)section
                                         [pointedCell valueForKey:@"id"]],
                                        @"pointer", nil];
 
-    [[HumbugAPIClient sharedClient] postPath:@"users/me/pointer" parameters:postFields success:nil failure:nil];
+    [[HumbugAPIClient sharedClient] putPath:@"users/me/pointer" parameters:postFields success:nil failure:nil];
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
