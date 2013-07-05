@@ -383,7 +383,10 @@ numberOfRowsInSection:(NSInteger)section
     [[HumbugAPIClient sharedClient] getPath:@"events" parameters:postFields success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *json = (NSDictionary *)responseObject;
 
-        self.waitingOnErrorRecovery = FALSE;
+        if (self.waitingOnErrorRecovery == TRUE) {
+            self.waitingOnErrorRecovery = FALSE;
+            [self.delegate dismissErrorScreen];
+        }
         self.backoff = 0;
 
         NSMutableArray *messages = [[NSMutableArray alloc] init];
@@ -398,7 +401,6 @@ numberOfRowsInSection:(NSInteger)section
             self.lastEventId = MAX(self.lastEventId, [[event objectForKey:@"id"] intValue]);
 
         }
-
 
         // If we're not hidden/in the background, load the new messages immediately
         if (!self.backgrounded) {
