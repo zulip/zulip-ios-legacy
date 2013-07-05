@@ -54,7 +54,9 @@ static NSString *email = nil;
 - (AFHTTPRequestOperation *)HTTPRequestOperationWithRequest:(NSURLRequest *)urlRequest success:(void ( ^ ) ( AFHTTPRequestOperation *operation , id responseObject ))success failure:(void ( ^ ) ( AFHTTPRequestOperation *operation , NSError *error ))failure {
     // Reimplement to print out error messages from JSON content
     id my_failure = ^( AFHTTPRequestOperation *operation , NSError *error ) {
-        failure(operation, error);
+        if (failure) {
+            failure(operation, error);
+        }
 
         // Log 'msg' key from JSON payload if it exists
         if ([operation isKindOfClass:[AFJSONRequestOperation class]]) {
