@@ -17,7 +17,7 @@
 // User-specific info from the server
 @property(assign) int lastEventId;
 @property(assign) int maxMessageId;
-@property(assign) int pointer;
+@property(assign) long pointer;
 @property(nonatomic, retain) NSString *queueId;
 
 // Internally used variables

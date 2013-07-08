@@ -87,9 +87,9 @@
             [self loadSubscriptionData:subscriptions];
 
             self.queueId = [json objectForKey:@"queue_id"];
-            self.lastEventId = [json objectForKey:@"last_event_id"];
-            self.maxMessageId = [json objectForKey:@"max_message_id"];
-            self.pointer = [json objectForKey:@"pointer"];
+            self.lastEventId = [[json objectForKey:@"last_event_id"] intValue];
+            self.maxMessageId = [[json objectForKey:@"max_message_id"] intValue];
+            self.pointer = [[json objectForKey:@"pointer"] longValue];
 
             // Load old messages
             NSDictionary * args = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -313,7 +313,7 @@ numberOfRowsInSection:(NSInteger)section
 }
 
 - (void) getOldMessages: (NSDictionary *)args {
-    int anchor = [[args objectForKey:@"anchor"] integerValue];
+    long anchor = [[args objectForKey:@"anchor"] integerValue];
     if (!anchor) {
         anchor = self.pointer;
     }
@@ -396,6 +396,12 @@ numberOfRowsInSection:(NSInteger)section
                 NSMutableDictionary *msg = [[event objectForKey:@"message"] mutableCopy];
                 [msg setValue:[event objectForKey:@"flags"] forKey:@"flags"];
                 [messages addObject:msg];
+            } else if ([eventType isEqualToString:@"pointer"]) {
+                long newPointer = [[event objectForKey:@"pointer"] longValue];
+
+                if (newPointer > self.pointer) {
+                    [self scrollToPointer:newPointer];
+                }
             }
 
             self.lastEventId = MAX(self.lastEventId, [[event objectForKey:@"id"] intValue]);
@@ -506,6 +512,21 @@ numberOfRowsInSection:(NSInteger)section
     [self.tableView reloadData];
 }
 
+-(void)scrollToPointer:(long)newPointer
+{
+    int pointerRowNum = [self rowWithId:newPointer];
+    if (pointerRowNum) {
+        // If the pointer is already in our table, but not visible, scroll to it
+        // but don't try to clear and refetch messages.
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath
+                                                indexPathForRow:pointerRowNum
+                                                inSection:0]
+                              atScrollPosition:UITableViewScrollPositionMiddle
+                                      animated:NO];
+    }
+    self.pointer = newPointer;
+}
+
 -(void)reset {
     // Hide any error screens if visible
     [self.delegate dismissErrorScreen];
@@ -516,19 +537,8 @@ numberOfRowsInSection:(NSInteger)section
         int updatedPointer = [[json objectForKey:@"pointer"] intValue];
 
         if (updatedPointer != -1) {
-            int pointerRowNum = [self rowWithId:updatedPointer];
-            if (pointerRowNum) {
-                // If the pointer is already in our table, but not visible, scroll to it
-                // but don't try to clear and refetch messages.
-                [self.tableView scrollToRowAtIndexPath:[NSIndexPath
-                                                        indexPathForRow:pointerRowNum
-                                                        inSection:0]
-                                      atScrollPosition:UITableViewScrollPositionMiddle
-                                              animated:NO];
-                self.backgrounded = FALSE;
-            }
-
-            pointer = updatedPointer;
+            [self scrollToPointer:updatedPointer];
+            self.backgrounded = FALSE;
         }
 
         [self repopulateList];
