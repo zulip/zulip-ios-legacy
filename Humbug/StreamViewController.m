@@ -8,6 +8,7 @@
 #import "UIImageView+AFNetworking.h"
 
 @implementation StreamViewController
+@synthesize allMessages;
 @synthesize listData;
 @synthesize messageCell = _messageCell;
 @synthesize lastEventId, maxMessageId, pointer, queueId;
@@ -36,6 +37,7 @@
     self.pollingStarted = FALSE;
     self.waitingOnErrorRecovery = FALSE;
     self.listData = [[NSMutableArray alloc] init];
+    self.allMessages = [[NSMutableArray alloc] init];
     self.delegate = (HumbugAppDelegate *)[UIApplication sharedApplication].delegate;
     
     UIImage *composeButtonImage = [UIImage imageNamed:@"glyphicons_355_bullhorn.png"];
@@ -95,6 +97,7 @@
             NSDictionary * args = [NSDictionary dictionaryWithObjectsAndKeys:
                                    [NSNumber numberWithInteger:6], @"num_before",
                                    [NSNumber numberWithInteger:0], @"num_after",
+                                   [NSNumber numberWithBool:YES], @"scroll_to_pointer",
                                    nil];
             [self getOldMessages:args];
             
@@ -284,6 +287,8 @@ numberOfRowsInSection:(NSInteger)section
     }
 
     for (NSDictionary *message in messages) {
+        [self.allMessages addObject:message];
+
         if ([[message objectForKey:@"type"] isEqualToString:@"stream"]) {
             NSString* stream = [message objectForKey:@"display_recipient"];
             if (![self streamInHome:stream]) {
@@ -319,7 +324,7 @@ numberOfRowsInSection:(NSInteger)section
     }
     NSMutableDictionary *postFields = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                        @"false", @"apply_markdown",
-                                       [NSString stringWithFormat:@"%i", anchor], @"anchor",
+                                       [NSString stringWithFormat:@"%li", anchor], @"anchor",
                                        [NSString stringWithFormat:@"%i",
                                         [[args objectForKey:@"num_before"] integerValue]], @"num_before",
                                        [NSString stringWithFormat:@"%i",
@@ -330,24 +335,31 @@ numberOfRowsInSection:(NSInteger)section
     [[HumbugAPIClient sharedClient] getPath:@"messages" parameters:postFields success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *json = (NSDictionary *)responseObject;
 
-        int old_count = [self.listData count];
         [self performSelectorOnMainThread:@selector(addMessages:)
                                withObject:[json objectForKey:@"messages"] waitUntilDone:YES];
 
-        if (old_count != [self.listData count]) {
-            // There are still historical messages to fetch.
-            NSDictionary *args = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  @"false", @"apply_markdown",
-                                  [NSNumber numberWithInteger:self.pointer + 1], @"anchor",
-                                  [NSNumber numberWithInteger:0], @"num_before",
-                                  [NSNumber numberWithInteger:20], @"num_after",
-                                  nil];
-            [self getOldMessages:args];
-        } else {
-            self.backgrounded = FALSE;
-            if (!self.pollingStarted) {
-                self.pollingStarted = TRUE;
-                [self startPoll];
+        if ([[args objectForKey:@"scroll_to_pointer"] boolValue]) {
+            [self scrollToPointer:self.pointer];
+        }
+
+        NSDictionary *lastMsg = (NSDictionary *)[self.listData lastObject];
+        if (lastMsg) {
+            int latest_msg_id = [[lastMsg objectForKey:@"id"] intValue];
+            if (latest_msg_id < self.maxMessageId) {
+                // There are still historical messages to fetch.
+                NSDictionary *args = [NSDictionary dictionaryWithObjectsAndKeys:
+                                      @"false", @"apply_markdown",
+                                      [NSNumber numberWithInteger:latest_msg_id + 1], @"anchor",
+                                      [NSNumber numberWithInteger:0], @"num_before",
+                                      [NSNumber numberWithInteger:20], @"num_after",
+                                      nil];
+                [self getOldMessages:args];
+            } else {
+                self.backgrounded = FALSE;
+                if (!self.pollingStarted) {
+                    self.pollingStarted = TRUE;
+                    [self startPoll];
+                }
             }
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -449,7 +461,6 @@ numberOfRowsInSection:(NSInteger)section
 }
 
 - (void) updatePointer {
-    [self.tableView visibleCells];
     if ([self.listData count] == 0) {
         return;
     }

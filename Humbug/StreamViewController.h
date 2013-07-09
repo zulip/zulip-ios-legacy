@@ -3,7 +3,10 @@
 #import "HumbugAppDelegate.h"
 
 @interface StreamViewController : UITableViewController {
+    // listData is the data delegate for our home message list
     NSMutableArray *listData;
+    // allMessages contains all known messages, even not-in-home-view ones
+    NSMutableArray *allMessages;
     NSMutableData *responseData;
     NSMutableDictionary *gravatars;
 }
@@ -11,6 +14,7 @@
 @property(assign, nonatomic) IBOutlet MessageCell *messageCell;
 
 @property(nonatomic,retain) NSMutableArray *listData;
+@property(nonatomic,retain) NSMutableArray *allMessages;
 @property(nonatomic,retain) HumbugAppDelegate *delegate;
 @property(nonatomic,retain) NSDictionary *streams;
 
