@@ -5,6 +5,7 @@
 @implementation HumbugAPIClient
 
 static NSString *email = nil;
+static BOOL debug = NO;
 
 + (void)setCredentials:(NSString *)user_email withAPIKey:(NSString *)key {
     [user_email retain];
@@ -19,7 +20,6 @@ static NSString *email = nil;
     static HumbugAPIClient *_sharedClient = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        BOOL debug = NO;
         NSString *apiURL;
         
         if (debug == YES) {
@@ -68,6 +68,8 @@ static NSString *email = nil;
         }
     };
 
+    if (debug)
+        NSLog(@"Sending API request for: %@", [[urlRequest URL] path]);
     return [super HTTPRequestOperationWithRequest:urlRequest success:success failure:my_failure];
 }
 @end
