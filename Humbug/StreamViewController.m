@@ -469,9 +469,12 @@ numberOfRowsInSection:(NSInteger)section
     NSUInteger lastIndex = [indexPath indexAtPosition:[indexPath length] - 1];
     MessageCell *pointedCell = [self.listData objectAtIndex:lastIndex];
 
+    long newPointer = [[pointedCell valueForKey:@"id"] longValue];
+    if (newPointer <= self.pointer)
+        return;
+
     NSMutableDictionary *postFields = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                       [NSString stringWithFormat:@"%@",
-                                        [pointedCell valueForKey:@"id"]],
+                                       [[NSString alloc] initWithFormat:@"%ld", newPointer],
                                        @"pointer", nil];
 
     [[HumbugAPIClient sharedClient] putPath:@"users/me/pointer" parameters:postFields success:nil failure:nil];
