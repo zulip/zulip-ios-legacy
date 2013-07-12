@@ -519,8 +519,10 @@ numberOfRowsInSection:(NSInteger)section
     // If the pointer has moved because messages were consumed on another device, clear
     // the list and re-populate it.
     [self.listData removeAllObjects];
+    [self.allMessages removeAllObjects];
     self.pointer = -1;
     self.maxMessageId = -1;
+    self.lastEventId = -1;
     self.queueId = @"";
     [self initialPopulate];
     [self.tableView reloadData];
