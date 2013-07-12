@@ -95,7 +95,7 @@
 
             // Load old messages
             NSDictionary * args = [NSDictionary dictionaryWithObjectsAndKeys:
-                                   [NSNumber numberWithInteger:6], @"num_before",
+                                   [NSNumber numberWithInteger:12], @"num_before",
                                    [NSNumber numberWithInteger:0], @"num_after",
                                    [NSNumber numberWithBool:YES], @"scroll_to_pointer",
                                    nil];
