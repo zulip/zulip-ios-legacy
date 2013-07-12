@@ -33,6 +33,7 @@
     self.backoff = 0;
     self.queueId = @"";
     self.lastRequestTime = 0;
+    self.pollFailures = 0;
     self.backgrounded = FALSE;
     self.pollingStarted = FALSE;
     self.waitingOnErrorRecovery = FALSE;
@@ -400,6 +401,7 @@ numberOfRowsInSection:(NSInteger)section
             [self.delegate dismissErrorScreen];
         }
         self.backoff = 0;
+        self.pollFailures = 0;
 
         NSMutableArray *messages = [[NSMutableArray alloc] init];
         for (NSDictionary *event in [json objectForKey:@"events"]) {
@@ -443,9 +445,9 @@ numberOfRowsInSection:(NSInteger)section
             }
         }
 
-
+        self.pollFailures++;
         [self adjustRequestBackoff];
-        if (self.waitingOnErrorRecovery == FALSE) {
+        if (self.pollFailures > 5 && self.waitingOnErrorRecovery == FALSE) {
             self.waitingOnErrorRecovery = TRUE;
             [self.delegate showErrorScreen:self.view
                               errorMessage:@"Error getting messages. Please try again in a few minutes."];
@@ -523,6 +525,7 @@ numberOfRowsInSection:(NSInteger)section
     self.pointer = -1;
     self.maxMessageId = -1;
     self.lastEventId = -1;
+    self.pollFailures = 0;
     self.queueId = @"";
     [self initialPopulate];
     [self.tableView reloadData];

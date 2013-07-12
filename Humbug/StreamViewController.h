@@ -26,6 +26,7 @@
 
 // Internally used variables
 @property(assign) double lastRequestTime;
+@property(assign) int pollFailures;
 @property(assign) BOOL pollingStarted;
 @property(assign) double backoff;
 @property(assign) BOOL waitingOnErrorRecovery;
