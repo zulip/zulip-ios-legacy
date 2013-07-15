@@ -39,6 +39,7 @@
     self.waitingOnErrorRecovery = FALSE;
     self.listData = [[NSMutableArray alloc] init];
     self.allMessages = [[NSMutableArray alloc] init];
+    self.messageIDs = [[NSMutableSet alloc] init];
     self.delegate = (HumbugAppDelegate *)[UIApplication sharedApplication].delegate;
     
     UIImage *composeButtonImage = [UIImage imageNamed:@"glyphicons_355_bullhorn.png"];
@@ -288,6 +289,11 @@ numberOfRowsInSection:(NSInteger)section
     }
 
     for (NSDictionary *message in messages) {
+        NSNumber* messageID = [NSNumber numberWithInt:[[message objectForKey:@"id"] intValue]];
+        if([self.messageIDs containsObject:messageID]) {
+            continue;
+        }
+        [self.messageIDs addObject:messageID];
         [self.allMessages addObject:message];
 
         if ([[message objectForKey:@"type"] isEqualToString:@"stream"]) {
@@ -522,6 +528,7 @@ numberOfRowsInSection:(NSInteger)section
     // the list and re-populate it.
     [self.listData removeAllObjects];
     [self.allMessages removeAllObjects];
+    [self.messageIDs removeAllObjects];
     [[[HumbugAPIClient sharedClient] operationQueue] cancelAllOperations];
     self.pointer = -1;
     self.maxMessageId = -1;

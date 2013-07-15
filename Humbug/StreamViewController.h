@@ -15,6 +15,7 @@
 
 @property(nonatomic,retain) NSMutableArray *listData;
 @property(nonatomic,retain) NSMutableArray *allMessages;
+@property(nonatomic, retain) NSMutableSet *messageIDs;
 @property(nonatomic,retain) HumbugAppDelegate *delegate;
 @property(nonatomic,retain) NSDictionary *streams;
 
