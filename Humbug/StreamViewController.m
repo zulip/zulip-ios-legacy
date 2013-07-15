@@ -389,7 +389,7 @@ numberOfRowsInSection:(NSInteger)section
 
     NSMutableDictionary *postFields = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                        @"false", @"apply_markdown",
-                                       queueId, @"queue_id",
+                                       self.queueId, @"queue_id",
                                        [NSString stringWithFormat:@"%i", self.lastEventId], @"last_event_id",
                                        nil];
 
@@ -522,6 +522,7 @@ numberOfRowsInSection:(NSInteger)section
     // the list and re-populate it.
     [self.listData removeAllObjects];
     [self.allMessages removeAllObjects];
+    [[[HumbugAPIClient sharedClient] operationQueue] cancelAllOperations];
     self.pointer = -1;
     self.maxMessageId = -1;
     self.lastEventId = -1;
