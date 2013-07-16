@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		780CF5E3179608FE0053481C /* ComposeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5DC806A165D347D008B53F9 /* ComposeViewController.m */; };
+		782681C01795C513009F69F5 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681BE1795C513009F69F5 /* MainWindow-iPad.xib */; };
+		782681C91795CE08009F69F5 /* ComposeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681C81795CE08009F69F5 /* ComposeViewController.xib */; };
+		782681CC1795D10C009F69F5 /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681CB1795D10C009F69F5 /* LoginViewController.xib */; };
+		78B52F061796038F002B26DE /* ErrorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78B52F051796038F002B26DE /* ErrorViewController.xib */; };
 		B3733CCF1778C75300714B6E /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B3733CCB1778C75300714B6E /* Default-568h@2x.png */; };
 		B3733CD01778C75300714B6E /* glyphicons_003_user.png in Resources */ = {isa = PBXBuildFile; fileRef = B3733CCC1778C75300714B6E /* glyphicons_003_user.png */; };
 		B3733CD11778C75300714B6E /* glyphicons_355_bullhorn.png in Resources */ = {isa = PBXBuildFile; fileRef = B3733CCD1778C75300714B6E /* glyphicons_355_bullhorn.png */; };
@@ -29,7 +34,7 @@
 		C316738F1620DB6B00CE9FE5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C316738D1620DB6B00CE9FE5 /* InfoPlist.strings */; };
 		C31673911620DB6B00CE9FE5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C31673901620DB6B00CE9FE5 /* main.m */; };
 		C31673951620DB6B00CE9FE5 /* HumbugAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C31673941620DB6B00CE9FE5 /* HumbugAppDelegate.m */; };
-		C31673981620DB6B00CE9FE5 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = C31673961620DB6B00CE9FE5 /* MainWindow.xib */; };
+		C31673981620DB6B00CE9FE5 /* MainWindow-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = C31673961620DB6B00CE9FE5 /* MainWindow-iPhone.xib */; };
 		C31673AC1620DB6C00CE9FE5 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673AB1620DB6C00CE9FE5 /* SenTestingKit.framework */; };
 		C31673AD1620DB6C00CE9FE5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673841620DB6B00CE9FE5 /* UIKit.framework */; };
 		C31673AE1620DB6C00CE9FE5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673861620DB6B00CE9FE5 /* Foundation.framework */; };
@@ -38,7 +43,6 @@
 		C31673B91620DB6C00CE9FE5 /* HumbugTests.h in Resources */ = {isa = PBXBuildFile; fileRef = C31673B81620DB6C00CE9FE5 /* HumbugTests.h */; };
 		C31673BB1620DB6C00CE9FE5 /* HumbugTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C31673BA1620DB6C00CE9FE5 /* HumbugTests.m */; };
 		E50D7573163318DA00251D1F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E50D7572163318D900251D1F /* Security.framework */; };
-		E50D757616331B6600251D1F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E50D757516331B6600251D1F /* Security.framework */; };
 		E50D757916331D7A00251D1F /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = E50D757816331D7A00251D1F /* KeychainItemWrapper.m */; };
 		E570A8BF169DF81E0072BC7E /* NSString+Encode.m in Sources */ = {isa = PBXBuildFile; fileRef = E570A8BE169DF81E0072BC7E /* NSString+Encode.m */; };
 		E5726A2816332BF800ED8BB1 /* StreamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5726A2616332BF800ED8BB1 /* StreamViewController.m */; };
@@ -46,11 +50,10 @@
 		E577A74D16226AC4002D9651 /* MessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E577A74C16226AC4002D9651 /* MessageCell.m */; };
 		E577A74F16226AFF002D9651 /* MessageCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E577A74E16226AFF002D9651 /* MessageCellView.xib */; };
 		E598E78A1634A9950022BF4A /* ErrorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E598E7881634A9940022BF4A /* ErrorViewController.m */; };
-		E598E78B1634A9950022BF4A /* ErrorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E598E7891634A9940022BF4A /* ErrorViewController.xib */; };
+		E598E78B1634A9950022BF4A /* ErrorViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = E598E7891634A9940022BF4A /* ErrorViewController~iphone.xib */; };
 		E5CDE07C162C88A800BBD773 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5CDE07A162C88A800BBD773 /* LoginViewController.m */; };
-		E5CDE07D162C88A800BBD773 /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E5CDE07B162C88A800BBD773 /* LoginViewController.xib */; };
-		E5DC806C165D347D008B53F9 /* ComposeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5DC806A165D347D008B53F9 /* ComposeViewController.m */; };
-		E5DC806D165D347D008B53F9 /* ComposeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E5DC806B165D347D008B53F9 /* ComposeViewController.xib */; };
+		E5CDE07D162C88A800BBD773 /* LoginViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = E5CDE07B162C88A800BBD773 /* LoginViewController~iphone.xib */; };
+		E5DC806D165D347D008B53F9 /* ComposeViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = E5DC806B165D347D008B53F9 /* ComposeViewController~iphone.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +67,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		782681BF1795C513009F69F5 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "iPad/en.lproj/MainWindow-iPad.xib"; sourceTree = "<group>"; };
+		782681C81795CE08009F69F5 /* ComposeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ComposeViewController.xib; sourceTree = "<group>"; };
+		782681CB1795D10C009F69F5 /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
+		78B52F051796038F002B26DE /* ErrorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ErrorViewController.xib; sourceTree = "<group>"; };
 		B3733CCB1778C75300714B6E /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "Resources/Default-568h@2x.png"; sourceTree = "<group>"; };
 		B3733CCC1778C75300714B6E /* glyphicons_003_user.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = glyphicons_003_user.png; path = Resources/glyphicons_003_user.png; sourceTree = "<group>"; };
 		B3733CCD1778C75300714B6E /* glyphicons_355_bullhorn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = glyphicons_355_bullhorn.png; path = Resources/glyphicons_355_bullhorn.png; sourceTree = "<group>"; };
@@ -102,7 +109,7 @@
 		C31673921620DB6B00CE9FE5 /* Humbug-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Humbug-Prefix.pch"; sourceTree = "<group>"; };
 		C31673931620DB6B00CE9FE5 /* HumbugAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HumbugAppDelegate.h; sourceTree = "<group>"; };
 		C31673941620DB6B00CE9FE5 /* HumbugAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HumbugAppDelegate.m; sourceTree = "<group>"; };
-		C31673971620DB6B00CE9FE5 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
+		C31673971620DB6B00CE9FE5 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "en.lproj/MainWindow-iPhone.xib"; sourceTree = "<group>"; };
 		C31673AA1620DB6C00CE9FE5 /* HumbugTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HumbugTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C31673AB1620DB6C00CE9FE5 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		C31673B41620DB6C00CE9FE5 /* HumbugTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HumbugTests-Info.plist"; sourceTree = "<group>"; };
@@ -123,13 +130,13 @@
 		E577A74E16226AFF002D9651 /* MessageCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MessageCellView.xib; sourceTree = "<group>"; };
 		E598E7871634A9940022BF4A /* ErrorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ErrorViewController.h; sourceTree = "<group>"; };
 		E598E7881634A9940022BF4A /* ErrorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ErrorViewController.m; sourceTree = "<group>"; };
-		E598E7891634A9940022BF4A /* ErrorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ErrorViewController.xib; sourceTree = "<group>"; };
+		E598E7891634A9940022BF4A /* ErrorViewController~iphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "ErrorViewController~iphone.xib"; sourceTree = "<group>"; };
 		E5CDE079162C88A800BBD773 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		E5CDE07A162C88A800BBD773 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
-		E5CDE07B162C88A800BBD773 /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
+		E5CDE07B162C88A800BBD773 /* LoginViewController~iphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "LoginViewController~iphone.xib"; sourceTree = "<group>"; };
 		E5DC8069165D347D008B53F9 /* ComposeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComposeViewController.h; sourceTree = "<group>"; };
 		E5DC806A165D347D008B53F9 /* ComposeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComposeViewController.m; sourceTree = "<group>"; };
-		E5DC806B165D347D008B53F9 /* ComposeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ComposeViewController.xib; sourceTree = "<group>"; };
+		E5DC806B165D347D008B53F9 /* ComposeViewController~iphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "ComposeViewController~iphone.xib"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,7 +149,6 @@
 				C31673851620DB6B00CE9FE5 /* UIKit.framework in Frameworks */,
 				C31673871620DB6B00CE9FE5 /* Foundation.framework in Frameworks */,
 				C31673891620DB6B00CE9FE5 /* CoreGraphics.framework in Frameworks */,
-				E50D757616331B6600251D1F /* Security.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -160,6 +166,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		782681BD1795C512009F69F5 /* iPad */ = {
+			isa = PBXGroup;
+			children = (
+				782681C81795CE08009F69F5 /* ComposeViewController.xib */,
+				78B52F051796038F002B26DE /* ErrorViewController.xib */,
+				782681CB1795D10C009F69F5 /* LoginViewController.xib */,
+				782681BE1795C513009F69F5 /* MainWindow-iPad.xib */,
+			);
+			name = iPad;
+			sourceTree = "<group>";
+		};
+		782681CA1795CFD2009F69F5 /* iPhone */ = {
+			isa = PBXGroup;
+			children = (
+				E5DC806B165D347D008B53F9 /* ComposeViewController~iphone.xib */,
+				E598E7891634A9940022BF4A /* ErrorViewController~iphone.xib */,
+				E5CDE07B162C88A800BBD773 /* LoginViewController~iphone.xib */,
+				C31673961620DB6B00CE9FE5 /* MainWindow-iPhone.xib */,
+			);
+			name = iPhone;
+			sourceTree = "<group>";
+		};
 		B3733CCA1778C63400714B6E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -243,26 +271,24 @@
 		C316738A1620DB6B00CE9FE5 /* Humbug */ = {
 			isa = PBXGroup;
 			children = (
+				782681CA1795CFD2009F69F5 /* iPhone */,
+				782681BD1795C512009F69F5 /* iPad */,
 				E50D757716331D7A00251D1F /* KeychainItemWrapper.h */,
 				E50D757816331D7A00251D1F /* KeychainItemWrapper.m */,
 				E5CDE079162C88A800BBD773 /* LoginViewController.h */,
 				E5CDE07A162C88A800BBD773 /* LoginViewController.m */,
-				E5CDE07B162C88A800BBD773 /* LoginViewController.xib */,
 				C31673931620DB6B00CE9FE5 /* HumbugAppDelegate.h */,
 				C31673941620DB6B00CE9FE5 /* HumbugAppDelegate.m */,
-				C31673961620DB6B00CE9FE5 /* MainWindow.xib */,
 				E5726A2516332BF800ED8BB1 /* StreamViewController.h */,
 				E5726A2616332BF800ED8BB1 /* StreamViewController.m */,
 				E5726A2716332BF800ED8BB1 /* StreamViewController.xib */,
 				E5DC8069165D347D008B53F9 /* ComposeViewController.h */,
 				E5DC806A165D347D008B53F9 /* ComposeViewController.m */,
-				E5DC806B165D347D008B53F9 /* ComposeViewController.xib */,
 				E577A74B16226AC4002D9651 /* MessageCell.h */,
 				E577A74C16226AC4002D9651 /* MessageCell.m */,
 				E577A74E16226AFF002D9651 /* MessageCellView.xib */,
 				E598E7871634A9940022BF4A /* ErrorViewController.h */,
 				E598E7881634A9940022BF4A /* ErrorViewController.m */,
-				E598E7891634A9940022BF4A /* ErrorViewController.xib */,
 				C316738B1620DB6B00CE9FE5 /* Supporting Files */,
 				E570A8BD169DF81E0072BC7E /* NSString+Encode.h */,
 				E570A8BE169DF81E0072BC7E /* NSString+Encode.m */,
@@ -349,7 +375,7 @@
 		C31673771620DB6A00CE9FE5 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0450;
+				LastUpgradeCheck = 0460;
 			};
 			buildConfigurationList = C316737A1620DB6A00CE9FE5 /* Build configuration list for PBXProject "Humbug" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -375,16 +401,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				C316738F1620DB6B00CE9FE5 /* InfoPlist.strings in Resources */,
-				C31673981620DB6B00CE9FE5 /* MainWindow.xib in Resources */,
+				C31673981620DB6B00CE9FE5 /* MainWindow-iPhone.xib in Resources */,
 				E577A74F16226AFF002D9651 /* MessageCellView.xib in Resources */,
-				E5CDE07D162C88A800BBD773 /* LoginViewController.xib in Resources */,
+				E5CDE07D162C88A800BBD773 /* LoginViewController~iphone.xib in Resources */,
 				E5726A2916332BF800ED8BB1 /* StreamViewController.xib in Resources */,
-				E598E78B1634A9950022BF4A /* ErrorViewController.xib in Resources */,
-				E5DC806D165D347D008B53F9 /* ComposeViewController.xib in Resources */,
+				E598E78B1634A9950022BF4A /* ErrorViewController~iphone.xib in Resources */,
+				E5DC806D165D347D008B53F9 /* ComposeViewController~iphone.xib in Resources */,
 				B3733CCF1778C75300714B6E /* Default-568h@2x.png in Resources */,
 				B3733CD01778C75300714B6E /* glyphicons_003_user.png in Resources */,
 				B3733CD11778C75300714B6E /* glyphicons_355_bullhorn.png in Resources */,
 				B3733CD21778C75300714B6E /* robot_gravatar.png in Resources */,
+				782681C01795C513009F69F5 /* MainWindow-iPad.xib in Resources */,
+				782681C91795CE08009F69F5 /* ComposeViewController.xib in Resources */,
+				782681CC1795D10C009F69F5 /* LoginViewController.xib in Resources */,
+				78B52F061796038F002B26DE /* ErrorViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -420,6 +450,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				780CF5E3179608FE0053481C /* ComposeViewController.m in Sources */,
 				C31673911620DB6B00CE9FE5 /* main.m in Sources */,
 				C31673951620DB6B00CE9FE5 /* HumbugAppDelegate.m in Sources */,
 				E577A74D16226AC4002D9651 /* MessageCell.m in Sources */,
@@ -427,7 +458,6 @@
 				E50D757916331D7A00251D1F /* KeychainItemWrapper.m in Sources */,
 				E5726A2816332BF800ED8BB1 /* StreamViewController.m in Sources */,
 				E598E78A1634A9950022BF4A /* ErrorViewController.m in Sources */,
-				E5DC806C165D347D008B53F9 /* ComposeViewController.m in Sources */,
 				E570A8BF169DF81E0072BC7E /* NSString+Encode.m in Sources */,
 				B3733CD81778D5DD00714B6E /* UIColor+HexColor.m in Sources */,
 				B3733CF11779EA1400714B6E /* AFHTTPClient.m in Sources */,
@@ -462,6 +492,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		782681BE1795C513009F69F5 /* MainWindow-iPad.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				782681BF1795C513009F69F5 /* en */,
+			);
+			name = "MainWindow-iPad.xib";
+			sourceTree = "<group>";
+		};
 		C316738D1620DB6B00CE9FE5 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -470,12 +508,12 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		C31673961620DB6B00CE9FE5 /* MainWindow.xib */ = {
+		C31673961620DB6B00CE9FE5 /* MainWindow-iPhone.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				C31673971620DB6B00CE9FE5 /* en */,
 			);
-			name = MainWindow.xib;
+			name = "MainWindow-iPhone.xib";
 			sourceTree = "<group>";
 		};
 		C31673B51620DB6C00CE9FE5 /* InfoPlist.strings */ = {
@@ -541,14 +579,16 @@
 		C31673BF1620DB6C00CE9FE5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Jessica McKellar (9QY7MX763F)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Humbug/Humbug-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "Humbug/Humbug-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -556,14 +596,16 @@
 		C31673C01620DB6C00CE9FE5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Jessica McKellar (9QY7MX763F)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Humbug/Humbug-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "Humbug/Humbug-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

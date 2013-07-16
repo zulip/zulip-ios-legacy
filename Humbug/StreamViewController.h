@@ -8,6 +8,7 @@
     // allMessages contains all known messages, even not-in-home-view ones
     NSMutableArray *allMessages;
     NSMutableData *responseData;
+    NSMutableSet *messageIDs;
     NSMutableDictionary *gravatars;
 }
 
