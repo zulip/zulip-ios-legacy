@@ -14,6 +14,7 @@
 		B3733CD81778D5DD00714B6E /* UIColor+HexColor.m in Sources */ = {isa = PBXBuildFile; fileRef = B3733CD71778D5DD00714B6E /* UIColor+HexColor.m */; };
 		B3733CFB1779F7FD00714B6E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3733CFA1779F7FD00714B6E /* SystemConfiguration.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		B3733CFE177A00D900714B6E /* HumbugAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = B3733CFD177A00D900714B6E /* HumbugAPIClient.m */; };
+		B3766D2E179DD1DF005FB0D4 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3766D2D179DD1DF005FB0D4 /* MobileCoreServices.framework */; };
 		B3F50D6C179DADE800F9DAE4 /* AFHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F50D5A179DADE800F9DAE4 /* AFHTTPClient.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		B3F50D6D179DADE800F9DAE4 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F50D5C179DADE800F9DAE4 /* AFHTTPRequestOperation.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		B3F50D6E179DADE800F9DAE4 /* AFImageRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F50D5E179DADE800F9DAE4 /* AFImageRequestOperation.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -74,6 +75,7 @@
 		B3733CFA1779F7FD00714B6E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		B3733CFC177A00D900714B6E /* HumbugAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HumbugAPIClient.h; sourceTree = "<group>"; };
 		B3733CFD177A00D900714B6E /* HumbugAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HumbugAPIClient.m; sourceTree = "<group>"; };
+		B3766D2D179DD1DF005FB0D4 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		B3F50D59179DADE800F9DAE4 /* AFHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPClient.h; sourceTree = "<group>"; };
 		B3F50D5A179DADE800F9DAE4 /* AFHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPClient.m; sourceTree = "<group>"; };
 		B3F50D5B179DADE800F9DAE4 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3766D2E179DD1DF005FB0D4 /* MobileCoreServices.framework in Frameworks */,
 				B3733CFB1779F7FD00714B6E /* SystemConfiguration.framework in Frameworks */,
 				E50D7573163318DA00251D1F /* Security.framework in Frameworks */,
 				C31673851620DB6B00CE9FE5 /* UIKit.framework in Frameworks */,
@@ -213,6 +216,7 @@
 		C31673751620DB6A00CE9FE5 = {
 			isa = PBXGroup;
 			children = (
+				B3766D2D179DD1DF005FB0D4 /* MobileCoreServices.framework */,
 				B3733CDC1779E9F800714B6E /* ThirdParty */,
 				B3733CCA1778C63400714B6E /* Resources */,
 				E50D7572163318D900251D1F /* Security.framework */,
