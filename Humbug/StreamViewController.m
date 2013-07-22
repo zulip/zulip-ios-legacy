@@ -485,6 +485,7 @@ numberOfRowsInSection:(NSInteger)section
                                        [[NSString alloc] initWithFormat:@"%ld", newPointer],
                                        @"pointer", nil];
 
+    self.pointer = newPointer;
     [[HumbugAPIClient sharedClient] putPath:@"users/me/pointer" parameters:postFields success:nil failure:nil];
 }
 
