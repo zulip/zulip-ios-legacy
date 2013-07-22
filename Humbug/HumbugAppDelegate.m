@@ -7,6 +7,9 @@
 #import "AFNetworkActivityIndicatorManager.h"
 #import "AFJSONRequestOperation.h"
 
+// Crashlytics
+#import <Crashlytics/Crashlytics.h>
+
 @implementation HumbugAppDelegate
 
 @synthesize window = _window;
@@ -55,6 +58,8 @@
 
     [self.window makeKeyAndVisible];
     [self.navController release];
+
+    [Crashlytics startWithAPIKey:@"7c523eb4efdbd264d6d4a7403ee7a683b733a9bd"];
     
     return YES;
 }
