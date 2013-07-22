@@ -8,15 +8,6 @@
 #import "UIImageView+AFNetworking.h"
 
 @implementation StreamViewController
-@synthesize allMessages;
-@synthesize listData;
-@synthesize messageCell = _messageCell;
-@synthesize lastEventId, maxMessageId, pointer, queueId;
-@synthesize delegate;
-@synthesize lastRequestTime;
-@synthesize waitingOnErrorRecovery;
-@synthesize timeWhenBackgrounded;
-@synthesize streams;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -175,14 +166,14 @@ numberOfRowsInSection:(NSInteger)section
         cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSUInteger row = [indexPath row];
-    NSDictionary *dict = [listData objectAtIndex:row];
+    NSDictionary *dict = [self.listData objectAtIndex:row];
 
     MessageCell *cell = (MessageCell *)[self.tableView dequeueReusableCellWithIdentifier:
                                         [MessageCell reuseIdentifier]];
     if (cell == nil) {
         [[NSBundle mainBundle] loadNibNamed:@"MessageCellView" owner:self options:nil];
-        cell = _messageCell;
-        _messageCell = nil;
+        cell = self.messageCell;
+        self.messageCell = nil;
     }
 
     cell.type = [dict objectForKey:@"type"];
@@ -254,7 +245,7 @@ numberOfRowsInSection:(NSInteger)section
                                           initWithNibName:@"ComposeViewController"
                                           bundle:nil];
 
-    NSDictionary *dict = [listData objectAtIndex:indexPath.row];
+    NSDictionary *dict = [self.listData objectAtIndex:indexPath.row];
     composeView.type = [dict objectForKey:@"type"];
     [[self navigationController] pushViewController:composeView animated:YES];
 
