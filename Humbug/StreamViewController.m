@@ -5,7 +5,6 @@
 #import "UIColor+HexColor.h"
 
 #import "AFJSONRequestOperation.h"
-#import "UIImageView+AFNetworking.h"
 
 @implementation StreamViewController
 
@@ -137,14 +136,6 @@ numberOfRowsInSection:(NSInteger)section
                            alpha:1];
 }
 
-- (NSURL *)gravatarUrl:(NSString *)gravatarHash
-{
-    return [NSURL URLWithString:
-            [NSString stringWithFormat:
-             @"https://secure.gravatar.com/avatar/%@?d=identicon&s=30",
-             gravatarHash]];
-}
-
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     MessageCell *my_cell = (MessageCell *)cell;
@@ -176,40 +167,7 @@ numberOfRowsInSection:(NSInteger)section
         self.messageCell = nil;
     }
 
-    cell.type = [dict objectForKey:@"type"];
-    cell.recipient = [dict objectForKey:@"display_recipient"];
-    if ([cell.type isEqualToString:@"stream"]) {
-        cell.header.text = [NSString stringWithFormat:@"%@ > %@",
-                            [dict objectForKey:@"display_recipient"],
-                            [dict objectForKey:@"subject"]];
-    } else if ([cell.type isEqualToString:@"private"]) {
-        NSArray *recipients = [dict objectForKey:@"display_recipient"];
-        NSMutableArray *recipient_array = [[NSMutableArray alloc] init];
-        for (NSDictionary *recipient in recipients) {
-            if (![[recipient valueForKey:@"email"] isEqualToString:self.delegate.email]) {
-                [recipient_array addObject:[recipient objectForKey:@"full_name"]];
-            }
-        }
-        cell.header.text = [@"You and " stringByAppendingString:[recipient_array componentsJoinedByString:@", "]];
-    }
-
-    cell.sender.text = [dict objectForKey:@"sender_full_name"];
-    cell.content.text = [dict objectForKey:@"content"];
-    // Allow multi-line content.
-    cell.content.lineBreakMode = UILineBreakModeWordWrap;
-    cell.content.numberOfLines = 0;
-
-    // Asynchronously load gravatar if needed
-    NSString *ghash = [dict objectForKey:@"gravatar_hash"];
-    [cell.gravatar setImageWithURL:[self gravatarUrl:ghash]];
-
-    NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
-    [dateFormatter setLocale:[[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]
-                              autorelease]];
-    [dateFormatter setDateFormat:@"HH:mm"];
-    NSDate *date = [NSDate dateWithTimeIntervalSince1970:
-                    [[dict objectForKey:@"timestamp"] doubleValue]];
-    cell.timestamp.text = [dateFormatter stringFromDate:date];
+    [cell setMessage:dict];
 
     return cell;
 }

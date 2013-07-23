@@ -1,6 +1,9 @@
 #import <UIKit/UIKit.h>
 
 @interface MessageCell : UITableViewCell
+
+- (void)setMessage:(NSDictionary *)dict;
+
 + (NSString *)reuseIdentifier;
 
 @property (strong, nonatomic) IBOutlet UILabel *header;
