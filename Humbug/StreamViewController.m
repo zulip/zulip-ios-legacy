@@ -17,7 +17,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self setTitle:@"Humbug"];
+    [self setTitle:@"Zulip"];
     self.pointer = -1;
     self.lastEventId = -1;
     self.maxMessageId = -1;
@@ -42,7 +42,12 @@
     UIBarButtonItem *uiBarComposeButton = [[UIBarButtonItem alloc] initWithCustomView:composeButton];
     [[self navigationItem] setRightBarButtonItem:uiBarComposeButton];
     [composeButton release];
-    
+
+    UIButton *menuButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [menuButton setTitle:@"Zulip" forState:UIControlStateNormal];
+    [menuButton addTarget:self action:@selector(menuButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    [[self navigationItem] setTitleView:menuButton];
+
     UIImage *composePMButtonImage = [UIImage imageNamed:@"glyphicons_003_user.png"];
     UIButton *composePMButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [composePMButton setImage:composePMButtonImage forState:UIControlStateNormal];
@@ -501,6 +506,17 @@ numberOfRowsInSection:(NSInteger)section
     composeView.type = @"private";
     [[self navigationController] pushViewController:composeView animated:YES];
     [composeView release];
+}
+
+-(void)menuButtonPressed {
+//    [[HumbugAPIClient sharedClient] logout];
+//    [self.delegate logout];
+    LoginViewController *menuView = [[LoginViewController alloc]
+                                          initWithNibName:@"LoginViewController"
+                                          bundle:nil];
+    [[self navigationController] pushViewController:menuView animated:YES];
+//    [self repopulateList];
+    [menuView release];
 }
 
 -(int) rowWithId: (int)messageId

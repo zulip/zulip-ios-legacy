@@ -145,6 +145,19 @@
     }];
 }
 
+- (void) logout
+{
+    self.apiKey = @"";
+    self.email = @"";
+    KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc]
+                                         initWithIdentifier:@"HumbugLogin" accessGroup:nil];
+    [keychainItem resetKeychainItem];
+    [keychainItem release];
+//    [self.streamViewController reset];
+
+
+}
+
 - (void)viewStream
 {
     [self.navController popViewControllerAnimated:YES];

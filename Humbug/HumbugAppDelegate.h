@@ -20,6 +20,7 @@
 @property (nonatomic, retain) NSString *apiURL;
 
 - (void) login:(NSString *)email password:(NSString *)password result:(void (^) (bool success))result;
+- (void) logout;
 - (void) viewStream;
 - (void) showErrorScreen:(UIView *)view errorMessage:(NSString *)errorMessage;
 - (void) dismissErrorScreen;

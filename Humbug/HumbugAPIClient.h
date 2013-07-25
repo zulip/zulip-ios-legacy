@@ -11,4 +11,7 @@
 + (HumbugAPIClient *) sharedClient;
 
 - (AFHTTPRequestOperation *)HTTPRequestOperationWithRequest:(NSURLRequest *)urlRequest success:(void ( ^ ) ( AFHTTPRequestOperation *operation , id responseObject ))success failure:(void ( ^ ) ( AFHTTPRequestOperation *operation , NSError *error ))failure;
+
+- (void) logout;
+
 @end

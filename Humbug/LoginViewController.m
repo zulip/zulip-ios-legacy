@@ -1,5 +1,6 @@
 #import "LoginViewController.h"
 #import "HumbugAppDelegate.h"
+#import "HumbugAPIClient.h"
 
 @interface LoginViewController ()
 
@@ -45,8 +46,12 @@
 
 - (IBAction) login: (id) sender
 {
+    [appDelegate logout];
+    [[HumbugAPIClient sharedClient] logout];
+
     [appDelegate login:email.text password:password.text result:^(bool loggedIn) {
         if (loggedIn) {
+            [appDelegate.streamViewController reset];
             [appDelegate viewStream];
         } else {
             NSLog(@"Failed to login!");

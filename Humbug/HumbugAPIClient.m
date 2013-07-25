@@ -15,10 +15,13 @@ static BOOL debug = NO;
 
 }
 
+static dispatch_once_t *onceTokenPointer;
+
 // Singleton
 + (HumbugAPIClient *)sharedClient {
     static HumbugAPIClient *_sharedClient = nil;
     static dispatch_once_t onceToken;
+    onceTokenPointer = &onceToken;
     dispatch_once(&onceToken, ^{
         NSString *apiURL;
         
@@ -35,6 +38,10 @@ static BOOL debug = NO;
     });
 
     return _sharedClient;
+}
+
+- (void)logout {
+    *onceTokenPointer = 0;
 }
 
 - (id)initWithBaseURL:(NSURL *)url {
