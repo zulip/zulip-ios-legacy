@@ -40,7 +40,6 @@
     [composeButton addTarget:self action:@selector(composeButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *uiBarComposeButton = [[UIBarButtonItem alloc] initWithCustomView:composeButton];
     [[self navigationItem] setRightBarButtonItem:uiBarComposeButton];
-    [composeButton release];
     
     UIImage *composePMButtonImage = [UIImage imageNamed:@"glyphicons_003_user.png"];
     UIButton *composePMButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -50,8 +49,6 @@
     [composePMButton addTarget:self action:@selector(composePMButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *uiBarComposePMButton = [[UIBarButtonItem alloc] initWithCustomView:composePMButton];
     [[self navigationItem] setLeftBarButtonItem:uiBarComposePMButton];
-    [composePMButton release];
-    [uiBarComposePMButton release];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -223,8 +220,6 @@ numberOfRowsInSection:(NSInteger)section
         }
         composeView.privateRecipient.text = [recipient_array componentsJoinedByString:@", "];
     }
-
-    [composeView release];
 }
 
 - (void) addMessages: (NSArray*) messages {
@@ -449,7 +444,6 @@ numberOfRowsInSection:(NSInteger)section
                                     bundle:nil];
     composeView.type = @"stream";
     [[self navigationController] pushViewController:composeView animated:YES];
-    [composeView release];
 }
 
 -(void)composePMButtonPressed {
@@ -458,7 +452,6 @@ numberOfRowsInSection:(NSInteger)section
                                      bundle:nil];
     composeView.type = @"private";
     [[self navigationController] pushViewController:composeView animated:YES];
-    [composeView release];
 }
 
 -(int) rowWithId: (int)messageId

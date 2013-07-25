@@ -45,9 +45,8 @@
     NSString *ghash = [dict objectForKey:@"gravatar_hash"];
     [self.gravatar setImageWithURL:[self gravatarUrl:ghash]];
 
-    NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
-    [dateFormatter setLocale:[[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]
-                              autorelease]];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
     [dateFormatter setDateFormat:@"HH:mm"];
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:
                     [[dict objectForKey:@"timestamp"] doubleValue]];

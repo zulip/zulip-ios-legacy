@@ -29,8 +29,8 @@
 
     KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc]
                                          initWithIdentifier:@"HumbugLogin" accessGroup:nil];
-    NSString *storedApiKey = [keychainItem objectForKey:kSecValueData];
-    NSString *storedEmail = [keychainItem objectForKey:kSecAttrAccount];
+    NSString *storedApiKey = [keychainItem objectForKey:(__bridge id)kSecValueData];
+    NSString *storedEmail = [keychainItem objectForKey:(__bridge id)kSecAttrAccount];
 
     self.streamViewController = [[StreamViewController alloc] init];
     // Bottom padding so you can see new messages arrive.
@@ -57,7 +57,6 @@
     self.clientID = @"";
 
     [self.window makeKeyAndVisible];
-    [self.navController release];
 
     [Crashlytics startWithAPIKey:@"7c523eb4efdbd264d6d4a7403ee7a683b733a9bd"];
     
@@ -106,20 +105,6 @@
      */
 }
 
-- (void)dealloc
-{
-    [_window release];
-    [_tabBarController release];
-    [super dealloc];
-}
-
-- (NSMutableString *)encodeString:(NSStringEncoding)encoding
-{
-    return (NSMutableString *) CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)self,
-                                                                NULL, (CFStringRef)@";/?:@&=$+{}<>,",
-                                                                CFStringConvertNSStringEncodingToEncoding(encoding));
-}
-
 - (void) login:(NSString *)username password:(NSString *)password result:(void (^) (bool success))result;
 {
     NSMutableDictionary *postFields = [NSMutableDictionary dictionaryWithObjectsAndKeys:username, @"username",
@@ -134,8 +119,8 @@
         [HumbugAPIClient setCredentials:self.email withAPIKey:self.apiKey];
 
         KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"HumbugLogin" accessGroup:nil];
-        [keychainItem setObject:self.apiKey forKey:kSecValueData];
-        [keychainItem setObject:self.email forKey:kSecAttrAccount];
+        [keychainItem setObject:self.apiKey forKey:(__bridge id)kSecValueData];
+        [keychainItem setObject:self.email forKey:(__bridge id)kSecAttrAccount];
 
         result(YES);
     } failure: ^( AFHTTPRequestOperation *operation , NSError *error ){

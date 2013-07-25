@@ -8,7 +8,6 @@ static NSString *email = nil;
 static BOOL debug = NO;
 
 + (void)setCredentials:(NSString *)user_email withAPIKey:(NSString *)key {
-    [user_email retain];
     email = user_email;
 
     [[HumbugAPIClient sharedClient] setAuthorizationHeaderWithUsername:email password:key];
