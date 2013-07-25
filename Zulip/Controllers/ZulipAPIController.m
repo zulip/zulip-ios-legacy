@@ -117,6 +117,17 @@
     }];
 }
 
+- (void) logout
+{
+    self.apiKey = @"";
+    self.email = @"";
+    KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc]
+                                         initWithIdentifier:@"ZulipLogin" accessGroup:nil];
+    [keychainItem resetKeychainItem];
+    [[ZulipAPIClient sharedClient] logout];
+    //    [self.streamViewController reset];
+}
+
 - (BOOL) loggedIn
 {
     return ![self.apiKey isEqualToString:@""];

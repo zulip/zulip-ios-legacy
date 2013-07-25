@@ -256,6 +256,8 @@
 		B3766D30179DD675005FB0D4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				782681CA1795CFD2009F69F5 /* iPhone */,
+				782681BD1795C512009F69F5 /* iPad */,
 				E577A74B16226AC4002D9651 /* MessageCell.h */,
 				E577A74C16226AC4002D9651 /* MessageCell.m */,
 				E577A74E16226AFF002D9651 /* MessageCellView.xib */,
@@ -361,8 +363,6 @@
 				C31673941620DB6B00CE9FE5 /* ZulipAppDelegate.m */,
 				E50D757716331D7A00251D1F /* KeychainItemWrapper.h */,
 				E50D757816331D7A00251D1F /* KeychainItemWrapper.m */,
-				782681CA1795CFD2009F69F5 /* iPhone */,
-				782681BD1795C512009F69F5 /* iPad */,
 				B3766D32179DD701005FB0D4 /* Models */,
 				B3766D30179DD675005FB0D4 /* Views */,
 				B3766D2F179DD668005FB0D4 /* Controllers */,

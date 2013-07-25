@@ -29,6 +29,8 @@
 + (ZulipAPIController *) sharedInstance;
 
 - (void) login:(NSString *)email password:(NSString *)password result:(void (^) (bool success))result;
+- (void) logout;
+
 - (BOOL) loggedIn;
 - (NSString *)domain;
 

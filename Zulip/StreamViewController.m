@@ -80,6 +80,13 @@
     [composePMButton addTarget:self action:@selector(composePMButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *uiBarComposePMButton = [[UIBarButtonItem alloc] initWithCustomView:composePMButton];
     [[self navigationItem] setLeftBarButtonItem:uiBarComposePMButton];
+
+    UIButton *menuButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [menuButton setTitle:@"Zulip" forState:UIControlStateNormal];
+    [menuButton setTitleColor:[UIColor colorWithWhite:1 alpha:1] forState:UIControlStateNormal];
+    [menuButton addTarget:self action:@selector(menuButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    [[self navigationItem] setTitleView:menuButton];
+
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -260,6 +267,13 @@
                                      bundle:nil];
     composeView.type = @"private";
     [[self navigationController] pushViewController:composeView animated:YES];
+}
+
+-(void)menuButtonPressed {
+    [[ZulipAPIController sharedInstance] logout];
+    LoginViewController *menuView = [[LoginViewController alloc] initWithNibName:@"LoginViewController"
+                                                                          bundle:nil];
+    [[self navigationController] pushViewController:menuView animated:YES];
 }
 
 -(int) rowWithId: (int)messageId
