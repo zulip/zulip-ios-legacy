@@ -28,6 +28,13 @@
     _fetchedResultsController = 0;
     self.initialLoad = YES;
 
+    // Watch for pointer updates
+    [[ZulipAPIController sharedInstance] addObserver:self
+                                          forKeyPath:@"pointer"
+                                             options:(NSKeyValueObservingOptionNew |
+                                                      NSKeyValueObservingOptionOld)
+                                             context:nil];
+
     return ret;
 }
 
@@ -351,6 +358,20 @@
         self.initialLoad = NO;
         NSLog(@"Done with initial load, scrolling to pointer");
         [self scrollToPointer:[[ZulipAPIController sharedInstance] pointer] animated:NO];
+    }
+}
+
+#pragma mark - NSKeyValueObserving
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:@"pointer"]) {
+        long old = [[change objectForKey:NSKeyValueChangeOldKey] longValue];
+        long new = [[change objectForKey:NSKeyValueChangeNewKey] longValue];
+
+        if (new > old) {
+            [self scrollToPointer:new animated:YES];
+        }
     }
 }
 
