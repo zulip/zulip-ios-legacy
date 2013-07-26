@@ -37,11 +37,15 @@
 @property(nonatomic, assign) BOOL waitingOnErrorRecovery;
 
 @property(nonatomic, retain) HumbugAppDelegate *appDelegate;
+@property(nonatomic, retain) AFHTTPRequestOperation *pollRequest;
 @end
 
 @implementation ZulipAPIController
 
+// Explicitly synthesize so we _-prefix member vars,
+// as we override the default getter/setters
 @synthesize pointer = _pointer;
+@synthesize backgrounded = _backgrounded;
 
 - (id) init
 {
@@ -58,6 +62,7 @@
     self.queueId = @"";
     self.pollFailures = 0;
     self.pollingStarted = NO;
+    self.pollRequest = nil;
 
     return ret;
 }
@@ -128,6 +133,22 @@
     [[HumbugAPIClient sharedClient] putPath:@"users/me/pointer" parameters:postFields success:nil failure:nil];
 }
 
+- (BOOL)backgrounded
+{
+    return _backgrounded;
+}
+
+- (void)setBackgrounded:(BOOL)backgrounded
+{
+    
+    // Re-start polling
+    if (_backgrounded && !backgrounded) {
+        NSLog(@"Coming to the foreground!!");
+        [self startPoll];
+    }
+    _backgrounded = backgrounded;
+}
+
 - (void) loadMessagesAroundAnchor:(int)anchor before:(int)before after:(int)after
 {
     NSDictionary *args = @{@"anchor": @(anchor),
@@ -189,6 +210,11 @@
 }
 
 - (void) startPoll {
+    if (self.pollRequest && [self.pollRequest isExecuting]) {
+        [self.pollRequest cancel];
+        self.pollRequest = 0;
+    }
+    
     [self performSelectorInBackground:@selector(longPoll) withObject: nil];
 }
 
@@ -204,7 +230,9 @@
                              @"queue_id": self.queueId,
                              @"last_event_id": @(self.lastEventId)};
 
-    [[HumbugAPIClient sharedClient] getPath:@"events" parameters:fields success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSMutableURLRequest *request = [[HumbugAPIClient sharedClient] requestWithMethod:@"GET" path:@"events" parameters:fields];
+    self.pollRequest = [[HumbugAPIClient sharedClient] HTTPRequestOperationWithRequest:request
+                                                                               success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *json = (NSDictionary *)responseObject;
 
         if (self.waitingOnErrorRecovery == YES) {
@@ -225,10 +253,6 @@
                 long newPointer = [[event objectForKey:@"pointer"] longValue];
 
                 self.pointer = newPointer;
-                // TODO KVO watch in StreamViewController to move pointer
-//                if (newPointer > self.pointer) {
-//                    [self scrollToPointer:newPointer];
-//                }
             }
 
             self.lastEventId = MAX(self.lastEventId, [[event objectForKey:@"id"] intValue]);
@@ -250,24 +274,26 @@
             if ([[operation response] statusCode] == 400 &&
                 ([errorMsg rangeOfString:@"too old"].location != NSNotFound ||
                  [errorMsg rangeOfString:@"Bad event queue id"].location != NSNotFound)) {
-                // Reload our data if we've been GCed
-                self.pollingStarted = NO;
-//                [self reset];
-                return;
-            }
+                    // Reload our data if we've been GCed
+                    self.pollingStarted = NO;
+                    //                [self reset];
+                    return;
+                }
         }
 
         self.pollFailures++;
         [self adjustRequestBackoff];
         if (self.pollFailures > 5 && self.waitingOnErrorRecovery == NO) {
             self.waitingOnErrorRecovery = YES;
-//            [self.appDelegate showErrorScreen:self.view
-//                              errorMessage:@"Error getting messages. Please try again in a few minutes."];
+            //            [self.appDelegate showErrorScreen:self.view
+            //                              errorMessage:@"Error getting messages. Please try again in a few minutes."];
         }
-
+        
         // Continue polling regardless
         [self performSelectorInBackground:@selector(longPoll) withObject: nil];
     }];
+    
+    [[HumbugAPIClient sharedClient] enqueueHTTPRequestOperation:self.pollRequest];
 }
 
 - (void) adjustRequestBackoff
