@@ -13,6 +13,7 @@
 
 // Models
 #import "ZSubscription.h"
+#include "ZUser.h"
 
 // AFNetworking
 #import "AFJSONRequestOperation.h"
@@ -388,7 +389,16 @@
             msg.subscription = [self subscriptionForName:msg.stream_recipient];
         } else {
             msg.stream_recipient = @"";
-            // TODO set pm+recipients
+
+            NSArray *involved_people = [msgDict objectForKey:@"display_recipient"];
+            for (NSDictionary *person in involved_people) {
+                ZUser *recipient  = [self addPerson:person];
+
+                if (recipient) {
+                    [msg addPm_recipientsObject:recipient];
+                }
+            }
+            NSLog(@"Adding PM recipients: %@", [msgDict objectForKey:@"display_recipient"]);
         }
         // TODO set sender
     }
@@ -398,6 +408,45 @@
     if (error) {
         NSLog(@"Error saving new messages: %@ %@", [error localizedDescription], [error userInfo]);
     }
+}
+
+- (ZUser *)addPerson:(NSDictionary *)personDict
+{
+    int userID = [[personDict objectForKey:@"id"] intValue];
+
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ZUser"];
+    request.predicate = [NSPredicate predicateWithFormat:@"userID == %i", userID];
+
+    NSError *error = nil;
+    NSArray *results = [[self.appDelegate managedObjectContext] executeFetchRequest:request error:&error];
+    if (error) {
+        NSLog(@"Error fetching ZUser: %@ %@", [error localizedDescription], [error userInfo]);
+
+        return nil;
+    }
+
+    ZUser *user = nil;
+    if ([results count] != 0) {
+        user = (ZUser *)[results objectAtIndex:0];
+    } else {
+        user = [NSEntityDescription insertNewObjectForEntityForName:@"ZUser" inManagedObjectContext:[self.appDelegate managedObjectContext]];
+        user.userID = @(userID);
+    }
+    NSArray *stringProperties = @[@"email", @"gravatar_hash", @"full_name"];
+    for (NSString *prop in stringProperties) {
+        // Use KVC to set the property value by the string name
+        [user setValue:[personDict valueForKey:prop] forKey:prop];
+    }
+
+    error = nil;
+    [[self.appDelegate managedObjectContext] save:&error];
+    if (error) {
+        NSLog(@"Error saving ZUser: %@ %@", [error localizedDescription], [error userInfo]);
+
+        return nil;
+    }
+
+    return user;
 }
 
 #pragma mark - Core Data Getters
