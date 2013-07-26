@@ -42,11 +42,11 @@
 {
     [super viewDidLoad];
     [self setTitle:@"Zulip"];
-    
+
     self.backgrounded = FALSE;
     self.waitingOnErrorRecovery = FALSE;
     self.delegate = (HumbugAppDelegate *)[UIApplication sharedApplication].delegate;
-    
+
     UIImage *composeButtonImage = [UIImage imageNamed:@"glyphicons_355_bullhorn.png"];
     UIButton *composeButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [composeButton setImage:composeButtonImage forState:UIControlStateNormal];
@@ -55,7 +55,7 @@
     [composeButton addTarget:self action:@selector(composeButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *uiBarComposeButton = [[UIBarButtonItem alloc] initWithCustomView:composeButton];
     [[self navigationItem] setRightBarButtonItem:uiBarComposeButton];
-    
+
     UIImage *composePMButtonImage = [UIImage imageNamed:@"glyphicons_003_user.png"];
     UIButton *composePMButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [composePMButton setImage:composePMButtonImage forState:UIControlStateNormal];
@@ -131,7 +131,7 @@
         cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ZMessage *message = [self messageAtIndexPath:indexPath];
-    
+
     MessageCell *cell = (MessageCell *)[self.tableView dequeueReusableCellWithIdentifier:
                                         [MessageCell reuseIdentifier]];
     if (cell == nil) {
@@ -200,6 +200,9 @@
     fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"messageID" ascending:YES]];
     fetchRequest.fetchOffset = 0; // 0 offset + descending means starting from the end
     fetchRequest.fetchBatchSize = 10;
+
+    // We only want stream messages that have the in_home_view flag set in the associated subscription object
+    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"( subscription == NIL ) OR ( subscription.in_home_view == YES )"];
 
     _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                     managedObjectContext:[self.delegate managedObjectContext]
