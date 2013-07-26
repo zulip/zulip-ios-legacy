@@ -64,11 +64,6 @@
     [[self navigationItem] setLeftBarButtonItem:uiBarComposePMButton];
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    // This function gets called whenever the stream view appears, including returning to the view after popping another view. We only want to backfill old messages on the very first load.
-}
-
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     // Return YES for supported orientations
@@ -86,9 +81,6 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
 }
 
 #pragma mark - UITableViewDataSource
@@ -198,6 +190,10 @@
 }
 
 - (void) updatePointer {
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:[self.tableView.visibleCells objectAtIndex:0]];
+    ZMessage *message = (ZMessage *)[_fetchedResultsController objectAtIndexPath:indexPath];
+
+    [[ZulipAPIController sharedInstance] setPointer:[message.messageID longValue]];
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
@@ -235,9 +231,7 @@
 
 -(void)repopulateList
 {
-    [[[HumbugAPIClient sharedClient] operationQueue] cancelAllOperations];
     [self initialPopulate];
-    [self.tableView reloadData];
 }
 
 -(void)scrollToPointer:(long)newPointer animated:(BOOL)animated
@@ -278,6 +272,7 @@
 }
 
 #pragma mark - NSFetchedResultsControllerDelegate methods
+// Below code mostly inspired by Apple documentation on NSFetchedResultsControllerDelegate
 /*
  Assume self has a property 'tableView' -- as is the case for an instance of a UITableViewController
  subclass -- and a method configureCell:atIndexPath: which updates the contents of a given cell

@@ -33,12 +33,14 @@
 @property(assign) double lastRequestTime;
 
 @property(assign) BOOL pollingStarted;
-@property(assign) BOOL waitingOnErrorRecovery;
+@property(nonatomic, assign) BOOL waitingOnErrorRecovery;
 
 @property(nonatomic, retain) HumbugAppDelegate *appDelegate;
 @end
 
 @implementation ZulipAPIController
+
+@synthesize pointer = _pointer;
 
 - (id) init
 {
@@ -107,6 +109,22 @@
     }
 
     return [results objectAtIndex:0];
+}
+
+- (long)pointer
+{
+    return _pointer;
+}
+
+- (void)setPointer:(long)pointer
+{
+    if (pointer <= _pointer)
+        return;
+
+    _pointer = pointer;
+    NSDictionary *postFields = @{@"pointer": @(_pointer)};
+
+    [[HumbugAPIClient sharedClient] putPath:@"users/me/pointer" parameters:postFields success:nil failure:nil];
 }
 
 #pragma mark - Humbug API calls
