@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="2061" systemVersion="12E55" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="ZMessage" representedClassName="ZMessage" syncable="YES">
+        <attribute name="avatar_url" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="gravatar_hash" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="messageID" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="stream_recipient" attributeType="String" syncable="YES"/>
         <attribute name="subject" optional="YES" attributeType="String" syncable="YES"/>
@@ -22,17 +22,17 @@
         <relationship name="subscribers" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ZUser" inverseName="subscriptions" inverseEntity="ZUser" syncable="YES"/>
     </entity>
     <entity name="ZUser" representedClassName="ZUser" syncable="YES">
+        <attribute name="avatar_url" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="full_name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="gravatar_hash" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="userID" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <relationship name="received_pm" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="ZMessage" inverseName="pm_recipients" inverseEntity="ZMessage" syncable="YES"/>
         <relationship name="sent_messages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ZMessage" inverseName="sender" inverseEntity="ZMessage" syncable="YES"/>
         <relationship name="subscriptions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ZSubscription" inverseName="subscribers" inverseEntity="ZSubscription" syncable="YES"/>
     </entity>
     <elements>
-        <element name="ZMessage" positionX="124" positionY="167" width="128" height="193"/>
-        <element name="ZUser" positionX="448" positionY="234" width="128" height="150"/>
+        <element name="ZMessage" positionX="124" positionY="167" width="128" height="195"/>
         <element name="ZSubscription" positionX="144" positionY="450" width="135" height="148"/>
+        <element name="ZUser" positionX="448" positionY="234" width="128" height="150"/>
     </elements>
 </model>

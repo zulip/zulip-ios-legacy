@@ -14,7 +14,7 @@
 @interface ZMessage : NSManagedObject
 
 @property (nonatomic, retain) NSString * content;
-@property (nonatomic, retain) NSString * gravatar_hash;
+@property (nonatomic, retain) NSString * avatar_url;
 @property (nonatomic, retain) NSNumber * messageID;
 @property (nonatomic, retain) NSString * stream_recipient;
 @property (nonatomic, retain) NSString * subject;

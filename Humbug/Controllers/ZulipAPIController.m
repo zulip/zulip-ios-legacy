@@ -140,7 +140,7 @@
 
 - (void)setBackgrounded:(BOOL)backgrounded
 {
-    
+
     // Re-start polling
     if (_backgrounded && !backgrounded) {
         NSLog(@"Coming to the foreground!!");
@@ -214,7 +214,7 @@
         [self.pollRequest cancel];
         self.pollRequest = 0;
     }
-    
+
     [self performSelectorInBackground:@selector(longPoll) withObject: nil];
 }
 
@@ -288,11 +288,11 @@
             //            [self.appDelegate showErrorScreen:self.view
             //                              errorMessage:@"Error getting messages. Please try again in a few minutes."];
         }
-        
+
         // Continue polling regardless
         [self performSelectorInBackground:@selector(longPoll) withObject: nil];
     }];
-    
+
     [[HumbugAPIClient sharedClient] enqueueHTTPRequestOperation:self.pollRequest];
 }
 
@@ -413,7 +413,7 @@
             newMsgIdx++;
         }
 
-        NSArray *stringProperties = @[@"content", @"gravatar_hash", @"subject", @"type"];
+        NSArray *stringProperties = @[@"content", @"avatar_url", @"subject", @"type"];
         for (NSString *prop in stringProperties) {
             // Use KVC to set the property value by the string name
             [msg setValue:[msgDict valueForKey:prop] forKey:prop];
@@ -435,7 +435,15 @@
                 }
             }
         }
-        // TODO set sender
+
+        if ([msgDict objectForKey:@"sender_id"]) {
+            NSDictionary *senderDict = @{@"full_name": [msgDict objectForKey:@"sender_full_name"],
+                                         @"email": [msgDict objectForKey:@"sender_email"],
+                                         @"id": [msgDict objectForKey:@"sender_id"],
+                                         @"avatar_url": [msgDict objectForKey:@"avatar_url"]};
+            ZUser *sender = [self addPerson:senderDict];
+            msg.sender = sender;
+        }
     }
 
     error = nil;
@@ -467,7 +475,7 @@
         user = [NSEntityDescription insertNewObjectForEntityForName:@"ZUser" inManagedObjectContext:[self.appDelegate managedObjectContext]];
         user.userID = @(userID);
     }
-    NSArray *stringProperties = @[@"email", @"gravatar_hash", @"full_name"];
+    NSArray *stringProperties = @[@"email", @"avatar_url", @"full_name"];
     for (NSString *prop in stringProperties) {
         // Use KVC to set the property value by the string name
         [user setValue:[personDict valueForKey:prop] forKey:prop];

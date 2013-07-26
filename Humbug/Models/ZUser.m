@@ -15,7 +15,7 @@
 
 @dynamic email;
 @dynamic full_name;
-@dynamic gravatar_hash;
+@dynamic avatar_url;
 @dynamic userID;
 @dynamic received_pm;
 @dynamic sent_messages;

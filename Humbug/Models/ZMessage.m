@@ -14,7 +14,7 @@
 @implementation ZMessage
 
 @dynamic content;
-@dynamic gravatar_hash;
+@dynamic avatar_url;
 @dynamic messageID;
 @dynamic stream_recipient;
 @dynamic subject;

@@ -15,7 +15,7 @@
 
 @property (nonatomic, retain) NSString * email;
 @property (nonatomic, retain) NSString * full_name;
-@property (nonatomic, retain) NSString * gravatar_hash;
+@property (nonatomic, retain) NSString * avatar_url;
 @property (nonatomic, retain) NSNumber * userID;
 @property (nonatomic, retain) ZMessage *received_pm;
 @property (nonatomic, retain) NSSet *sent_messages;

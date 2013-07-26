@@ -45,8 +45,7 @@
     self.content.numberOfLines = 0;
 
     // Asynchronously load gravatar if needed
-    NSString *ghash = message.gravatar_hash;
-    [self.gravatar setImageWithURL:[self gravatarUrl:ghash]];
+    [self.gravatar setImageWithURL:[NSURL URLWithString:message.avatar_url]];
 
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
