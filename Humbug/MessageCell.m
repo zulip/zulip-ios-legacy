@@ -1,7 +1,8 @@
 #import "MessageCell.h"
 #import "HumbugAppDelegate.h"
 #import "UIImageView+AFNetworking.h"
-#include "ZUser.h"
+#import "ZUser.h"
+#import "ZulipAPIController.h"
 
 @implementation MessageCell
 
@@ -17,12 +18,12 @@
 - (void)setMessage:(ZMessage *)message
 {
     self.type = message.type;
-//    self.recipient = message.;// [dict objectForKey:@"display_recipient"];
 
     if ([self.type isEqualToString:@"stream"]) {
         self.header.text = [NSString stringWithFormat:@"%@ > %@",
                             message.stream_recipient,
                             message.subject];
+        self.recipient = message.stream_recipient;
     } else if ([self.type isEqualToString:@"private"]) {
         NSSet *recipients = message.pm_recipients;
         NSMutableArray *recipient_array = [[NSMutableArray alloc] init];
@@ -33,7 +34,8 @@
                 [recipient_array addObject:recipient.full_name];
             }
         }
-        self.header.text = [@"You and " stringByAppendingString:[recipient_array componentsJoinedByString:@", "]];
+        self.recipient = [recipient_array componentsJoinedByString:@", "];
+        self.header.text = [@"You and " stringByAppendingString:self.recipient];
     }
 
     self.sender.text = message.sender.full_name;
@@ -49,8 +51,6 @@
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
     [dateFormatter setDateFormat:@"HH:mm"];
-//    NSDate *date = [NSDate dateWithTimeIntervalSince1970:
-//                    [message.tim];
     self.timestamp.text = [dateFormatter stringFromDate:message.timestamp];
 
 }
@@ -58,8 +58,7 @@
 - (void)willBeDisplayed
 {
     if ([self.type isEqualToString:@"stream"]) {
-        // TODO get stream color
-//        self.headerBar.backgroundColor = [self streamColor:my_cell.recipient];
+        self.headerBar.backgroundColor = [[ZulipAPIController sharedInstance] streamColor:self.recipient withDefault:[MessageCell defaultStreamColor]];
     } else {
         // For non-stream messages, color cell background pale yellow (#FEFFE0).
         self.backgroundColor = [UIColor colorWithRed:255.0/255 green:254.0/255
@@ -100,6 +99,14 @@
             [NSString stringWithFormat:
              @"https://secure.gravatar.com/avatar/%@?d=identicon&s=30",
              gravatarHash]];
+}
+
+
++ (UIColor *)defaultStreamColor {
+    return [UIColor colorWithRed:187.0/255
+                           green:187.0/255
+                            blue:187.0/255
+                           alpha:1];
 }
 
 + (NSString *)reuseIdentifier {

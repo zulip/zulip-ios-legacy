@@ -10,16 +10,32 @@
 #import "HumbugAPIClient.h"
 #import "HumbugAppDelegate.h"
 #import "StreamViewController.h"
+
+// Models
 #import "ZSubscription.h"
+
+// AFNetworking
+#import "AFJSONRequestOperation.h"
+
+// Categories
+#import "UIColor+HexColor.h"
 
 // Private category to let us declare "private" member properties
 @interface ZulipAPIController ()
 
 @property(nonatomic, retain) NSString *queueId;
+
 @property(assign) int lastEventId;
 @property(assign) int maxMessageId;
-@property(nonatomic, retain) HumbugAppDelegate *appDelegate;
+@property(assign) int pollFailures;
 
+@property(assign) double backoff;
+@property(assign) double lastRequestTime;
+
+@property(assign) BOOL pollingStarted;
+@property(assign) BOOL waitingOnErrorRecovery;
+
+@property(nonatomic, retain) HumbugAppDelegate *appDelegate;
 @end
 
 @implementation ZulipAPIController
@@ -29,6 +45,16 @@
     id ret = [super init];
 
     self.appDelegate = (HumbugAppDelegate *)[[UIApplication sharedApplication] delegate];
+    self.queueId = @"";
+    self.backgrounded = FALSE;
+    self.waitingOnErrorRecovery = FALSE;
+    self.pointer = -1;
+    self.lastEventId = -1;
+    self.maxMessageId = -1;
+    self.backoff = 0;
+    self.queueId = @"";
+    self.pollFailures = 0;
+    self.pollingStarted = FALSE;
 
     return ret;
 }
@@ -121,16 +147,113 @@
                                        @"num_after": @(20)};
                 [self getOldMessages:args];
             } else {
-//                self.backgrounded = FALSE;
-//                if (!self.pollingStarted) {
-//                    self.pollingStarted = TRUE;
-//                    [self startPoll];
-//                }
+                self.backgrounded = FALSE;
+                if (!self.pollingStarted) {
+                    self.pollingStarted = TRUE;
+                    [self startPoll];
+                }
             }
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Failed to load old messages: %@", [error localizedDescription]);
     }];
+}
+
+- (void) startPoll {
+    [self performSelectorInBackground:@selector(longPoll) withObject: nil];
+}
+
+
+- (void) longPoll {
+    while (([[NSDate date] timeIntervalSince1970] - self.lastRequestTime) < self.backoff) {
+        [NSThread sleepForTimeInterval:.5];
+    }
+
+    self.lastRequestTime = [[NSDate date] timeIntervalSince1970];
+
+    NSDictionary *fields = @{@"apply_markdown": @"false",
+                             @"queue_id": self.queueId,
+                             @"last_event_id": @(self.lastEventId)};
+
+    [[HumbugAPIClient sharedClient] getPath:@"events" parameters:fields success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary *json = (NSDictionary *)responseObject;
+
+        if (self.waitingOnErrorRecovery == TRUE) {
+            self.waitingOnErrorRecovery = FALSE;
+            [self.appDelegate dismissErrorScreen];
+        }
+        self.backoff = 0;
+        self.pollFailures = 0;
+
+        NSMutableArray *messages = [[NSMutableArray alloc] init];
+        for (NSDictionary *event in [json objectForKey:@"events"]) {
+            NSString *eventType = [event objectForKey:@"type"];
+            if ([eventType isEqualToString:@"message"]) {
+                NSMutableDictionary *msg = [[event objectForKey:@"message"] mutableCopy];
+                [msg setValue:[event objectForKey:@"flags"] forKey:@"flags"];
+                [messages addObject:msg];
+            } else if ([eventType isEqualToString:@"pointer"]) {
+                long newPointer = [[event objectForKey:@"pointer"] longValue];
+
+                self.pointer = newPointer;
+                // TODO KVO watch in StreamViewController to move pointer
+//                if (newPointer > self.pointer) {
+//                    [self scrollToPointer:newPointer];
+//                }
+            }
+
+            self.lastEventId = MAX(self.lastEventId, [[event objectForKey:@"id"] intValue]);
+        }
+
+        // If we're not hidden/in the background, load the new messages immediately
+        if (!self.backgrounded) {
+            [self performSelectorOnMainThread:@selector(insertMessages:)
+                                   withObject:messages waitUntilDone:YES];
+        }
+
+        [self performSelectorInBackground:@selector(longPoll) withObject: nil];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Failed to do long poll: %@", [error localizedDescription]);
+
+        if ([operation isKindOfClass:[AFJSONRequestOperation class]]) {
+            NSDictionary *json = (NSDictionary *)[(AFJSONRequestOperation *)operation responseJSON];
+            NSString *errorMsg = [json objectForKey:@"msg"];
+            if ([[operation response] statusCode] == 400 &&
+                ([errorMsg rangeOfString:@"too old"].location != NSNotFound ||
+                 [errorMsg rangeOfString:@"Bad event queue id"].location != NSNotFound)) {
+                // Reload our data if we've been GCed
+                self.pollingStarted = NO;
+//                [self reset];
+                return;
+            }
+        }
+
+        self.pollFailures++;
+        [self adjustRequestBackoff];
+        if (self.pollFailures > 5 && self.waitingOnErrorRecovery == FALSE) {
+            self.waitingOnErrorRecovery = TRUE;
+//            [self.appDelegate showErrorScreen:self.view
+//                              errorMessage:@"Error getting messages. Please try again in a few minutes."];
+        }
+
+        // Continue polling regardless
+        [self performSelectorInBackground:@selector(longPoll) withObject: nil];
+    }];
+}
+
+- (void) adjustRequestBackoff
+{
+    if (self.backoff > 4) {
+        return;
+    }
+
+    if (self.backoff == 0) {
+        self.backoff = .8;
+    } else if (self.backoff < 10) {
+        self.backoff *= 2;
+    } else {
+        self.backoff = 10;
+    }
 }
 
 #pragma mark - Core Data Insertion
@@ -259,7 +382,7 @@
     }
 }
 
-#pragma mark - Core Data Getteres
+#pragma mark - Core Data Getters
 - (ZMessage *)newestMessage
 {
     // Fetch the newest message
@@ -275,6 +398,25 @@
     }
 
     return [results objectAtIndex:0];
+}
+
+- (UIColor *)streamColor:(NSString *)name withDefault:(UIColor *)defaultColor {
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ZSubscription"];
+    request.predicate = [NSPredicate predicateWithFormat:@"name = %@", name];
+
+
+    NSError *error = nil;
+    NSArray *results = [[self.appDelegate managedObjectContext] executeFetchRequest:request error:&error];
+    if (error) {
+        NSLog(@"Error fetching subscription to get color: %@, %@", [error localizedDescription], [error userInfo]);
+        return defaultColor;
+    } else if ([results count] == 0) {
+        NSLog(@"Error loading stream data to fetch color, %@", name);
+        return defaultColor;
+    }
+
+    ZSubscription *sub = [results objectAtIndex:0];
+    return [UIColor colorWithHexString:sub.color defaultColor:defaultColor];
 }
 
 // Singleton

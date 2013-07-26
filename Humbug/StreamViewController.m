@@ -43,8 +43,6 @@
     [super viewDidLoad];
     [self setTitle:@"Zulip"];
 
-    self.backgrounded = FALSE;
-    self.waitingOnErrorRecovery = FALSE;
     self.delegate = (HumbugAppDelegate *)[UIApplication sharedApplication].delegate;
 
     UIImage *composeButtonImage = [UIImage imageNamed:@"glyphicons_355_bullhorn.png"];
@@ -102,13 +100,6 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return [[[_fetchedResultsController sections] objectAtIndex:section] numberOfObjects];
-}
-
-+ (UIColor *)defaultStreamColor {
-    return [UIColor colorWithRed:187.0/255
-                           green:187.0/255
-                            blue:187.0/255
-                           alpha:1];
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -180,15 +171,6 @@
 
 #pragma mark - StreamViewController
 
-- (void)loadSubscriptionData:(NSArray *)subscriptions
-{
-    NSMutableDictionary *streamdict = [[NSMutableDictionary alloc] init];
-    for (NSDictionary* stream in subscriptions) {
-        [streamdict setObject:stream forKey:[stream objectForKey:@"name"]];
-    }
-    [self setStreams:streamdict];
-}
-
 - (void)initialPopulate
 {
     if (_fetchedResultsController) {
@@ -213,17 +195,6 @@
     NSLog(@"Initially populating!");
     [self refetchData];
     [self.tableView reloadData];
-}
-
-- (BOOL) streamInHome:(NSString *)stream
-{
-    NSDictionary *streamInfo = [[self streams] objectForKey:stream];
-
-    if (!streamInfo) {
-        return YES;
-    }
-
-    return [[streamInfo objectForKey:@"in_home_view"] boolValue];
 }
 
 - (void) updatePointer {
@@ -296,7 +267,7 @@
 
         if (updatedPointer != -1) {
             [self scrollToPointer:updatedPointer animated:NO];
-            self.backgrounded = FALSE;
+//            self.backgrounded = FALSE;
         }
 
         [self repopulateList];
@@ -304,21 +275,6 @@
         NSLog(@"Failed to fetch pointer: %@", [error localizedDescription]);
         [self repopulateList];
     }];
-}
-
-- (UIColor *)streamColor:(NSString *)withName {
-    NSDictionary *stream = [[self streams] objectForKey:withName];
-    if (stream == NULL) {
-        NSLog(@"Error loading stream data to fetch color, %@", withName);
-        return [StreamViewController defaultStreamColor];
-    }
-    NSString* colorHex = [stream objectForKey:@"color"];
-    if (colorHex == NULL || [colorHex isEqualToString:@""]) {
-        NSLog(@"Got no color for stream %@", withName);
-        return [StreamViewController defaultStreamColor];
-    }
-
-    return [UIColor colorWithHexString:colorHex defaultColor:[StreamViewController defaultStreamColor]];
 }
 
 #pragma mark - NSFetchedResultsControllerDelegate methods

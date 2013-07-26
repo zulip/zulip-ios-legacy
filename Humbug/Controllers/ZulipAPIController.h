@@ -29,9 +29,12 @@
 + (ZulipAPIController *) sharedInstance;
 
 // Registers for an event queue, and sets up initial data
+// Will fetch initial messages and begin long polling
 - (void) registerForQueue;
+- (UIColor *)streamColor:(NSString *)name withDefault:(UIColor *)defaultColor;
 
 @property(assign) long pointer;
+@property(assign) BOOL backgrounded;
 @property(nonatomic, retain) StreamViewController *homeViewController;
 
 @end
