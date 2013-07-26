@@ -11,10 +11,20 @@
 #import "AFJSONRequestOperation.h"
 
 @interface StreamViewController () <NSFetchedResultsControllerDelegate> {
+    // NSFetchedResultsController helpers
     NSFetchedResultsController *_fetchedResultsController;
+    NSMutableArray *_batchedInsertingRows;
 }
 
-@property (assign) BOOL initialLoad;
+@property(assign) BOOL initialLoad;
+@property(assign, nonatomic) IBOutlet MessageCell *messageCell;
+
+@property(nonatomic,retain) HumbugAppDelegate *delegate;
+
+@property(nonatomic, assign) BOOL currentlyIgnoringScrollPastTopEvents;
+@property(nonatomic, retain) ZMessage* topRow;
+@property(assign) CGFloat scrollFinalTarget;
+
 
 - (void)refetchData;
 
@@ -88,6 +98,25 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
+}
+
+#pragma mark - UIScrollView
+
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+{
+    NSUInteger numRows = [self tableView:self.tableView numberOfRowsInSection:0];
+
+    self.currentlyIgnoringScrollPastTopEvents = NO;
+    if ((targetContentOffset->y < 200) && !self.currentlyIgnoringScrollPastTopEvents && (numRows > 5)){
+        self.currentlyIgnoringScrollPastTopEvents = YES;
+        self.scrollFinalTarget = targetContentOffset->y;
+        // Load old messages, with the anchor set to whatever is at the top of the StreamView UITable
+        self.topRow = (ZMessage *)[_fetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+        NSLog(@"Getting more with anchor: %@", self.topRow.messageID);
+
+        [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[self.topRow.messageID intValue] before:15 after:0];
+    }
+    return;
 }
 
 #pragma mark - UITableViewDataSource
@@ -287,14 +316,15 @@
  */
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
-    [self.tableView beginUpdates];
+//    [self.tableView beginUpdates];
+
+    _batchedInsertingRows = [[NSMutableArray alloc] init];
 }
 
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
            atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
 {
-    NSLog(@"Section change!");
     switch(type) {
         case NSFetchedResultsChangeInsert:
             [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex]
@@ -319,8 +349,11 @@
 
         case NSFetchedResultsChangeInsert:
 //            NSLog(@"Added object: %@", newIndexPath);
-            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
-                             withRowAnimation:UITableViewRowAnimationFade];
+            // Batch inserting rows
+            [_batchedInsertingRows addObject:newIndexPath];
+
+//            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
+//                             withRowAnimation:UITableViewRowAnimationFade];
             break;
 
         case NSFetchedResultsChangeDelete:
@@ -352,12 +385,29 @@
 
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-    [self.tableView endUpdates];
+    BOOL insertingAtTop = NO;
+
+    if ([_batchedInsertingRows count] > 0) {
+        NSIndexPath *last = [_batchedInsertingRows lastObject];
+        ZMessage *lastNewMsg = (ZMessage *)[_fetchedResultsController objectAtIndexPath:last];
+
+        NSLog(@"Adding backlog with last new message; %i", [lastNewMsg.messageID intValue]);
+        if (lastNewMsg && lastNewMsg.messageID < self.topRow.messageID) {
+            insertingAtTop = YES;
+        }
+
+//        [self.tableView insertRowsAtIndexPaths:_batchedInsertingRows withRowAnimation:UITableViewRowAnimationFade];
+    }
+
+//    [self.tableView endUpdates];
 //    NSLog(@"FInished changing content");
     if (self.initialLoad) {
+        [self.tableView reloadData];
         self.initialLoad = NO;
         NSLog(@"Done with initial load, scrolling to pointer");
         [self scrollToPointer:[[ZulipAPIController sharedInstance] pointer] animated:NO];
+    } else {
+        [self.tableView reloadData];
     }
 }
 

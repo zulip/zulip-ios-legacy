@@ -128,6 +128,14 @@
     [[HumbugAPIClient sharedClient] putPath:@"users/me/pointer" parameters:postFields success:nil failure:nil];
 }
 
+- (void) loadMessagesAroundAnchor:(int)anchor before:(int)before after:(int)after
+{
+    NSDictionary *args = @{@"anchor": @(anchor),
+                           @"num_before": @(before),
+                           @"num_after": @(after)};
+    [self getOldMessages:args];
+}
+
 #pragma mark - Humbug API calls
 
 /**
@@ -145,6 +153,8 @@
                              @"num_after": @([[args objectForKey:@"num_after"] intValue]),
                              @"narrow": @"{}"
                              };
+
+    NSLog(@"Getting message: %@", fields);
 
     [[HumbugAPIClient sharedClient] getPath:@"messages" parameters:fields success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *json = (NSDictionary *)responseObject;
@@ -364,13 +374,13 @@
 
         // If we got a matching ZMessage for this ID, we want to update
         if (msg && msgId == [msg.messageID intValue]) {
-            NSLog(@"Updating EXISTING message: %i", msgId);
+//            NSLog(@"Updating EXISTING message: %i", msgId);
 
             newMsgIdx++;
             existingMsgIdx++;
         } else {
             // Otherwise this message is NOT in Core Data, so insert and move to the next new message
-            NSLog(@"Inserting NEW MESSAGE: %i", msgId);
+//            NSLog(@"Inserting NEW MESSAGE: %i", msgId);
             msg = [NSEntityDescription insertNewObjectForEntityForName:@"ZMessage" inManagedObjectContext:[self.appDelegate managedObjectContext]];
             msg.messageID = @(msgId);
 
@@ -398,7 +408,6 @@
                     [msg addPm_recipientsObject:recipient];
                 }
             }
-            NSLog(@"Adding PM recipients: %@", [msgDict objectForKey:@"display_recipient"]);
         }
         // TODO set sender
     }

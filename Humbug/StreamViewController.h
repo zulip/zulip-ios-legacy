@@ -4,10 +4,6 @@
 
 @interface StreamViewController : UITableViewController
 
-@property(assign, nonatomic) IBOutlet MessageCell *messageCell;
-
-@property(nonatomic,retain) HumbugAppDelegate *delegate;
-
 -(void)composeButtonPressed;
 -(void)initialPopulate;
 -(void)reset;
