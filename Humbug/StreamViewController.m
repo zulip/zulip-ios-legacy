@@ -18,6 +18,7 @@
 
 @property(assign) BOOL initialLoad;
 @property(assign, nonatomic) IBOutlet MessageCell *messageCell;
+@property(assign) long scrollToPointer;
 
 @property(nonatomic,retain) HumbugAppDelegate *delegate;
 
@@ -37,6 +38,7 @@
     id ret = [super initWithStyle:style];
     _fetchedResultsController = 0;
     self.initialLoad = YES;
+    self.scrollToPointer = -1;
 
     // Watch for pointer updates
     [[ZulipAPIController sharedInstance] addObserver:self
@@ -226,9 +228,17 @@
 }
 
 - (void) updatePointer {
+    UITableViewCell *cell = [self.tableView.visibleCells objectAtIndex:0];
+    if (!cell)
+        return;
+
     NSIndexPath *indexPath = [self.tableView indexPathForCell:[self.tableView.visibleCells objectAtIndex:0]];
+    if (!indexPath)
+        return;
+
     ZMessage *message = (ZMessage *)[_fetchedResultsController objectAtIndexPath:indexPath];
 
+    self.scrollToPointer = [message.messageID longValue];
     [[ZulipAPIController sharedInstance] setPointer:[message.messageID longValue]];
 }
 
@@ -419,7 +429,7 @@
         long old = [[change objectForKey:NSKeyValueChangeOldKey] longValue];
         long new = [[change objectForKey:NSKeyValueChangeNewKey] longValue];
 
-        if (new > old) {
+        if (new > old && new > self.scrollToPointer) {
             [self scrollToPointer:new animated:YES];
         }
     }
