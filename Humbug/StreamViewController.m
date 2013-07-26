@@ -233,7 +233,7 @@
             return i;
         }
     }
-    return FALSE;
+    return -1;
 }
 
 -(void)repopulateList
@@ -244,8 +244,8 @@
 -(void)scrollToPointer:(long)newPointer animated:(BOOL)animated
 {
     int pointerRowNum = [self rowWithId:newPointer];
-    if (pointerRowNum) {
-        NSLog(@"Scrolling to pointer");
+    if (pointerRowNum > -1) {
+        NSLog(@"Scrolling to pointer %li", newPointer);
         // If the pointer is already in our table, but not visible, scroll to it
         // but don't try to clear and refetch messages.
         [self.tableView scrollToRowAtIndexPath:[NSIndexPath

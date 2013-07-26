@@ -49,15 +49,15 @@
 
     self.appDelegate = (HumbugAppDelegate *)[[UIApplication sharedApplication] delegate];
     self.queueId = @"";
-    self.backgrounded = FALSE;
-    self.waitingOnErrorRecovery = FALSE;
+    self.backgrounded = NO;
+    self.waitingOnErrorRecovery = NO;
     self.pointer = -1;
     self.lastEventId = -1;
     self.maxMessageId = -1;
     self.backoff = 0;
     self.queueId = @"";
     self.pollFailures = 0;
-    self.pollingStarted = FALSE;
+    self.pollingStarted = NO;
 
     return ret;
 }
@@ -166,9 +166,9 @@
                                        @"num_after": @(20)};
                 [self getOldMessages:args];
             } else {
-                self.backgrounded = FALSE;
+                self.backgrounded = NO;
                 if (!self.pollingStarted) {
-                    self.pollingStarted = TRUE;
+                    self.pollingStarted = YES;
                     [self startPoll];
                 }
             }
@@ -197,8 +197,8 @@
     [[HumbugAPIClient sharedClient] getPath:@"events" parameters:fields success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *json = (NSDictionary *)responseObject;
 
-        if (self.waitingOnErrorRecovery == TRUE) {
-            self.waitingOnErrorRecovery = FALSE;
+        if (self.waitingOnErrorRecovery == YES) {
+            self.waitingOnErrorRecovery = NO;
             [self.appDelegate dismissErrorScreen];
         }
         self.backoff = 0;
@@ -249,8 +249,8 @@
 
         self.pollFailures++;
         [self adjustRequestBackoff];
-        if (self.pollFailures > 5 && self.waitingOnErrorRecovery == FALSE) {
-            self.waitingOnErrorRecovery = TRUE;
+        if (self.pollFailures > 5 && self.waitingOnErrorRecovery == NO) {
+            self.waitingOnErrorRecovery = YES;
 //            [self.appDelegate showErrorScreen:self.view
 //                              errorMessage:@"Error getting messages. Please try again in a few minutes."];
         }

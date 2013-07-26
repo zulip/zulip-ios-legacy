@@ -21,7 +21,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.password.secureTextEntry = TRUE;
+    self.password.secureTextEntry = YES;
     appDelegate = (HumbugAppDelegate *)[[UIApplication sharedApplication] delegate];
 
     self.entryFields = [[NSMutableArray alloc] init];
