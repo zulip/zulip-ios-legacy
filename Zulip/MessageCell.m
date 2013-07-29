@@ -28,7 +28,6 @@
         NSSet *recipients = message.pm_recipients;
         NSMutableArray *recipient_array = [[NSMutableArray alloc] init];
 
-        ZulipAppDelegate *appDelegate = (ZulipAppDelegate *)[[UIApplication sharedApplication] delegate];
         for (ZUser *recipient in recipients) {
             if (![recipient.email isEqualToString:[[ZulipAPIController sharedInstance] email]]) {
                 [recipient_array addObject:recipient.full_name];

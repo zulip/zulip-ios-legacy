@@ -122,6 +122,18 @@
     return ![self.apiKey isEqualToString:@""];
 }
 
+- (NSString *)domain
+{
+    NSString *host = [[[ZulipAPIClient sharedClient] baseURL] host];
+    if ([host isEqualToString:@"localhost"]) {
+        return @"local";
+    } else if ([host isEqualToString:@"staging.zulip.com"]) {
+        return @"staging";
+    } else {
+        return [[self.email componentsSeparatedByString:@"@"] lastObject];
+    }
+}
+
 - (void) registerForQueue
 {
     // Register for events, then fetch messages

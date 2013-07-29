@@ -30,6 +30,7 @@
 
 - (void) login:(NSString *)email password:(NSString *)password result:(void (^) (bool success))result;
 - (BOOL) loggedIn;
+- (NSString *)domain;
 
 // Registers for an event queue, and sets up initial data
 // Will fetch initial messages and begin long polling

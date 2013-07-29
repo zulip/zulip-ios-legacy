@@ -145,9 +145,8 @@
 
     __persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
 
-//    AFIncrementalStore *incrementalStore = (AFIncrementalStore *)[__persistentStoreCoordinator addPersistentStoreWithType:[ZulipIncrementalStore type] configuration:nil URL:nil options:nil error:nil];
-
-    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"Zulip.sqlite"];
+    NSString *sqliteDb = [NSString stringWithFormat:@"Zulip-%@.sqlite", [[ZulipAPIController sharedInstance] domain]];
+    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:sqliteDb];
 
     NSDictionary *options = @{
                               NSInferMappingModelAutomaticallyOption : @(YES),

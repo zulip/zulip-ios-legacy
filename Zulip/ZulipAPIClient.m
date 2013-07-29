@@ -5,7 +5,7 @@
 @implementation ZulipAPIClient
 
 static NSString *email = nil;
-static BOOL debug = YES;
+static BOOL debug = NO;
 
 + (void)setCredentials:(NSString *)user_email withAPIKey:(NSString *)key {
     email = user_email;
