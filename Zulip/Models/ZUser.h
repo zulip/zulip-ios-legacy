@@ -2,7 +2,7 @@
 //  ZUser.h
 //  Zulip
 //
-//  Created by Leonardo Franchi on 7/25/13.
+//  Created by Leonardo Franchi on 7/29/13.
 //
 //
 
@@ -13,16 +13,21 @@
 
 @interface ZUser : NSManagedObject
 
+@property (nonatomic, retain) NSString * avatar_url;
 @property (nonatomic, retain) NSString * email;
 @property (nonatomic, retain) NSString * full_name;
-@property (nonatomic, retain) NSString * avatar_url;
 @property (nonatomic, retain) NSNumber * userID;
-@property (nonatomic, retain) ZMessage *received_pm;
+@property (nonatomic, retain) NSSet *received_pms;
 @property (nonatomic, retain) NSSet *sent_messages;
 @property (nonatomic, retain) NSSet *subscriptions;
 @end
 
 @interface ZUser (CoreDataGeneratedAccessors)
+
+- (void)addReceived_pmsObject:(ZMessage *)value;
+- (void)removeReceived_pmsObject:(ZMessage *)value;
+- (void)addReceived_pms:(NSSet *)values;
+- (void)removeReceived_pms:(NSSet *)values;
 
 - (void)addSent_messagesObject:(ZMessage *)value;
 - (void)removeSent_messagesObject:(ZMessage *)value;

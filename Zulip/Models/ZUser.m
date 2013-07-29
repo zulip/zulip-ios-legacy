@@ -2,7 +2,7 @@
 //  ZUser.m
 //  Zulip
 //
-//  Created by Leonardo Franchi on 7/25/13.
+//  Created by Leonardo Franchi on 7/29/13.
 //
 //
 
@@ -13,11 +13,11 @@
 
 @implementation ZUser
 
+@dynamic avatar_url;
 @dynamic email;
 @dynamic full_name;
-@dynamic avatar_url;
 @dynamic userID;
-@dynamic received_pm;
+@dynamic received_pms;
 @dynamic sent_messages;
 @dynamic subscriptions;
 

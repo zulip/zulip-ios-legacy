@@ -87,7 +87,7 @@
         [self registerForQueue];
     }
 
-    
+
     return ret;
 }
 
@@ -95,7 +95,7 @@
 {
     NSDictionary *postFields =  @{@"username": username,
                                          @"password": password};
-    
+
     [[ZulipAPIClient sharedClient] postPath:@"fetch_api_key" parameters:postFields success:^(AFHTTPRequestOperation *operation , id responseObject) {
         NSDictionary *jsonDict = (NSDictionary *)responseObject;
 
@@ -112,7 +112,7 @@
         result(YES);
     } failure: ^( AFHTTPRequestOperation *operation , NSError *error ){
         NSLog(@"Failed to fetch_api_key %@", [error localizedDescription]);
-        
+
         result(NO);
     }];
 }
@@ -553,6 +553,11 @@
     if ([results count] != 0) {
         user = (ZUser *)[results objectAtIndex:0];
     } else {
+        if (![personDict objectForKey:@"id"]) {
+            NSLog(@"Tried to add a new person without an ID?!");
+            return nil;
+        }
+
         user = [NSEntityDescription insertNewObjectForEntityForName:@"ZUser" inManagedObjectContext:[self.appDelegate managedObjectContext]];
         user.userID = @(userID);
     }

@@ -25,10 +25,9 @@
                             message.subject];
         self.recipient = message.stream_recipient;
     } else if ([self.type isEqualToString:@"private"]) {
-        NSSet *recipients = message.pm_recipients;
         NSMutableArray *recipient_array = [[NSMutableArray alloc] init];
 
-        for (ZUser *recipient in recipients) {
+        for (ZUser *recipient in message.pm_recipients) {
             if (![recipient.email isEqualToString:[[ZulipAPIController sharedInstance] email]]) {
                 [recipient_array addObject:recipient.full_name];
             }

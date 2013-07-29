@@ -26,6 +26,7 @@
 		B3CC438B17A6E2E200C8AF3F /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681BE1795C513009F69F5 /* MainWindow-iPad.xib */; };
 		B3CC438D17A6E44C00C8AF3F /* zulip.png in Resources */ = {isa = PBXBuildFile; fileRef = B3CC438C17A6E44C00C8AF3F /* zulip.png */; };
 		B3CC438F17A6E45000C8AF3F /* zulip@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B3CC438E17A6E45000C8AF3F /* zulip@2x.png */; };
+		B3CC439217A701A900C8AF3F /* ZUser.m in Sources */ = {isa = PBXBuildFile; fileRef = B3CC439117A701A900C8AF3F /* ZUser.m */; };
 		B3F50D6C179DADE800F9DAE4 /* AFHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F50D5A179DADE800F9DAE4 /* AFHTTPClient.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		B3F50D6D179DADE800F9DAE4 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F50D5C179DADE800F9DAE4 /* AFHTTPRequestOperation.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		B3F50D6E179DADE800F9DAE4 /* AFImageRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F50D5E179DADE800F9DAE4 /* AFImageRequestOperation.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -83,8 +84,6 @@
 		B34697C417A020D1006D0E9B /* ZulipAPIController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZulipAPIController.m; path = Controllers/ZulipAPIController.m; sourceTree = "<group>"; };
 		B351822F17A1B20A00B41D75 /* ZSubscription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZSubscription.h; path = Models/ZSubscription.h; sourceTree = "<group>"; };
 		B351823017A1B20A00B41D75 /* ZSubscription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZSubscription.m; path = Models/ZSubscription.m; sourceTree = "<group>"; };
-		B351823217A1B20B00B41D75 /* ZUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZUser.h; path = Models/ZUser.h; sourceTree = "<group>"; };
-		B351823317A1B20B00B41D75 /* ZUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZUser.m; path = Models/ZUser.m; sourceTree = "<group>"; };
 		B351823517A1B20B00B41D75 /* ZMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZMessage.h; path = Models/ZMessage.h; sourceTree = "<group>"; };
 		B351823617A1B20B00B41D75 /* ZMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZMessage.m; path = Models/ZMessage.m; sourceTree = "<group>"; };
 		B3733CCB1778C75300714B6E /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "Resources/Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -100,6 +99,8 @@
 		B3766D3D179DDBE2005FB0D4 /* Zulip.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Zulip.xcdatamodel; sourceTree = "<group>"; };
 		B3CC438C17A6E44C00C8AF3F /* zulip.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zulip.png; sourceTree = "<group>"; };
 		B3CC438E17A6E45000C8AF3F /* zulip@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zulip@2x.png"; sourceTree = "<group>"; };
+		B3CC439017A701A900C8AF3F /* ZUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZUser.h; path = Models/ZUser.h; sourceTree = "<group>"; };
+		B3CC439117A701A900C8AF3F /* ZUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZUser.m; path = Models/ZUser.m; sourceTree = "<group>"; };
 		B3F50D59179DADE800F9DAE4 /* AFHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPClient.h; sourceTree = "<group>"; };
 		B3F50D5A179DADE800F9DAE4 /* AFHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPClient.m; sourceTree = "<group>"; };
 		B3F50D5B179DADE800F9DAE4 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
@@ -244,6 +245,8 @@
 				E5DC806A165D347D008B53F9 /* ComposeViewController.m */,
 				E598E7871634A9940022BF4A /* ErrorViewController.h */,
 				E598E7881634A9940022BF4A /* ErrorViewController.m */,
+				B3733CFC177A00D900714B6E /* ZulipAPIClient.h */,
+				B3733CFD177A00D900714B6E /* ZulipAPIClient.m */,
 				B34697C317A020D1006D0E9B /* ZulipAPIController.h */,
 				B34697C417A020D1006D0E9B /* ZulipAPIController.m */,
 			);
@@ -275,10 +278,10 @@
 			isa = PBXGroup;
 			children = (
 				B3766D3C179DDBE2005FB0D4 /* Zulip.xcdatamodeld */,
+				B3CC439017A701A900C8AF3F /* ZUser.h */,
+				B3CC439117A701A900C8AF3F /* ZUser.m */,
 				B351823517A1B20B00B41D75 /* ZMessage.h */,
 				B351823617A1B20B00B41D75 /* ZMessage.m */,
-				B351823217A1B20B00B41D75 /* ZUser.h */,
-				B351823317A1B20B00B41D75 /* ZUser.m */,
 				B351822F17A1B20A00B41D75 /* ZSubscription.h */,
 				B351823017A1B20A00B41D75 /* ZSubscription.m */,
 			);
@@ -356,8 +359,6 @@
 			children = (
 				C31673931620DB6B00CE9FE5 /* ZulipAppDelegate.h */,
 				C31673941620DB6B00CE9FE5 /* ZulipAppDelegate.m */,
-				B3733CFC177A00D900714B6E /* ZulipAPIClient.h */,
-				B3733CFD177A00D900714B6E /* ZulipAPIClient.m */,
 				E50D757716331D7A00251D1F /* KeychainItemWrapper.h */,
 				E50D757816331D7A00251D1F /* KeychainItemWrapper.m */,
 				782681CA1795CFD2009F69F5 /* iPhone */,
@@ -559,6 +560,7 @@
 				B3766D3E179DDBE2005FB0D4 /* Zulip.xcdatamodeld in Sources */,
 				B34697C517A020D1006D0E9B /* ZulipAPIController.m in Sources */,
 				B351823117A1B20A00B41D75 /* ZSubscription.m in Sources */,
+				B3CC439217A701A900C8AF3F /* ZUser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
