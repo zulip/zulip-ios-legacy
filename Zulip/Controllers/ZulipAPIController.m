@@ -150,6 +150,8 @@
     // Register for events, then fetch messages
     [[ZulipAPIClient sharedClient] postPath:@"register" parameters:@{@"apply_markdown": @"false"}
     success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        self.pollFailures = 0;
+
         NSDictionary *json = (NSDictionary *)responseObject;
 
         self.queueId = [json objectForKey:@"queue_id"];
@@ -170,7 +172,12 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Failure doing registerForQueue...retrying %@", [error localizedDescription]);
 
-        [self performSelector:@selector(registerForQueue) withObject:self afterDelay:1];
+        if (self.pollFailures > 5) {
+            [self.appDelegate showErrorScreen:@"Unable to connect to Zulip."];
+
+        }
+        self.pollFailures++;
+        [self performSelector:@selector(registerForQueue) withObject:self afterDelay:2];
     }];
 }
 
@@ -377,8 +384,7 @@
         [self adjustRequestBackoff];
         if (self.pollFailures > 5 && self.waitingOnErrorRecovery == NO) {
             self.waitingOnErrorRecovery = YES;
-            //            [self.appDelegate showErrorScreen:self.view
-            //                              errorMessage:@"Error getting messages. Please try again in a few minutes."];
+            [self.appDelegate showErrorScreen:@"Error getting messages. Please try again in a few minutes."];
         }
 
         // Continue polling regardless

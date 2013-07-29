@@ -93,10 +93,9 @@
     [self.navController popViewControllerAnimated:YES];
 }
 
-- (void)showErrorScreen:(UIView *)view errorMessage:(NSString *)errorMessage
+- (void)showErrorScreen:(NSString *)errorMessage
 {
     [self.window addSubview:self.errorViewController.view];
-    self.errorViewController.whereWeCameFrom = view;
     self.errorViewController.errorMessage.text = errorMessage;
 }
 

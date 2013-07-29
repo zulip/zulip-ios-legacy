@@ -19,7 +19,7 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 - (void) viewStream;
-- (void) showErrorScreen:(UIView *)view errorMessage:(NSString *)errorMessage;
+- (void) showErrorScreen:(NSString *)errorMessage;
 - (void) dismissErrorScreen;
 
 @end
