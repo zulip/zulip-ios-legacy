@@ -40,7 +40,6 @@
 		C31673B91620DB6C00CE9FE5 /* HumbugTests.h in Resources */ = {isa = PBXBuildFile; fileRef = C31673B81620DB6C00CE9FE5 /* HumbugTests.h */; };
 		C31673BB1620DB6C00CE9FE5 /* HumbugTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C31673BA1620DB6C00CE9FE5 /* HumbugTests.m */; };
 		E50D7573163318DA00251D1F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E50D7572163318D900251D1F /* Security.framework */; };
-		E50D757616331B6600251D1F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E50D757516331B6600251D1F /* Security.framework */; };
 		E50D757916331D7A00251D1F /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = E50D757816331D7A00251D1F /* KeychainItemWrapper.m */; };
 		E570A8BF169DF81E0072BC7E /* NSString+Encode.m in Sources */ = {isa = PBXBuildFile; fileRef = E570A8BE169DF81E0072BC7E /* NSString+Encode.m */; };
 		E5726A2816332BF800ED8BB1 /* StreamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5726A2616332BF800ED8BB1 /* StreamViewController.m */; };
@@ -147,7 +146,6 @@
 				C31673851620DB6B00CE9FE5 /* UIKit.framework in Frameworks */,
 				C31673871620DB6B00CE9FE5 /* Foundation.framework in Frameworks */,
 				C31673891620DB6B00CE9FE5 /* CoreGraphics.framework in Frameworks */,
-				E50D757616331B6600251D1F /* Security.framework in Frameworks */,
 				B3F50D76179DADF200F9DAE4 /* Crashlytics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -359,7 +357,7 @@
 		C31673771620DB6A00CE9FE5 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0450;
+				LastUpgradeCheck = 0460;
 			};
 			buildConfigurationList = C316737A1620DB6A00CE9FE5 /* Build configuration list for PBXProject "Humbug" */;
 			compatibilityVersion = "Xcode 3.2";
