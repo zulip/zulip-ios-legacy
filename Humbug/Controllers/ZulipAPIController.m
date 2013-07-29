@@ -10,7 +10,6 @@
 #import "HumbugAPIClient.h"
 #import "HumbugAppDelegate.h"
 #import "StreamViewController.h"
-#import "ZFetchRequest.h"
 #import "ZSubscription.h"
 
 // Private category to let us declare "private" member properties

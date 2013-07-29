@@ -80,8 +80,6 @@
 		B3469794179ED591006D0E9B /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		B34697C317A020D1006D0E9B /* ZulipAPIController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZulipAPIController.h; path = Controllers/ZulipAPIController.h; sourceTree = "<group>"; };
 		B34697C417A020D1006D0E9B /* ZulipAPIController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZulipAPIController.m; path = Controllers/ZulipAPIController.m; sourceTree = "<group>"; };
-		B34697C617A06148006D0E9B /* ZFetchRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZFetchRequest.h; sourceTree = "<group>"; };
-		B34697C717A06149006D0E9B /* ZFetchRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZFetchRequest.m; sourceTree = "<group>"; };
 		B351822F17A1B20A00B41D75 /* ZSubscription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZSubscription.h; path = Models/ZSubscription.h; sourceTree = "<group>"; };
 		B351823017A1B20A00B41D75 /* ZSubscription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZSubscription.m; path = Models/ZSubscription.m; sourceTree = "<group>"; };
 		B351823217A1B20B00B41D75 /* ZUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZUser.h; path = Models/ZUser.h; sourceTree = "<group>"; };
@@ -364,8 +362,6 @@
 				B3766D2F179DD668005FB0D4 /* Controllers */,
 				C316738B1620DB6B00CE9FE5 /* Supporting Files */,
 				B3766D31179DD6CF005FB0D4 /* Categories */,
-				B34697C617A06148006D0E9B /* ZFetchRequest.h */,
-				B34697C717A06149006D0E9B /* ZFetchRequest.m */,
 			);
 			path = Humbug;
 			sourceTree = "<group>";
@@ -556,7 +552,6 @@
 				B3F50D74179DADE800F9DAE4 /* UIImageView+AFNetworking.m in Sources */,
 				B3766D3E179DDBE2005FB0D4 /* Zulip.xcdatamodeld in Sources */,
 				B34697C517A020D1006D0E9B /* ZulipAPIController.m in Sources */,
-				B34697C817A06149006D0E9B /* ZFetchRequest.m in Sources */,
 				B351823117A1B20A00B41D75 /* ZSubscription.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -4,7 +4,6 @@
 #import "ComposeViewController.h"
 #import "UIColor+HexColor.h"
 #include "ZulipAPIController.h"
-#include "ZFetchRequest.h"
 
 #import "ZMessage.h"
 #import "ZUser.h"
@@ -197,15 +196,10 @@
     }
 
     // This is the home view, so we want to display all messages
-    ZFetchRequest *fetchRequest = [ZFetchRequest fetchRequestWithEntityName:@"ZMessage"];
-    fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"messageID" ascending:NO]];
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ZMessage"];
+    fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"messageID" ascending:YES]];
     fetchRequest.fetchOffset = 0; // 0 offset + descending means starting from the end
-    fetchRequest.fetchBatchSize = 5;
-    [fetchRequest setIncludesSubentities:YES];
-    // API requests need the pointer for the anchor
-    fetchRequest.anchor = [[ZulipAPIController sharedInstance] pointer];
-    // Zulip addition because we want results in reverse order
-    fetchRequest.reverseResults = YES;
+    fetchRequest.fetchBatchSize = 10;
 
     _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                     managedObjectContext:[self.delegate managedObjectContext]
