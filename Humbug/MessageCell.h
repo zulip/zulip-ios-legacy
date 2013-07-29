@@ -1,10 +1,14 @@
 #import <UIKit/UIKit.h>
 
+#import "ZMessage.h"
+
 @interface MessageCell : UITableViewCell
 
-- (void)setMessage:(NSDictionary *)dict;
+- (void)setMessage:(ZMessage *)message;
+- (void)willBeDisplayed;
 
 + (NSString *)reuseIdentifier;
++ (CGFloat)heightForCellWithMessage:(ZMessage *)message;
 
 @property (strong, nonatomic) IBOutlet UILabel *header;
 @property (strong, nonatomic) IBOutlet UILabel *headerBar;

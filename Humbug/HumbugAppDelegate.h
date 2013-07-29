@@ -14,6 +14,11 @@
 @property (nonatomic, retain) IBOutlet StreamViewController *streamViewController;
 @property (nonatomic, retain) IBOutlet ErrorViewController *errorViewController;
 
+// Core Data bits
+@property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
+@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+
 @property (nonatomic, retain) NSString *apiKey;
 @property (nonatomic, retain) NSString *email;
 @property (nonatomic, retain) NSString *clientID;

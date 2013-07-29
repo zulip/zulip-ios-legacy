@@ -5,7 +5,7 @@
 @implementation HumbugAPIClient
 
 static NSString *email = nil;
-static BOOL debug = NO;
+static BOOL debug = YES;
 
 + (void)setCredentials:(NSString *)user_email withAPIKey:(NSString *)key {
     email = user_email;
@@ -20,13 +20,13 @@ static BOOL debug = NO;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         NSString *apiURL;
-        
+
         if (debug == YES) {
             apiURL = @"http://localhost:9991/api/v1";
         } else if (email != nil && [[email lowercaseString] hasSuffix:@"@humbughq.com"]) {
-            apiURL = @"https://staging.humbughq.com/api/v1/";
+            apiURL = @"https://staging.zulip.com/api/v1/";
         } else {
-            apiURL = @"https://api.humbughq.com/v1/";
+            apiURL = @"https://api.zulip.com/v1/";
         }
 
         NSLog(@"Loading URL: %@", apiURL);

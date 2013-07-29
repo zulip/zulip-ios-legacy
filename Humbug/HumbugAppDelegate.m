@@ -2,6 +2,7 @@
 #import "KeychainItemWrapper.h"
 #import "NSString+Encode.h"
 #import "HumbugAPIClient.h"
+#import "ZulipAPIController.h"
 
 // AFNetworking
 #import "AFNetworkActivityIndicatorManager.h"
@@ -12,16 +13,9 @@
 
 @implementation HumbugAppDelegate
 
-@synthesize window = _window;
-@synthesize tabBarController = _tabBarController;
-@synthesize navController = _navController;
-@synthesize loginViewController = _loginViewController;
-@synthesize streamViewController = _streamViewController;
-@synthesize errorViewController = _errorViewController;
-
-@synthesize email;
-@synthesize apiKey;
-@synthesize clientID;
+@synthesize managedObjectContext = __managedObjectContext;
+@synthesize managedObjectModel = __managedObjectModel;
+@synthesize persistentStoreCoordinator = __persistentStoreCoordinator;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -31,12 +25,6 @@
                                          initWithIdentifier:@"HumbugLogin" accessGroup:nil];
     NSString *storedApiKey = [keychainItem objectForKey:(__bridge id)kSecValueData];
     NSString *storedEmail = [keychainItem objectForKey:(__bridge id)kSecAttrAccount];
-
-    self.streamViewController = [[StreamViewController alloc] init];
-    // Bottom padding so you can see new messages arrive.
-    self.streamViewController.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, 200.0, 0.0);
-    self.navController = [[UINavigationController alloc] initWithRootViewController:self.streamViewController];
-    [[self window] setRootViewController:self.navController];
 
     if ([storedApiKey isEqual: @""]) {
         // No credentials stored; we need to log in.
@@ -49,6 +37,16 @@
 
         [HumbugAPIClient setCredentials:self.email withAPIKey:self.apiKey];
     }
+    
+    self.streamViewController = [[StreamViewController alloc] init];
+    // Bottom padding so you can see new messages arrive.
+    self.streamViewController.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, 200.0, 0.0);
+    self.navController = [[UINavigationController alloc] initWithRootViewController:self.streamViewController];
+    [[self window] setRootViewController:self.navController];
+
+    // Connect the API controller to the home view, and connect to the Zulip API
+    [[ZulipAPIController sharedInstance] setHomeViewController:self.streamViewController];
+    [[ZulipAPIController sharedInstance] registerForQueue];
 
     // Set out NSURLCache settings
     NSURLCache *URLCache = [[NSURLCache alloc] initWithMemoryCapacity:4 * 1024 * 1024 diskCapacity:20 * 1024 * 1024 diskPath:nil];
@@ -145,6 +143,74 @@
 - (void)dismissErrorScreen
 {
     [self.errorViewController.view removeFromSuperview];
+}
+
+
+#pragma mark - Core Data
+
+// Returns the managed object context for the application.
+// If the context doesn't already exist, it is created and bound to the persistent store coordinator for the application.
+- (NSManagedObjectContext *)managedObjectContext {
+    if (__managedObjectContext != nil) {
+        return __managedObjectContext;
+    }
+
+    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
+    if (coordinator != nil) {
+        __managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+        [__managedObjectContext setPersistentStoreCoordinator:coordinator];
+    }
+
+    return __managedObjectContext;
+}
+
+// Returns the managed object model for the application.
+// If the model doesn't already exist, it is created from the application's model.
+- (NSManagedObjectModel *)managedObjectModel
+{
+    if (__managedObjectModel != nil) {
+        return __managedObjectModel;
+    }
+    __managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
+
+    return __managedObjectModel;
+}
+
+// Returns the persistent store coordinator for the application.
+// If the coordinator doesn't already exist, it is created and the application's store added to it.
+- (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
+    if (__persistentStoreCoordinator != nil) {
+        return __persistentStoreCoordinator;
+    }
+
+    __persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
+
+//    AFIncrementalStore *incrementalStore = (AFIncrementalStore *)[__persistentStoreCoordinator addPersistentStoreWithType:[ZulipIncrementalStore type] configuration:nil URL:nil options:nil error:nil];
+
+    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"Zulip.sqlite"];
+
+    NSDictionary *options = @{
+                              NSInferMappingModelAutomaticallyOption : @(YES),
+                              NSMigratePersistentStoresAutomaticallyOption: @(YES)
+                              };
+
+    NSError *error = nil;
+    [__persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error];
+    if (error) {
+        NSLog(@"Error initializing persistent sqlite store! %@, %@", [error localizedDescription], [error userInfo]);
+        abort();
+    }
+    
+    NSLog(@"SQLite URL: %@", storeURL);
+
+    return __persistentStoreCoordinator;
+}
+
+#pragma mark - Application's Documents directory
+
+// Returns the URL to the application's Documents directory.
+- (NSURL *)applicationDocumentsDirectory {
+    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
 
 @end

@@ -3,33 +3,49 @@
 #import "HumbugAPIClient.h"
 #import "ComposeViewController.h"
 #import "UIColor+HexColor.h"
+#include "ZulipAPIController.h"
+#include "ZFetchRequest.h"
+
+#import "ZMessage.h"
+#import "ZUser.h"
 
 #import "AFJSONRequestOperation.h"
+
+@interface StreamViewController () <NSFetchedResultsControllerDelegate> {
+    NSFetchedResultsController *_fetchedResultsController;
+}
+
+@property (assign) BOOL initialLoad;
+
+- (void)refetchData;
+
+@end
 
 @implementation StreamViewController
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
-    return [super initWithStyle:style];
+    id ret = [super initWithStyle:style];
+    _fetchedResultsController = 0;
+    self.initialLoad = YES;
+
+    return ret;
 }
+
+- (void)refetchData {
+    // Refetches all our messages
+    [_fetchedResultsController performSelectorOnMainThread:@selector(performFetch:) withObject:nil waitUntilDone:YES modes:@[ NSRunLoopCommonModes ]];
+}
+
+#pragma mark - UIViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self setTitle:@"Humbug"];
-    self.pointer = -1;
-    self.lastEventId = -1;
-    self.maxMessageId = -1;
-    self.backoff = 0;
-    self.queueId = @"";
-    self.lastRequestTime = 0;
-    self.pollFailures = 0;
+    [self setTitle:@"Zulip"];
+    
     self.backgrounded = FALSE;
-    self.pollingStarted = FALSE;
     self.waitingOnErrorRecovery = FALSE;
-    self.listData = [[NSMutableArray alloc] init];
-    self.allMessages = [[NSMutableArray alloc] init];
-    self.messageIDs = [[NSMutableSet alloc] init];
     self.delegate = (HumbugAppDelegate *)[UIApplication sharedApplication].delegate;
     
     UIImage *composeButtonImage = [UIImage imageNamed:@"glyphicons_355_bullhorn.png"];
@@ -54,48 +70,6 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     // This function gets called whenever the stream view appears, including returning to the view after popping another view. We only want to backfill old messages on the very first load.
-    [self initialPopulate];
-}
-
-- (void)loadSubscriptionData:(NSArray *)subscriptions
-{
-    NSMutableDictionary *streamdict = [[NSMutableDictionary alloc] init];
-    for (NSDictionary* stream in subscriptions) {
-        [streamdict setObject:stream forKey:[stream objectForKey:@"name"]];
-    }
-    [self setStreams:streamdict];
-}
-
-- (void)initialPopulate
-{
-    if (self.maxMessageId == -1) {
-        // Register for events, then fetch messages
-        [[HumbugAPIClient sharedClient] postPath:@"register" parameters:[NSDictionary dictionaryWithObjectsAndKeys:@"false", @"apply_markdown", nil]
-        success:^(AFHTTPRequestOperation *operation, id responseObject) {
-            NSDictionary *json = (NSDictionary *)responseObject;
-
-            NSArray *subscriptions = [json objectForKey:@"subscriptions"];
-            [self loadSubscriptionData:subscriptions];
-
-            self.queueId = [json objectForKey:@"queue_id"];
-            self.lastEventId = [[json objectForKey:@"last_event_id"] intValue];
-            self.maxMessageId = [[json objectForKey:@"max_message_id"] intValue];
-            self.pointer = [[json objectForKey:@"pointer"] longValue];
-
-            // Load old messages
-            NSDictionary * args = [NSDictionary dictionaryWithObjectsAndKeys:
-                                   [NSNumber numberWithInteger:12], @"num_before",
-                                   [NSNumber numberWithInteger:0], @"num_after",
-                                   [NSNumber numberWithBool:YES], @"scroll_to_pointer",
-                                   nil];
-            [self getOldMessages:args];
-            
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            NSLog(@"Failure doing initialPopulate...retrying %@", [error localizedDescription]);
-
-            [self performSelector:@selector(initialPopulate) withObject:self afterDelay:1];
-        }];
-    }
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -120,10 +94,15 @@
     // e.g. self.myOutlet = nil;
 }
 
--(NSInteger)tableView:(UITableView *)tableView
-numberOfRowsInSection:(NSInteger)section
+#pragma mark - UITableViewDataSource
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return [[_fetchedResultsController sections] count];
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.listData count];
+    return [[[_fetchedResultsController sections] objectAtIndex:section] numberOfObjects];
 }
 
 + (UIColor *)defaultStreamColor {
@@ -135,27 +114,25 @@ numberOfRowsInSection:(NSInteger)section
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    MessageCell *my_cell = (MessageCell *)cell;
-    if ([my_cell.type isEqualToString:@"stream"]) {
-        my_cell.headerBar.backgroundColor = [self streamColor:my_cell.recipient];
-    } else {
-        // For non-stream messages, color cell background pale yellow (#FEFFE0).
-        my_cell.backgroundColor = [UIColor colorWithRed:255.0/255 green:254.0/255
-                                                   blue:224.0/255 alpha:1];
-        my_cell.headerBar.backgroundColor = [UIColor colorWithRed:51.0/255
-                                                            green:51.0/255
-                                                             blue:51.0/255
-                                                            alpha:1];
-        my_cell.header.textColor = [UIColor whiteColor];
+    [(MessageCell *)cell willBeDisplayed];
+}
+
+- (ZMessage *)messageAtIndexPath:(NSIndexPath *)indexPath
+{
+    @try {
+        return (ZMessage *)[_fetchedResultsController objectAtIndexPath:indexPath];
+    }
+    @catch (NSException *exception) {
+        NSLog(@"Exception: %@", exception);
+        return nil;
     }
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView
         cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSUInteger row = [indexPath row];
-    NSDictionary *dict = [self.listData objectAtIndex:row];
-
+    ZMessage *message = [self messageAtIndexPath:indexPath];
+    
     MessageCell *cell = (MessageCell *)[self.tableView dequeueReusableCellWithIdentifier:
                                         [MessageCell reuseIdentifier]];
     if (cell == nil) {
@@ -164,34 +141,14 @@ numberOfRowsInSection:(NSInteger)section
         self.messageCell = nil;
     }
 
-    [cell setMessage:dict];
+    [cell setMessage:message];
 
     return cell;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *cellText = [[self.listData objectAtIndex:indexPath.row] valueForKey:@"content"];
-    UIFont *cellFont = [UIFont systemFontOfSize:12];
-    CGSize constraintSize = CGSizeMake(262.0, CGFLOAT_MAX); // content width from xib = 267.
-    CGSize labelSize = [cellText sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:UILineBreakModeWordWrap];
-
-    // Full cell height of 77 - default content height of 36 = 41. + a little bit of bottom padding.
-    return fmax(77.0, labelSize.height + 45);
-}
-
-- (void) adjustRequestBackoff
-{
-    if (self.backoff > 4) {
-        return;
-    }
-
-    if (self.backoff == 0) {
-        self.backoff = .8;
-    } else if (self.backoff < 10) {
-        self.backoff *= 2;
-    } else {
-        self.backoff = 10;
-    }
+    ZMessage * message = [self messageAtIndexPath:indexPath];
+    return [MessageCell heightForCellWithMessage:message];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -200,122 +157,65 @@ numberOfRowsInSection:(NSInteger)section
                                           initWithNibName:@"ComposeViewController"
                                           bundle:nil];
 
-    NSDictionary *dict = [self.listData objectAtIndex:indexPath.row];
-    composeView.type = [dict objectForKey:@"type"];
+    ZMessage *message = [self messageAtIndexPath:indexPath];
+    composeView.type = message.type;
     [[self navigationController] pushViewController:composeView animated:YES];
 
-    if ([[dict objectForKey:@"type"] isEqualToString:@"stream"]) {
-        composeView.recipient.text = [dict valueForKey:@"display_recipient"];
+    if ([message.type isEqualToString:@"stream"]) {
+        composeView.recipient.text = message.stream_recipient;
         [composeView.subject setHidden:NO];
-        composeView.subject.text = [dict valueForKey:@"subject"];
-    } else if ([[dict objectForKey:@"type"] isEqualToString:@"private"]) {
+        composeView.subject.text = message.subject;
+    } else if ([message.type isEqualToString:@"private"]) {
         [composeView.subject setHidden:YES];
 
-        NSArray *recipients = [dict objectForKey:@"display_recipient"];
+        NSSet *recipients = message.pm_recipients;
         NSMutableArray *recipient_array = [[NSMutableArray alloc] init];
-        for (NSDictionary *recipient in recipients) {
-            if (![[recipient valueForKey:@"email"] isEqualToString:self.delegate.email]) {
-                [recipient_array addObject:[recipient valueForKey:@"email"]];
+        for (ZUser *recipient in recipients) {
+            if (![recipient.email isEqualToString:self.delegate.email]) {
+                [recipient_array addObject:recipient.email];
             }
         }
         composeView.privateRecipient.text = [recipient_array componentsJoinedByString:@", "];
     }
 }
 
-- (void) addMessages: (NSArray*) messages {
-    if (!messages) {
-        return;
+#pragma mark - StreamViewController
+
+- (void)loadSubscriptionData:(NSArray *)subscriptions
+{
+    NSMutableDictionary *streamdict = [[NSMutableDictionary alloc] init];
+    for (NSDictionary* stream in subscriptions) {
+        [streamdict setObject:stream forKey:[stream objectForKey:@"name"]];
     }
-
-    BOOL backfill = FALSE;
-    if ([self.listData count] == 0) {
-        backfill = TRUE;
-    }
-
-    for (NSDictionary *message in messages) {
-        NSNumber* messageID = [NSNumber numberWithInt:[[message objectForKey:@"id"] intValue]];
-        if([self.messageIDs containsObject:messageID]) {
-            continue;
-        }
-        [self.messageIDs addObject:messageID];
-        [self.allMessages addObject:message];
-
-        if ([[message objectForKey:@"type"] isEqualToString:@"stream"]) {
-            NSString* stream = [message objectForKey:@"display_recipient"];
-            if (![self streamInHome:stream]) {
-                continue;
-            }
-        }
-
-        NSArray *newIndexPaths = [NSArray arrayWithObjects:
-                                  [NSIndexPath indexPathForRow:[self.listData count]
-                                                     inSection:0], nil];
-        [self.listData addObject: message];
-
-        [self.tableView insertRowsAtIndexPaths:newIndexPaths
-                              withRowAnimation:UITableViewRowAnimationTop];
-        self.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, 200.0, 0.0);
-    }
-    
-    if (backfill && [self.listData count]) {
-        // If we are backfilling old messages, these are messages you've necessarily already
-        // seen that are just being fetched as context, so scroll to the bottom of them.
-        [self.tableView scrollToRowAtIndexPath:[NSIndexPath
-                                                indexPathForRow:[self.listData count] - 1
-                                                inSection:0]
-                              atScrollPosition:UITableViewScrollPositionMiddle
-                                      animated:NO];
-    }
+    [self setStreams:streamdict];
 }
 
-- (void) getOldMessages: (NSDictionary *)args {
-    long anchor = [[args objectForKey:@"anchor"] integerValue];
-    if (!anchor) {
-        anchor = self.pointer;
+- (void)initialPopulate
+{
+    if (_fetchedResultsController) {
+        _fetchedResultsController = 0;
     }
-    NSMutableDictionary *postFields = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                       @"false", @"apply_markdown",
-                                       [NSString stringWithFormat:@"%li", anchor], @"anchor",
-                                       [NSString stringWithFormat:@"%i",
-                                        [[args objectForKey:@"num_before"] integerValue]], @"num_before",
-                                       [NSString stringWithFormat:@"%i",
-                                        [[args objectForKey:@"num_after"] integerValue]], @"num_after",
-                                       @"{}", @"narrow", nil];
 
+    // This is the home view, so we want to display all messages
+    ZFetchRequest *fetchRequest = [ZFetchRequest fetchRequestWithEntityName:@"ZMessage"];
+    fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"messageID" ascending:NO]];
+    fetchRequest.fetchOffset = 0; // 0 offset + descending means starting from the end
+    fetchRequest.fetchBatchSize = 5;
+    [fetchRequest setIncludesSubentities:YES];
+    // API requests need the pointer for the anchor
+    fetchRequest.anchor = [[ZulipAPIController sharedInstance] pointer];
+    // Zulip addition because we want results in reverse order
+    fetchRequest.reverseResults = YES;
 
-    [[HumbugAPIClient sharedClient] getPath:@"messages" parameters:postFields success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSDictionary *json = (NSDictionary *)responseObject;
-
-        [self performSelectorOnMainThread:@selector(addMessages:)
-                               withObject:[json objectForKey:@"messages"] waitUntilDone:YES];
-
-        if ([[args objectForKey:@"scroll_to_pointer"] boolValue]) {
-            [self scrollToPointer:self.pointer];
-        }
-
-        NSDictionary *lastMsg = (NSDictionary *)[self.listData lastObject];
-        if (lastMsg) {
-            int latest_msg_id = [[lastMsg objectForKey:@"id"] intValue];
-            if (latest_msg_id < self.maxMessageId) {
-                // There are still historical messages to fetch.
-                NSDictionary *args = [NSDictionary dictionaryWithObjectsAndKeys:
-                                      @"false", @"apply_markdown",
-                                      [NSNumber numberWithInteger:latest_msg_id + 1], @"anchor",
-                                      [NSNumber numberWithInteger:0], @"num_before",
-                                      [NSNumber numberWithInteger:20], @"num_after",
-                                      nil];
-                [self getOldMessages:args];
-            } else {
-                self.backgrounded = FALSE;
-                if (!self.pollingStarted) {
-                    self.pollingStarted = TRUE;
-                    [self startPoll];
-                }
-            }
-        }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Failed to load old messages: %@", [error localizedDescription]);
-    }];
+    _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                                                    managedObjectContext:[self.delegate managedObjectContext]
+                                                                      sectionNameKeyPath:nil
+                                                                               cacheName:@"AllMessages"];
+    _fetchedResultsController.delegate = self;
+    // Load initial set of messages
+    NSLog(@"Initially populating!");
+    [self refetchData];
+    [self.tableView reloadData];
 }
 
 - (BOOL) streamInHome:(NSString *)stream
@@ -329,108 +229,7 @@ numberOfRowsInSection:(NSInteger)section
     return [[streamInfo objectForKey:@"in_home_view"] boolValue];
 }
 
-- (void) longPoll {
-    while (([[NSDate date] timeIntervalSince1970] - self.lastRequestTime) < self.backoff) {
-        [NSThread sleepForTimeInterval:.5];
-    }
-
-    self.lastRequestTime = [[NSDate date] timeIntervalSince1970];
-
-
-    NSMutableDictionary *postFields = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                       @"false", @"apply_markdown",
-                                       self.queueId, @"queue_id",
-                                       [NSString stringWithFormat:@"%i", self.lastEventId], @"last_event_id",
-                                       nil];
-
-    [[HumbugAPIClient sharedClient] getPath:@"events" parameters:postFields success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSDictionary *json = (NSDictionary *)responseObject;
-
-        if (self.waitingOnErrorRecovery == TRUE) {
-            self.waitingOnErrorRecovery = FALSE;
-            [self.delegate dismissErrorScreen];
-        }
-        self.backoff = 0;
-        self.pollFailures = 0;
-
-        NSMutableArray *messages = [[NSMutableArray alloc] init];
-        for (NSDictionary *event in [json objectForKey:@"events"]) {
-            NSString *eventType = [event objectForKey:@"type"];
-            if ([eventType isEqualToString:@"message"]) {
-                NSMutableDictionary *msg = [[event objectForKey:@"message"] mutableCopy];
-                [msg setValue:[event objectForKey:@"flags"] forKey:@"flags"];
-                [messages addObject:msg];
-            } else if ([eventType isEqualToString:@"pointer"]) {
-                long newPointer = [[event objectForKey:@"pointer"] longValue];
-
-                if (newPointer > self.pointer) {
-                    [self scrollToPointer:newPointer];
-                }
-            }
-
-            self.lastEventId = MAX(self.lastEventId, [[event objectForKey:@"id"] intValue]);
-
-        }
-
-        // If we're not hidden/in the background, load the new messages immediately
-        if (!self.backgrounded) {
-            [self performSelectorOnMainThread:@selector(addMessages:)
-                                   withObject:messages waitUntilDone:YES];
-        }
-
-        [self performSelectorInBackground:@selector(longPoll) withObject: nil];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Failed to do long poll: %@", [error localizedDescription]);
-
-        if ([operation isKindOfClass:[AFJSONRequestOperation class]]) {
-            NSDictionary *json = (NSDictionary *)[(AFJSONRequestOperation *)operation responseJSON];
-            NSString *errorMsg = [json objectForKey:@"msg"];
-            if ([[operation response] statusCode] == 400 &&
-                ([errorMsg rangeOfString:@"too old"].location != NSNotFound ||
-                 [errorMsg rangeOfString:@"Bad event queue id"].location != NSNotFound)) {
-                // Reload our data if we've been GCed
-                self.pollingStarted = NO;
-                [self reset];
-                return;
-            }
-        }
-
-        self.pollFailures++;
-        [self adjustRequestBackoff];
-        if (self.pollFailures > 5 && self.waitingOnErrorRecovery == FALSE) {
-            self.waitingOnErrorRecovery = TRUE;
-            [self.delegate showErrorScreen:self.view
-                              errorMessage:@"Error getting messages. Please try again in a few minutes."];
-        }
-
-        // Continue polling regardless
-        [self performSelectorInBackground:@selector(longPoll) withObject: nil];
-    }];
-}
-
-- (void) startPoll {
-    [self performSelectorInBackground:@selector(longPoll) withObject: nil];
-}
-
 - (void) updatePointer {
-    if ([self.listData count] == 0) {
-        return;
-    }
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:
-                              [self.tableView.visibleCells objectAtIndex:0]];
-    NSUInteger lastIndex = [indexPath indexAtPosition:[indexPath length] - 1];
-    MessageCell *pointedCell = [self.listData objectAtIndex:lastIndex];
-
-    long newPointer = [[pointedCell valueForKey:@"id"] longValue];
-    if (newPointer <= self.pointer)
-        return;
-
-    NSMutableDictionary *postFields = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                       [[NSString alloc] initWithFormat:@"%ld", newPointer],
-                                       @"pointer", nil];
-
-    self.pointer = newPointer;
-    [[HumbugAPIClient sharedClient] putPath:@"users/me/pointer" parameters:postFields success:nil failure:nil];
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
@@ -457,8 +256,9 @@ numberOfRowsInSection:(NSInteger)section
 -(int) rowWithId: (int)messageId
 {
     int i = 0;
-    for (i = 0; i < [self.listData count]; i++) {
-        if ([[self.listData[i] objectForKey:@"id"] intValue] == messageId) {
+    for (i = 0; i < [[[_fetchedResultsController sections] objectAtIndex:0] numberOfObjects]; i++) {
+        ZMessage *message = [self messageAtIndexPath:[NSIndexPath indexPathForItem:i inSection:0]];
+        if ([message.messageID intValue] == messageId) {
             return i;
         }
     }
@@ -467,34 +267,25 @@ numberOfRowsInSection:(NSInteger)section
 
 -(void)repopulateList
 {
-    // If the pointer has moved because messages were consumed on another device, clear
-    // the list and re-populate it.
-    [self.listData removeAllObjects];
-    [self.allMessages removeAllObjects];
-    [self.messageIDs removeAllObjects];
     [[[HumbugAPIClient sharedClient] operationQueue] cancelAllOperations];
-    self.pointer = -1;
-    self.maxMessageId = -1;
-    self.lastEventId = -1;
-    self.pollFailures = 0;
-    self.queueId = @"";
     [self initialPopulate];
     [self.tableView reloadData];
 }
 
--(void)scrollToPointer:(long)newPointer
+-(void)scrollToPointer:(long)newPointer animated:(BOOL)animated
 {
     int pointerRowNum = [self rowWithId:newPointer];
     if (pointerRowNum) {
+        NSLog(@"Scrolling to pointer");
         // If the pointer is already in our table, but not visible, scroll to it
         // but don't try to clear and refetch messages.
         [self.tableView scrollToRowAtIndexPath:[NSIndexPath
                                                 indexPathForRow:pointerRowNum
                                                 inSection:0]
                               atScrollPosition:UITableViewScrollPositionMiddle
-                                      animated:NO];
+                                      animated:animated];
     }
-    self.pointer = newPointer;
+    [[ZulipAPIController sharedInstance] setPointer:newPointer];
 }
 
 -(void)reset {
@@ -507,7 +298,7 @@ numberOfRowsInSection:(NSInteger)section
         int updatedPointer = [[json objectForKey:@"pointer"] intValue];
 
         if (updatedPointer != -1) {
-            [self scrollToPointer:updatedPointer];
+            [self scrollToPointer:updatedPointer animated:NO];
             self.backgrounded = FALSE;
         }
 
@@ -531,6 +322,88 @@ numberOfRowsInSection:(NSInteger)section
     }
 
     return [UIColor colorWithHexString:colorHex defaultColor:[StreamViewController defaultStreamColor]];
+}
+
+#pragma mark - NSFetchedResultsControllerDelegate methods
+/*
+ Assume self has a property 'tableView' -- as is the case for an instance of a UITableViewController
+ subclass -- and a method configureCell:atIndexPath: which updates the contents of a given cell
+ with information from a managed object at the given index path in the fetched results controller.
+ */
+
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
+    [self.tableView beginUpdates];
+}
+
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
+           atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
+{
+    NSLog(@"Section change!");
+    switch(type) {
+        case NSFetchedResultsChangeInsert:
+            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex]
+                          withRowAnimation:UITableViewRowAnimationFade];
+            break;
+
+        case NSFetchedResultsChangeDelete:
+            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex]
+                          withRowAnimation:UITableViewRowAnimationFade];
+            break;
+    }
+}
+
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
+       atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
+      newIndexPath:(NSIndexPath *)newIndexPath {
+
+    UITableView *tableView = self.tableView;
+
+    switch(type) {
+
+        case NSFetchedResultsChangeInsert:
+//            NSLog(@"Added object: %@", newIndexPath);
+            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
+                             withRowAnimation:UITableViewRowAnimationFade];
+            break;
+
+        case NSFetchedResultsChangeDelete:
+//            NSLog(@"Removed object: %@", newIndexPath);
+
+            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+                             withRowAnimation:UITableViewRowAnimationFade];
+            break;
+
+        case NSFetchedResultsChangeUpdate:
+        {
+//            NSLog(@"Changed object: %i", [newIndexPath row]);
+            MessageCell *cell = (MessageCell *)[self.tableView cellForRowAtIndexPath:newIndexPath];
+            ZMessage *message = [self messageAtIndexPath:newIndexPath];
+
+            [cell setMessage:message];
+            break;
+        }
+        case NSFetchedResultsChangeMove:
+//            NSLog(@"Moved object: from %i to %i", [indexPath row], [newIndexPath row]);
+
+            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+                             withRowAnimation:UITableViewRowAnimationFade];
+            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
+                             withRowAnimation:UITableViewRowAnimationFade];
+            break;
+    }
+}
+
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+    [self.tableView endUpdates];
+//    NSLog(@"FInished changing content");
+    if (self.initialLoad) {
+        self.initialLoad = NO;
+        NSLog(@"Done with initial load, scrolling to pointer");
+        [self scrollToPointer:[[ZulipAPIController sharedInstance] pointer] animated:NO];
+    }
 }
 
 @end

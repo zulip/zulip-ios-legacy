@@ -10,6 +10,7 @@
 *.pbxuser
 *.xcworkspace
 xcuserdata
+DerivedData/
 
 # Build products
 build/

@@ -12,6 +12,9 @@
 		782681C91795CE08009F69F5 /* ComposeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681C81795CE08009F69F5 /* ComposeViewController.xib */; };
 		782681CC1795D10C009F69F5 /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681CB1795D10C009F69F5 /* LoginViewController.xib */; };
 		78B52F061796038F002B26DE /* ErrorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78B52F051796038F002B26DE /* ErrorViewController.xib */; };
+		B3469795179ED591006D0E9B /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3469794179ED591006D0E9B /* CoreData.framework */; };
+		B34697C517A020D1006D0E9B /* ZulipAPIController.m in Sources */ = {isa = PBXBuildFile; fileRef = B34697C417A020D1006D0E9B /* ZulipAPIController.m */; };
+		B351823117A1B20A00B41D75 /* ZSubscription.m in Sources */ = {isa = PBXBuildFile; fileRef = B351823017A1B20A00B41D75 /* ZSubscription.m */; };
 		B3733CCF1778C75300714B6E /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B3733CCB1778C75300714B6E /* Default-568h@2x.png */; };
 		B3733CD01778C75300714B6E /* glyphicons_003_user.png in Resources */ = {isa = PBXBuildFile; fileRef = B3733CCC1778C75300714B6E /* glyphicons_003_user.png */; };
 		B3733CD11778C75300714B6E /* glyphicons_355_bullhorn.png in Resources */ = {isa = PBXBuildFile; fileRef = B3733CCD1778C75300714B6E /* glyphicons_355_bullhorn.png */; };
@@ -20,6 +23,7 @@
 		B3733CFB1779F7FD00714B6E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3733CFA1779F7FD00714B6E /* SystemConfiguration.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		B3733CFE177A00D900714B6E /* HumbugAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = B3733CFD177A00D900714B6E /* HumbugAPIClient.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		B3766D2E179DD1DF005FB0D4 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3766D2D179DD1DF005FB0D4 /* MobileCoreServices.framework */; };
+		B3766D3E179DDBE2005FB0D4 /* Zulip.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B3766D3C179DDBE2005FB0D4 /* Zulip.xcdatamodeld */; };
 		B3F50D6C179DADE800F9DAE4 /* AFHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F50D5A179DADE800F9DAE4 /* AFHTTPClient.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		B3F50D6D179DADE800F9DAE4 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F50D5C179DADE800F9DAE4 /* AFHTTPRequestOperation.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		B3F50D6E179DADE800F9DAE4 /* AFImageRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F50D5E179DADE800F9DAE4 /* AFImageRequestOperation.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -73,6 +77,17 @@
 		782681C81795CE08009F69F5 /* ComposeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ComposeViewController.xib; sourceTree = "<group>"; };
 		782681CB1795D10C009F69F5 /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
 		78B52F051796038F002B26DE /* ErrorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ErrorViewController.xib; sourceTree = "<group>"; };
+		B3469794179ED591006D0E9B /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		B34697C317A020D1006D0E9B /* ZulipAPIController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZulipAPIController.h; path = Controllers/ZulipAPIController.h; sourceTree = "<group>"; };
+		B34697C417A020D1006D0E9B /* ZulipAPIController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZulipAPIController.m; path = Controllers/ZulipAPIController.m; sourceTree = "<group>"; };
+		B34697C617A06148006D0E9B /* ZFetchRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZFetchRequest.h; sourceTree = "<group>"; };
+		B34697C717A06149006D0E9B /* ZFetchRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZFetchRequest.m; sourceTree = "<group>"; };
+		B351822F17A1B20A00B41D75 /* ZSubscription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZSubscription.h; path = Models/ZSubscription.h; sourceTree = "<group>"; };
+		B351823017A1B20A00B41D75 /* ZSubscription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZSubscription.m; path = Models/ZSubscription.m; sourceTree = "<group>"; };
+		B351823217A1B20B00B41D75 /* ZUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZUser.h; path = Models/ZUser.h; sourceTree = "<group>"; };
+		B351823317A1B20B00B41D75 /* ZUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZUser.m; path = Models/ZUser.m; sourceTree = "<group>"; };
+		B351823517A1B20B00B41D75 /* ZMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZMessage.h; path = Models/ZMessage.h; sourceTree = "<group>"; };
+		B351823617A1B20B00B41D75 /* ZMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZMessage.m; path = Models/ZMessage.m; sourceTree = "<group>"; };
 		B3733CCB1778C75300714B6E /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "Resources/Default-568h@2x.png"; sourceTree = "<group>"; };
 		B3733CCC1778C75300714B6E /* glyphicons_003_user.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = glyphicons_003_user.png; path = Resources/glyphicons_003_user.png; sourceTree = "<group>"; };
 		B3733CCD1778C75300714B6E /* glyphicons_355_bullhorn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = glyphicons_355_bullhorn.png; path = Resources/glyphicons_355_bullhorn.png; sourceTree = "<group>"; };
@@ -83,6 +98,7 @@
 		B3733CFC177A00D900714B6E /* HumbugAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HumbugAPIClient.h; sourceTree = "<group>"; };
 		B3733CFD177A00D900714B6E /* HumbugAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HumbugAPIClient.m; sourceTree = "<group>"; };
 		B3766D2D179DD1DF005FB0D4 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		B3766D3D179DDBE2005FB0D4 /* Zulip.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Zulip.xcdatamodel; sourceTree = "<group>"; };
 		B3F50D59179DADE800F9DAE4 /* AFHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPClient.h; sourceTree = "<group>"; };
 		B3F50D5A179DADE800F9DAE4 /* AFHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPClient.m; sourceTree = "<group>"; };
 		B3F50D5B179DADE800F9DAE4 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
@@ -148,6 +164,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3469795179ED591006D0E9B /* CoreData.framework in Frameworks */,
 				B3766D2E179DD1DF005FB0D4 /* MobileCoreServices.framework in Frameworks */,
 				B3733CFB1779F7FD00714B6E /* SystemConfiguration.framework in Frameworks */,
 				E50D7573163318DA00251D1F /* Security.framework in Frameworks */,
@@ -214,6 +231,59 @@
 			name = ThirdParty;
 			sourceTree = "<group>";
 		};
+		B3766D2F179DD668005FB0D4 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				E5CDE079162C88A800BBD773 /* LoginViewController.h */,
+				E5CDE07A162C88A800BBD773 /* LoginViewController.m */,
+				E5726A2516332BF800ED8BB1 /* StreamViewController.h */,
+				E5726A2616332BF800ED8BB1 /* StreamViewController.m */,
+				E5726A2716332BF800ED8BB1 /* StreamViewController.xib */,
+				E5DC8069165D347D008B53F9 /* ComposeViewController.h */,
+				E5DC806A165D347D008B53F9 /* ComposeViewController.m */,
+				E598E7871634A9940022BF4A /* ErrorViewController.h */,
+				E598E7881634A9940022BF4A /* ErrorViewController.m */,
+				B34697C317A020D1006D0E9B /* ZulipAPIController.h */,
+				B34697C417A020D1006D0E9B /* ZulipAPIController.m */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		B3766D30179DD675005FB0D4 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E577A74B16226AC4002D9651 /* MessageCell.h */,
+				E577A74C16226AC4002D9651 /* MessageCell.m */,
+				E577A74E16226AFF002D9651 /* MessageCellView.xib */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		B3766D31179DD6CF005FB0D4 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				E570A8BD169DF81E0072BC7E /* NSString+Encode.h */,
+				E570A8BE169DF81E0072BC7E /* NSString+Encode.m */,
+				B3733CD61778D5DD00714B6E /* UIColor+HexColor.h */,
+				B3733CD71778D5DD00714B6E /* UIColor+HexColor.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
+		B3766D32179DD701005FB0D4 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B3766D3C179DDBE2005FB0D4 /* Zulip.xcdatamodeld */,
+				B351823517A1B20B00B41D75 /* ZMessage.h */,
+				B351823617A1B20B00B41D75 /* ZMessage.m */,
+				B351823217A1B20B00B41D75 /* ZUser.h */,
+				B351823317A1B20B00B41D75 /* ZUser.m */,
+				B351822F17A1B20A00B41D75 /* ZSubscription.h */,
+				B351823017A1B20A00B41D75 /* ZSubscription.m */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
 		B3F50D58179DADE800F9DAE4 /* AFNetworking */ = {
 			isa = PBXGroup;
 			children = (
@@ -244,6 +314,7 @@
 		C31673751620DB6A00CE9FE5 = {
 			isa = PBXGroup;
 			children = (
+				B3469794179ED591006D0E9B /* CoreData.framework */,
 				B3766D2D179DD1DF005FB0D4 /* MobileCoreServices.framework */,
 				B3733CDC1779E9F800714B6E /* ThirdParty */,
 				B3733CCA1778C63400714B6E /* Resources */,
@@ -280,31 +351,21 @@
 		C316738A1620DB6B00CE9FE5 /* Humbug */ = {
 			isa = PBXGroup;
 			children = (
-				782681CA1795CFD2009F69F5 /* iPhone */,
-				782681BD1795C512009F69F5 /* iPad */,
-				E50D757716331D7A00251D1F /* KeychainItemWrapper.h */,
-				E50D757816331D7A00251D1F /* KeychainItemWrapper.m */,
-				E5CDE079162C88A800BBD773 /* LoginViewController.h */,
-				E5CDE07A162C88A800BBD773 /* LoginViewController.m */,
 				C31673931620DB6B00CE9FE5 /* HumbugAppDelegate.h */,
 				C31673941620DB6B00CE9FE5 /* HumbugAppDelegate.m */,
-				E5726A2516332BF800ED8BB1 /* StreamViewController.h */,
-				E5726A2616332BF800ED8BB1 /* StreamViewController.m */,
-				E5726A2716332BF800ED8BB1 /* StreamViewController.xib */,
-				E5DC8069165D347D008B53F9 /* ComposeViewController.h */,
-				E5DC806A165D347D008B53F9 /* ComposeViewController.m */,
-				E577A74B16226AC4002D9651 /* MessageCell.h */,
-				E577A74C16226AC4002D9651 /* MessageCell.m */,
-				E577A74E16226AFF002D9651 /* MessageCellView.xib */,
-				E598E7871634A9940022BF4A /* ErrorViewController.h */,
-				E598E7881634A9940022BF4A /* ErrorViewController.m */,
-				C316738B1620DB6B00CE9FE5 /* Supporting Files */,
-				E570A8BD169DF81E0072BC7E /* NSString+Encode.h */,
-				E570A8BE169DF81E0072BC7E /* NSString+Encode.m */,
-				B3733CD61778D5DD00714B6E /* UIColor+HexColor.h */,
-				B3733CD71778D5DD00714B6E /* UIColor+HexColor.m */,
 				B3733CFC177A00D900714B6E /* HumbugAPIClient.h */,
 				B3733CFD177A00D900714B6E /* HumbugAPIClient.m */,
+				E50D757716331D7A00251D1F /* KeychainItemWrapper.h */,
+				E50D757816331D7A00251D1F /* KeychainItemWrapper.m */,
+				782681CA1795CFD2009F69F5 /* iPhone */,
+				782681BD1795C512009F69F5 /* iPad */,
+				B3766D32179DD701005FB0D4 /* Models */,
+				B3766D30179DD675005FB0D4 /* Views */,
+				B3766D2F179DD668005FB0D4 /* Controllers */,
+				C316738B1620DB6B00CE9FE5 /* Supporting Files */,
+				B3766D31179DD6CF005FB0D4 /* Categories */,
+				B34697C617A06148006D0E9B /* ZFetchRequest.h */,
+				B34697C717A06149006D0E9B /* ZFetchRequest.m */,
 			);
 			path = Humbug;
 			sourceTree = "<group>";
@@ -493,6 +554,10 @@
 				B3F50D72179DADE800F9DAE4 /* AFURLConnectionOperation.m in Sources */,
 				B3F50D73179DADE800F9DAE4 /* AFXMLRequestOperation.m in Sources */,
 				B3F50D74179DADE800F9DAE4 /* UIImageView+AFNetworking.m in Sources */,
+				B3766D3E179DDBE2005FB0D4 /* Zulip.xcdatamodeld in Sources */,
+				B34697C517A020D1006D0E9B /* ZulipAPIController.m in Sources */,
+				B34697C817A06149006D0E9B /* ZFetchRequest.m in Sources */,
+				B351823117A1B20A00B41D75 /* ZSubscription.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -603,7 +668,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Jessica McKellar (9QY7MX763F)";
+				CODE_SIGN_IDENTITY = "Developer ID Application: Leonardo Franchi (6BPNS8FGMH)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -625,7 +690,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Jessica McKellar (9QY7MX763F)";
+				CODE_SIGN_IDENTITY = "Developer ID Application: Leonardo Franchi (6BPNS8FGMH)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -710,6 +775,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		B3766D3C179DDBE2005FB0D4 /* Zulip.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				B3766D3D179DDBE2005FB0D4 /* Zulip.xcdatamodel */,
+			);
+			currentVersion = B3766D3D179DDBE2005FB0D4 /* Zulip.xcdatamodel */;
+			name = Zulip.xcdatamodeld;
+			path = Models/Zulip.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = C31673771620DB6A00CE9FE5 /* Project object */;
 }

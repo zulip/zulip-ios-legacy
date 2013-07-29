@@ -1,6 +1,7 @@
 #import "MessageCell.h"
 #import "HumbugAppDelegate.h"
 #import "UIImageView+AFNetworking.h"
+#include "ZUser.h"
 
 @implementation MessageCell
 
@@ -13,45 +14,73 @@
     return self;
 }
 
-- (void)setMessage:(NSDictionary *)dict
+- (void)setMessage:(ZMessage *)message
 {
-    self.type = [dict objectForKey:@"type"];
-    self.recipient = [dict objectForKey:@"display_recipient"];
+    self.type = message.type;
+//    self.recipient = message.;// [dict objectForKey:@"display_recipient"];
 
     if ([self.type isEqualToString:@"stream"]) {
         self.header.text = [NSString stringWithFormat:@"%@ > %@",
-                            [dict objectForKey:@"display_recipient"],
-                            [dict objectForKey:@"subject"]];
+                            message.stream_recipient,
+                            message.subject];
     } else if ([self.type isEqualToString:@"private"]) {
-        NSArray *recipients = [dict objectForKey:@"display_recipient"];
+        NSSet *recipients = message.pm_recipients;
         NSMutableArray *recipient_array = [[NSMutableArray alloc] init];
 
         HumbugAppDelegate *appDelegate = (HumbugAppDelegate *)[[UIApplication sharedApplication] delegate];
-        for (NSDictionary *recipient in recipients) {
-            if (![[recipient valueForKey:@"email"] isEqualToString:[appDelegate email]]) {
-                [recipient_array addObject:[recipient objectForKey:@"full_name"]];
+        for (ZUser *recipient in recipients) {
+            if (![recipient.email isEqualToString:[appDelegate email]]) {
+                [recipient_array addObject:recipient.full_name];
             }
         }
         self.header.text = [@"You and " stringByAppendingString:[recipient_array componentsJoinedByString:@", "]];
     }
 
-    self.sender.text = [dict objectForKey:@"sender_full_name"];
-    self.content.text = [dict objectForKey:@"content"];
+    self.sender.text = message.sender.full_name;
+    self.content.text = message.content;
     // Allow multi-line content.
     self.content.lineBreakMode = UILineBreakModeWordWrap;
     self.content.numberOfLines = 0;
 
     // Asynchronously load gravatar if needed
-    NSString *ghash = [dict objectForKey:@"gravatar_hash"];
+    NSString *ghash = message.gravatar_hash;
     [self.gravatar setImageWithURL:[self gravatarUrl:ghash]];
 
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
     [dateFormatter setDateFormat:@"HH:mm"];
-    NSDate *date = [NSDate dateWithTimeIntervalSince1970:
-                    [[dict objectForKey:@"timestamp"] doubleValue]];
-    self.timestamp.text = [dateFormatter stringFromDate:date];
+//    NSDate *date = [NSDate dateWithTimeIntervalSince1970:
+//                    [message.tim];
+    self.timestamp.text = [dateFormatter stringFromDate:message.timestamp];
 
+}
+
+- (void)willBeDisplayed
+{
+    if ([self.type isEqualToString:@"stream"]) {
+        // TODO get stream color
+//        self.headerBar.backgroundColor = [self streamColor:my_cell.recipient];
+    } else {
+        // For non-stream messages, color cell background pale yellow (#FEFFE0).
+        self.backgroundColor = [UIColor colorWithRed:255.0/255 green:254.0/255
+                                                   blue:224.0/255 alpha:1];
+        self.headerBar.backgroundColor = [UIColor colorWithRed:51.0/255
+                                                            green:51.0/255
+                                                             blue:51.0/255
+                                                            alpha:1];
+        self.header.textColor = [UIColor whiteColor];
+    }
+}
+
++ (CGFloat)heightForCellWithMessage:(ZMessage *)message
+{
+    NSString *cellText = [message valueForKey:@"content"];
+    UIFont *cellFont = [UIFont systemFontOfSize:12];
+    CGSize constraintSize = CGSizeMake(262.0, CGFLOAT_MAX); // content width from xib = 267.
+    CGSize labelSize = [cellText sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:UILineBreakModeWordWrap];
+
+    // Full cell height of 77 - default content height of 36 = 41. + a little bit of bottom padding.
+    return fmax(77.0, labelSize.height + 45);
 }
 
 #pragma mark - UITableViewCell
