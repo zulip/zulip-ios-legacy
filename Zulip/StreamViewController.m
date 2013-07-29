@@ -426,9 +426,13 @@
 //    NSLog(@"FInished changing content");
     if (self.initialLoad) {
         [self.tableView reloadData];
-        self.initialLoad = NO;
-        NSLog(@"Done with initial load, scrolling to pointer");
-        [self scrollToPointer:[[ZulipAPIController sharedInstance] pointer] animated:NO];
+
+        long pointer = [[ZulipAPIController sharedInstance] pointer];
+        if (self.initialLoad && [self rowWithId:pointer]) {
+            self.initialLoad = NO;
+            NSLog(@"Done with initial load, scrolling to pointer");
+            [self scrollToPointer:pointer animated:NO];
+        }
     } else {
         [self.tableView reloadData];
     }
