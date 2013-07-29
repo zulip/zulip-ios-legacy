@@ -19,24 +19,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [Crashlytics startWithAPIKey:@"7c523eb4efdbd264d6d4a7403ee7a683b733a9bd"];
+
     self.errorViewController = [[ErrorViewController alloc] init];
-
-    KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc]
-                                         initWithIdentifier:@"ZulipLogin" accessGroup:nil];
-    NSString *storedApiKey = [keychainItem objectForKey:(__bridge id)kSecValueData];
-    NSString *storedEmail = [keychainItem objectForKey:(__bridge id)kSecAttrAccount];
-
-    if ([storedApiKey isEqual: @""]) {
-        // No credentials stored; we need to log in.
-        self.loginViewController = [[LoginViewController alloc] init];
-        [self.navController pushViewController:self.loginViewController animated:YES];
-    } else {
-        // We have credentials, so try to reuse them. We may still have to log in if they are stale.
-        self.apiKey = storedApiKey;
-        self.email = storedEmail;
-
-        [ZulipAPIClient setCredentials:self.email withAPIKey:self.apiKey];
-    }
     
     self.streamViewController = [[StreamViewController alloc] init];
     // Bottom padding so you can see new messages arrive.
@@ -46,17 +31,18 @@
 
     // Connect the API controller to the home view, and connect to the Zulip API
     [[ZulipAPIController sharedInstance] setHomeViewController:self.streamViewController];
-    [[ZulipAPIController sharedInstance] registerForQueue];
 
+    if (![[ZulipAPIController sharedInstance] loggedIn]) {
+        // No credentials stored; we need to log in.
+        self.loginViewController = [[LoginViewController alloc] init];
+        [self.navController pushViewController:self.loginViewController animated:YES];
+    }
+    
     // Set out NSURLCache settings
     NSURLCache *URLCache = [[NSURLCache alloc] initWithMemoryCapacity:4 * 1024 * 1024 diskCapacity:20 * 1024 * 1024 diskPath:nil];
     [NSURLCache setSharedURLCache:URLCache];
 
-    self.clientID = @"";
-
     [self.window makeKeyAndVisible];
-
-    [Crashlytics startWithAPIKey:@"7c523eb4efdbd264d6d4a7403ee7a683b733a9bd"];
     
     return YES;
 }
@@ -100,31 +86,6 @@
      Save data if appropriate.
      See also applicationDidEnterBackground:.
      */
-}
-
-- (void) login:(NSString *)username password:(NSString *)password result:(void (^) (bool success))result;
-{
-    NSMutableDictionary *postFields = [NSMutableDictionary dictionaryWithObjectsAndKeys:username, @"username",
-                                       password, @"password", nil];
-    
-    [[ZulipAPIClient sharedClient] postPath:@"fetch_api_key" parameters:postFields success:^(AFHTTPRequestOperation *operation , id responseObject) {
-        NSDictionary *jsonDict = (NSDictionary *)responseObject;
-
-        self.apiKey = [jsonDict objectForKey:@"api_key"];
-        self.email = username;
-
-        [ZulipAPIClient setCredentials:self.email withAPIKey:self.apiKey];
-
-        KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"ZulipLogin" accessGroup:nil];
-        [keychainItem setObject:self.apiKey forKey:(__bridge id)kSecValueData];
-        [keychainItem setObject:self.email forKey:(__bridge id)kSecAttrAccount];
-
-        result(YES);
-    } failure: ^( AFHTTPRequestOperation *operation , NSError *error ){
-        NSLog(@"Failed to fetch_api_key %@", [error localizedDescription]);
-
-        result(NO);
-    }];
 }
 
 - (void)viewStream

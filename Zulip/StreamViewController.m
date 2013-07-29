@@ -190,7 +190,7 @@
         NSSet *recipients = message.pm_recipients;
         NSMutableArray *recipient_array = [[NSMutableArray alloc] init];
         for (ZUser *recipient in recipients) {
-            if (![recipient.email isEqualToString:self.delegate.email]) {
+            if (![recipient.email isEqualToString:[[ZulipAPIController sharedInstance] email]]) {
                 [recipient_array addObject:recipient.email];
             }
         }

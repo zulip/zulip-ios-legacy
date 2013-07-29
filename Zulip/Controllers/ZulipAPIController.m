@@ -11,6 +11,8 @@
 #import "ZulipAppDelegate.h"
 #import "StreamViewController.h"
 
+#include "KeychainItemWrapper.h"
+
 // Models
 #import "ZSubscription.h"
 #include "ZUser.h"
@@ -23,6 +25,10 @@
 
 // Private category to let us declare "private" member properties
 @interface ZulipAPIController ()
+
+@property (nonatomic, retain) NSString *apiKey;
+@property (nonatomic, retain) NSString *clientID;
+@property (nonatomic, retain) NSString *apiURL;
 
 @property(nonatomic, retain) NSString *queueId;
 
@@ -50,19 +56,70 @@
 {
     id ret = [super init];
 
-    self.appDelegate = (ZulipAppDelegate *)[[UIApplication sharedApplication] delegate];
     self.queueId = @"";
+    self.apiKey = @"";
+    self.clientID = @"";
+    self.apiURL = @"";
+    self.email = @"";
     self.backgrounded = NO;
     self.waitingOnErrorRecovery = NO;
     self.pointer = -1;
     self.lastEventId = -1;
     self.maxMessageId = -1;
     self.backoff = 0;
-    self.queueId = @"";
     self.pollFailures = 0;
     self.pollRequest = nil;
 
+    self.appDelegate = (ZulipAppDelegate *)[[UIApplication sharedApplication] delegate];
+
+    KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc]
+                                         initWithIdentifier:@"ZulipLogin" accessGroup:nil];
+    NSString *storedApiKey = [keychainItem objectForKey:(__bridge id)kSecValueData];
+    NSString *storedEmail = [keychainItem objectForKey:(__bridge id)kSecAttrAccount];
+
+    if ([storedApiKey isEqualToString:@""]) {
+    } else {
+        // We have credentials, so try to reuse them. We may still have to log in if they are stale.
+        self.apiKey = storedApiKey;
+        self.email = storedEmail;
+
+        [ZulipAPIClient setCredentials:self.email withAPIKey:self.apiKey];
+        [self registerForQueue];
+    }
+
+    
     return ret;
+}
+
+- (void) login:(NSString *)username password:(NSString *)password result:(void (^) (bool success))result;
+{
+    NSDictionary *postFields =  @{@"username": username,
+                                         @"password": password};
+    
+    [[ZulipAPIClient sharedClient] postPath:@"fetch_api_key" parameters:postFields success:^(AFHTTPRequestOperation *operation , id responseObject) {
+        NSDictionary *jsonDict = (NSDictionary *)responseObject;
+
+        self.apiKey = [jsonDict objectForKey:@"api_key"];
+        self.email = username;
+
+        KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"ZulipLogin" accessGroup:nil];
+        [keychainItem setObject:self.apiKey forKey:(__bridge id)kSecValueData];
+        [keychainItem setObject:self.email forKey:(__bridge id)kSecAttrAccount];
+
+        [ZulipAPIClient setCredentials:self.email withAPIKey:self.apiKey];
+        [self registerForQueue];
+
+        result(YES);
+    } failure: ^( AFHTTPRequestOperation *operation , NSError *error ){
+        NSLog(@"Failed to fetch_api_key %@", [error localizedDescription]);
+        
+        result(NO);
+    }];
+}
+
+- (BOOL) loggedIn
+{
+    return ![self.apiKey isEqualToString:@""];
 }
 
 - (void) registerForQueue
@@ -164,6 +221,10 @@
 - (void) fetchNewMessages
 {
     ZMessage *newest = [self newestMessage];
+    if (!newest) {
+        return;
+    }
+
     [self getOldMessages:@{@"anchor": newest.messageID,
                            @"num_before": @(0),
                            @"num_after": @(20)}];
@@ -512,6 +573,9 @@
     NSArray *results = [[self.appDelegate managedObjectContext] executeFetchRequest:fetchRequest error:&error];
     if (error) {
         NSLog(@"Error fetching newest message: %@, %@", [error localizedDescription], [error userInfo]);
+        return nil;
+    } else if ([results count] < 1) {
+        NSLog(@"No newest message yet");
         return nil;
     }
 

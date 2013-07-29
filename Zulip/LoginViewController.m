@@ -1,5 +1,6 @@
 #import "LoginViewController.h"
 #import "ZulipAppDelegate.h"
+#import "ZulipAPIController.h"
 
 @interface LoginViewController ()
 
@@ -45,7 +46,7 @@
 
 - (IBAction) login: (id) sender
 {
-    [appDelegate login:email.text password:password.text result:^(bool loggedIn) {
+    [[ZulipAPIController sharedInstance] login:email.text password:password.text result:^(bool loggedIn) {
         if (loggedIn) {
             [appDelegate viewStream];
         } else {

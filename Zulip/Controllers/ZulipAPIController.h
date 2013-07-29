@@ -28,6 +28,9 @@
 
 + (ZulipAPIController *) sharedInstance;
 
+- (void) login:(NSString *)email password:(NSString *)password result:(void (^) (bool success))result;
+- (BOOL) loggedIn;
+
 // Registers for an event queue, and sets up initial data
 // Will fetch initial messages and begin long polling
 - (void)registerForQueue;
@@ -37,6 +40,7 @@
 
 @property(assign) long pointer;
 @property(assign) BOOL backgrounded;
+@property (nonatomic, retain) NSString *email;
 @property(nonatomic, retain) StreamViewController *homeViewController;
 
 @end
