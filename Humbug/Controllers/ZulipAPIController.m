@@ -33,7 +33,6 @@
 @property(assign) double backoff;
 @property(assign) double lastRequestTime;
 
-@property(assign) BOOL pollingStarted;
 @property(nonatomic, assign) BOOL waitingOnErrorRecovery;
 
 @property(nonatomic, retain) HumbugAppDelegate *appDelegate;
@@ -61,7 +60,6 @@
     self.backoff = 0;
     self.queueId = @"";
     self.pollFailures = 0;
-    self.pollingStarted = NO;
     self.pollRequest = nil;
 
     return ret;
@@ -144,6 +142,7 @@
     // Re-start polling
     if (_backgrounded && !backgrounded) {
         NSLog(@"Coming to the foreground!!");
+        [self fetchNewMessages];
         [self startPoll];
     }
     _backgrounded = backgrounded;
@@ -158,6 +157,17 @@
 }
 
 #pragma mark - Humbug API calls
+
+/**
+ When resuming, make sure we haven't missed any messages since we left the foreground
+ */
+- (void) fetchNewMessages
+{
+    ZMessage *newest = [self newestMessage];
+    [self getOldMessages:@{@"anchor": newest.messageID,
+                           @"num_before": @(0),
+                           @"num_after": @(20)}];
+}
 
 /**
  Load messages from the Zulip API into Core Data
@@ -198,8 +208,7 @@
                 [self getOldMessages:args];
             } else {
                 self.backgrounded = NO;
-                if (!self.pollingStarted) {
-                    self.pollingStarted = YES;
+                if (![self.pollRequest isExecuting]) {
                     [self startPoll];
                 }
             }
@@ -274,9 +283,8 @@
             if ([[operation response] statusCode] == 400 &&
                 ([errorMsg rangeOfString:@"too old"].location != NSNotFound ||
                  [errorMsg rangeOfString:@"Bad event queue id"].location != NSNotFound)) {
-                    // Reload our data if we've been GCed
-                    self.pollingStarted = NO;
-                    //                [self reset];
+                    // Load any new data if we've been GCed
+                    [self fetchNewMessages];
                     return;
                 }
         }
