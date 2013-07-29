@@ -24,10 +24,10 @@ static BOOL debug = NO;
         
         if (debug == YES) {
             apiURL = @"http://localhost:9991/api/v1";
-        } else if (email != nil && [[email lowercaseString] hasSuffix:@"@humbughq.com"]) {
-            apiURL = @"https://staging.humbughq.com/api/v1/";
+        } else if (email != nil && [[email lowercaseString] hasSuffix:@"@zulip.com"]) {
+            apiURL = @"https://staging.zulip.com/api/v1/";
         } else {
-            apiURL = @"https://api.humbughq.com/v1/";
+            apiURL = @"https://api.zulip.com/v1/";
         }
 
         NSLog(@"Loading URL: %@", apiURL);
