@@ -89,7 +89,6 @@
 		B3733CCB1778C75300714B6E /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "Resources/Default-568h@2x.png"; sourceTree = "<group>"; };
 		B3733CCC1778C75300714B6E /* glyphicons_003_user.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = glyphicons_003_user.png; path = Resources/glyphicons_003_user.png; sourceTree = "<group>"; };
 		B3733CCD1778C75300714B6E /* glyphicons_355_bullhorn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = glyphicons_355_bullhorn.png; path = Resources/glyphicons_355_bullhorn.png; sourceTree = "<group>"; };
-		B3733CCE1778C75300714B6E /* robot_gravatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = robot_gravatar.png; path = Resources/robot_gravatar.png; sourceTree = "<group>"; };
 		B3733CD61778D5DD00714B6E /* UIColor+HexColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+HexColor.h"; sourceTree = "<group>"; };
 		B3733CD71778D5DD00714B6E /* UIColor+HexColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+HexColor.m"; sourceTree = "<group>"; };
 		B3733CFA1779F7FD00714B6E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -219,7 +218,8 @@
 				B3733CCB1778C75300714B6E /* Default-568h@2x.png */,
 				B3733CCC1778C75300714B6E /* glyphicons_003_user.png */,
 				B3733CCD1778C75300714B6E /* glyphicons_355_bullhorn.png */,
-				B3733CCE1778C75300714B6E /* robot_gravatar.png */,
+				B3CC438E17A6E45000C8AF3F /* zulip@2x.png */,
+				B3CC438C17A6E44C00C8AF3F /* zulip.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -320,8 +320,6 @@
 		C31673751620DB6A00CE9FE5 = {
 			isa = PBXGroup;
 			children = (
-				B3CC438E17A6E45000C8AF3F /* zulip@2x.png */,
-				B3CC438C17A6E44C00C8AF3F /* zulip.png */,
 				B3469794179ED591006D0E9B /* CoreData.framework */,
 				B3766D2D179DD1DF005FB0D4 /* MobileCoreServices.framework */,
 				B3733CDC1779E9F800714B6E /* ThirdParty */,
