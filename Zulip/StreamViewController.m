@@ -145,6 +145,7 @@
 
 - (ZMessage *)messageAtIndexPath:(NSIndexPath *)indexPath
 {
+    indexPath = [self invertIndexPath:indexPath];
     @try {
         return (ZMessage *)[_fetchedResultsController objectAtIndexPath:indexPath];
     }
@@ -205,6 +206,26 @@
     }
 }
 
+/*
+ HACK this is a workaround for us not being able to do the proper Core Data query that we want.
+ We are not able to say "give me the last X messages in ascending order. We can only do:
+
+ * First X messages in ascending oder
+ * Last X messages in descending order
+
+ and since we want to limit how many messages we initially fetch, we do the latter.
+
+ However, this means the message list we get out of core data (and that is stored in
+ NSFetchedResultsController) is in the wrong order. We invert the indices, so undo
+ the incorrect ordering
+ */
+- (NSIndexPath *)invertIndexPath:(NSIndexPath *)path
+{
+    int count = [[[_fetchedResultsController sections] objectAtIndex:0] numberOfObjects];
+    NSIndexPath *fixed = [NSIndexPath indexPathForRow:(count - path.row - 1) inSection:path.section];
+    return fixed;
+}
+
 #pragma mark - StreamViewController
 
 - (void)initialPopulate
@@ -215,9 +236,9 @@
 
     // This is the home view, so we want to display all messages
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ZMessage"];
-    fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"messageID" ascending:YES]];
+    fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"messageID" ascending:NO]];
     fetchRequest.fetchOffset = 0; // 0 offset + descending means starting from the end
-    fetchRequest.fetchBatchSize = 10;
+    fetchRequest.fetchBatchSize = 15;
 
     // We only want stream messages that have the in_home_view flag set in the associated subscription object
     fetchRequest.predicate = [NSPredicate predicateWithFormat:@"( subscription == NIL ) OR ( subscription.in_home_view == YES )"];

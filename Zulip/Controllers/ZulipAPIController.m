@@ -571,7 +571,7 @@
         user = (ZUser *)[results objectAtIndex:0];
     } else {
         if (![personDict objectForKey:@"id"]) {
-            NSLog(@"Tried to add a new person without an ID?!");
+            NSLog(@"Tried to add a new person without an ID?! %@", personDict);
             return nil;
         }
 
