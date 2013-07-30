@@ -16,6 +16,7 @@
 @interface StreamsSidebarController () <NSFetchedResultsControllerDelegate>
 
 @property (nonatomic, retain) NSFetchedResultsController *streamController;
+@property (nonatomic, retain) UIView *sidebarStreamsHeader;
 
 @end
 
@@ -35,6 +36,9 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"SidebarStreamsHeader" owner:self options:nil];
+    self.sidebarStreamsHeader = [nib objectAtIndex:0];
 
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ZSubscription"];
     fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]];
@@ -202,6 +206,25 @@
 //
 //}
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    // Stream section has a "Streams.." header, no other sections do.
+    if (section == 2) {
+        return [self.sidebarStreamsHeader bounds].size.height;
+    } else {
+        return 0;
+    }
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    if (section == 2) {
+        return self.sidebarStreamsHeader;
+    } else {
+        return nil;
+    }
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Narrow to what the user selected
@@ -221,6 +244,7 @@
         }
     }
 }
+
 
 #pragma mark - NSFetchedResultsControllerDelegate
 

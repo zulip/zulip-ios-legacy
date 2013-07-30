@@ -45,6 +45,7 @@
 		B3F5629317A81C37004B185A /* SidebarStreamCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F5629217A81C37004B185A /* SidebarStreamCell.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		B3F5629517A81C49004B185A /* SidebarStreamCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3F5629417A81C49004B185A /* SidebarStreamCell.xib */; };
 		B3F5629817A84FD5004B185A /* NarrowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F5629717A84FD5004B185A /* NarrowViewController.m */; };
+		B3F5629A17A8674B004B185A /* SidebarStreamsHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3F5629917A8674B004B185A /* SidebarStreamsHeader.xib */; };
 		C31673851620DB6B00CE9FE5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673841620DB6B00CE9FE5 /* UIKit.framework */; };
 		C31673871620DB6B00CE9FE5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673861620DB6B00CE9FE5 /* Foundation.framework */; };
 		C31673891620DB6B00CE9FE5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673881620DB6B00CE9FE5 /* CoreGraphics.framework */; };
@@ -142,6 +143,7 @@
 		B3F5629417A81C49004B185A /* SidebarStreamCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SidebarStreamCell.xib; path = Views/SidebarStreamCell.xib; sourceTree = "<group>"; };
 		B3F5629617A84FD5004B185A /* NarrowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NarrowViewController.h; path = Controllers/ViewControllers/NarrowViewController.h; sourceTree = "<group>"; };
 		B3F5629717A84FD5004B185A /* NarrowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NarrowViewController.m; path = Controllers/ViewControllers/NarrowViewController.m; sourceTree = "<group>"; };
+		B3F5629917A8674B004B185A /* SidebarStreamsHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SidebarStreamsHeader.xib; path = Views/SidebarStreamsHeader.xib; sourceTree = "<group>"; };
 		C31673801620DB6B00CE9FE5 /* Zulip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Zulip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C31673841620DB6B00CE9FE5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C31673861620DB6B00CE9FE5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -278,6 +280,7 @@
 				B3F5629117A81C37004B185A /* SidebarStreamCell.h */,
 				B3F5629217A81C37004B185A /* SidebarStreamCell.m */,
 				B3F5629417A81C49004B185A /* SidebarStreamCell.xib */,
+				B3F5629917A8674B004B185A /* SidebarStreamsHeader.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -541,6 +544,7 @@
 				B3CC438D17A6E44C00C8AF3F /* zulip.png in Resources */,
 				B3CC438F17A6E45000C8AF3F /* zulip@2x.png in Resources */,
 				B3F5629517A81C49004B185A /* SidebarStreamCell.xib in Resources */,
+				B3F5629A17A8674B004B185A /* SidebarStreamsHeader.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
