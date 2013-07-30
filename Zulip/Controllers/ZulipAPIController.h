@@ -34,6 +34,7 @@
 - (BOOL) loggedIn;
 - (NSString *)domain;
 
+
 // Registers for an event queue, and sets up initial data
 // Will fetch initial messages and begin long polling
 - (void)registerForQueue;
@@ -44,6 +45,7 @@
 @property(assign) long pointer;
 @property(assign) BOOL backgrounded;
 @property (nonatomic, retain) NSString *email;
+@property (nonatomic, retain) NSString *fullName;
 @property(nonatomic, retain) StreamViewController *homeViewController;
 
 @end

@@ -232,10 +232,11 @@
     if ([self respondsToSelector:@selector(predicate)])
         fetchRequest.predicate = [self performSelector:@selector(predicate)];
 
+    NSString *cacheName = [self performSelector:@selector(cacheName)];
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                     managedObjectContext:[self.delegate managedObjectContext]
                                                                       sectionNameKeyPath:nil
-                                                                               cacheName:@"AllMessages"];
+                                                                               cacheName:cacheName];
     self.fetchedResultsController.delegate = self;
     // Load initial set of messages
     NSLog(@"Initially populating!");

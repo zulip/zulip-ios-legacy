@@ -3,6 +3,8 @@
 #import "NSString+Encode.h"
 #import "ZulipAPIClient.h"
 #import "ZulipAPIController.h"
+#import "StreamsSidebarController.h"
+#import "NarrowViewController.h"
 
 // AFNetworking
 #import "AFNetworkActivityIndicatorManager.h"
@@ -10,6 +12,15 @@
 
 // Crashlytics
 #import <Crashlytics/Crashlytics.h>
+
+// JASidePanels
+#import "JASidePanelController.h"
+
+@interface ZulipAppDelegate ()
+
+@property (nonatomic, retain) NSMutableDictionary *narrows;
+
+@end
 
 @implementation ZulipAppDelegate
 
@@ -22,12 +33,20 @@
     [Crashlytics startWithAPIKey:@"7c523eb4efdbd264d6d4a7403ee7a683b733a9bd"];
 
     self.errorViewController = [[ErrorViewController alloc] init];
-    
+
+    self.sidePanelController = [[JASidePanelController alloc] init];
+    self.sidePanelController.shouldDelegateAutorotateToVisiblePanel = NO;
+    self.sidePanelController.panningLimitedToTopViewController = NO;
+
     self.homeViewController = [[HomeViewController alloc] init];
     // Bottom padding so you can see new messages arrive.
     self.homeViewController.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, 200.0, 0.0);
     self.navController = [[UINavigationController alloc] initWithRootViewController:self.homeViewController];
-    [[self window] setRootViewController:self.navController];
+
+    self.sidePanelController.centerPanel = self.navController;
+
+    StreamsSidebarController *sidebar = [[StreamsSidebarController alloc] init];
+    self.sidePanelController.leftPanel = sidebar;
 
     // Connect the API controller to the home view, and connect to the Zulip API
     [[ZulipAPIController sharedInstance] setHomeViewController:self.homeViewController];
@@ -37,7 +56,9 @@
         self.loginViewController = [[LoginViewController alloc] init];
         [self.navController pushViewController:self.loginViewController animated:YES];
     }
-    
+
+    [[self window] setRootViewController:self.sidePanelController];
+
     // Set out NSURLCache settings
     NSURLCache *URLCache = [[NSURLCache alloc] initWithMemoryCapacity:4 * 1024 * 1024 diskCapacity:20 * 1024 * 1024 diskPath:nil];
     [NSURLCache setSharedURLCache:URLCache];
@@ -46,6 +67,64 @@
     
     return YES;
 }
+
+- (void)dismissLoginScreen
+{
+//    [self.loginViewController.view removeFromSuperview];
+    [self.navController popViewControllerAnimated:YES];
+}
+
+- (void)showErrorScreen:(NSString *)errorMessage
+{
+    [self.window addSubview:self.errorViewController.view];
+    self.errorViewController.errorMessage.text = errorMessage;
+}
+
+- (void)dismissErrorScreen
+{
+    [self.errorViewController.view removeFromSuperview];
+}
+
+- (void)reloadCoreData
+{
+    __managedObjectContext = 0;
+    __managedObjectModel = 0;
+    __persistentStoreCoordinator = 0;
+}
+
+- (void)narrow:(NSPredicate *)predicate
+{
+    NarrowViewController *narrow;
+    if ([self.narrows objectForKey:predicate]) {
+        narrow = [self.narrows objectForKey:predicate];
+    } else {
+        narrow = [[NarrowViewController alloc] initWithPredicate:predicate];
+        [self.narrows setObject:narrow forKey:predicate];
+    }
+
+    if ([self isNarrowed])
+        [self.navController popToRootViewControllerAnimated:NO];
+
+
+    [self.navController pushViewController:narrow animated:NO];
+    [self.sidePanelController toggleLeftPanel:self];
+}
+
+- (BOOL)isNarrowed
+{
+    return [[self.navController visibleViewController] isKindOfClass:[NarrowViewController class]];
+
+}
+
+- (void)clearNarrowWithAnimation:(BOOL)animated
+{
+    if ([self isNarrowed]) {
+        [self.navController popToRootViewControllerAnimated:animated];
+        [self.sidePanelController toggleLeftPanel:self];
+    }
+}
+
+#pragma mark - UIApplicationDelegate
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
@@ -86,29 +165,6 @@
      Save data if appropriate.
      See also applicationDidEnterBackground:.
      */
-}
-
-- (void)viewStream
-{
-    [self.navController popViewControllerAnimated:YES];
-}
-
-- (void)showErrorScreen:(NSString *)errorMessage
-{
-    [self.window addSubview:self.errorViewController.view];
-    self.errorViewController.errorMessage.text = errorMessage;
-}
-
-- (void)dismissErrorScreen
-{
-    [self.errorViewController.view removeFromSuperview];
-}
-
-- (void)reloadCoreData
-{
-    __managedObjectContext = 0;
-    __managedObjectModel = 0;
-    __persistentStoreCoordinator = 0;
 }
 
 #pragma mark - Core Data

@@ -26,8 +26,8 @@
 		B3CC438B17A6E2E200C8AF3F /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681BE1795C513009F69F5 /* MainWindow-iPad.xib */; };
 		B3CC438D17A6E44C00C8AF3F /* zulip.png in Resources */ = {isa = PBXBuildFile; fileRef = B3CC438C17A6E44C00C8AF3F /* zulip.png */; };
 		B3CC438F17A6E45000C8AF3F /* zulip@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B3CC438E17A6E45000C8AF3F /* zulip@2x.png */; };
-		B3CC439217A701A900C8AF3F /* ZUser.m in Sources */ = {isa = PBXBuildFile; fileRef = B3CC439117A701A900C8AF3F /* ZUser.m */; };
-		B3CC439617A7F13700C8AF3F /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3CC439517A7F13700C8AF3F /* HomeViewController.m */; };
+		B3CC439217A701A900C8AF3F /* ZUser.m in Sources */ = {isa = PBXBuildFile; fileRef = B3CC439117A701A900C8AF3F /* ZUser.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		B3CC439617A7F13700C8AF3F /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3CC439517A7F13700C8AF3F /* HomeViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		B3F50D6C179DADE800F9DAE4 /* AFHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F50D5A179DADE800F9DAE4 /* AFHTTPClient.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		B3F50D6D179DADE800F9DAE4 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F50D5C179DADE800F9DAE4 /* AFHTTPRequestOperation.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		B3F50D6E179DADE800F9DAE4 /* AFImageRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F50D5E179DADE800F9DAE4 /* AFImageRequestOperation.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -41,6 +41,10 @@
 		B3F5628817A80724004B185A /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F5628517A80724004B185A /* JASidePanelController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		B3F5628917A80724004B185A /* UIViewController+JASidePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F5628717A80724004B185A /* UIViewController+JASidePanel.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		B3F5628B17A8074C004B185A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3F5628A17A8074C004B185A /* QuartzCore.framework */; };
+		B3F5628E17A80804004B185A /* StreamsSidebarController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F5628D17A80804004B185A /* StreamsSidebarController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		B3F5629317A81C37004B185A /* SidebarStreamCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F5629217A81C37004B185A /* SidebarStreamCell.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		B3F5629517A81C49004B185A /* SidebarStreamCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3F5629417A81C49004B185A /* SidebarStreamCell.xib */; };
+		B3F5629817A84FD5004B185A /* NarrowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F5629717A84FD5004B185A /* NarrowViewController.m */; };
 		C31673851620DB6B00CE9FE5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673841620DB6B00CE9FE5 /* UIKit.framework */; };
 		C31673871620DB6B00CE9FE5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673861620DB6B00CE9FE5 /* Foundation.framework */; };
 		C31673891620DB6B00CE9FE5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673881620DB6B00CE9FE5 /* CoreGraphics.framework */; };
@@ -131,6 +135,13 @@
 		B3F5628617A80724004B185A /* UIViewController+JASidePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+JASidePanel.h"; path = "ThirdParty/JASidePanels/JASidePanels/Source/UIViewController+JASidePanel.h"; sourceTree = "<group>"; };
 		B3F5628717A80724004B185A /* UIViewController+JASidePanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+JASidePanel.m"; path = "ThirdParty/JASidePanels/JASidePanels/Source/UIViewController+JASidePanel.m"; sourceTree = "<group>"; };
 		B3F5628A17A8074C004B185A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		B3F5628C17A80804004B185A /* StreamsSidebarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StreamsSidebarController.h; path = Controllers/ViewControllers/StreamsSidebarController.h; sourceTree = "<group>"; };
+		B3F5628D17A80804004B185A /* StreamsSidebarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StreamsSidebarController.m; path = Controllers/ViewControllers/StreamsSidebarController.m; sourceTree = "<group>"; };
+		B3F5629117A81C37004B185A /* SidebarStreamCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SidebarStreamCell.h; path = Views/SidebarStreamCell.h; sourceTree = "<group>"; };
+		B3F5629217A81C37004B185A /* SidebarStreamCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SidebarStreamCell.m; path = Views/SidebarStreamCell.m; sourceTree = "<group>"; };
+		B3F5629417A81C49004B185A /* SidebarStreamCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SidebarStreamCell.xib; path = Views/SidebarStreamCell.xib; sourceTree = "<group>"; };
+		B3F5629617A84FD5004B185A /* NarrowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NarrowViewController.h; path = Controllers/ViewControllers/NarrowViewController.h; sourceTree = "<group>"; };
+		B3F5629717A84FD5004B185A /* NarrowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NarrowViewController.m; path = Controllers/ViewControllers/NarrowViewController.m; sourceTree = "<group>"; };
 		C31673801620DB6B00CE9FE5 /* Zulip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Zulip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C31673841620DB6B00CE9FE5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C31673861620DB6B00CE9FE5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -264,6 +275,9 @@
 				E577A74B16226AC4002D9651 /* MessageCell.h */,
 				E577A74C16226AC4002D9651 /* MessageCell.m */,
 				E577A74E16226AFF002D9651 /* MessageCellView.xib */,
+				B3F5629117A81C37004B185A /* SidebarStreamCell.h */,
+				B3F5629217A81C37004B185A /* SidebarStreamCell.m */,
+				B3F5629417A81C49004B185A /* SidebarStreamCell.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -302,11 +316,15 @@
 				E5726A2616332BF800ED8BB1 /* StreamViewController.m */,
 				B3CC439417A7F13700C8AF3F /* HomeViewController.h */,
 				B3CC439517A7F13700C8AF3F /* HomeViewController.m */,
+				B3F5629617A84FD5004B185A /* NarrowViewController.h */,
+				B3F5629717A84FD5004B185A /* NarrowViewController.m */,
 				E5726A2716332BF800ED8BB1 /* StreamViewController.xib */,
 				E5DC8069165D347D008B53F9 /* ComposeViewController.h */,
 				E5DC806A165D347D008B53F9 /* ComposeViewController.m */,
 				E598E7871634A9940022BF4A /* ErrorViewController.h */,
 				E598E7881634A9940022BF4A /* ErrorViewController.m */,
+				B3F5628C17A80804004B185A /* StreamsSidebarController.h */,
+				B3F5628D17A80804004B185A /* StreamsSidebarController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -522,6 +540,7 @@
 				78B52F061796038F002B26DE /* ErrorViewController.xib in Resources */,
 				B3CC438D17A6E44C00C8AF3F /* zulip.png in Resources */,
 				B3CC438F17A6E45000C8AF3F /* zulip@2x.png in Resources */,
+				B3F5629517A81C49004B185A /* SidebarStreamCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -597,6 +616,9 @@
 				B3CC439617A7F13700C8AF3F /* HomeViewController.m in Sources */,
 				B3F5628817A80724004B185A /* JASidePanelController.m in Sources */,
 				B3F5628917A80724004B185A /* UIViewController+JASidePanel.m in Sources */,
+				B3F5628E17A80804004B185A /* StreamsSidebarController.m in Sources */,
+				B3F5629317A81C37004B185A /* SidebarStreamCell.m in Sources */,
+				B3F5629817A84FD5004B185A /* NarrowViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

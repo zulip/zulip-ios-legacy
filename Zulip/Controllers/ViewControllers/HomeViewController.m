@@ -86,6 +86,11 @@
     }
 }
 
+- (NSString *)cacheName
+{
+    return @"HomeMessages";
+}
+
 #pragma mark - UITableView
 
 

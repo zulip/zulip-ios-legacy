@@ -3,24 +3,31 @@
 #import "HomeViewController.h"
 #import "ErrorViewController.h"
 #import "AFHTTPRequestOperation.h"
+#import "JASidePanelController.h"
 
 @interface ZulipAppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate>
 
-@property (nonatomic, retain) IBOutlet UIWindow *window;
-@property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
-@property (nonatomic, retain) IBOutlet UINavigationController *navController;
-@property (nonatomic, retain) IBOutlet LoginViewController *loginViewController;
-@property (nonatomic, retain) IBOutlet HomeViewController *homeViewController;
-@property (nonatomic, retain) IBOutlet ErrorViewController *errorViewController;
+@property (nonatomic, retain) UIWindow *window;
+@property (nonatomic, retain) UITabBarController *tabBarController;
+@property (nonatomic, retain) UINavigationController *navController;
+@property (nonatomic, retain) JASidePanelController *sidePanelController;
+@property (nonatomic, retain) LoginViewController *loginViewController;
+@property (nonatomic, retain) HomeViewController *homeViewController;
+@property (nonatomic, retain) ErrorViewController *errorViewController;
 
 // Core Data bits
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
-- (void) viewStream;
 - (void) showErrorScreen:(NSString *)errorMessage;
 - (void) dismissErrorScreen;
+- (void) dismissLoginScreen;
+
+// Narrowing
+- (void) narrow:(NSPredicate *)predicate;
+- (BOOL) isNarrowed;
+- (void) clearNarrowWithAnimation:(BOOL)animation;
 
 - (void) reloadCoreData;
 @end

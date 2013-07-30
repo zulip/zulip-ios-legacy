@@ -64,8 +64,7 @@
     NSString *storedApiKey = [keychainItem objectForKey:(__bridge id)kSecValueData];
     NSString *storedEmail = [keychainItem objectForKey:(__bridge id)kSecAttrAccount];
 
-    if ([storedApiKey isEqualToString:@""]) {
-    } else {
+    if (![storedApiKey isEqualToString:@""]) {
         // We have credentials, so try to reuse them. We may still have to log in if they are stale.
         self.apiKey = storedApiKey;
         self.email = storedEmail;
@@ -85,6 +84,7 @@
     self.clientID = @"";
     self.apiURL = @"";
     self.email = @"";
+    self.fullName = @"";
     self.backgrounded = NO;
     self.waitingOnErrorRecovery = NO;
     self.pointer = -1;
@@ -93,6 +93,11 @@
     self.backoff = 0;
     self.pollFailures = 0;
     self.pollRequest = nil;
+}
+
+- (void)loadUserSettings
+{
+    // Load initial activity status, etc
 }
 
 - (void) login:(NSString *)username password:(NSString *)password result:(void (^) (bool success))result;
@@ -175,6 +180,14 @@
         self.lastEventId = [[json objectForKey:@"last_event_id"] intValue];
         self.maxMessageId = [[json objectForKey:@"max_message_id"] intValue];
         self.pointer = [[json objectForKey:@"pointer"] longValue];
+
+        // Set the full name from realm_users
+        // TODO save the whole list properly and use it for presence information
+        NSArray *realm_users = [json objectForKey:@"realm_users"];
+        for (NSDictionary *person in realm_users) {
+            if ([[person objectForKey:@"email"] isEqualToString:self.email])
+                self.fullName = [person objectForKey:@"full_name"];
+        }
 
         NSLog(@"Registered for queue, pointer is %li", self.pointer);
         NSArray *subscriptions = [json objectForKey:@"subscriptions"];
