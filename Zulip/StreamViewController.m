@@ -119,7 +119,7 @@
         self.currentlyIgnoringScrollPastTopEvents = YES;
         self.scrollFinalTarget = targetContentOffset->y;
         // Load old messages, with the anchor set to whatever is at the top of the StreamView UITable
-        self.topRow = (ZMessage *)[_fetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+        self.topRow = (ZMessage *)[_fetchedResultsController objectAtIndexPath:[self invertIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]]];
         NSLog(@"Getting more with anchor: %@", self.topRow.messageID);
 
         [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[self.topRow.messageID intValue] before:15 after:0];
@@ -435,12 +435,14 @@
         NSIndexPath *last = [_batchedInsertingRows lastObject];
         ZMessage *lastNewMsg = (ZMessage *)[_fetchedResultsController objectAtIndexPath:last];
 
-        NSLog(@"Adding backlog with last new message; %i", [lastNewMsg.messageID intValue]);
+        NSLog(@"Adding %i backlog with last new message; %i", [_batchedInsertingRows count], [lastNewMsg.messageID intValue]);
         if (lastNewMsg && lastNewMsg.messageID < self.topRow.messageID) {
             insertingAtTop = YES;
         }
 
 //        [self.tableView insertRowsAtIndexPaths:_batchedInsertingRows withRowAnimation:UITableViewRowAnimationFade];
+
+        [_batchedInsertingRows removeAllObjects];
     }
 
 //    [self.tableView endUpdates];
