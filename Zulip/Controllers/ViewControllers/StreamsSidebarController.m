@@ -110,13 +110,50 @@
             if (!cell) {
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UserNameCell"];
             }
+            break;
+        }
+        case 1:
+        {
+            // Misc narrows
+            cell = [self loadSidebarStreamCell:@"MiscNarrow"];
+            break;
+        }
+        case 2:
+        {
+            // Streams
+            cell = [self loadSidebarStreamCell:@"MiscNarrow"];
+            break;
+        }
+        case 3:
+        {
+            // Logout (Settings?)
+            cell = (UITableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:@"LogoutCell"];
+            if (!cell) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"LogoutCell"];
+            }
+            break;
+        }
+        default:
+            NSLog(@"MISSING TABLE VIEW CELL!? %@", indexPath);
+            break;
+    }
+    [self configureCell:cell atIndexPath:indexPath];
+
+    return cell;
+}
+
+- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
+{
+    switch (indexPath.section) {
+        case 0:
+        {
             cell.textLabel.text = [[ZulipAPIController sharedInstance] fullName];
             break;
         }
         case 1:
         {
             // Misc narrows
-            SidebarStreamCell *my_cell = [self loadSidebarStreamCell:@"MiscNarrow"];
+            SidebarStreamCell *my_cell = (SidebarStreamCell *)cell;
             switch (indexPath.row) {
                 case 0:
                     my_cell.name.text = @"Home";
@@ -128,39 +165,26 @@
                 default:
                     break;
             }
-
-            cell = my_cell;
             break;
         }
         case 2:
         {
             // Streams
-            SidebarStreamCell *my_cell = [self loadSidebarStreamCell:@"MiscNarrow"];
+            SidebarStreamCell *my_cell = (SidebarStreamCell *)cell;
             NSIndexPath *cdIndexPath = [NSIndexPath indexPathForRow:indexPath.row inSection:0];
             ZSubscription *stream = (ZSubscription *)[self.streamController objectAtIndexPath:cdIndexPath];
             [my_cell setStream:stream];
-
-            cell = my_cell;
-
             break;
         }
         case 3:
         {
             // Logout (Settings?)
-            cell = (UITableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:@"LogoutCell"];
-            if (!cell) {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"LogoutCell"];
-            }
             cell.textLabel.text = @"Logout";
-
             break;
         }
         default:
             NSLog(@"MISSING TABLE VIEW CELL!? %@", indexPath);
-            break;
     }
-
-    return cell;
 }
 
 - (SidebarStreamCell *)loadSidebarStreamCell:(NSString *)cellIdentifier
@@ -227,8 +251,8 @@
             break;
 
         case NSFetchedResultsChangeUpdate:
-//            [self configureCell:[tableView cellForRowAtIndexPath:sectionFixedPath]
-//                    atIndexPath:sectionFixedPath];
+            [self configureCell:[tableView cellForRowAtIndexPath:sectionFixedPath]
+                    atIndexPath:sectionFixedPath];
             break;
 
         case NSFetchedResultsChangeMove:
