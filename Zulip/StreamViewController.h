@@ -5,7 +5,6 @@
 
 // Generic message list implementations
 - (void)composeButtonPressed;
-- (void)menuButtonPressed;
 - (void)initialPopulate;
 - (int)rowWithId:(int)messageId;
 

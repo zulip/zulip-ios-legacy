@@ -13,6 +13,8 @@
 // Various cells
 #import "SidebarStreamCell.h"
 
+#import "UIViewController+JASidePanel.h"
+
 @interface StreamsSidebarController () <NSFetchedResultsControllerDelegate>
 
 @property (nonatomic, retain) NSFetchedResultsController *streamController;
@@ -110,10 +112,7 @@
         case 0:
         {
             // Name
-            cell = (UITableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:@"UserNameCell"];
-            if (!cell) {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UserNameCell"];
-            }
+            cell = [self loadTableViewCell:@"UserNameCell"];
             break;
         }
         case 1:
@@ -131,10 +130,7 @@
         case 3:
         {
             // Logout (Settings?)
-            cell = (UITableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:@"LogoutCell"];
-            if (!cell) {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"LogoutCell"];
-            }
+            cell = [self loadTableViewCell:@"LogoutCell"];
             break;
         }
         default:
@@ -143,6 +139,28 @@
     }
     [self configureCell:cell atIndexPath:indexPath];
 
+    return cell;
+}
+
+
+- (SidebarStreamCell *)loadSidebarStreamCell:(NSString *)cellIdentifier
+{
+    SidebarStreamCell *my_cell = (SidebarStreamCell *)[self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (my_cell == nil) {
+        NSArray *loaded  = [[NSBundle mainBundle] loadNibNamed:@"SidebarStreamCell" owner:self options:nil];
+        my_cell = (SidebarStreamCell *)[loaded objectAtIndex:0];
+    }
+    return my_cell;
+}
+
+- (UITableViewCell *)loadTableViewCell:(NSString *)cellIdentifier
+{
+    UITableViewCell *cell = (UITableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.userInteractionEnabled = YES;
+    }
     return cell;
 }
 
@@ -183,22 +201,12 @@
         case 3:
         {
             // Logout (Settings?)
-            cell.textLabel.text = @"Logout";
+            cell.textLabel.text = @"Switch User";
             break;
         }
         default:
             NSLog(@"MISSING TABLE VIEW CELL!? %@", indexPath);
     }
-}
-
-- (SidebarStreamCell *)loadSidebarStreamCell:(NSString *)cellIdentifier
-{
-    SidebarStreamCell *my_cell = (SidebarStreamCell *)[self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (my_cell == nil) {
-        NSArray *loaded  = [[NSBundle mainBundle] loadNibNamed:@"SidebarStreamCell" owner:self options:nil];
-        my_cell = (SidebarStreamCell *)[loaded objectAtIndex:0];
-    }
-    return my_cell;
 }
 
 //- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -242,6 +250,13 @@
                 NSLog(@"ERROR: Trying to narrow but have a nul predicate!!");
             }
         }
+    } else if (indexPath.section == 3) {
+        // Logout
+        LoginViewController *loginView = [[LoginViewController alloc] initWithNibName:@"LoginViewController"
+                                                                              bundle:nil];
+        [self.sidePanelController toggleLeftPanel:self];
+        ZulipAppDelegate *delegate = (ZulipAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [[delegate navController] pushViewController:loginView animated:YES];
     }
 }
 
