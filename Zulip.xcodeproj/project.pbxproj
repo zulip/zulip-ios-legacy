@@ -27,6 +27,7 @@
 		B3CC438D17A6E44C00C8AF3F /* zulip.png in Resources */ = {isa = PBXBuildFile; fileRef = B3CC438C17A6E44C00C8AF3F /* zulip.png */; };
 		B3CC438F17A6E45000C8AF3F /* zulip@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B3CC438E17A6E45000C8AF3F /* zulip@2x.png */; };
 		B3CC439217A701A900C8AF3F /* ZUser.m in Sources */ = {isa = PBXBuildFile; fileRef = B3CC439117A701A900C8AF3F /* ZUser.m */; };
+		B3CC439617A7F13700C8AF3F /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3CC439517A7F13700C8AF3F /* HomeViewController.m */; };
 		B3F50D6C179DADE800F9DAE4 /* AFHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F50D5A179DADE800F9DAE4 /* AFHTTPClient.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		B3F50D6D179DADE800F9DAE4 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F50D5C179DADE800F9DAE4 /* AFHTTPRequestOperation.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		B3F50D6E179DADE800F9DAE4 /* AFImageRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F50D5E179DADE800F9DAE4 /* AFImageRequestOperation.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -100,6 +101,8 @@
 		B3CC438E17A6E45000C8AF3F /* zulip@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zulip@2x.png"; sourceTree = "<group>"; };
 		B3CC439017A701A900C8AF3F /* ZUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZUser.h; path = Models/ZUser.h; sourceTree = "<group>"; };
 		B3CC439117A701A900C8AF3F /* ZUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZUser.m; path = Models/ZUser.m; sourceTree = "<group>"; };
+		B3CC439417A7F13700C8AF3F /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HomeViewController.h; path = Controllers/ViewControllers/HomeViewController.h; sourceTree = "<group>"; };
+		B3CC439517A7F13700C8AF3F /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HomeViewController.m; path = Controllers/ViewControllers/HomeViewController.m; sourceTree = "<group>"; };
 		B3F50D59179DADE800F9DAE4 /* AFHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPClient.h; sourceTree = "<group>"; };
 		B3F50D5A179DADE800F9DAE4 /* AFHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPClient.m; sourceTree = "<group>"; };
 		B3F50D5B179DADE800F9DAE4 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
@@ -236,17 +239,7 @@
 		B3766D2F179DD668005FB0D4 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				E5CDE079162C88A800BBD773 /* LoginViewController.h */,
-				E5CDE07A162C88A800BBD773 /* LoginViewController.m */,
-				E5726A2516332BF800ED8BB1 /* StreamViewController.h */,
-				E5726A2616332BF800ED8BB1 /* StreamViewController.m */,
-				E5726A2716332BF800ED8BB1 /* StreamViewController.xib */,
-				E5DC8069165D347D008B53F9 /* ComposeViewController.h */,
-				E5DC806A165D347D008B53F9 /* ComposeViewController.m */,
-				E598E7871634A9940022BF4A /* ErrorViewController.h */,
-				E598E7881634A9940022BF4A /* ErrorViewController.m */,
-				B3733CFC177A00D900714B6E /* ZulipAPIClient.h */,
-				B3733CFD177A00D900714B6E /* ZulipAPIClient.m */,
+				B3CC439317A7F07000C8AF3F /* View Controllers */,
 				B34697C317A020D1006D0E9B /* ZulipAPIController.h */,
 				B34697C417A020D1006D0E9B /* ZulipAPIController.m */,
 			);
@@ -288,6 +281,24 @@
 				B351823017A1B20A00B41D75 /* ZSubscription.m */,
 			);
 			name = Models;
+			sourceTree = "<group>";
+		};
+		B3CC439317A7F07000C8AF3F /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				E5CDE079162C88A800BBD773 /* LoginViewController.h */,
+				E5CDE07A162C88A800BBD773 /* LoginViewController.m */,
+				E5726A2516332BF800ED8BB1 /* StreamViewController.h */,
+				E5726A2616332BF800ED8BB1 /* StreamViewController.m */,
+				B3CC439417A7F13700C8AF3F /* HomeViewController.h */,
+				B3CC439517A7F13700C8AF3F /* HomeViewController.m */,
+				E5726A2716332BF800ED8BB1 /* StreamViewController.xib */,
+				E5DC8069165D347D008B53F9 /* ComposeViewController.h */,
+				E5DC806A165D347D008B53F9 /* ComposeViewController.m */,
+				E598E7871634A9940022BF4A /* ErrorViewController.h */,
+				E598E7881634A9940022BF4A /* ErrorViewController.m */,
+			);
+			name = "View Controllers";
 			sourceTree = "<group>";
 		};
 		B3F50D58179DADE800F9DAE4 /* AFNetworking */ = {
@@ -364,6 +375,8 @@
 				B3766D32179DD701005FB0D4 /* Models */,
 				B3766D30179DD675005FB0D4 /* Views */,
 				B3766D2F179DD668005FB0D4 /* Controllers */,
+				B3733CFC177A00D900714B6E /* ZulipAPIClient.h */,
+				B3733CFD177A00D900714B6E /* ZulipAPIClient.m */,
 				C316738B1620DB6B00CE9FE5 /* Supporting Files */,
 				B3766D31179DD6CF005FB0D4 /* Categories */,
 			);
@@ -559,6 +572,7 @@
 				B34697C517A020D1006D0E9B /* ZulipAPIController.m in Sources */,
 				B351823117A1B20A00B41D75 /* ZSubscription.m in Sources */,
 				B3CC439217A701A900C8AF3F /* ZUser.m in Sources */,
+				B3CC439617A7F13700C8AF3F /* HomeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -49,7 +49,6 @@
     [[ZulipAPIController sharedInstance] logout];
     [[ZulipAPIController sharedInstance] login:email.text password:password.text result:^(bool loggedIn) {
         if (loggedIn) {
-            [appDelegate.streamViewController reset];
             [appDelegate viewStream];
         } else {
             NSLog(@"Failed to login!");

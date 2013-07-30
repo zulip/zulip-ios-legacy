@@ -56,20 +56,7 @@
 {
     id ret = [super init];
 
-    self.queueId = @"";
-    self.apiKey = @"";
-    self.clientID = @"";
-    self.apiURL = @"";
-    self.email = @"";
-    self.backgrounded = NO;
-    self.waitingOnErrorRecovery = NO;
-    self.pointer = -1;
-    self.lastEventId = -1;
-    self.maxMessageId = -1;
-    self.backoff = 0;
-    self.pollFailures = 0;
-    self.pollRequest = nil;
-
+    [self clearSettings];
     self.appDelegate = (ZulipAppDelegate *)[[UIApplication sharedApplication] delegate];
 
     KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc]
@@ -91,13 +78,36 @@
     return ret;
 }
 
+- (void)clearSettings
+{
+    self.queueId = @"";
+    self.apiKey = @"";
+    self.clientID = @"";
+    self.apiURL = @"";
+    self.email = @"";
+    self.backgrounded = NO;
+    self.waitingOnErrorRecovery = NO;
+    self.pointer = -1;
+    self.lastEventId = -1;
+    self.maxMessageId = -1;
+    self.backoff = 0;
+    self.pollFailures = 0;
+    self.pollRequest = nil;
+}
+
 - (void) login:(NSString *)username password:(NSString *)password result:(void (^) (bool success))result;
 {
     NSDictionary *postFields =  @{@"username": username,
-                                         @"password": password};
+                                  @"password": password};
 
+    NSLog(@"Trying to log in: %@", postFields);
     [[ZulipAPIClient sharedClient] postPath:@"fetch_api_key" parameters:postFields success:^(AFHTTPRequestOperation *operation , id responseObject) {
         NSDictionary *jsonDict = (NSDictionary *)responseObject;
+
+        // If we were previously logged in, log out first
+        if ([self loggedIn]) {
+            [self logout];
+        }
 
         self.apiKey = [jsonDict objectForKey:@"api_key"];
         self.email = username;
@@ -119,13 +129,16 @@
 
 - (void) logout
 {
-    self.apiKey = @"";
-    self.email = @"";
+    // Hide any error screens if visible
+    [self.appDelegate dismissErrorScreen];
+
+    [self clearSettings];
     KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc]
                                          initWithIdentifier:@"ZulipLogin" accessGroup:nil];
     [keychainItem resetKeychainItem];
     [[ZulipAPIClient sharedClient] logout];
-    //    [self.streamViewController reset];
+
+    [self.appDelegate reloadCoreData];
 }
 
 - (BOOL) loggedIn
@@ -136,14 +149,18 @@
 - (NSString *)domain
 {
     NSString *host = [[[ZulipAPIClient sharedClient] baseURL] host];
+    NSString *domainPart;
     if ([host isEqualToString:@"localhost"]) {
-        return @"local";
+        domainPart = @"local";
     } else if ([host isEqualToString:@"staging.zulip.com"]) {
-        return @"staging";
+        domainPart = @"staging";
     } else {
-        return [[self.email componentsSeparatedByString:@"@"] lastObject];
+        domainPart = [[self.email componentsSeparatedByString:@"@"] lastObject];
     }
+
+    return [NSString stringWithFormat:@"%@-%@", self.email, domainPart];
 }
+
 
 - (void) registerForQueue
 {
@@ -159,6 +176,7 @@
         self.maxMessageId = [[json objectForKey:@"max_message_id"] intValue];
         self.pointer = [[json objectForKey:@"pointer"] longValue];
 
+        NSLog(@"Registered for queue, pointer is %li", self.pointer);
         NSArray *subscriptions = [json objectForKey:@"subscriptions"];
         [self loadSubscriptionData:subscriptions];
 

@@ -23,14 +23,14 @@
 
     self.errorViewController = [[ErrorViewController alloc] init];
     
-    self.streamViewController = [[StreamViewController alloc] init];
+    self.homeViewController = [[HomeViewController alloc] init];
     // Bottom padding so you can see new messages arrive.
-    self.streamViewController.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, 200.0, 0.0);
-    self.navController = [[UINavigationController alloc] initWithRootViewController:self.streamViewController];
+    self.homeViewController.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, 200.0, 0.0);
+    self.navController = [[UINavigationController alloc] initWithRootViewController:self.homeViewController];
     [[self window] setRootViewController:self.navController];
 
     // Connect the API controller to the home view, and connect to the Zulip API
-    [[ZulipAPIController sharedInstance] setHomeViewController:self.streamViewController];
+    [[ZulipAPIController sharedInstance] setHomeViewController:self.homeViewController];
 
     if (![[ZulipAPIController sharedInstance] loggedIn]) {
         // No credentials stored; we need to log in.
@@ -104,6 +104,12 @@
     [self.errorViewController.view removeFromSuperview];
 }
 
+- (void)reloadCoreData
+{
+    __managedObjectContext = 0;
+    __managedObjectModel = 0;
+    __persistentStoreCoordinator = 0;
+}
 
 #pragma mark - Core Data
 

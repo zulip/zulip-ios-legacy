@@ -11,13 +11,10 @@
 
 @interface StreamViewController () <NSFetchedResultsControllerDelegate> {
     // NSFetchedResultsController helpers
-    NSFetchedResultsController *_fetchedResultsController;
     NSMutableArray *_batchedInsertingRows;
 }
 
-@property(assign) BOOL initialLoad;
 @property(assign, nonatomic) IBOutlet MessageCell *messageCell;
-@property(assign) long scrollToPointer;
 
 @property(nonatomic,retain) ZulipAppDelegate *delegate;
 
@@ -35,23 +32,14 @@
 - (id)initWithStyle:(UITableViewStyle)style
 {
     id ret = [super initWithStyle:style];
-    _fetchedResultsController = 0;
-    self.initialLoad = YES;
-    self.scrollToPointer = -1;
-
-    // Watch for pointer updates
-    [[ZulipAPIController sharedInstance] addObserver:self
-                                          forKeyPath:@"pointer"
-                                             options:(NSKeyValueObservingOptionNew |
-                                                      NSKeyValueObservingOptionOld)
-                                             context:nil];
+    self.fetchedResultsController = 0;
 
     return ret;
 }
 
 - (void)refetchData {
     // Refetches all our messages
-    [_fetchedResultsController performSelectorOnMainThread:@selector(performFetch:) withObject:nil waitUntilDone:YES modes:@[ NSRunLoopCommonModes ]];
+    [self.fetchedResultsController performSelectorOnMainThread:@selector(performFetch:) withObject:nil waitUntilDone:YES modes:@[ NSRunLoopCommonModes ]];
 }
 
 #pragma mark - UIViewController
@@ -119,7 +107,7 @@
         self.currentlyIgnoringScrollPastTopEvents = YES;
         self.scrollFinalTarget = targetContentOffset->y;
         // Load old messages, with the anchor set to whatever is at the top of the StreamView UITable
-        self.topRow = (ZMessage *)[_fetchedResultsController objectAtIndexPath:[self invertIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]]];
+        self.topRow = (ZMessage *)[self.fetchedResultsController objectAtIndexPath:[self invertIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]]];
         NSLog(@"Getting more with anchor: %@", self.topRow.messageID);
 
         [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[self.topRow.messageID intValue] before:15 after:0];
@@ -130,12 +118,12 @@
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return [[_fetchedResultsController sections] count];
+    return [[self.fetchedResultsController sections] count];
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[[_fetchedResultsController sections] objectAtIndex:section] numberOfObjects];
+    return [[[self.fetchedResultsController sections] objectAtIndex:section] numberOfObjects];
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -147,7 +135,7 @@
 {
     indexPath = [self invertIndexPath:indexPath];
     @try {
-        return (ZMessage *)[_fetchedResultsController objectAtIndexPath:indexPath];
+        return (ZMessage *)[self.fetchedResultsController objectAtIndexPath:indexPath];
     }
     @catch (NSException *exception) {
         NSLog(@"Exception: %@", exception);
@@ -221,7 +209,7 @@
  */
 - (NSIndexPath *)invertIndexPath:(NSIndexPath *)path
 {
-    int count = [[[_fetchedResultsController sections] objectAtIndex:0] numberOfObjects];
+    int count = [[[self.fetchedResultsController sections] objectAtIndex:0] numberOfObjects];
     NSIndexPath *fixed = [NSIndexPath indexPathForRow:(count - path.row - 1) inSection:path.section];
     return fixed;
 }
@@ -230,8 +218,8 @@
 
 - (void)initialPopulate
 {
-    if (_fetchedResultsController) {
-        _fetchedResultsController = 0;
+    if (self.fetchedResultsController) {
+        self.fetchedResultsController = 0;
     }
 
     // This is the home view, so we want to display all messages
@@ -243,35 +231,15 @@
     // We only want stream messages that have the in_home_view flag set in the associated subscription object
     fetchRequest.predicate = [NSPredicate predicateWithFormat:@"( subscription == NIL ) OR ( subscription.in_home_view == YES )"];
 
-    _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+    self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                     managedObjectContext:[self.delegate managedObjectContext]
                                                                       sectionNameKeyPath:nil
                                                                                cacheName:@"AllMessages"];
-    _fetchedResultsController.delegate = self;
+    self.fetchedResultsController.delegate = self;
     // Load initial set of messages
     NSLog(@"Initially populating!");
     [self refetchData];
     [self.tableView reloadData];
-}
-
-- (void) updatePointer {
-    UITableViewCell *cell = [self.tableView.visibleCells objectAtIndex:0];
-    if (!cell)
-        return;
-
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:[self.tableView.visibleCells objectAtIndex:0]];
-    if (!indexPath)
-        return;
-
-    ZMessage *message = (ZMessage *)[_fetchedResultsController objectAtIndexPath:indexPath];
-
-    self.scrollToPointer = [message.messageID longValue];
-    [[ZulipAPIController sharedInstance] setPointer:[message.messageID longValue]];
-}
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
-    [self performSelectorInBackground:@selector(updatePointer) withObject: nil];
 }
 
 -(void)composeButtonPressed {
@@ -291,7 +259,6 @@
 }
 
 -(void)menuButtonPressed {
-    [[ZulipAPIController sharedInstance] logout];
     LoginViewController *menuView = [[LoginViewController alloc] initWithNibName:@"LoginViewController"
                                                                           bundle:nil];
     [[self navigationController] pushViewController:menuView animated:YES];
@@ -300,7 +267,7 @@
 -(int) rowWithId: (int)messageId
 {
     int i = 0;
-    for (i = 0; i < [[[_fetchedResultsController sections] objectAtIndex:0] numberOfObjects]; i++) {
+    for (i = 0; i < [[[self.fetchedResultsController sections] objectAtIndex:0] numberOfObjects]; i++) {
         ZMessage *message = [self messageAtIndexPath:[NSIndexPath indexPathForItem:i inSection:0]];
         if ([message.messageID intValue] == messageId) {
             return i;
@@ -312,43 +279,6 @@
 -(void)repopulateList
 {
     [self initialPopulate];
-}
-
--(void)scrollToPointer:(long)newPointer animated:(BOOL)animated
-{
-    int pointerRowNum = [self rowWithId:newPointer];
-    if (pointerRowNum > -1) {
-        NSLog(@"Scrolling to pointer %li", newPointer);
-        // If the pointer is already in our table, but not visible, scroll to it
-        // but don't try to clear and refetch messages.
-        [self.tableView scrollToRowAtIndexPath:[NSIndexPath
-                                                indexPathForRow:pointerRowNum
-                                                inSection:0]
-                              atScrollPosition:UITableViewScrollPositionMiddle
-                                      animated:animated];
-    }
-    [[ZulipAPIController sharedInstance] setPointer:newPointer];
-}
-
--(void)reset {
-    // Hide any error screens if visible
-    [self.delegate dismissErrorScreen];
-
-    // Fetch the pointer, then reset
-    [[ZulipAPIClient sharedClient] getPath:@"users/me" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSDictionary *json = (NSDictionary *)responseObject;
-        int updatedPointer = [[json objectForKey:@"pointer"] intValue];
-
-        if (updatedPointer != -1) {
-            [self scrollToPointer:updatedPointer animated:NO];
-//            self.backgrounded = FALSE;
-        }
-
-        [self repopulateList];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Failed to fetch pointer: %@", [error localizedDescription]);
-        [self repopulateList];
-    }];
 }
 
 #pragma mark - NSFetchedResultsControllerDelegate methods
@@ -433,7 +363,7 @@
 
     if ([_batchedInsertingRows count] > 0) {
         NSIndexPath *last = [_batchedInsertingRows lastObject];
-        ZMessage *lastNewMsg = (ZMessage *)[_fetchedResultsController objectAtIndexPath:last];
+        ZMessage *lastNewMsg = (ZMessage *)[self.fetchedResultsController objectAtIndexPath:last];
 
         NSLog(@"Adding %i backlog with last new message; %i", [_batchedInsertingRows count], [lastNewMsg.messageID intValue]);
         if (lastNewMsg && lastNewMsg.messageID < self.topRow.messageID) {
@@ -446,32 +376,10 @@
     }
 
 //    [self.tableView endUpdates];
-//    NSLog(@"FInished changing content");
-    if (self.initialLoad) {
-        [self.tableView reloadData];
+    [self.tableView reloadData];
 
-        long pointer = [[ZulipAPIController sharedInstance] pointer];
-        if (self.initialLoad && [self rowWithId:pointer]) {
-            self.initialLoad = NO;
-            NSLog(@"Done with initial load, scrolling to pointer");
-            [self scrollToPointer:pointer animated:NO];
-        }
-    } else {
-        [self.tableView reloadData];
-    }
-}
-
-#pragma mark - NSKeyValueObserving
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    if ([keyPath isEqualToString:@"pointer"]) {
-        long old = [[change objectForKey:NSKeyValueChangeOldKey] longValue];
-        long new = [[change objectForKey:NSKeyValueChangeNewKey] longValue];
-
-        if (new > old && new > self.scrollToPointer) {
-            [self scrollToPointer:new animated:YES];
-        }
+    if ([self respondsToSelector:@selector(messagesDidChange)]) {
+        [self performSelector:@selector(messagesDidChange)];
     }
 }
 

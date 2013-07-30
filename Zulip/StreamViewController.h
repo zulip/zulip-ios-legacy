@@ -3,10 +3,12 @@
 
 @interface StreamViewController : UITableViewController
 
--(void)composeButtonPressed;
--(void)menuButtonPressed;
--(void)initialPopulate;
--(void)reset;
--(int)rowWithId:(int)messageId;
+// Generic message list implementations
+- (void)composeButtonPressed;
+- (void)menuButtonPressed;
+- (void)initialPopulate;
+- (int)rowWithId:(int)messageId;
+
+@property(nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 
 @end
