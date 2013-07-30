@@ -9,6 +9,11 @@
 - (void)initialPopulate;
 - (int)rowWithId:(int)messageId;
 
+// The NSPredicate * to use for this message list
+// Implement in subclass
+// TODO create a proper protocol
+//- (NSPredicate *)predicate;
+
 @property(nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 
 @end

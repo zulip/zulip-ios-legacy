@@ -229,7 +229,8 @@
     fetchRequest.fetchBatchSize = 15;
 
     // We only want stream messages that have the in_home_view flag set in the associated subscription object
-    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"( subscription == NIL ) OR ( subscription.in_home_view == YES )"];
+    if ([self respondsToSelector:@selector(predicate)])
+        fetchRequest.predicate = [self performSelector:@selector(predicate)];
 
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                     managedObjectContext:[self.delegate managedObjectContext]

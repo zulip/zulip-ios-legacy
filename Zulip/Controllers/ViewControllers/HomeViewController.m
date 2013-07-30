@@ -67,6 +67,14 @@
     [[ZulipAPIController sharedInstance] setPointer:newPointer];
 }
 
+#pragma mark StreamViewController
+
+
+- (NSPredicate *)predicate
+{
+    return [NSPredicate predicateWithFormat:@"( subscription == NIL ) OR ( subscription.in_home_view == YES )"];
+}
+
 - (void)messagesDidChange
 {
     long pointer = [[ZulipAPIController sharedInstance] pointer];
