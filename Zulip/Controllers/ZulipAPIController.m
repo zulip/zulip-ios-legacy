@@ -557,7 +557,7 @@
 
             NSArray *involved_people = [msgDict objectForKey:@"display_recipient"];
             for (NSDictionary *person in involved_people) {
-                ZUser *recipient  = [self addPerson:person];
+                ZUser *recipient  = [self addPerson:person andSave:NO];
 
                 if (recipient) {
                     [msg addPm_recipientsObject:recipient];
@@ -570,7 +570,7 @@
                                          @"email": [msgDict objectForKey:@"sender_email"],
                                          @"id": [msgDict objectForKey:@"sender_id"],
                                          @"avatar_url": [msgDict objectForKey:@"avatar_url"]};
-            ZUser *sender = [self addPerson:senderDict];
+            ZUser *sender = [self addPerson:senderDict andSave:NO];
             msg.sender = sender;
         }
     }
@@ -582,7 +582,7 @@
     }
 }
 
-- (ZUser *)addPerson:(NSDictionary *)personDict
+- (ZUser *)addPerson:(NSDictionary *)personDict andSave:(BOOL)save
 {
     int userID = [[personDict objectForKey:@"id"] intValue];
 
@@ -615,14 +615,16 @@
         [user setValue:[personDict valueForKey:prop] forKey:prop];
     }
 
-    error = nil;
-    [[self.appDelegate managedObjectContext] save:&error];
-    if (error) {
-        NSLog(@"Error saving ZUser: %@ %@", [error localizedDescription], [error userInfo]);
+    if (save) {
+        error = nil;
+        [[self.appDelegate managedObjectContext] save:&error];
+        if (error) {
+            NSLog(@"Error saving ZUser: %@ %@", [error localizedDescription], [error userInfo]);
 
-        return nil;
+            return nil;
+        }
     }
-
+    
     return user;
 }
 

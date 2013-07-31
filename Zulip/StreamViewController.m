@@ -91,21 +91,22 @@
 
 #pragma mark - UIScrollView
 
-- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+// We want to load messages **after** the scroll & deceleration is finished.
+// Unfortunately, scrollViewDidFinishDecelerating doesn't work, so we use
+// this trick from facebook's Three20 library.
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    NSUInteger numRows = [self tableView:self.tableView numberOfRowsInSection:0];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    [self performSelector:@selector(scrollViewDidEndScrollingAnimation:) withObject:nil afterDelay:0.3];
+}
 
-    self.currentlyIgnoringScrollPastTopEvents = NO;
-    if ((targetContentOffset->y < 200) && !self.currentlyIgnoringScrollPastTopEvents && (numRows > 5)){
-        self.currentlyIgnoringScrollPastTopEvents = YES;
-        self.scrollFinalTarget = targetContentOffset->y;
-        // Load old messages, with the anchor set to whatever is at the top of the StreamView UITable
+-(void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
+{
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    if ([self.tableView contentOffset].y == 0) {
         self.topRow = (ZMessage *)[self.fetchedResultsController objectAtIndexPath:[self invertIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]]];
-        NSLog(@"Getting more with anchor: %@", self.topRow.messageID);
-
         [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[self.topRow.messageID intValue] before:15 after:0];
     }
-    return;
 }
 
 #pragma mark - UITableViewDataSource
@@ -349,24 +350,35 @@
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
     BOOL insertingAtTop = NO;
-
+    CGPoint offset;
+    CGFloat height = self.tableView.contentSize.height;
+    
     if ([_batchedInsertingRows count] > 0) {
         NSIndexPath *last = [_batchedInsertingRows lastObject];
         ZMessage *lastNewMsg = (ZMessage *)[self.fetchedResultsController objectAtIndexPath:last];
 
-        NSLog(@"Adding %i backlog with last new message; %i", [_batchedInsertingRows count], [lastNewMsg.messageID intValue]);
+//        NSLog(@"Adding %i backlog with last new message; %i", [_batchedInsertingRows count], [lastNewMsg.messageID intValue]);
         if (lastNewMsg && lastNewMsg.messageID < self.topRow.messageID) {
             insertingAtTop = YES;
+            [UIView setAnimationsEnabled:NO];
+            offset = [self.tableView contentOffset];
         }
-
-//        [self.tableView insertRowsAtIndexPaths:_batchedInsertingRows withRowAnimation:UITableViewRowAnimationFade];
-
-        [_batchedInsertingRows removeAllObjects];
     }
 
-//    [self.tableView endUpdates];
     [self.tableView reloadData];
 
+    if (insertingAtTop) {
+        // If inserting at top, calculate the pixels height that was inserted, and scroll to the same position
+        offset.y = self.tableView.contentSize.height - height;
+        [self.tableView setContentOffset:offset];
+        [UIView setAnimationsEnabled:YES];
+
+        int peek_height = 20;
+        CGRect peek = CGRectMake(0, offset.y - peek_height, self.tableView.bounds.size.width, peek_height);
+        [self.tableView scrollRectToVisible:peek animated:YES];
+    }
+
+    [_batchedInsertingRows removeAllObjects];
     if ([self respondsToSelector:@selector(messagesDidChange)]) {
         [self performSelector:@selector(messagesDidChange)];
     }
