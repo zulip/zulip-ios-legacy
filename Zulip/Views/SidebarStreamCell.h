@@ -19,6 +19,7 @@ typedef enum {
 @interface SidebarStreamCell : UITableViewCell
 
 @property (nonatomic, retain) IBOutlet UILabel *name;
+@property (nonatomic, retain) IBOutlet UILabel *unread;
 @property (strong, nonatomic) IBOutlet UIImageView *gravatar;
 
 @property (nonatomic, assign) SIDEBAR_SHORTCUTS shortcut;

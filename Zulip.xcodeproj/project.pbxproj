@@ -48,6 +48,10 @@
 		B3F5629A17A8674B004B185A /* SidebarStreamsHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3F5629917A8674B004B185A /* SidebarStreamsHeader.xib */; };
 		B3F5629D17A9A4EE004B185A /* RawMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F5629C17A9A4EE004B185A /* RawMessage.m */; };
 		B3F562A017AAAE5A004B185A /* NarrowOperators.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F5629F17AAAE59004B185A /* NarrowOperators.m */; };
+		B3F562A317AB0ADC004B185A /* home.png in Resources */ = {isa = PBXBuildFile; fileRef = B3F562A117AB0ADC004B185A /* home.png */; };
+		B3F562A417AB0ADC004B185A /* home@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B3F562A217AB0ADC004B185A /* home@2x.png */; };
+		B3F562A717AB0B0F004B185A /* user.png in Resources */ = {isa = PBXBuildFile; fileRef = B3F562A517AB0B0F004B185A /* user.png */; };
+		B3F562A817AB0B0F004B185A /* user@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B3F562A617AB0B0F004B185A /* user@2x.png */; };
 		C31673851620DB6B00CE9FE5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673841620DB6B00CE9FE5 /* UIKit.framework */; };
 		C31673871620DB6B00CE9FE5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673861620DB6B00CE9FE5 /* Foundation.framework */; };
 		C31673891620DB6B00CE9FE5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673881620DB6B00CE9FE5 /* CoreGraphics.framework */; };
@@ -150,6 +154,10 @@
 		B3F5629C17A9A4EE004B185A /* RawMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RawMessage.m; path = Models/RawMessage.m; sourceTree = "<group>"; };
 		B3F5629E17AAAE59004B185A /* NarrowOperators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NarrowOperators.h; sourceTree = "<group>"; };
 		B3F5629F17AAAE59004B185A /* NarrowOperators.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NarrowOperators.m; sourceTree = "<group>"; };
+		B3F562A117AB0ADC004B185A /* home.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home.png; sourceTree = "<group>"; };
+		B3F562A217AB0ADC004B185A /* home@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home@2x.png"; sourceTree = "<group>"; };
+		B3F562A517AB0B0F004B185A /* user.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = user.png; sourceTree = "<group>"; };
+		B3F562A617AB0B0F004B185A /* user@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "user@2x.png"; sourceTree = "<group>"; };
 		C31673801620DB6B00CE9FE5 /* Zulip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Zulip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C31673841620DB6B00CE9FE5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C31673861620DB6B00CE9FE5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -251,6 +259,10 @@
 				B3733CCD1778C75300714B6E /* glyphicons_355_bullhorn.png */,
 				B3CC438E17A6E45000C8AF3F /* zulip@2x.png */,
 				B3CC438C17A6E44C00C8AF3F /* zulip.png */,
+				B3F562A117AB0ADC004B185A /* home.png */,
+				B3F562A217AB0ADC004B185A /* home@2x.png */,
+				B3F562A517AB0B0F004B185A /* user.png */,
+				B3F562A617AB0B0F004B185A /* user@2x.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -555,6 +567,10 @@
 				B3CC438F17A6E45000C8AF3F /* zulip@2x.png in Resources */,
 				B3F5629517A81C49004B185A /* SidebarStreamCell.xib in Resources */,
 				B3F5629A17A8674B004B185A /* SidebarStreamsHeader.xib in Resources */,
+				B3F562A317AB0ADC004B185A /* home.png in Resources */,
+				B3F562A417AB0ADC004B185A /* home@2x.png in Resources */,
+				B3F562A717AB0B0F004B185A /* user.png in Resources */,
+				B3F562A817AB0B0F004B185A /* user@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

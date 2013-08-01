@@ -209,10 +209,18 @@
     }
 }
 
-//- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//
-//}
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 1 ||
+        indexPath.section == 2) {
+        SidebarStreamCell *cell = (SidebarStreamCell *)[self tableView:self.tableView cellForRowAtIndexPath:indexPath];
+        return cell.bounds.size.height;
+    } else {
+        UITableViewCell *cell = [self tableView:self.tableView cellForRowAtIndexPath:indexPath];
+        return cell.bounds.size.height;
+
+    }
+}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
