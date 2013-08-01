@@ -46,7 +46,7 @@
                                                            before:12
                                                             after:0
                                                     withOperators:self.operators
-                                                             opts:@{@"fetch_until_latest": @(YES)}
+                                                             opts:@{}
                                                   completionBlock:^(NSArray *messages) {
                                                       NSLog(@"Initially loaded %i messages!", [messages count]);
 

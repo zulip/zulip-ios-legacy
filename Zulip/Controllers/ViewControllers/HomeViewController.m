@@ -130,11 +130,6 @@
     }
 }
 
-- (BOOL)acceptsMessage:(RawMessage *)message
-{
-    return message.subscription && [message.subscription.in_home_view boolValue];
-}
-
 #pragma mark - UITableView
 
 

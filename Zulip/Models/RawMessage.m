@@ -31,7 +31,7 @@
     }
     raw.messageID = message.messageID;
     raw.timestamp = message.timestamp;
-    raw.pm_recipients = [NSMutableSet setWithSet:raw.pm_recipients];
+    raw.pm_recipients = [NSMutableSet setWithSet:message.pm_recipients];
     raw.sender = message.sender;
 
     return raw;

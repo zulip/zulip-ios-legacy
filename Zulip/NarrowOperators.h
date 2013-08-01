@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "RawMessage.h"
 
 /**
  This represents a bunch of narrow operators, and can be converted into either an
@@ -20,6 +21,7 @@
 
 - (NSPredicate *)asPredicate;
 - (NSString *)asJSONPayload;
+- (BOOL)acceptsMessage:(RawMessage *)msg;
 
 - (void)clear;
 

@@ -10,6 +10,8 @@
 
 @interface NarrowOperators ()
 
+@property (assign) BOOL home_view;
+
 @property (nonatomic, retain) NSMutableArray *subpredicates;
 
 @end
@@ -21,6 +23,7 @@
     self = [super init];
     if (self) {
         _subpredicates = [[NSMutableArray alloc] init];
+        _home_view = NO;
     }
     return self;
 }
@@ -28,6 +31,7 @@
 - (void)setInHomeView
 {
     [self.subpredicates addObject:[NSPredicate predicateWithFormat:@"( subscription == NIL ) OR ( subscription.in_home_view == YES )"]];
+    self.home_view = YES;
 }
 
 - (void)setPrivateMessages
@@ -53,7 +57,7 @@
             NSString *operator = [pred objectAtIndex:0];
             NSString *operand = [pred objectAtIndex:1];
 
-            if ([operator isEqualToString:@"is"] && [operand isEqualToString:@"pm"]) {
+            if ([operator isEqualToString:@"is"] && [operand isEqualToString:@"private"]) {
                 [generated addObject:[NSPredicate predicateWithFormat:@"subscription == NIL"]];
             } else if ([operator isEqualToString:@"stream"]) {
                 [generated addObject:[NSPredicate predicateWithFormat:@"subscription.name LIKE %@", operand]];
@@ -87,6 +91,35 @@
         return @"{}";
     }
     return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+}
+
+- (BOOL)acceptsMessage:(RawMessage *)msg
+{
+    // Filter out by elimination
+    if (self.home_view) {
+        if (msg.subscription && ![msg.subscription.in_home_view boolValue])
+            return NO;
+    }
+
+    for (id pred in self.subpredicates) {
+        if (![pred isKindOfClass:[NSArray class]])
+            continue;
+
+        NSString *operator = [pred objectAtIndex:0];
+        NSString *operand = [pred objectAtIndex:1];
+
+        if ([operator isEqualToString:@"is"]) {
+            if ([operand isEqualToString:@"private"] &&
+                msg.subscription != nil) {
+                return NO;
+            }
+        } else if ([operator isEqualToString:@"stream"]) {
+            if (![operand isEqualToString:msg.stream_recipient]) {
+                return NO;
+            }
+        }
+    }
+    return YES;
 }
 
 - (void)clear

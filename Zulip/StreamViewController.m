@@ -332,22 +332,12 @@
 
 - (void)handleLongPollMessages:(NSArray *)messages
 {
-
-    // Ignore ARC's warning about performing a selector potentially causing a leak
-    // acceptsMessage: does not return any objects that ARC needs to know about/manage
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-    SEL acceptsMessage = @selector(acceptsMessage:);
-
-    if ([self respondsToSelector:acceptsMessage]) {
-        NSMutableArray *accepted = [[NSMutableArray alloc] init];
-        for (RawMessage *msg in messages) {
-            if ([self performSelector:acceptsMessage withObject:msg]) {
-                [accepted addObject:msg];
-            }
-        }
-        [self loadMessages:accepted];
+    NSMutableArray *accepted = [[NSMutableArray alloc] init];
+    for (RawMessage *msg in messages) {
+        if (self.operators && [self.operators acceptsMessage:msg])
+            [accepted addObject:msg];
     }
-#pragma clang diagnostic pop
+    [self loadMessages:accepted];
 }
 
 #pragma mark - NSKeyValueObserving
