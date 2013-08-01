@@ -276,28 +276,36 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
 
 #pragma mark - Loading messages
 
-- (void) loadMessagesAroundAnchor:(int)anchor before:(int)before after:(int)after withQuery:(NSPredicate *)pred opts:(NSDictionary *)opts completionBlock:(MessagesDelivered)block
+- (void) loadMessagesAroundAnchor:(int)anchor
+                           before:(int)before
+                            after:(int)after
+                    withOperators:(NarrowOperators *)operators
+                             opts:(NSDictionary *)opts
+                  completionBlock:(MessagesDelivered)block
 {
     // Try to load the desired messages, either from the cache or from the API
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ZMessage"];
     BOOL ascending;
 
-    // TODO clean this up and support narrowing filters
-    NSMutableArray *filters = [[NSMutableArray alloc] init];
+    NSPredicate *predicate;
     if (before > 0) {
         fetchRequest.fetchLimit = before;
         ascending = NO;
 
-        [filters addObject:[NSString stringWithFormat:@" ( messageID <= %@ )", @(anchor)]];
-        fetchRequest.predicate = [NSPredicate predicateWithFormat:[filters componentsJoinedByString:@" "]];
-
+        predicate = [NSPredicate predicateWithFormat:@"messageID <= %@", @(anchor)];
     } else {
         fetchRequest.fetchLimit = after;
         ascending = YES;
 
-        [filters addObject:[NSString stringWithFormat:@" ( messageID >= %@ )", @(anchor)]];
-        fetchRequest.predicate = [NSPredicate predicateWithFormat:[filters componentsJoinedByString:@" "]];
+        predicate = [NSPredicate predicateWithFormat:@"messageID >= %@", @(anchor)];
     }
+    NSMutableArray *predicates = [NSMutableArray arrayWithObject:predicate];
+    if (operators != nil) {
+        [predicates addObject:[operators asPredicate]];
+        predicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicates];
+    }
+
+    fetchRequest.predicate = predicate;
 
     fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"messageID" ascending:ascending]];
 
@@ -338,7 +346,6 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
         after = messagesLeft;
     }
 
-    // TODO NSPredicate * to narrow operators
     NSMutableDictionary *args = [[NSMutableDictionary alloc] initWithDictionary:@{@"anchor": @(anchor),
                                                                                   @"num_before": @(before),
                                                                                   @"num_after": @(after)}];
@@ -348,7 +355,7 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
         }
     }
 
-    [self getOldMessages:args narrow:nil completionBlock:block];
+    [self getOldMessages:args narrow:operators completionBlock:block];
 }
 
 #pragma mark - Zulip API calls
@@ -356,18 +363,22 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
 /**
  Load messages from the Zulip API into Core Data
  */
-- (void) getOldMessages: (NSDictionary *)args narrow:(NSString *)narrow completionBlock:(MessagesDelivered)block
+- (void) getOldMessages: (NSDictionary *)args narrow:(NarrowOperators *)narrow completionBlock:(MessagesDelivered)block
 {
     long anchor = [[args objectForKey:@"anchor"] integerValue];
     if (!anchor) {
         anchor = self.pointer;
     }
 
+    NSString *narrowParam = @"{}";
+    if (narrow)
+        narrowParam = [narrow asJSONPayload];
+
     NSDictionary *fields = @{@"apply_markdown": @"false",
                              @"anchor": @(anchor),
                              @"num_before": @([[args objectForKey:@"num_before"] intValue]),
                              @"num_after": @([[args objectForKey:@"num_after"] intValue]),
-                             @"narrow": @"{}"
+                             @"narrow": narrowParam
                              };
 
     NSLog(@"Getting message: %@", fields);
@@ -391,6 +402,7 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
 {
     // If we have more messages to fetch to reach the newest message,
     // fetch them.
+    // TODO we only support "All messages"
     if (newestID < self.maxMessageId) {
         // There are still historical messages to fetch.
         NSDictionary *args = @{@"anchor": @(newestID + 1),

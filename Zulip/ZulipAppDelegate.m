@@ -43,6 +43,8 @@
     self.homeViewController.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, 200.0, 0.0);
     self.navController = [[UINavigationController alloc] initWithRootViewController:self.homeViewController];
 
+    [self.narrows setObject:self.homeViewController forKey:(id)self.homeViewController.operators];
+
     self.sidePanelController.centerPanel = self.navController;
 
     StreamsSidebarController *sidebar = [[StreamsSidebarController alloc] init];
@@ -92,21 +94,21 @@
     __persistentStoreCoordinator = 0;
 }
 
-- (void)narrow:(NSPredicate *)predicate
+- (void)narrowWithOperators:(NarrowOperators *)narrowOperators;
 {
-    NarrowViewController *narrow;
-    if ([self.narrows objectForKey:predicate]) {
-        narrow = [self.narrows objectForKey:predicate];
+    NarrowViewController *narrowController;
+    if ([self.narrows objectForKey:narrowOperators]) {
+        narrowController = [self.narrows objectForKey:narrowOperators];
     } else {
-        narrow = [[NarrowViewController alloc] initWithPredicate:predicate];
-        [self.narrows setObject:narrow forKey:predicate];
+        narrowController = [[NarrowViewController alloc] initWithOperators:narrowOperators];
+        [self.narrows setObject:narrowController forKey:(id)narrowOperators];
     }
 
     if ([self isNarrowed])
         [self.navController popToRootViewControllerAnimated:NO];
 
 
-    [self.navController pushViewController:narrow animated:NO];
+    [self.navController pushViewController:narrowController animated:NO];
     [self.sidePanelController toggleLeftPanel:self];
 }
 

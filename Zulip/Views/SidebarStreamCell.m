@@ -27,18 +27,22 @@
 - (void)setShortcut:(SIDEBAR_SHORTCUTS)shortcut
 {
     _shortcut = shortcut;
+    NarrowOperators *op = [[NarrowOperators alloc] init];
+
     switch (shortcut) {
         case HOME:
             self.name.text = @"Home";
             // Magic to go  back to the main view
+            [op setInHomeView];
             break;
 
         case PRIVATE_MESSAGES:
             self.name.text = @"Private Messages";
-            _predicate = [NSPredicate predicateWithFormat:@"subscription == nil"];
+            [op setPrivateMessages];
         default:
             break;
     }
+    _narrow = op;
 }
 
 - (void)setStream:(ZSubscription *)subscription
@@ -47,7 +51,9 @@
     _stream = subscription;
     self.name.text = subscription.name;
 
-    _predicate = [NSPredicate predicateWithFormat:@"subscription.name LIKE %@", subscription.name];
+    NarrowOperators *op = [[NarrowOperators alloc] init];
+    [op addStreamNarrow:subscription.name];
+    _narrow = op;
 }
 
 @end

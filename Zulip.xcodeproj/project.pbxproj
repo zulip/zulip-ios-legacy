@@ -47,6 +47,7 @@
 		B3F5629817A84FD5004B185A /* NarrowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F5629717A84FD5004B185A /* NarrowViewController.m */; };
 		B3F5629A17A8674B004B185A /* SidebarStreamsHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3F5629917A8674B004B185A /* SidebarStreamsHeader.xib */; };
 		B3F5629D17A9A4EE004B185A /* RawMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F5629C17A9A4EE004B185A /* RawMessage.m */; };
+		B3F562A017AAAE5A004B185A /* NarrowOperators.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F5629F17AAAE59004B185A /* NarrowOperators.m */; };
 		C31673851620DB6B00CE9FE5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673841620DB6B00CE9FE5 /* UIKit.framework */; };
 		C31673871620DB6B00CE9FE5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673861620DB6B00CE9FE5 /* Foundation.framework */; };
 		C31673891620DB6B00CE9FE5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673881620DB6B00CE9FE5 /* CoreGraphics.framework */; };
@@ -147,6 +148,8 @@
 		B3F5629917A8674B004B185A /* SidebarStreamsHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SidebarStreamsHeader.xib; path = Views/SidebarStreamsHeader.xib; sourceTree = "<group>"; };
 		B3F5629B17A9A4EE004B185A /* RawMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RawMessage.h; path = Models/RawMessage.h; sourceTree = "<group>"; };
 		B3F5629C17A9A4EE004B185A /* RawMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RawMessage.m; path = Models/RawMessage.m; sourceTree = "<group>"; };
+		B3F5629E17AAAE59004B185A /* NarrowOperators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NarrowOperators.h; sourceTree = "<group>"; };
+		B3F5629F17AAAE59004B185A /* NarrowOperators.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NarrowOperators.m; sourceTree = "<group>"; };
 		C31673801620DB6B00CE9FE5 /* Zulip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Zulip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C31673841620DB6B00CE9FE5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C31673861620DB6B00CE9FE5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -322,11 +325,11 @@
 				E5CDE07A162C88A800BBD773 /* LoginViewController.m */,
 				E5726A2516332BF800ED8BB1 /* StreamViewController.h */,
 				E5726A2616332BF800ED8BB1 /* StreamViewController.m */,
+				E5726A2716332BF800ED8BB1 /* StreamViewController.xib */,
 				B3CC439417A7F13700C8AF3F /* HomeViewController.h */,
 				B3CC439517A7F13700C8AF3F /* HomeViewController.m */,
 				B3F5629617A84FD5004B185A /* NarrowViewController.h */,
 				B3F5629717A84FD5004B185A /* NarrowViewController.m */,
-				E5726A2716332BF800ED8BB1 /* StreamViewController.xib */,
 				E5DC8069165D347D008B53F9 /* ComposeViewController.h */,
 				E5DC806A165D347D008B53F9 /* ComposeViewController.m */,
 				E598E7871634A9940022BF4A /* ErrorViewController.h */,
@@ -420,6 +423,8 @@
 				C31673941620DB6B00CE9FE5 /* ZulipAppDelegate.m */,
 				E50D757716331D7A00251D1F /* KeychainItemWrapper.h */,
 				E50D757816331D7A00251D1F /* KeychainItemWrapper.m */,
+				B3F5629E17AAAE59004B185A /* NarrowOperators.h */,
+				B3F5629F17AAAE59004B185A /* NarrowOperators.m */,
 				B3766D32179DD701005FB0D4 /* Models */,
 				B3766D30179DD675005FB0D4 /* Views */,
 				B3766D2F179DD668005FB0D4 /* Controllers */,
@@ -629,6 +634,7 @@
 				B3F5629317A81C37004B185A /* SidebarStreamCell.m in Sources */,
 				B3F5629817A84FD5004B185A /* NarrowViewController.m in Sources */,
 				B3F5629D17A9A4EE004B185A /* RawMessage.m in Sources */,
+				B3F562A017AAAE5A004B185A /* NarrowOperators.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

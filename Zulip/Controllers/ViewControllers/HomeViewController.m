@@ -25,6 +25,9 @@
     self.initialLoad = YES;
     self.scrollToPointer = -1;
 
+    self.operators = [[NarrowOperators alloc] init];
+    [self.operators setInHomeView];
+
     // Watch for pointer updates
     [[ZulipAPIController sharedInstance] addObserver:self
                                           forKeyPath:@"pointer"
@@ -47,7 +50,7 @@
     [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[[ZulipAPIController sharedInstance] pointer]
                                                            before:12
                                                             after:0
-                                                        withQuery:nil
+                                                    withOperators:nil
                                                              opts:@{@"fetch_until_latest": @(YES)}
                                                   completionBlock:^(NSArray *messages) {
                                                       NSLog(@"Initially loaded %i messages!", [messages count]);
@@ -63,7 +66,7 @@
     [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[latest.messageID intValue] + 1
                                                            before:0
                                                             after:20
-                                                        withQuery:nil
+                                                    withOperators:nil
                                                              opts:@{}
                                                   completionBlock:^(NSArray *messages) {
                                                       NSLog(@"Resuming and fetched loaded %i new messages!", [messages count]);

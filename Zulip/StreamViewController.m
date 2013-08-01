@@ -127,7 +127,7 @@
         [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[self.topRow.messageID intValue]
                                                                before:15
                                                                 after:0
-                                                            withQuery:nil
+                                                        withOperators:self.operators
                                                                  opts:nil
                                                       completionBlock:^(NSArray *messages) {
               [self loadMessages: messages];

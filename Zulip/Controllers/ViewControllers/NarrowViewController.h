@@ -8,11 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "StreamViewController.h"
+#import "NarrowOperators.h"
 
 @interface NarrowViewController : StreamViewController
 
-@property (nonatomic, retain) NSPredicate *predicate;
-
-- (id)initWithPredicate:(NSPredicate *)predicate;
+- (id)initWithOperators:(NarrowOperators *)operators;
 
 @end

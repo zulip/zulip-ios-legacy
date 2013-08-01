@@ -244,10 +244,10 @@
         if (cell.shortcut == HOME) {
             [appDelegate clearNarrowWithAnimation:YES];
         } else {
-            if (cell.predicate) {
-                [appDelegate narrow:cell.predicate];
+            if (cell.narrow) {
+                [appDelegate narrowWithOperators:cell.narrow];
             } else {
-                NSLog(@"ERROR: Trying to narrow but have a nul predicate!!");
+                NSLog(@"ERROR: Trying to narrow but have a null NarrowOperators!!");
             }
         }
     } else if (indexPath.section == 3) {

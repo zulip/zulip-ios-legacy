@@ -10,6 +10,7 @@
 #import <CoreData/CoreData.h>
 
 #import "ZSubscription.h"
+#import "NarrowOperators.h"
 
 @class StreamViewController;
 
@@ -45,7 +46,7 @@ typedef void(^MessagesDelivered)(NSArray *messages);
 // Will begin long polling
 - (UIColor *)streamColor:(NSString *)name withDefault:(UIColor *)defaultColor;
 
-- (void)loadMessagesAroundAnchor:(int)anchor before:(int)before after:(int)after withQuery:(NSPredicate *)pred opts:(NSDictionary *)opts completionBlock:(MessagesDelivered)block;
+- (void)loadMessagesAroundAnchor:(int)anchor before:(int)before after:(int)after withOperators:(NarrowOperators *)operators opts:(NSDictionary *)opts completionBlock:(MessagesDelivered)block;
 
 @property(assign) long pointer;
 @property(assign) BOOL backgrounded;

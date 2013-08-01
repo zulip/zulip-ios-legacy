@@ -7,6 +7,7 @@
 //
 
 #import "NarrowViewController.h"
+#import "ZulipAPIController.h"
 
 @interface NarrowViewController ()
 
@@ -14,12 +15,12 @@
 
 @implementation NarrowViewController
 
-- (id)initWithPredicate:(NSPredicate *)predicate
+- (id)initWithOperators:(NarrowOperators *)operators
 {
     self = [super init];
 
     if (self) {
-        self.predicate = predicate;
+        self.operators = operators;
     }
 
     return self;
@@ -32,16 +33,31 @@
     [self initialPopulate];
 }
 
-- (void)initialPopulate
-{
-
-}
-
 #pragma mark - StreamViewControllerDelegate
 
-- (NSString *)cacheName
+- (void)initialPopulate
 {
-    return [self.predicate predicateFormat];
+    // Clear any messages first
+    if ([self.messages count]) {
+        [self clearMessages];
+    }
+
+    [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[[ZulipAPIController sharedInstance] pointer]
+                                                           before:12
+                                                            after:0
+                                                    withOperators:self.operators
+                                                             opts:@{@"fetch_until_latest": @(YES)}
+                                                  completionBlock:^(NSArray *messages) {
+                                                      NSLog(@"Initially loaded %i messages!", [messages count]);
+
+                                                      [self loadMessages:messages];
+                                                  }];
 }
+
+- (void)resumePopulate
+{
+    NSLog(@"Resuming populating!");
+}
+
 
 @end

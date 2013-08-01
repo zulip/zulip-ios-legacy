@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ZSubscription.h"
+#import "NarrowOperators.h"
 
 typedef enum {
     HOME,
@@ -22,6 +23,6 @@ typedef enum {
 
 @property (nonatomic, assign) SIDEBAR_SHORTCUTS shortcut;
 @property (nonatomic, retain) ZSubscription *stream;
-@property (nonatomic, retain, readonly) NSPredicate *predicate;
+@property (nonatomic, retain, readonly) NarrowOperators *narrow;
 
 @end

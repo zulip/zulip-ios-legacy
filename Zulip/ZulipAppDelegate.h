@@ -4,6 +4,7 @@
 #import "ErrorViewController.h"
 #import "AFHTTPRequestOperation.h"
 #import "JASidePanelController.h"
+#import "NarrowOperators.h"
 
 @interface ZulipAppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate>
 
@@ -25,7 +26,7 @@
 - (void) dismissLoginScreen;
 
 // Narrowing
-- (void) narrow:(NSPredicate *)predicate;
+- (void) narrowWithOperators:(NarrowOperators *)narrow;
 - (BOOL) isNarrowed;
 - (void) clearNarrowWithAnimation:(BOOL)animation;
 
