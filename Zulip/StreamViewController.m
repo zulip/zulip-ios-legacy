@@ -4,24 +4,17 @@
 #import "UIColor+HexColor.h"
 #include "ZulipAPIController.h"
 
-#import "ZMessage.h"
 #import "ZUser.h"
+#import "RawMessage.h"
 
 #import "AFJSONRequestOperation.h"
 
-@interface StreamViewController () <NSFetchedResultsControllerDelegate> {
-    // NSFetchedResultsController helpers
-    NSMutableArray *_batchedInsertingRows;
-}
+@interface StreamViewController ()
 
+@property (nonatomic, retain) RawMessage *topRow;
 @property(assign, nonatomic) IBOutlet MessageCell *messageCell;
 
 @property(nonatomic,retain) ZulipAppDelegate *delegate;
-
-@property(nonatomic, assign) BOOL currentlyIgnoringScrollPastTopEvents;
-@property(nonatomic, retain) ZMessage* topRow;
-@property(assign) CGFloat scrollFinalTarget;
-
 
 - (void)refetchData;
 
@@ -32,14 +25,34 @@
 - (id)initWithStyle:(UITableViewStyle)style
 {
     id ret = [super initWithStyle:style];
-    self.fetchedResultsController = 0;
+    self.messages = [[NSMutableArray alloc] init];
+    self.msgIds = [[NSMutableSet alloc] init];
+    self.topRow = 0;
+
+    // Listen to long polling messages
+    [[NSNotificationCenter defaultCenter] addObserverForName:kLongPollMessageNotification
+                                                      object:nil
+                                                       queue:[NSOperationQueue mainQueue]
+                                                  usingBlock:^(NSNotification *note) {
+                                                      NSArray *messages = [[note userInfo] objectForKey:kLongPollMessageData];
+                                                      [self handleLongPollMessages:messages];
+                                                  }];
+
+    // KVO watch for resume from background
+    [[ZulipAPIController sharedInstance] addObserver:self
+                                          forKeyPath:@"backgrounded"
+                                             options:(NSKeyValueObservingOptionNew |
+                                                      NSKeyValueObservingOptionOld)
+                                             context:nil];
 
     return ret;
 }
 
-- (void)refetchData {
-    // Refetches all our messages
-    [self.fetchedResultsController performSelectorOnMainThread:@selector(performFetch:) withObject:nil waitUntilDone:YES modes:@[ NSRunLoopCommonModes ]];
+- (void)clearMessages
+{
+    [self.messages removeAllObjects];
+    [self.msgIds removeAllObjects];
+    self.topRow = 0;
 }
 
 #pragma mark - UIViewController
@@ -89,6 +102,12 @@
     [super viewDidUnload];
 }
 
+- (void)initialPopulate
+{}
+
+- (void)resumePopulate
+{}
+
 #pragma mark - UIScrollView
 
 // We want to load messages **after** the scroll & deceleration is finished.
@@ -103,21 +122,30 @@
 -(void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
-    if ([self.tableView contentOffset].y == 0) {
-        self.topRow = (ZMessage *)[self.fetchedResultsController objectAtIndexPath:[self invertIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]]];
-        [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[self.topRow.messageID intValue] before:15 after:0];
+    if ([self.tableView contentOffset].y == 0 && [self.messages count] > 0) {
+        self.topRow = [self.messages objectAtIndex:0];
+        [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[self.topRow.messageID intValue]
+                                                               before:15
+                                                                after:0
+                                                            withQuery:nil
+                                                                 opts:nil
+                                                      completionBlock:^(NSArray *messages) {
+              [self loadMessages: messages];
+
+          }];
+//        [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[self.topRow.messageID intValue] before:15 after:0];
     }
 }
 
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return [[self.fetchedResultsController sections] count];
+    return 1;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[[self.fetchedResultsController sections] objectAtIndex:section] numberOfObjects];
+    return [self.messages count];
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -125,22 +153,14 @@
     [(MessageCell *)cell willBeDisplayed];
 }
 
-- (ZMessage *)messageAtIndexPath:(NSIndexPath *)indexPath
+- (RawMessage *)messageAtIndexPath:(NSIndexPath *)indexPath
 {
-    indexPath = [self invertIndexPath:indexPath];
-    @try {
-        return (ZMessage *)[self.fetchedResultsController objectAtIndexPath:indexPath];
-    }
-    @catch (NSException *exception) {
-        NSLog(@"Exception: %@", exception);
-        return nil;
-    }
+    return [self.messages objectAtIndex:indexPath.row];
 }
 
--(UITableViewCell *)tableView:(UITableView *)tableView
-        cellForRowAtIndexPath:(NSIndexPath *)indexPath
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZMessage *message = [self messageAtIndexPath:indexPath];
+    RawMessage *message = [self messageAtIndexPath:indexPath];
 
     MessageCell *cell = (MessageCell *)[self.tableView dequeueReusableCellWithIdentifier:
                                         [MessageCell reuseIdentifier]];
@@ -156,7 +176,7 @@
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    ZMessage * message = [self messageAtIndexPath:indexPath];
+    RawMessage * message = [self messageAtIndexPath:indexPath];
     return [MessageCell heightForCellWithMessage:message];
 }
 
@@ -166,7 +186,7 @@
                                           initWithNibName:@"ComposeViewController"
                                           bundle:nil];
 
-    ZMessage *message = [self messageAtIndexPath:indexPath];
+    RawMessage *message = [self messageAtIndexPath:indexPath];
     composeView.type = message.type;
     [[self navigationController] pushViewController:composeView animated:YES];
 
@@ -188,55 +208,7 @@
     }
 }
 
-/*
- HACK this is a workaround for us not being able to do the proper Core Data query that we want.
- We are not able to say "give me the last X messages in ascending order. We can only do:
-
- * First X messages in ascending oder
- * Last X messages in descending order
-
- and since we want to limit how many messages we initially fetch, we do the latter.
-
- However, this means the message list we get out of core data (and that is stored in
- NSFetchedResultsController) is in the wrong order. We invert the indices, so undo
- the incorrect ordering
- */
-- (NSIndexPath *)invertIndexPath:(NSIndexPath *)path
-{
-    int count = [[[self.fetchedResultsController sections] objectAtIndex:0] numberOfObjects];
-    NSIndexPath *fixed = [NSIndexPath indexPathForRow:(count - path.row - 1) inSection:path.section];
-    return fixed;
-}
-
 #pragma mark - StreamViewController
-
-- (void)initialPopulate
-{
-    if (self.fetchedResultsController) {
-        self.fetchedResultsController = 0;
-    }
-
-    // This is the home view, so we want to display all messages
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ZMessage"];
-    fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"messageID" ascending:NO]];
-    fetchRequest.fetchOffset = 0; // 0 offset + descending means starting from the end
-    fetchRequest.fetchBatchSize = 15;
-
-    // We only want stream messages that have the in_home_view flag set in the associated subscription object
-    if ([self respondsToSelector:@selector(predicate)])
-        fetchRequest.predicate = [self performSelector:@selector(predicate)];
-
-    NSString *cacheName = [self performSelector:@selector(cacheName)];
-    self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                    managedObjectContext:[self.delegate managedObjectContext]
-                                                                      sectionNameKeyPath:nil
-                                                                               cacheName:cacheName];
-    self.fetchedResultsController.delegate = self;
-    // Load initial set of messages
-    NSLog(@"Initially populating!");
-    [self refetchData];
-    [self.tableView reloadData];
-}
 
 -(void)composeButtonPressed {
     ComposeViewController *composeView = [[ComposeViewController alloc]
@@ -257,8 +229,8 @@
 -(int) rowWithId: (int)messageId
 {
     int i = 0;
-    for (i = 0; i < [[[self.fetchedResultsController sections] objectAtIndex:0] numberOfObjects]; i++) {
-        ZMessage *message = [self messageAtIndexPath:[NSIndexPath indexPathForItem:i inSection:0]];
+    for (i = 0; i < [self.messages count]; i++) {
+        RawMessage *message = [self messageAtIndexPath:[NSIndexPath indexPathForItem:i inSection:0]];
         if ([message.messageID intValue] == messageId) {
             return i;
         }
@@ -266,103 +238,41 @@
     return -1;
 }
 
--(void)repopulateList
+-(void)loadMessages:(NSArray *)messages
 {
-    [self initialPopulate];
-}
-
-#pragma mark - NSFetchedResultsControllerDelegate methods
-// Below code mostly inspired by Apple documentation on NSFetchedResultsControllerDelegate
-/*
- Assume self has a property 'tableView' -- as is the case for an instance of a UITableViewController
- subclass -- and a method configureCell:atIndexPath: which updates the contents of a given cell
- with information from a managed object at the given index path in the fetched results controller.
- */
-
-- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
-//    [self.tableView beginUpdates];
-
-    _batchedInsertingRows = [[NSMutableArray alloc] init];
-}
-
-
-- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
-           atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
-{
-    switch(type) {
-        case NSFetchedResultsChangeInsert:
-            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex]
-                          withRowAnimation:UITableViewRowAnimationFade];
-            break;
-
-        case NSFetchedResultsChangeDelete:
-            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex]
-                          withRowAnimation:UITableViewRowAnimationFade];
-            break;
-    }
-}
-
-
-- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
-       atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
-      newIndexPath:(NSIndexPath *)newIndexPath {
-
-    UITableView *tableView = self.tableView;
-
-    switch(type) {
-
-        case NSFetchedResultsChangeInsert:
-//            NSLog(@"Added object: %@", newIndexPath);
-            // Batch inserting rows
-            [_batchedInsertingRows addObject:newIndexPath];
-
-//            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
-//                             withRowAnimation:UITableViewRowAnimationFade];
-            break;
-
-        case NSFetchedResultsChangeDelete:
-//            NSLog(@"Removed object: %@", newIndexPath);
-
-            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
-                             withRowAnimation:UITableViewRowAnimationFade];
-            break;
-
-        case NSFetchedResultsChangeUpdate:
-        {
-//            NSLog(@"Changed object: %i", [newIndexPath row]);
-            MessageCell *cell = (MessageCell *)[self.tableView cellForRowAtIndexPath:newIndexPath];
-            ZMessage *message = [self messageAtIndexPath:newIndexPath];
-
-            [cell setMessage:message];
-            break;
-        }
-        case NSFetchedResultsChangeMove:
-//            NSLog(@"Moved object: from %i to %i", [indexPath row], [newIndexPath row]);
-
-            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
-                             withRowAnimation:UITableViewRowAnimationFade];
-            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
-                             withRowAnimation:UITableViewRowAnimationFade];
-            break;
-    }
-}
-
-
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
     BOOL insertingAtTop = NO;
     CGPoint offset;
     CGFloat height = self.tableView.contentSize.height;
-    
-    if ([_batchedInsertingRows count] > 0) {
-        NSIndexPath *last = [_batchedInsertingRows lastObject];
-        ZMessage *lastNewMsg = (ZMessage *)[self.fetchedResultsController objectAtIndexPath:last];
+
+    if ([messages count] > 0) {
+        RawMessage *last = [messages lastObject];
 
 //        NSLog(@"Adding %i backlog with last new message; %i", [_batchedInsertingRows count], [lastNewMsg.messageID intValue]);
-        if (lastNewMsg && lastNewMsg.messageID < self.topRow.messageID) {
+        if (last && last.messageID < self.topRow.messageID) {
             insertingAtTop = YES;
             [UIView setAnimationsEnabled:NO];
             offset = [self.tableView contentOffset];
         }
+    }
+
+    // this block influenced by: http://stackoverflow.com/questions/8180115/nsmutablearray-add-object-with-order
+    // we want to do an in-order insert so that whether doing the initial backfill or inserting historical messages as requested, this method doesn't require special booleans or state.
+    for (RawMessage *message in messages) {
+        if ([self.msgIds containsObject:message.messageID])
+            continue;
+        else
+            [self.msgIds addObject:message.messageID];
+
+        NSUInteger insertionIndex = [self.messages indexOfObject:message
+                                                   inSortedRange:(NSRange){0, [self.messages count]}
+                                                         options:NSBinarySearchingInsertionIndex
+                                                 usingComparator:^(id left, id right) {
+                                                     RawMessage *rLeft = (RawMessage *)left;
+                                                     RawMessage *rRight = (RawMessage *)right;
+                                                     return [rLeft.messageID compare:rRight.messageID];
+        }];
+
+        [self.messages insertObject:message atIndex:insertionIndex];
     }
 
     [self.tableView reloadData];
@@ -378,9 +288,79 @@
         [self.tableView scrollRectToVisible:peek animated:YES];
     }
 
-    [_batchedInsertingRows removeAllObjects];
     if ([self respondsToSelector:@selector(messagesDidChange)]) {
         [self performSelector:@selector(messagesDidChange)];
+    }
+}
+
+//
+//- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+//    BOOL insertingAtTop = NO;
+//    CGPoint offset;
+//    CGFloat height = self.tableView.contentSize.height;
+//
+//    if ([_batchedInsertingRows count] > 0) {
+//        NSIndexPath *last = [_batchedInsertingRows lastObject];
+//        RawMessage *lastNewMsg = (RawMessage *)[self.fetchedResultsController objectAtIndexPath:last];
+//
+////        NSLog(@"Adding %i backlog with last new message; %i", [_batchedInsertingRows count], [lastNewMsg.messageID intValue]);
+//        if (lastNewMsg && lastNewMsg.messageID < self.topRow.messageID) {
+//            insertingAtTop = YES;
+//            [UIView setAnimationsEnabled:NO];
+//            offset = [self.tableView contentOffset];
+//        }
+//    }
+//
+//    [self.tableView reloadData];
+//
+//    if (insertingAtTop) {
+//        // If inserting at top, calculate the pixels height that was inserted, and scroll to the same position
+//        offset.y = self.tableView.contentSize.height - height;
+//        [self.tableView setContentOffset:offset];
+//        [UIView setAnimationsEnabled:YES];
+//
+//        int peek_height = 20;
+//        CGRect peek = CGRectMake(0, offset.y - peek_height, self.tableView.bounds.size.width, peek_height);
+//        [self.tableView scrollRectToVisible:peek animated:YES];
+//    }
+//
+//    [_batchedInsertingRows removeAllObjects];
+//    if ([self respondsToSelector:@selector(messagesDidChange)]) {
+//        [self performSelector:@selector(messagesDidChange)];
+//    }
+//}
+
+- (void)handleLongPollMessages:(NSArray *)messages
+{
+
+    // Ignore ARC's warning about performing a selector potentially causing a leak
+    // acceptsMessage: does not return any objects that ARC needs to know about/manage
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+    SEL acceptsMessage = @selector(acceptsMessage:);
+
+    if ([self respondsToSelector:acceptsMessage]) {
+        NSMutableArray *accepted = [[NSMutableArray alloc] init];
+        for (RawMessage *msg in messages) {
+            if ([self performSelector:acceptsMessage withObject:msg]) {
+                [accepted addObject:msg];
+            }
+        }
+        [self loadMessages:accepted];
+    }
+#pragma clang diagnostic pop
+}
+
+#pragma mark - NSKeyValueObserving
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:@"backgrounded"]) {
+        BOOL old = [[change objectForKey:NSKeyValueChangeOldKey] boolValue];
+        BOOL new = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
+
+        if (old && !new) {
+            [self resumePopulate];
+        }
     }
 }
 

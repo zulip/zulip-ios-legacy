@@ -1,18 +1,32 @@
 #import <UIKit/UIKit.h>
 #import "MessageCell.h"
 
+//@protocol StreamViewControllerDelegate <NSObject>
+
+//- (NSPredicate *)filterPrediate;
+//- ()
+
+//@end
+
 @interface StreamViewController : UITableViewController
+
+@property (nonatomic, retain) NSMutableArray *messages;
+@property (nonatomic, retain) NSMutableSet *msgIds;
 
 // Generic message list implementations
 - (void)composeButtonPressed;
-- (void)initialPopulate;
 - (int)rowWithId:(int)messageId;
 
 // The NSPredicate * to use for this message list
 // Implement in subclass
 // TODO create a proper protocol
-//- (NSPredicate *)predicate;
+//- (NSPredicate *);
+//- (BOOL)acceptsMessage:(RawMessage *);
 
-@property(nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
+- (void)initialPopulate;
+- (void)resumePopulate;
+- (void)clearMessages;
+
+-(void)loadMessages:(NSArray *)messages;
 
 @end

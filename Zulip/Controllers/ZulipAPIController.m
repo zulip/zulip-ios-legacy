@@ -10,6 +10,7 @@
 #import "ZulipAPIClient.h"
 #import "ZulipAppDelegate.h"
 #import "StreamViewController.h"
+#import "RawMessage.h"
 
 #include "KeychainItemWrapper.h"
 
@@ -44,6 +45,9 @@
 @property(nonatomic, retain) ZulipAppDelegate *appDelegate;
 @property(nonatomic, retain) AFHTTPRequestOperation *pollRequest;
 @end
+
+NSString * const kLongPollMessageNotification = @"LongPollMessages";
+NSString * const kLongPollMessageData = @"LongPollMessageData";
 
 @implementation ZulipAPIController
 
@@ -166,6 +170,11 @@
     return [NSString stringWithFormat:@"%@-%@", self.email, domainPart];
 }
 
+- (void)reset
+{
+    [self clearSettings];
+    [self registerForQueue];
+}
 
 - (void) registerForQueue
 {
@@ -193,12 +202,11 @@
         NSArray *subscriptions = [json objectForKey:@"subscriptions"];
         [self loadSubscriptionData:subscriptions];
 
-        [self getOldMessages:@{@"anchor": @(self.pointer),
-                               @"num_before": @(12),
-                               @"num_after": @(0)}];
-
         // Set up the home view
         [self.homeViewController initialPopulate];
+
+        // Start long polling
+        [self startPoll];
 
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Failure doing registerForQueue...retrying %@", [error localizedDescription]);
@@ -214,8 +222,7 @@
 
 - (ZSubscription *) subscriptionForName:(NSString *)name
 {
-    // TODO make sure this is coming from in-memory cache and not SQLite call,
-    // as this is called for every incoming message
+    // TODO cache these in-memory
     NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"ZSubscription"];
     req.predicate = [NSPredicate predicateWithFormat:@"name = %@", name];
 
@@ -256,45 +263,101 @@
 
 - (void)setBackgrounded:(BOOL)backgrounded
 {
+    if (_backgrounded == backgrounded)
+        return;
 
     // Re-start polling
     if (_backgrounded && !backgrounded) {
         NSLog(@"Coming to the foreground!!");
-        [self fetchNewMessages];
         [self startPoll];
     }
     _backgrounded = backgrounded;
 }
 
-- (void) loadMessagesAroundAnchor:(int)anchor before:(int)before after:(int)after
+#pragma mark - Loading messages
+
+- (void) loadMessagesAroundAnchor:(int)anchor before:(int)before after:(int)after withQuery:(NSPredicate *)pred opts:(NSDictionary *)opts completionBlock:(MessagesDelivered)block
 {
-    NSDictionary *args = @{@"anchor": @(anchor),
-                           @"num_before": @(before),
-                           @"num_after": @(after)};
-    [self getOldMessages:args];
+    // Try to load the desired messages, either from the cache or from the API
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ZMessage"];
+    BOOL ascending;
+
+    // TODO clean this up and support narrowing filters
+    NSMutableArray *filters = [[NSMutableArray alloc] init];
+    if (before > 0) {
+        fetchRequest.fetchLimit = before;
+        ascending = NO;
+
+        [filters addObject:[NSString stringWithFormat:@" ( messageID <= %@ )", @(anchor)]];
+        fetchRequest.predicate = [NSPredicate predicateWithFormat:[filters componentsJoinedByString:@" "]];
+
+    } else {
+        fetchRequest.fetchLimit = after;
+        ascending = YES;
+
+        [filters addObject:[NSString stringWithFormat:@" ( messageID >= %@ )", @(anchor)]];
+        fetchRequest.predicate = [NSPredicate predicateWithFormat:[filters componentsJoinedByString:@" "]];
+    }
+
+    fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"messageID" ascending:ascending]];
+
+    NSError *error = nil;
+    NSArray *results = [[self.appDelegate managedObjectContext] executeFetchRequest:fetchRequest error:&error];
+
+    if (ascending == NO) {
+        results = [[results reverseObjectEnumerator] allObjects];
+    }
+
+    int messagesLeft = 0;
+    if (error) {
+        NSLog(@"Error fetching results from Core Data for message request! %@ %@", [error localizedDescription], [error userInfo]);
+    } else {
+        // If we got enough messages, return them directly from local cache
+        if ([results count] >= fetchRequest.fetchLimit) {
+            block([self rawMessagesFromManaged:results]);
+
+            if ([opts valueForKey:@"fetch_until_latest"]) {
+                ZMessage *last = [results lastObject];
+                [self fetchNewestMessages:block withNewestID:[last.messageID longValue]];
+            }
+            return;
+        } else {
+            messagesLeft = fetchRequest.fetchLimit - [results count];
+        }
+
+        // Send what we already fetched, then do an API query
+        if ([results count] > 0) {
+            block([self rawMessagesFromManaged:results]);
+        }
+    }
+
+    // Fetch what's left
+    if (before > 0) {
+        before = messagesLeft;
+    } else {
+        after = messagesLeft;
+    }
+
+    // TODO NSPredicate * to narrow operators
+    NSMutableDictionary *args = [[NSMutableDictionary alloc] initWithDictionary:@{@"anchor": @(anchor),
+                                                                                  @"num_before": @(before),
+                                                                                  @"num_after": @(after)}];
+    if (opts) {
+        for (NSString *key in opts) {
+            [args setObject:[opts objectForKey:key] forKey:key];
+        }
+    }
+
+    [self getOldMessages:args narrow:nil completionBlock:block];
 }
 
 #pragma mark - Zulip API calls
 
 /**
- When resuming, make sure we haven't missed any messages since we left the foreground
- */
-- (void) fetchNewMessages
-{
-    ZMessage *newest = [self newestMessage];
-    if (!newest) {
-        return;
-    }
-
-    [self getOldMessages:@{@"anchor": newest.messageID,
-                           @"num_before": @(0),
-                           @"num_after": @(20)}];
-}
-
-/**
  Load messages from the Zulip API into Core Data
  */
-- (void) getOldMessages: (NSDictionary *)args {
+- (void) getOldMessages: (NSDictionary *)args narrow:(NSString *)narrow completionBlock:(MessagesDelivered)block
+{
     long anchor = [[args objectForKey:@"anchor"] integerValue];
     if (!anchor) {
         anchor = self.pointer;
@@ -312,34 +375,31 @@
     [[ZulipAPIClient sharedClient] getPath:@"messages" parameters:fields success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *json = (NSDictionary *)responseObject;
 
-        // Insert message into Core Data back on the main thread
-        [self performSelectorOnMainThread:@selector(insertMessages:)
-                               withObject:[json objectForKey:@"messages"]
-                            waitUntilDone:YES];
+        BOOL not_in_narrow = narrow == nil;
+        [self insertMessages:[json objectForKey:@"messages"] saveToCoreData:not_in_narrow withCompletionBlock:block];
 
-        // If we have more messages to fetch to reach the newest message,
-        // fetch them. Otherwise, begin the long polling
-        ZMessage *last = [self newestMessage];
-        if (last) {
-            int latest_msg_id = [last.messageID intValue];
-            if (latest_msg_id < self.maxMessageId) {
-                // There are still historical messages to fetch.
-                NSDictionary *args = @{@"anchor": @(latest_msg_id + 1),
-                                       @"num_before": @(0),
-                                       @"num_after": @(20)};
-                [self getOldMessages:args];
-            } else {
-                self.backgrounded = NO;
-                if (![self.pollRequest isExecuting]) {
-                    [self startPoll];
-                }
-            }
+        if ([args valueForKey:@"fetch_until_latest"]) {
+            NSDictionary *last = [[json objectForKey:@"messages"] lastObject];
+            [self fetchNewestMessages:block withNewestID:[[last objectForKey:@"id"] longValue]];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Failed to load old messages: %@", [error localizedDescription]);
     }];
 }
 
+- (void)fetchNewestMessages:(MessagesDelivered)block withNewestID:(long)newestID
+{
+    // If we have more messages to fetch to reach the newest message,
+    // fetch them.
+    if (newestID < self.maxMessageId) {
+        // There are still historical messages to fetch.
+        NSDictionary *args = @{@"anchor": @(newestID + 1),
+                               @"num_before": @(0),
+                               @"num_after": @(20),
+                               @"fetch_until_latest": @(YES)};
+        [self getOldMessages:args narrow:nil completionBlock:block];
+    }
+}
 - (void) startPoll {
     if (self.pollRequest && [self.pollRequest isExecuting]) {
         [self.pollRequest cancel];
@@ -362,6 +422,8 @@
                              @"last_event_id": @(self.lastEventId)};
 
     NSMutableURLRequest *request = [[ZulipAPIClient sharedClient] requestWithMethod:@"GET" path:@"events" parameters:fields];
+    [request setTimeoutInterval:120];
+
     self.pollRequest = [[ZulipAPIClient sharedClient] HTTPRequestOperationWithRequest:request
                                                                                success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *json = (NSDictionary *)responseObject;
@@ -391,13 +453,29 @@
 
         // If we're not hidden/in the background, load the new messages immediately
         if (!self.backgrounded) {
-            [self performSelectorOnMainThread:@selector(insertMessages:)
-                                   withObject:messages waitUntilDone:YES];
+            // TODO figure out why the dispatch_async body is never executed
+//            dispatch_async(dispatch_get_main_queue(), ^{
+                [self insertMessages:messages saveToCoreData:YES withCompletionBlock:^(NSArray *messages) {
+                    NSNotification *longPollMessages = [NSNotification notificationWithName:kLongPollMessageNotification
+                                                                                     object:self
+                                                                                   userInfo:@{kLongPollMessageData: messages}];
+                    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+                    [notificationCenter postNotification:longPollMessages];
+                }];
+//            });
         }
 
         [self performSelectorInBackground:@selector(longPoll) withObject: nil];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Failed to do long poll: %@", [error localizedDescription]);
+
+        BOOL ignoreError = NO;
+
+        // TODO
+        // Ignore 504 errors from nginx, until I can figure out what they are
+        if ([[operation response] statusCode] == 504) {
+            ignoreError = YES;
+        }
 
         if ([operation isKindOfClass:[AFJSONRequestOperation class]]) {
             NSDictionary *json = (NSDictionary *)[(AFJSONRequestOperation *)operation responseJSON];
@@ -405,17 +483,19 @@
             if ([[operation response] statusCode] == 400 &&
                 ([errorMsg rangeOfString:@"too old"].location != NSNotFound ||
                  [errorMsg rangeOfString:@"Bad event queue id"].location != NSNotFound)) {
-                    // Load any new data if we've been GCed
-                    [self fetchNewMessages];
+                    // Reset if we've been GCed, we need a new event queue and all that
+                    [self reset];
                     return;
                 }
         }
 
-        self.pollFailures++;
-        [self adjustRequestBackoff];
-        if (self.pollFailures > 5 && self.waitingOnErrorRecovery == NO) {
-            self.waitingOnErrorRecovery = YES;
-            [self.appDelegate showErrorScreen:@"Error getting messages. Please try again in a few minutes."];
+        if (!ignoreError) {
+            self.pollFailures++;
+            [self adjustRequestBackoff];
+            if (self.pollFailures > 5 && self.waitingOnErrorRecovery == NO) {
+                self.waitingOnErrorRecovery = YES;
+                [self.appDelegate showErrorScreen:@"Error getting messages. Please try again in a few minutes."];
+            }
         }
 
         // Continue polling regardless
@@ -496,90 +576,134 @@
     }
 }
 
-- (void)insertMessages:(NSArray *)messages
+- (void)insertMessages:(NSArray *)messages saveToCoreData:(BOOL)saveToCD withCompletionBlock:(MessagesDelivered)block
 {
-    // Insert/Update messages into Core Data.
-    // First we fetch existing messages to update
-    // Then we update/create any missing ones
+    // Build our returned RawMessages
+    // Then, if we are saving to Core Data,
+    // do the CD save steps
+    NSMutableArray *rawMessages = [[NSMutableArray alloc] init];
+    NSMutableDictionary *rawMessagesDict = [[NSMutableDictionary alloc] init];
+    for(NSDictionary *json in messages) {
+        RawMessage *msg = [self rawMessageFromJSON:json];
+        [rawMessages addObject:msg];
+        [rawMessagesDict setObject:msg forKey:msg.messageID];
+    }
 
-    // Extract message IDs to insert
-    // NOTE: messages MUST be already sorted in ascending order!
-    NSArray *ids = [messages valueForKey:@"id"];
+    // Pass the downloaded messages back to whichever message list asked for it
+    block(rawMessages);
 
-    // Extract messages that already exist, sorted ascending
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ZMessage"];
-    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(messageID IN %@)", ids];
-    fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"messageID" ascending:YES]];
-    NSError *error = nil;
-    NSArray *existing = [[self.appDelegate managedObjectContext] executeFetchRequest:fetchRequest error:&error];
-    if (error) {
-        NSLog(@"Error fetching existing messages in insertMessages: %@ %@", [error localizedDescription], [error userInfo]);
+    if (!saveToCD) {
         return;
     }
 
-    // Now we have a list of (sorted) new IDs and existing ZMessages. Walk through them in order and insert/update
-    int newMsgIdx = 0, existingMsgIdx = 0;
-    while (newMsgIdx < [ids count]) {
-        int msgId = [[ids objectAtIndex:newMsgIdx] intValue];
-        NSDictionary *msgDict = [messages objectAtIndex:newMsgIdx];
+    // Do the core data inserting asynchronously
+    // TODO figure out why body of dispatch_async is not being called
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//        code
+        // Insert/Update messages into Core Data.
+        // First we fetch existing messages to update
+        // Then we update/create any missing ones
 
-        ZMessage *msg = nil;
-        if (existingMsgIdx < [existing count])
-            msg = [existing objectAtIndex:existingMsgIdx];
+        // Extract message IDs to insert
+        // NOTE: messages MUST be already sorted in ascending order!
+        NSArray *ids = [messages valueForKey:@"id"];
 
-        // If we got a matching ZMessage for this ID, we want to update
-        if (msg && msgId == [msg.messageID intValue]) {
-//            NSLog(@"Updating EXISTING message: %i", msgId);
-
-            newMsgIdx++;
-            existingMsgIdx++;
-        } else {
-            // Otherwise this message is NOT in Core Data, so insert and move to the next new message
-//            NSLog(@"Inserting NEW MESSAGE: %i", msgId);
-            msg = [NSEntityDescription insertNewObjectForEntityForName:@"ZMessage" inManagedObjectContext:[self.appDelegate managedObjectContext]];
-            msg.messageID = @(msgId);
-
-            newMsgIdx++;
+        // Extract messages that already exist, sorted ascending
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ZMessage"];
+        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(messageID IN %@)", ids];
+        fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"messageID" ascending:YES]];
+        NSError *error = nil;
+        NSArray *existing = [[self.appDelegate managedObjectContext] executeFetchRequest:fetchRequest error:&error];
+        if (error) {
+            NSLog(@"Error fetching existing messages in insertMessages: %@ %@", [error localizedDescription], [error userInfo]);
+            return;
         }
 
-        NSArray *stringProperties = @[@"content", @"avatar_url", @"subject", @"type"];
-        for (NSString *prop in stringProperties) {
-            // Use KVC to set the property value by the string name
-            [msg setValue:[msgDict valueForKey:prop] forKey:prop];
+        // Now we have a list of (sorted) new IDs and existing ZMessages. Walk through them in order and insert/update
+        int newMsgIdx = 0, existingMsgIdx = 0;
+
+        NSMutableArray *zmessages = [[NSMutableArray alloc] init];
+        while (newMsgIdx < [ids count]) {
+            int msgId = [[ids objectAtIndex:newMsgIdx] intValue];
+            RawMessage *rawMsg = [rawMessagesDict objectForKey:@(msgId)];
+
+            ZMessage *msg = nil;
+            if (existingMsgIdx < [existing count])
+                msg = [existing objectAtIndex:existingMsgIdx];
+
+            // If we got a matching ZMessage for this ID, we want to update
+            if (msg && msgId == [msg.messageID intValue]) {
+                newMsgIdx++;
+                existingMsgIdx++;
+            } else {
+                // Otherwise this message is NOT in Core Data, so insert and move to the next new message
+                msg = [NSEntityDescription insertNewObjectForEntityForName:@"ZMessage" inManagedObjectContext:[self.appDelegate managedObjectContext]];
+                msg.messageID = @(msgId);
+
+                newMsgIdx++;
+            }
+
+            msg.content = rawMsg.content;
+            msg.avatar_url = rawMsg.avatar_url;
+            msg.subject = rawMsg.subject;
+            msg.type = rawMsg.type;
+            msg.timestamp = rawMsg.timestamp;
+            msg.pm_recipients = rawMsg.pm_recipients;
+            msg.sender = rawMsg.sender;
+            msg.stream_recipient = rawMsg.stream_recipient;
+            msg.subscription = rawMsg.subscription;
+
+            [zmessages addObject:msg];
         }
-        msg.timestamp = [NSDate dateWithTimeIntervalSince1970:[[msgDict objectForKey:@"timestamp"] intValue]];
 
-        if ([msg.type isEqualToString:@"stream"]) {
-            msg.stream_recipient = [msgDict valueForKey:@"display_recipient"];
-            msg.subscription = [self subscriptionForName:msg.stream_recipient];
-        } else {
-            msg.stream_recipient = @"";
+        error = nil;
+        [[self.appDelegate managedObjectContext] save:&error];
+        if (error) {
+            NSLog(@"Error saving new messages: %@ %@", [error localizedDescription], [error userInfo]);
+        }
 
-            NSArray *involved_people = [msgDict objectForKey:@"display_recipient"];
-            for (NSDictionary *person in involved_people) {
-                ZUser *recipient  = [self addPerson:person andSave:NO];
+//    });
+}
 
-                if (recipient) {
-                    [msg addPm_recipientsObject:recipient];
-                }
+
+- (RawMessage *)rawMessageFromJSON:(NSDictionary *)msgDict
+{
+    RawMessage *msg = [[RawMessage alloc] init];
+
+    NSArray *stringProperties = @[@"content", @"avatar_url", @"subject", @"type"];
+    for (NSString *prop in stringProperties) {
+        // Use KVC to set the property value by the string name
+        [msg setValue:[msgDict valueForKey:prop] forKey:prop];
+    }
+    msg.timestamp = [NSDate dateWithTimeIntervalSince1970:[[msgDict objectForKey:@"timestamp"] intValue]];
+    msg.messageID = [NSNumber numberWithInteger:[[msgDict objectForKey:@"id"] integerValue]];
+
+    if ([msg.type isEqualToString:@"stream"]) {
+        msg.stream_recipient = [msgDict valueForKey:@"display_recipient"];
+        msg.subscription = [self subscriptionForName:msg.stream_recipient];
+    } else {
+        msg.stream_recipient = @"";
+
+        NSArray *involved_people = [msgDict objectForKey:@"display_recipient"];
+        for (NSDictionary *person in involved_people) {
+            ZUser *recipient  = [self addPerson:person andSave:YES];
+
+            if (recipient) {
+                [[msg pm_recipients] addObject:recipient];
             }
         }
-
-        if ([msgDict objectForKey:@"sender_id"]) {
-            NSDictionary *senderDict = @{@"full_name": [msgDict objectForKey:@"sender_full_name"],
-                                         @"email": [msgDict objectForKey:@"sender_email"],
-                                         @"id": [msgDict objectForKey:@"sender_id"],
-                                         @"avatar_url": [msgDict objectForKey:@"avatar_url"]};
-            ZUser *sender = [self addPerson:senderDict andSave:NO];
-            msg.sender = sender;
-        }
     }
 
-    error = nil;
-    [[self.appDelegate managedObjectContext] save:&error];
-    if (error) {
-        NSLog(@"Error saving new messages: %@ %@", [error localizedDescription], [error userInfo]);
+    if ([msgDict objectForKey:@"sender_id"]) {
+        NSDictionary *senderDict = @{@"full_name": [msgDict objectForKey:@"sender_full_name"],
+                                     @"email": [msgDict objectForKey:@"sender_email"],
+                                     @"id": [msgDict objectForKey:@"sender_id"],
+                                     @"avatar_url": [msgDict objectForKey:@"avatar_url"]};
+        ZUser *sender = [self addPerson:senderDict andSave:NO];
+        msg.sender = sender;
     }
+
+    return msg;
 }
 
 - (ZUser *)addPerson:(NSDictionary *)personDict andSave:(BOOL)save
@@ -624,30 +748,20 @@
             return nil;
         }
     }
-    
+
     return user;
 }
 
-#pragma mark - Core Data Getters
-- (ZMessage *)newestMessage
+- (NSArray *)rawMessagesFromManaged:(NSArray *)messages
 {
-    // Fetch the newest message
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ZMessage"];
-    fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"messageID" ascending:NO]];
-    fetchRequest.fetchLimit = 1;
-
-    NSError *error = nil;
-    NSArray *results = [[self.appDelegate managedObjectContext] executeFetchRequest:fetchRequest error:&error];
-    if (error) {
-        NSLog(@"Error fetching newest message: %@, %@", [error localizedDescription], [error userInfo]);
-        return nil;
-    } else if ([results count] < 1) {
-        NSLog(@"No newest message yet");
-        return nil;
+    NSMutableArray *rawMessages = [[NSMutableArray alloc] init];
+    for (ZMessage *msg in messages) {
+        [rawMessages addObject:[RawMessage fromZMessage:msg]];
     }
-
-    return [results objectAtIndex:0];
+    return rawMessages;
 }
+
+#pragma mark - Core Data Getters
 
 - (UIColor *)streamColor:(NSString *)name withDefault:(UIColor *)defaultColor {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ZSubscription"];

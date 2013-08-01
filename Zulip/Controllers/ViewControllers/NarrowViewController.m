@@ -32,6 +32,11 @@
     [self initialPopulate];
 }
 
+- (void)initialPopulate
+{
+
+}
+
 #pragma mark - StreamViewControllerDelegate
 
 - (NSString *)cacheName

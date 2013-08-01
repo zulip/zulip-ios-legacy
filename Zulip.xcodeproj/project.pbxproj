@@ -46,6 +46,7 @@
 		B3F5629517A81C49004B185A /* SidebarStreamCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3F5629417A81C49004B185A /* SidebarStreamCell.xib */; };
 		B3F5629817A84FD5004B185A /* NarrowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F5629717A84FD5004B185A /* NarrowViewController.m */; };
 		B3F5629A17A8674B004B185A /* SidebarStreamsHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3F5629917A8674B004B185A /* SidebarStreamsHeader.xib */; };
+		B3F5629D17A9A4EE004B185A /* RawMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F5629C17A9A4EE004B185A /* RawMessage.m */; };
 		C31673851620DB6B00CE9FE5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673841620DB6B00CE9FE5 /* UIKit.framework */; };
 		C31673871620DB6B00CE9FE5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673861620DB6B00CE9FE5 /* Foundation.framework */; };
 		C31673891620DB6B00CE9FE5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673881620DB6B00CE9FE5 /* CoreGraphics.framework */; };
@@ -144,6 +145,8 @@
 		B3F5629617A84FD5004B185A /* NarrowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NarrowViewController.h; path = Controllers/ViewControllers/NarrowViewController.h; sourceTree = "<group>"; };
 		B3F5629717A84FD5004B185A /* NarrowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NarrowViewController.m; path = Controllers/ViewControllers/NarrowViewController.m; sourceTree = "<group>"; };
 		B3F5629917A8674B004B185A /* SidebarStreamsHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SidebarStreamsHeader.xib; path = Views/SidebarStreamsHeader.xib; sourceTree = "<group>"; };
+		B3F5629B17A9A4EE004B185A /* RawMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RawMessage.h; path = Models/RawMessage.h; sourceTree = "<group>"; };
+		B3F5629C17A9A4EE004B185A /* RawMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RawMessage.m; path = Models/RawMessage.m; sourceTree = "<group>"; };
 		C31673801620DB6B00CE9FE5 /* Zulip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Zulip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C31673841620DB6B00CE9FE5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C31673861620DB6B00CE9FE5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -306,6 +309,8 @@
 				B351823617A1B20B00B41D75 /* ZMessage.m */,
 				B351822F17A1B20A00B41D75 /* ZSubscription.h */,
 				B351823017A1B20A00B41D75 /* ZSubscription.m */,
+				B3F5629B17A9A4EE004B185A /* RawMessage.h */,
+				B3F5629C17A9A4EE004B185A /* RawMessage.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -623,6 +628,7 @@
 				B3F5628E17A80804004B185A /* StreamsSidebarController.m in Sources */,
 				B3F5629317A81C37004B185A /* SidebarStreamCell.m in Sources */,
 				B3F5629817A84FD5004B185A /* NarrowViewController.m in Sources */,
+				B3F5629D17A9A4EE004B185A /* RawMessage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

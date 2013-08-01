@@ -35,7 +35,48 @@
 }
 
 
+- (void)initialPopulate
+{
+    // Clear any messages first
+    if ([self.messages count]) {
+        [self clearMessages];
+    }
+
+    // Load initial set of messages
+    NSLog(@"Initially populating!");
+    [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[[ZulipAPIController sharedInstance] pointer]
+                                                           before:12
+                                                            after:0
+                                                        withQuery:nil
+                                                             opts:@{@"fetch_until_latest": @(YES)}
+                                                  completionBlock:^(NSArray *messages) {
+                                                      NSLog(@"Initially loaded %i messages!", [messages count]);
+
+                                                      [self loadMessages:messages];
+                                                  }];
+}
+
+- (void)resumePopulate
+{
+    NSLog(@"Resuming populating!");
+    RawMessage *latest = [[self messages] lastObject];
+    [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[latest.messageID intValue] + 1
+                                                           before:0
+                                                            after:20
+                                                        withQuery:nil
+                                                             opts:@{}
+                                                  completionBlock:^(NSArray *messages) {
+                                                      NSLog(@"Resuming and fetched loaded %i new messages!", [messages count]);
+
+                                                      [self loadMessages:messages];
+                                                  }];
+}
+
+
 - (void)updatePointer {
+    if ([self.tableView.visibleCells count] == 0)
+        return;
+
     UITableViewCell *cell = [self.tableView.visibleCells objectAtIndex:0];
     if (!cell)
         return;
@@ -44,7 +85,7 @@
     if (!indexPath)
         return;
 
-    ZMessage *message = (ZMessage *)[self.fetchedResultsController objectAtIndexPath:indexPath];
+    RawMessage *message = [self.messages objectAtIndex:indexPath.row];
 
     self.scrollToPointer = [message.messageID longValue];
     [[ZulipAPIController sharedInstance] setPointer:[message.messageID longValue]];
@@ -86,9 +127,9 @@
     }
 }
 
-- (NSString *)cacheName
+- (BOOL)acceptsMessage:(RawMessage *)message
 {
-    return @"HomeMessages";
+    return message.subscription && [message.subscription.in_home_view boolValue];
 }
 
 #pragma mark - UITableView
@@ -104,6 +145,8 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
+    [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+
     if ([keyPath isEqualToString:@"pointer"]) {
         long old = [[change objectForKey:NSKeyValueChangeOldKey] longValue];
         long new = [[change objectForKey:NSKeyValueChangeNewKey] longValue];

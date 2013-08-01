@@ -15,7 +15,7 @@
     return self;
 }
 
-- (void)setMessage:(ZMessage *)message
+- (void)setMessage:(RawMessage *)message
 {
     self.type = message.type;
 
@@ -68,7 +68,7 @@
     }
 }
 
-+ (CGFloat)heightForCellWithMessage:(ZMessage *)message
++ (CGFloat)heightForCellWithMessage:(RawMessage *)message
 {
     NSString *cellText = [message valueForKey:@"content"];
     UIFont *cellFont = [UIFont systemFontOfSize:12];

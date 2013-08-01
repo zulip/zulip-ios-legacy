@@ -1,14 +1,14 @@
 #import <UIKit/UIKit.h>
 
-#import "ZMessage.h"
+#import "RawMessage.h"
 
 @interface MessageCell : UITableViewCell
 
-- (void)setMessage:(ZMessage *)message;
+- (void)setMessage:(RawMessage *)message;
 - (void)willBeDisplayed;
 
 + (NSString *)reuseIdentifier;
-+ (CGFloat)heightForCellWithMessage:(ZMessage *)message;
++ (CGFloat)heightForCellWithMessage:(RawMessage *)message;
 
 @property (strong, nonatomic) IBOutlet UILabel *header;
 @property (strong, nonatomic) IBOutlet UILabel *headerBar;
