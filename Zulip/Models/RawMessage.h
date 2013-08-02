@@ -34,8 +34,13 @@
 @property (nonatomic, retain) NSMutableSet *pm_recipients;
 @property (nonatomic, retain) ZUser *sender;
 @property (nonatomic, retain) ZSubscription *subscription;
+@property (nonatomic, retain) NSArray *messageFlags;
 
 - (void)save;
+
+// Flag specific
+- (BOOL)read;
+- (void)setRead:(BOOL)unread;
 
 + (RawMessage *)allocFromZMessage:(ZMessage *)message;
 

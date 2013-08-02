@@ -2,7 +2,7 @@
 //  ZMessage.m
 //  Zulip
 //
-//  Created by Leonardo Franchi on 7/25/13.
+//  Created by Leonardo Franchi on 8/2/13.
 //
 //
 
@@ -13,15 +13,41 @@
 
 @implementation ZMessage
 
-@dynamic content;
 @dynamic avatar_url;
+@dynamic content;
 @dynamic messageID;
 @dynamic stream_recipient;
 @dynamic subject;
 @dynamic timestamp;
 @dynamic type;
+@dynamic flagData;
 @dynamic pm_recipients;
 @dynamic sender;
 @dynamic subscription;
+
+- (NSArray *)messageFlags
+{
+    if (!self.flagData) {
+        return @[];
+    }
+    
+    return [NSKeyedUnarchiver unarchiveObjectWithData:self.flagData];
+}
+
+- (void)setMessageFlags:(NSArray *)flags
+{
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:flags];
+    self.flagData = data;
+}
+
+- (void)addMessageFlag:(NSString *)flag
+{
+    NSMutableArray *new_flags = [NSMutableArray arrayWithArray:[NSKeyedUnarchiver unarchiveObjectWithData:self.flagData]];
+    [new_flags addObject:flag];
+
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:new_flags];
+
+    self.flagData = data;
+}
 
 @end

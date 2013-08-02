@@ -55,6 +55,8 @@
 		B3F562B317ABEB85004B185A /* SidebarStreamsHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F562B217ABEB85004B185A /* SidebarStreamsHeader.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		B3F562B617ABFD5C004B185A /* my_avatar_placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = B3F562B417ABFD5C004B185A /* my_avatar_placeholder.png */; };
 		B3F562B717ABFD5C004B185A /* my_avatar_placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B3F562B517ABFD5C004B185A /* my_avatar_placeholder@2x.png */; };
+		B3F562BE17AC30BC004B185A /* ZMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F562BD17AC30BC004B185A /* ZMessage.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		B3F562C117AC3C65004B185A /* UnreadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F562C017AC3C65004B185A /* UnreadManager.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		C31673851620DB6B00CE9FE5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673841620DB6B00CE9FE5 /* UIKit.framework */; };
 		C31673871620DB6B00CE9FE5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673861620DB6B00CE9FE5 /* Foundation.framework */; };
 		C31673891620DB6B00CE9FE5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673881620DB6B00CE9FE5 /* CoreGraphics.framework */; };
@@ -102,8 +104,6 @@
 		B34697C417A020D1006D0E9B /* ZulipAPIController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZulipAPIController.m; path = Controllers/ZulipAPIController.m; sourceTree = "<group>"; };
 		B351822F17A1B20A00B41D75 /* ZSubscription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZSubscription.h; path = Models/ZSubscription.h; sourceTree = "<group>"; };
 		B351823017A1B20A00B41D75 /* ZSubscription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZSubscription.m; path = Models/ZSubscription.m; sourceTree = "<group>"; };
-		B351823517A1B20B00B41D75 /* ZMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZMessage.h; path = Models/ZMessage.h; sourceTree = "<group>"; };
-		B351823617A1B20B00B41D75 /* ZMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZMessage.m; path = Models/ZMessage.m; sourceTree = "<group>"; };
 		B3733CCB1778C75300714B6E /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "Resources/Default-568h@2x.png"; sourceTree = "<group>"; };
 		B3733CCC1778C75300714B6E /* glyphicons_003_user.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = glyphicons_003_user.png; path = Resources/glyphicons_003_user.png; sourceTree = "<group>"; };
 		B3733CCD1778C75300714B6E /* glyphicons_355_bullhorn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = glyphicons_355_bullhorn.png; path = Resources/glyphicons_355_bullhorn.png; sourceTree = "<group>"; };
@@ -165,6 +165,10 @@
 		B3F562B217ABEB85004B185A /* SidebarStreamsHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SidebarStreamsHeader.m; path = Views/SidebarStreamsHeader.m; sourceTree = "<group>"; };
 		B3F562B417ABFD5C004B185A /* my_avatar_placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = my_avatar_placeholder.png; path = Resources/my_avatar_placeholder.png; sourceTree = "<group>"; };
 		B3F562B517ABFD5C004B185A /* my_avatar_placeholder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "my_avatar_placeholder@2x.png"; path = "Resources/my_avatar_placeholder@2x.png"; sourceTree = "<group>"; };
+		B3F562BC17AC30BC004B185A /* ZMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZMessage.h; path = Models/ZMessage.h; sourceTree = "<group>"; };
+		B3F562BD17AC30BC004B185A /* ZMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZMessage.m; path = Models/ZMessage.m; sourceTree = "<group>"; };
+		B3F562BF17AC3C65004B185A /* UnreadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UnreadManager.h; path = Controllers/UnreadManager.h; sourceTree = "<group>"; };
+		B3F562C017AC3C65004B185A /* UnreadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UnreadManager.m; path = Controllers/UnreadManager.m; sourceTree = "<group>"; };
 		C31673801620DB6B00CE9FE5 /* Zulip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Zulip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C31673841620DB6B00CE9FE5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C31673861620DB6B00CE9FE5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -292,6 +296,8 @@
 				B3CC439317A7F07000C8AF3F /* View Controllers */,
 				B34697C317A020D1006D0E9B /* ZulipAPIController.h */,
 				B34697C417A020D1006D0E9B /* ZulipAPIController.m */,
+				B3F562BF17AC3C65004B185A /* UnreadManager.h */,
+				B3F562C017AC3C65004B185A /* UnreadManager.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -329,10 +335,10 @@
 			isa = PBXGroup;
 			children = (
 				B3766D3C179DDBE2005FB0D4 /* Zulip.xcdatamodeld */,
+				B3F562BC17AC30BC004B185A /* ZMessage.h */,
+				B3F562BD17AC30BC004B185A /* ZMessage.m */,
 				B3CC439017A701A900C8AF3F /* ZUser.h */,
 				B3CC439117A701A900C8AF3F /* ZUser.m */,
-				B351823517A1B20B00B41D75 /* ZMessage.h */,
-				B351823617A1B20B00B41D75 /* ZMessage.m */,
 				B351822F17A1B20A00B41D75 /* ZSubscription.h */,
 				B351823017A1B20A00B41D75 /* ZSubscription.m */,
 				B3F5629B17A9A4EE004B185A /* RawMessage.h */,
@@ -665,6 +671,8 @@
 				B3F5629D17A9A4EE004B185A /* RawMessage.m in Sources */,
 				B3F562A017AAAE5A004B185A /* NarrowOperators.m in Sources */,
 				B3F562B317ABEB85004B185A /* SidebarStreamsHeader.m in Sources */,
+				B3F562BE17AC30BC004B185A /* ZMessage.m in Sources */,
+				B3F562C117AC3C65004B185A /* UnreadManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

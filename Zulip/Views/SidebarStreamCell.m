@@ -10,6 +10,7 @@
 #import "ZulipAppDelegate.h"
 #import "ZulipAPIController.h"
 #import "UIColor+HexColor.h"
+#import "UnreadManager.h"
 
 @interface SidebarStreamCell ()
 @end
@@ -30,6 +31,9 @@
     _shortcut = shortcut;
     NarrowOperators *op = [[NarrowOperators alloc] init];
 
+    NSDictionary *unread_counts = [[[ZulipAPIController sharedInstance] unreadManager] unreadCounts];
+    int count = 0;
+
     switch (shortcut) {
         case HOME:
         {
@@ -38,8 +42,11 @@
             [op setInHomeView];
             UIImage *image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"home" ofType:@"png"]];
             self.gravatar.image = image;
-            break;
 
+            if ([unread_counts objectForKey:@"home"]) {
+                count = [[unread_counts objectForKey:@"home"] intValue];
+            }
+            break;
         }
         case PRIVATE_MESSAGES:
         {
@@ -48,11 +55,18 @@
 
             UIImage *image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"user" ofType:@"png"]];
             self.gravatar.image = image;
+
+            if ([unread_counts objectForKey:@"pms"]) {
+                count = [[unread_counts objectForKey:@"pms"] intValue];
+            }
             break;
         }
         default:
             break;
     }
+
+    [self setCount:count];
+    
     _narrow = op;
 }
 
@@ -69,7 +83,26 @@
     CGFloat size = CGRectGetHeight(self.gravatar.bounds);
     self.gravatar.image = [self streamColorSwatchWithSize:size andColor:subscription.color];
 
+    NSDictionary *unread_counts = [[[ZulipAPIController sharedInstance] unreadManager] unreadCounts];
+    int count = 0;
+    if ([unread_counts objectForKey:@"streams"]) {
+        NSDictionary *streams = [unread_counts objectForKey:@"streams"];
+        if ([streams objectForKey:subscription.name]) {
+            count = [[streams objectForKey:subscription.name] intValue];
+        }
+    }
+
+    [self setCount:count];
     [self setBackgroundIfCurrent];
+}
+
+- (void)setCount:(int)count
+{
+    if (count > 0) {
+        self.unread.text = [NSString stringWithFormat:@"%i", count];
+    } else {
+        self.unread.text = @"";
+    }
 }
 
 - (void)setBackgroundIfCurrent

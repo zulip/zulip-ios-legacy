@@ -3,6 +3,7 @@
     <entity name="ZMessage" representedClassName="ZMessage" syncable="YES">
         <attribute name="avatar_url" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="flagData" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="messageID" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="stream_recipient" attributeType="String" syncable="YES"/>
         <attribute name="subject" optional="YES" attributeType="String" syncable="YES"/>
@@ -31,8 +32,8 @@
         <relationship name="subscriptions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ZSubscription" inverseName="subscribers" inverseEntity="ZSubscription" syncable="YES"/>
     </entity>
     <elements>
-        <element name="ZMessage" positionX="124" positionY="167" width="128" height="195"/>
-        <element name="ZSubscription" positionX="144" positionY="450" width="135" height="148"/>
+        <element name="ZMessage" positionX="124" positionY="167" width="128" height="210"/>
+        <element name="ZSubscription" positionX="144" positionY="450" width="135" height="150"/>
         <element name="ZUser" positionX="448" positionY="234" width="128" height="150"/>
     </elements>
 </model>

@@ -11,6 +11,7 @@
 
 #import "ZSubscription.h"
 #import "NarrowOperators.h"
+#import "UnreadManager.h"
 
 @class StreamViewController;
 
@@ -53,5 +54,7 @@ typedef void(^MessagesDelivered)(NSArray *messages);
 @property(nonatomic, retain) NSString *email;
 @property(nonatomic, retain) NSString *fullName;
 @property(nonatomic, retain) StreamViewController *homeViewController;
+@property(nonatomic, retain, readonly) UnreadManager *unreadManager;
+
 
 @end

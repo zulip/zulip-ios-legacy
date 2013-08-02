@@ -34,6 +34,11 @@
     self.home_view = YES;
 }
 
+- (BOOL)isHomeView
+{
+    return self.home_view;
+}
+
 - (void)setPrivateMessages
 {
     [self.subpredicates addObject:@[@"is", @"private"]];
@@ -84,6 +89,10 @@
         }
     }
 
+    if ([narrow count] == 0) {
+        return @"{}";
+    }
+    
     NSError *error = nil;
     NSData *data = [NSJSONSerialization dataWithJSONObject:narrow options:NSJSONWritingPrettyPrinted error:&error];
     if (error) {

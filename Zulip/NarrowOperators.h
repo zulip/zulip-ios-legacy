@@ -19,6 +19,8 @@
 - (void)setPrivateMessages;
 - (void)addStreamNarrow:(NSString *)streamName;
 
+- (BOOL)isHomeView;
+
 - (NSPredicate *)allocAsPredicate;
 - (NSString *)allocAsJSONPayload;
 - (BOOL)acceptsMessage:(RawMessage *)msg;

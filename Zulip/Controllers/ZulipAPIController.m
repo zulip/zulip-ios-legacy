@@ -11,6 +11,7 @@
 #import "ZulipAppDelegate.h"
 #import "StreamViewController.h"
 #import "RawMessage.h"
+#import "UnreadManager.h"
 
 #include "KeychainItemWrapper.h"
 
@@ -58,27 +59,29 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
 
 - (id) init
 {
-    id ret = [super init];
+    self = [super init];
 
-    [self clearSettings];
-    self.appDelegate = (ZulipAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (self) {
+        [self clearSettings];
+        self.appDelegate = (ZulipAppDelegate *)[[UIApplication sharedApplication] delegate];
+        _unreadManager = [[UnreadManager alloc] init];
 
-    KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc]
-                                         initWithIdentifier:@"ZulipLogin" accessGroup:nil];
-    NSString *storedApiKey = [keychainItem objectForKey:(__bridge id)kSecValueData];
-    NSString *storedEmail = [keychainItem objectForKey:(__bridge id)kSecAttrAccount];
+        KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc]
+                                             initWithIdentifier:@"ZulipLogin" accessGroup:nil];
+        NSString *storedApiKey = [keychainItem objectForKey:(__bridge id)kSecValueData];
+        NSString *storedEmail = [keychainItem objectForKey:(__bridge id)kSecAttrAccount];
 
-    if (![storedApiKey isEqualToString:@""]) {
-        // We have credentials, so try to reuse them. We may still have to log in if they are stale.
-        self.apiKey = storedApiKey;
-        self.email = storedEmail;
+        if (![storedApiKey isEqualToString:@""]) {
+            // We have credentials, so try to reuse them. We may still have to log in if they are stale.
+            self.apiKey = storedApiKey;
+            self.email = storedEmail;
 
-        [ZulipAPIClient setCredentials:self.email withAPIKey:self.apiKey];
-        [self registerForQueue];
+            [ZulipAPIClient setCredentials:self.email withAPIKey:self.apiKey];
+            [self registerForQueue];
+        }
     }
 
-
-    return ret;
+    return self;
 }
 
 - (void)clearSettings
@@ -386,8 +389,7 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
     [[ZulipAPIClient sharedClient] getPath:@"messages" parameters:fields success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *json = (NSDictionary *)responseObject;
 
-        BOOL not_in_narrow = narrow == nil;
-        [self insertMessages:[json objectForKey:@"messages"] saveToCoreData:not_in_narrow withCompletionBlock:block];
+        [self insertMessages:[json objectForKey:@"messages"] saveToCoreData:[narrow isHomeView] withCompletionBlock:block];
 
         if ([args valueForKey:@"fetch_until_latest"]) {
             NSDictionary *last = [[json objectForKey:@"messages"] lastObject];
@@ -664,6 +666,7 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
             msg.sender = rawMsg.sender;
             msg.stream_recipient = rawMsg.stream_recipient;
             msg.subscription = rawMsg.subscription;
+            [msg setMessageFlags:rawMsg.messageFlags];
 
             [zmessages addObject:msg];
         }
@@ -690,6 +693,8 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
     msg.timestamp = [NSDate dateWithTimeIntervalSince1970:[[msgDict objectForKey:@"timestamp"] intValue]];
     msg.messageID = [NSNumber numberWithInteger:[[msgDict objectForKey:@"id"] integerValue]];
 
+    [msg setMessageFlags:[msgDict objectForKey:@"flags"]];
+    
     if ([msg.type isEqualToString:@"stream"]) {
         msg.stream_recipient = [msgDict valueForKey:@"display_recipient"];
         msg.subscription = [self subscriptionForName:msg.stream_recipient];
@@ -715,6 +720,7 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
         msg.sender = sender;
     }
 
+    [self.unreadManager handleIncomingMessage:msg];
     return msg;
 }
 
@@ -768,7 +774,9 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
 {
     NSMutableArray *rawMessages = [[NSMutableArray alloc] init];
     for (ZMessage *msg in messages) {
-        [rawMessages addObject:[RawMessage allocFromZMessage:msg]];
+        RawMessage *raw = [RawMessage allocFromZMessage:msg];
+        [rawMessages addObject:raw];
+        [self.unreadManager handleIncomingMessage:raw];
     }
     return rawMessages;
 }

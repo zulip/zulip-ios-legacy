@@ -50,7 +50,7 @@
     [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[[ZulipAPIController sharedInstance] pointer]
                                                            before:12
                                                             after:0
-                                                    withOperators:nil
+                                                    withOperators:self.operators
                                                              opts:@{@"fetch_until_latest": @(YES)}
                                                   completionBlock:^(NSArray *messages) {
                                                       NSLog(@"Initially loaded %i messages!", [messages count]);
@@ -66,13 +66,23 @@
     [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[latest.messageID intValue] + 1
                                                            before:0
                                                             after:20
-                                                    withOperators:nil
+                                                    withOperators:self.operators
                                                              opts:@{}
                                                   completionBlock:^(NSArray *messages) {
                                                       NSLog(@"Resuming and fetched loaded %i new messages!", [messages count]);
 
                                                       [self loadMessages:messages];
                                                   }];
+}
+
+- (void)loadMessages:(NSArray *)messages
+{
+    // Do extra filtering to remove not-in-home-view stream messages here
+    // Messages we get out of the DB are already filtered, but we get all messages
+    // from the server (since there's no "in home view only" narrow
+
+    NSArray *filtered = [messages filteredArrayUsingPredicate:[self.operators allocAsPredicate]];
+    [super loadMessages:filtered];
 }
 
 

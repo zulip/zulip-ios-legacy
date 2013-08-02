@@ -2,7 +2,7 @@
 //  ZMessage.h
 //  Zulip
 //
-//  Created by Leonardo Franchi on 7/25/13.
+//  Created by Leonardo Franchi on 8/2/13.
 //
 //
 
@@ -13,13 +13,14 @@
 
 @interface ZMessage : NSManagedObject
 
-@property (nonatomic, retain) NSString * content;
 @property (nonatomic, retain) NSString * avatar_url;
+@property (nonatomic, retain) NSString * content;
 @property (nonatomic, retain) NSNumber * messageID;
 @property (nonatomic, retain) NSString * stream_recipient;
 @property (nonatomic, retain) NSString * subject;
 @property (nonatomic, retain) NSDate * timestamp;
 @property (nonatomic, retain) NSString * type;
+@property (nonatomic, retain) NSData * flagData;
 @property (nonatomic, retain) NSSet *pm_recipients;
 @property (nonatomic, retain) ZUser *sender;
 @property (nonatomic, retain) ZSubscription *subscription;
@@ -31,5 +32,11 @@
 - (void)removePm_recipientsObject:(ZUser *)value;
 - (void)addPm_recipients:(NSSet *)values;
 - (void)removePm_recipients:(NSSet *)values;
+
+// NOTE: These two methods below have been manually added,
+// when regenerating this file make sure to keep them!
+- (NSArray *)messageFlags;
+- (void)setMessageFlags:(NSArray *)flags;
+- (void)addMessageFlag:(NSString *)flag;
 
 @end

@@ -21,6 +21,26 @@
     return self;
 }
 
+- (BOOL)read
+{
+    return [self.messageFlags containsObject:@"read"];
+}
+
+- (void)setRead:(BOOL)read
+{
+    if ([self read] == read) {
+        return;
+    }
+
+    NSMutableArray *newFlags = [[NSMutableArray alloc] initWithArray:self.messageFlags];
+    if (read) {
+        [newFlags addObject:@"read"];
+    } else {
+        [newFlags removeObject:@"read"];
+    }
+    self.messageFlags = newFlags;
+}
+
 + (RawMessage *)allocFromZMessage:(ZMessage *)message
 {
     RawMessage *raw = [[RawMessage alloc] init];
@@ -33,6 +53,8 @@
     raw.timestamp = message.timestamp;
     raw.pm_recipients = [NSMutableSet setWithSet:message.pm_recipients];
     raw.sender = message.sender;
+    
+    raw.messageFlags = [message messageFlags];
 
     return raw;
 }
