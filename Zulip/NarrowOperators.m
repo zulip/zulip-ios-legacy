@@ -127,4 +127,24 @@
     [self.subpredicates removeAllObjects];
 }
 
+- (BOOL)isEqual:(id)other
+{
+    if (self == other) {
+        return YES;
+    } else if (!other || ![other isKindOfClass:[NarrowOperators class]]) {
+        return NO;
+    } else {
+        NarrowOperators *them = (NarrowOperators *)other;
+
+        if (self.home_view && them.home_view) {
+            return YES;
+        }
+        if ([[self allocAsJSONPayload] isEqualToString:[them allocAsJSONPayload]]) {
+            return YES;
+        }
+    }
+
+    return NO;
+}
+
 @end

@@ -9,16 +9,24 @@
 #import "StreamsSidebarController.h"
 #import "ZulipAPIController.h"
 #import "ZulipAppDelegate.h"
+#import "ZUser.h"
 
 // Various cells
 #import "SidebarStreamCell.h"
+#import "SidebarStreamsHeader.h"
 
 #import "UIViewController+JASidePanel.h"
+#import "UIImageView+AFNetworking.h"
+#import "UIColor+HexColor.h"
+
+#import <QuartzCore/QuartzCore.h>
 
 @interface StreamsSidebarController () <NSFetchedResultsControllerDelegate>
 
 @property (nonatomic, retain) NSFetchedResultsController *streamController;
-@property (nonatomic, retain) UIView *sidebarStreamsHeader;
+@property (nonatomic, retain) SidebarStreamsHeader *sidebarStreamsHeader;
+
+@property (nonatomic, retain) NSString *avatar_url;
 
 @end
 
@@ -26,9 +34,16 @@
 
 - (id)init
 {
-    id ret = [super init];
+    self = [super init];
 
-    return ret;
+    if (self) {
+        self.streamController = 0;
+        self.sidebarStreamsHeader = 0;
+
+        self.avatar_url = 0;
+    }
+
+    return self;
 }
 
 - (void)viewDidLoad
@@ -38,24 +53,42 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.backgroundColor = [UIColor colorWithHexString:@"#F4F5F4" defaultColor:[UIColor whiteColor]];
 
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"SidebarStreamsHeader" owner:self options:nil];
-    self.sidebarStreamsHeader = [nib objectAtIndex:0];
+    self.sidebarStreamsHeader = [[SidebarStreamsHeader alloc] init];
 
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ZSubscription"];
     fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]];
 
     ZulipAppDelegate *appDelegate = (ZulipAppDelegate *)[[UIApplication sharedApplication] delegate];
+
+    // TODO consider doing the fetching in the background? Requires a per-thread Managed Object Context
     self.streamController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                 managedObjectContext:[appDelegate managedObjectContext]
                                                                   sectionNameKeyPath:nil
                                                                            cacheName:@"StreamSidebarCache"];
+
     self.streamController.delegate = self;
 
     NSError *error = nil;
     [self.streamController performFetch:&error];
     if (error) {
         NSLog(@"Failed to fetch Subscriptions from core data: %@ %@", [error localizedDescription], [error userInfo]);
+    }
+
+    // Fetch user's gravatar if it's there
+    fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ZUser"];
+    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"email LIKE %@", [[ZulipAPIController sharedInstance] email]];
+    fetchRequest.fetchLimit = 1;
+
+    error = nil;
+    NSArray *results = [[appDelegate managedObjectContext] executeFetchRequest:fetchRequest error:&error];
+    if (error) {
+        NSLog(@"Failed to fetch user profile: %@ %@", [error localizedDescription], [error userInfo]);
+    }
+    if ([results count] > 0) {
+        ZUser *user = (ZUser *)[results objectAtIndex:0];
+        self.avatar_url = user.avatar_url;
     }
 }
 
@@ -103,6 +136,11 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.section == 1 ||
+        indexPath.section == 2) {
+        SidebarStreamCell *sidebarCell = (SidebarStreamCell *)cell;
+        [sidebarCell setBackgroundIfCurrent];
+    }
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -170,6 +208,27 @@
         case 0:
         {
             cell.textLabel.text = [[ZulipAPIController sharedInstance] fullName];
+            cell.textLabel.font = [UIFont boldSystemFontOfSize:14.0];
+            cell.opaque = NO;
+            cell.backgroundColor = [UIColor clearColor];
+
+            if (self.avatar_url) {
+                NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:self.avatar_url]];
+                [request addValue:@"image/*" forHTTPHeaderField:@"Accept"];
+
+                // Weak reference to UIImageView to avoid retain cycle with success block
+                __weak UIImageView *imageView = cell.imageView;
+
+                UIImage *placeholder = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"my_avatar_placeholder" ofType:@"png"]];
+                [cell.imageView setImageWithURLRequest:request placeholderImage:placeholder success:^(NSURLRequest *r, NSHTTPURLResponse *resp, UIImage *img) {
+                    imageView.image = img;
+                    // Mask to get rounded corners
+                    CALayer *layer = imageView.layer;
+                    [layer setMasksToBounds:YES];
+                    [layer setCornerRadius:20.0f];
+                } failure:nil];
+
+            }
             break;
         }
         case 1:
@@ -202,6 +261,7 @@
         {
             // Logout (Settings?)
             cell.textLabel.text = @"Switch User";
+            cell.textLabel.font = [UIFont boldSystemFontOfSize:12.0];
             break;
         }
         default:
@@ -226,7 +286,7 @@
 {
     // Stream section has a "Streams.." header, no other sections do.
     if (section == 2) {
-        return [self.sidebarStreamsHeader bounds].size.height;
+        return [self.sidebarStreamsHeader.view bounds].size.height;
     } else {
         return 0;
     }
@@ -235,7 +295,7 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     if (section == 2) {
-        return self.sidebarStreamsHeader;
+        return self.sidebarStreamsHeader.view;
     } else {
         return nil;
     }
@@ -266,6 +326,19 @@
 
         ZulipAppDelegate *delegate = (ZulipAppDelegate *)[[UIApplication sharedApplication] delegate];
         [[delegate navController] pushViewController:loginView animated:YES];
+    }
+
+    // Update selected state of all rows
+    for (int i = 0; i < [self tableView:self.tableView numberOfRowsInSection:1]; i++) {
+        SidebarStreamCell *cell = (SidebarStreamCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:1]];
+        [cell setBackgroundIfCurrent];
+    }
+    for (int i = 0; i < [self tableView:self.tableView numberOfRowsInSection:2]; i++) {
+        SidebarStreamCell *cell = (SidebarStreamCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:2]];
+        if (!cell) {
+            continue;
+        }
+        [cell setBackgroundIfCurrent];
     }
 }
 

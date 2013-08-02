@@ -7,11 +7,11 @@
 //
 
 #import "SidebarStreamCell.h"
+#import "ZulipAppDelegate.h"
 #import "ZulipAPIController.h"
 #import "UIColor+HexColor.h"
 
 @interface SidebarStreamCell ()
-
 @end
 
 @implementation SidebarStreamCell
@@ -66,16 +66,29 @@
     [op addStreamNarrow:subscription.name];
     _narrow = op;
 
-    // TODO contentScaleFactor is always 1.0?!
-    CGFloat size = (CGRectGetHeight(self.gravatar.bounds) - 6.0f) * self.contentScaleFactor; // padding
+    CGFloat size = CGRectGetHeight(self.gravatar.bounds);
     self.gravatar.image = [self streamColorSwatchWithSize:size andColor:subscription.color];
+
+    [self setBackgroundIfCurrent];
+}
+
+- (void)setBackgroundIfCurrent
+{
+    ZulipAppDelegate *delegate = (ZulipAppDelegate *)[[UIApplication sharedApplication] delegate];
+
+    if ([[delegate currentNarrow] isEqual:self.narrow]) {
+        // This is the current narrow, highlight it
+        self.backgroundColor = [UIColor colorWithHexString:@"#CCD6CC" defaultColor:[UIColor grayColor]];
+    } else {
+        self.backgroundColor = [UIColor whiteColor];
+    }
 }
 
 #pragma mark - Drawing Methods
 
 - (UIImage *)streamColorSwatchWithSize:(int)height andColor:(NSString *)colorRGB
 {
-    UIGraphicsBeginImageContext(CGSizeMake(height, height));
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(height, height), NO, 0.0f);
     CGContextRef context = UIGraphicsGetCurrentContext();
 	UIGraphicsPushContext(context);
 

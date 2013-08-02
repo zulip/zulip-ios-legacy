@@ -28,6 +28,7 @@
 // Narrowing
 - (void) narrowWithOperators:(NarrowOperators *)narrow;
 - (BOOL) isNarrowed;
+- (NarrowOperators *)currentNarrow;
 - (void) clearNarrowWithAnimation:(BOOL)animation;
 
 - (void) reloadCoreData;

@@ -25,4 +25,6 @@
 
 - (void)clear;
 
+- (BOOL)isEqual:(id)object;
+
 @end

@@ -118,6 +118,20 @@
 
 }
 
+- (NarrowOperators *)currentNarrow
+{
+    // There may be a full-screen window like the compose controller on top, so we find the top controller
+    // that is a message list.
+    NSArray *controllers = [self.navController viewControllers];
+    int i = [controllers count] - 1;
+    for (; i >= 0; i--) {
+        if ([[controllers objectAtIndex:i] isKindOfClass:[StreamViewController class]])
+            break;
+    }
+    StreamViewController *messageController = (StreamViewController *)[controllers objectAtIndex:i];
+    return messageController.operators;
+}
+
 - (void)clearNarrowWithAnimation:(BOOL)animated
 {
     if ([self isNarrowed]) {

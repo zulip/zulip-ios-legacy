@@ -26,4 +26,6 @@ typedef enum {
 @property (nonatomic, retain) ZSubscription *stream;
 @property (nonatomic, retain, readonly) NarrowOperators *narrow;
 
+- (void)setBackgroundIfCurrent;
+
 @end
