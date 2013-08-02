@@ -4,6 +4,8 @@
 #import "ZUser.h"
 #import "ZulipAPIController.h"
 
+#include <QuartzCore/QuartzCore.h>
+
 @implementation MessageCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -44,6 +46,15 @@
 
     // Asynchronously load gravatar if needed
     [self.gravatar setImageWithURL:[NSURL URLWithString:message.avatar_url]];
+
+    // Mask to get rounded corners
+    // TODO apparently this can be slow during animations?
+    // If it makes scrolling slow, switch over to manually
+    // creating the UIImage by applying a mask with Core Graphics
+    // instead of using the view's layer.
+    CALayer *layer = self.gravatar.layer;
+    [layer setMasksToBounds:YES];
+    [layer setCornerRadius:21.0f];
 
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
