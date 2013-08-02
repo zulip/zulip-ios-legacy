@@ -23,6 +23,6 @@
 - (void)resumePopulate;
 - (void)clearMessages;
 
--(void)loadMessages:(NSArray *)messages;
+- (void)loadMessages:(NSArray *)messages;
 
 @end

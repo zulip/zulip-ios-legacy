@@ -119,6 +119,9 @@ static NSData *AFSecKeyGetData(SecKeyRef key) {
 }
 #endif
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-function"
+
 static BOOL AFSecKeyIsEqualToKey(SecKeyRef key1, SecKeyRef key2) {
 #if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
     return [(__bridge id)key1 isEqual:(__bridge id)key2];
@@ -126,6 +129,8 @@ static BOOL AFSecKeyIsEqualToKey(SecKeyRef key1, SecKeyRef key2) {
     return [AFSecKeyGetData(key1) isEqual:AFSecKeyGetData(key2)];
 #endif
 }
+
+#pragma clang diagnostic pop
 
 @interface AFURLConnectionOperation ()
 @property (readwrite, nonatomic, assign) AFOperationState state;

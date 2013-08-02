@@ -193,7 +193,7 @@
     OSStatus junk = noErr;
     if (!keychainItemData)
     {
-        self.keychainItemData = [[NSMutableDictionary alloc] init];
+        self.keychainItemData = [[[NSMutableDictionary alloc] init] autorelease];
     }
     else if (keychainItemData)
     {
@@ -203,9 +203,9 @@
     }
     
     // Default attributes for keychain item.
-    [keychainItemData setObject:@"" forKey:(id)kSecAttrAccount];
-    [keychainItemData setObject:@"" forKey:(id)kSecAttrLabel];
-    [keychainItemData setObject:@"" forKey:(id)kSecAttrDescription];
+    [self.keychainItemData setObject:@"" forKey:(id)kSecAttrAccount];
+    [self.keychainItemData setObject:@"" forKey:(id)kSecAttrLabel];
+    [self.keychainItemData setObject:@"" forKey:(id)kSecAttrDescription];
     
     // Default data for keychain item.
     [keychainItemData setObject:@"" forKey:(id)kSecValueData];

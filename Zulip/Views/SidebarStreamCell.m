@@ -67,7 +67,7 @@
     _narrow = op;
 
     // TODO contentScaleFactor is always 1.0?!
-    int size = (self.gravatar.bounds.size.height - 6) * self.contentScaleFactor; // padding
+    CGFloat size = (CGRectGetHeight(self.gravatar.bounds) - 6.0f) * self.contentScaleFactor; // padding
     self.gravatar.image = [self streamColorSwatchWithSize:size andColor:subscription.color];
 }
 

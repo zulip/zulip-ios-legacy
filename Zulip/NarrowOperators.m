@@ -44,7 +44,7 @@
     [self.subpredicates addObject:@[@"stream", streamName]];
 }
 
-- (NSPredicate *)asPredicate
+- (NSPredicate *)allocAsPredicate
 {
     NSMutableArray *generated = [[NSMutableArray alloc] init];
 
@@ -67,7 +67,7 @@
     return [NSCompoundPredicate andPredicateWithSubpredicates:generated];
 }
 
-- (NSString *)asJSONPayload
+- (NSString *)allocAsJSONPayload
 {
     NSMutableArray *narrow = [[NSMutableArray alloc] init];
 

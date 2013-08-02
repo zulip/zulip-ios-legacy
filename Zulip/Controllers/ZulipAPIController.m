@@ -301,7 +301,7 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
     }
     NSMutableArray *predicates = [NSMutableArray arrayWithObject:predicate];
     if (operators != nil) {
-        [predicates addObject:[operators asPredicate]];
+        [predicates addObject:[operators allocAsPredicate]];
         predicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicates];
     }
 
@@ -372,7 +372,7 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
 
     NSString *narrowParam = @"{}";
     if (narrow)
-        narrowParam = [narrow asJSONPayload];
+        narrowParam = [narrow allocAsJSONPayload];
 
     NSDictionary *fields = @{@"apply_markdown": @"false",
                              @"anchor": @(anchor),
@@ -467,10 +467,10 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
         if (!self.backgrounded) {
             // TODO figure out why the dispatch_async body is never executed
 //            dispatch_async(dispatch_get_main_queue(), ^{
-                [self insertMessages:messages saveToCoreData:YES withCompletionBlock:^(NSArray *messages) {
+                [self insertMessages:messages saveToCoreData:YES withCompletionBlock:^(NSArray *finishedMessages) {
                     NSNotification *longPollMessages = [NSNotification notificationWithName:kLongPollMessageNotification
                                                                                      object:self
-                                                                                   userInfo:@{kLongPollMessageData: messages}];
+                                                                                   userInfo:@{kLongPollMessageData: finishedMessages}];
                     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
                     [notificationCenter postNotification:longPollMessages];
                 }];
@@ -632,7 +632,7 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
         }
 
         // Now we have a list of (sorted) new IDs and existing ZMessages. Walk through them in order and insert/update
-        int newMsgIdx = 0, existingMsgIdx = 0;
+        NSUInteger newMsgIdx = 0, existingMsgIdx = 0;
 
         NSMutableArray *zmessages = [[NSMutableArray alloc] init];
         while (newMsgIdx < [ids count]) {
@@ -768,7 +768,7 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
 {
     NSMutableArray *rawMessages = [[NSMutableArray alloc] init];
     for (ZMessage *msg in messages) {
-        [rawMessages addObject:[RawMessage fromZMessage:msg]];
+        [rawMessages addObject:[RawMessage allocFromZMessage:msg]];
     }
     return rawMessages;
 }

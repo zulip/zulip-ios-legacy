@@ -37,6 +37,6 @@
 
 - (void)save;
 
-+ (RawMessage *)fromZMessage:(ZMessage *)message;
++ (RawMessage *)allocFromZMessage:(ZMessage *)message;
 
 @end

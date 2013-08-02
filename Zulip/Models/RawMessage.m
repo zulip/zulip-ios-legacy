@@ -21,7 +21,7 @@
     return self;
 }
 
-+ (RawMessage *)fromZMessage:(ZMessage *)message
++ (RawMessage *)allocFromZMessage:(ZMessage *)message
 {
     RawMessage *raw = [[RawMessage alloc] init];
 

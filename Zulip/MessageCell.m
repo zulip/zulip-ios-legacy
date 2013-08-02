@@ -76,7 +76,7 @@
     CGSize labelSize = [cellText sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:UILineBreakModeWordWrap];
 
     // Full cell height of 77 - default content height of 36 = 41. + a little bit of bottom padding.
-    return fmax(77.0, labelSize.height + 45);
+    return fmaxf(77.0f, labelSize.height + 45.0f);
 }
 
 #pragma mark - UITableViewCell
@@ -100,9 +100,9 @@
 
 
 + (UIColor *)defaultStreamColor {
-    return [UIColor colorWithRed:187.0/255
-                           green:187.0/255
-                            blue:187.0/255
+    return [UIColor colorWithRed:187.0f/255
+                           green:187.0f/255
+                            blue:187.0f/255
                            alpha:1];
 }
 

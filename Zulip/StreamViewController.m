@@ -12,11 +12,9 @@
 @interface StreamViewController ()
 
 @property (nonatomic, retain) RawMessage *topRow;
-@property(assign, nonatomic) IBOutlet MessageCell *messageCell;
+@property (nonatomic, retain) IBOutlet MessageCell *messageCell;
 
-@property(nonatomic,retain) ZulipAppDelegate *delegate;
-
-- (void)refetchData;
+@property (nonatomic,retain) ZulipAppDelegate *delegate;
 
 @end
 
@@ -226,9 +224,9 @@
     [[self navigationController] pushViewController:composeView animated:YES];
 }
 
--(int) rowWithId: (int)messageId
+-(int)rowWithId:(int)messageId
 {
-    int i = 0;
+    NSUInteger i = 0;
     for (i = 0; i < [self.messages count]; i++) {
         RawMessage *message = [self messageAtIndexPath:[NSIndexPath indexPathForItem:i inSection:0]];
         if ([message.messageID intValue] == messageId) {
@@ -292,43 +290,6 @@
         [self performSelector:@selector(messagesDidChange)];
     }
 }
-
-//
-//- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-//    BOOL insertingAtTop = NO;
-//    CGPoint offset;
-//    CGFloat height = self.tableView.contentSize.height;
-//
-//    if ([_batchedInsertingRows count] > 0) {
-//        NSIndexPath *last = [_batchedInsertingRows lastObject];
-//        RawMessage *lastNewMsg = (RawMessage *)[self.fetchedResultsController objectAtIndexPath:last];
-//
-////        NSLog(@"Adding %i backlog with last new message; %i", [_batchedInsertingRows count], [lastNewMsg.messageID intValue]);
-//        if (lastNewMsg && lastNewMsg.messageID < self.topRow.messageID) {
-//            insertingAtTop = YES;
-//            [UIView setAnimationsEnabled:NO];
-//            offset = [self.tableView contentOffset];
-//        }
-//    }
-//
-//    [self.tableView reloadData];
-//
-//    if (insertingAtTop) {
-//        // If inserting at top, calculate the pixels height that was inserted, and scroll to the same position
-//        offset.y = self.tableView.contentSize.height - height;
-//        [self.tableView setContentOffset:offset];
-//        [UIView setAnimationsEnabled:YES];
-//
-//        int peek_height = 20;
-//        CGRect peek = CGRectMake(0, offset.y - peek_height, self.tableView.bounds.size.width, peek_height);
-//        [self.tableView scrollRectToVisible:peek animated:YES];
-//    }
-//
-//    [_batchedInsertingRows removeAllObjects];
-//    if ([self respondsToSelector:@selector(messagesDidChange)]) {
-//        [self performSelector:@selector(messagesDidChange)];
-//    }
-//}
 
 - (void)handleLongPollMessages:(NSArray *)messages
 {
