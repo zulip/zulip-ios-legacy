@@ -94,7 +94,7 @@
     }
     
     NSError *error = nil;
-    NSData *data = [NSJSONSerialization dataWithJSONObject:narrow options:NSJSONWritingPrettyPrinted error:&error];
+    NSData *data = [NSJSONSerialization dataWithJSONObject:narrow options:0 error:&error];
     if (error) {
         NSLog(@"Failed to convert narrow parmams to JSON: %@ %@", [error localizedDescription], [error userInfo]);
         return @"{}";

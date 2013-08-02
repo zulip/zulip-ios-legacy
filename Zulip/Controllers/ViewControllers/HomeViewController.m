@@ -11,7 +11,6 @@
 
 @interface HomeViewController ()
 
-@property(assign) BOOL initialLoad;
 @property(assign) long scrollToPointer;
 
 @end
@@ -22,7 +21,6 @@
 {
     id ret = [super init];
 
-    self.initialLoad = YES;
     self.scrollToPointer = -1;
 
     self.operators = [[NarrowOperators alloc] init];
@@ -129,12 +127,11 @@
     return [NSPredicate predicateWithFormat:@"( subscription == NIL ) OR ( subscription.in_home_view == YES )"];
 }
 
-- (void)messagesDidChange
+- (void)initiallyLoadedMessages
 {
     long pointer = [[ZulipAPIController sharedInstance] pointer];
 //    NSLog(@"Pointer is %li and rowWithID is %i", pointer, [self rowWithId:pointer]);
-    if (self.initialLoad && [self rowWithId:pointer] > -1) {
-        self.initialLoad = NO;
+    if ([self rowWithId:pointer] > -1) {
         NSLog(@"Done with initial load, scrolling to pointer");
         [self scrollToPointer:pointer animated:NO];
     }

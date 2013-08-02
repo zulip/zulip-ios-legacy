@@ -60,4 +60,21 @@
 }
 
 
+- (void)initiallyLoadedMessages
+{
+    NSIndexPath *unread = nil;
+    for (NSUInteger i = 0; i < [self.messages count]; i++) {
+        RawMessage *msg = [self.messages objectAtIndex:i];
+        if (![msg read]) {
+            unread = [NSIndexPath indexPathForRow:i inSection:0];
+            break;
+        }
+    }
+    if (!unread) {
+        unread = [NSIndexPath indexPathForRow:[self.messages count] - 1 inSection:0];
+    }
+    // Scroll to first unread in the middle of the screen
+    [self.tableView scrollToRowAtIndexPath:unread atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
+}
+
 @end

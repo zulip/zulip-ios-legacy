@@ -16,6 +16,8 @@
 
 @property (nonatomic,retain) ZulipAppDelegate *delegate;
 
+@property(assign) BOOL initialLoad;
+
 @end
 
 @implementation StreamViewController
@@ -26,6 +28,7 @@
     self.messages = [[NSMutableArray alloc] init];
     self.msgIds = [[NSMutableSet alloc] init];
     self.topRow = 0;
+    self.initialLoad = YES;
 
     // Listen to long polling messages
     [[NSNotificationCenter defaultCenter] addObserverForName:kLongPollMessageNotification
@@ -286,8 +289,10 @@
         [self.tableView scrollRectToVisible:peek animated:YES];
     }
 
-    if ([self respondsToSelector:@selector(messagesDidChange)]) {
-        [self performSelector:@selector(messagesDidChange)];
+    if (self.initialLoad &&
+        [self respondsToSelector:@selector(initiallyLoadedMessages)]) {
+        self.initialLoad = NO;
+        [self performSelector:@selector(initiallyLoadedMessages)];
     }
 }
 
