@@ -19,7 +19,7 @@
 
 - (id) init
 {
-    id ret = [super init];
+    self = [super init];
 
     self.scrollToPointer = -1;
 
@@ -32,7 +32,14 @@
                                              options:(NSKeyValueObservingOptionNew |
                                                       NSKeyValueObservingOptionOld)
                                              context:nil];
-    return ret;
+
+    [[NSNotificationCenter defaultCenter] addObserverForName:kInitialLoadFinished
+                                                      object:nil
+                                                       queue:[NSOperationQueue mainQueue]
+                                                  usingBlock:^(NSNotification *note) {
+                                                      [self initiallyLoadedMessages];
+                                                  }];
+    return self;
 }
 
 

@@ -42,6 +42,7 @@
 @property(assign) double lastRequestTime;
 
 @property(nonatomic, assign) BOOL waitingOnErrorRecovery;
+@property(nonatomic, assign) BOOL loadingInitialMessages;
 
 @property(nonatomic, retain) ZulipAppDelegate *appDelegate;
 @property(nonatomic, retain) AFHTTPRequestOperation *pollRequest;
@@ -49,6 +50,8 @@
 
 NSString * const kLongPollMessageNotification = @"LongPollMessages";
 NSString * const kLongPollMessageData = @"LongPollMessageData";
+NSString * const kInitialLoadFinished = @"InitialMessagesLoaded";
+
 
 @implementation ZulipAPIController
 
@@ -94,6 +97,7 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
     self.fullName = @"";
     self.backgrounded = NO;
     self.waitingOnErrorRecovery = NO;
+    self.loadingInitialMessages = YES;
     self.pointer = -1;
     self.lastEventId = -1;
     self.maxMessageId = -1;
@@ -412,6 +416,12 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
                                @"num_after": @(20),
                                @"fetch_until_latest": @(YES)};
         [self getOldMessages:args narrow:nil completionBlock:block];
+    } else if (self.loadingInitialMessages) {
+        self.loadingInitialMessages = NO;
+
+        NSNotification *message = [NSNotification notificationWithName:kInitialLoadFinished object:self];
+        NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+        [notificationCenter postNotification:message];
     }
 }
 - (void) startPoll {
@@ -694,7 +704,7 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
     msg.messageID = [NSNumber numberWithInteger:[[msgDict objectForKey:@"id"] integerValue]];
 
     [msg setMessageFlags:[msgDict objectForKey:@"flags"]];
-    
+
     if ([msg.type isEqualToString:@"stream"]) {
         msg.stream_recipient = [msgDict valueForKey:@"display_recipient"];
         msg.subscription = [self subscriptionForName:msg.stream_recipient];

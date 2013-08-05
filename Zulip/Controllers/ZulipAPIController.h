@@ -29,6 +29,7 @@
 extern NSString * const kLongPollMessageNotification;
 extern NSString * const kLongPollMessageData;
 
+extern NSString * const kInitialLoadFinished;
 
 // Callback with resulting RawMessage* from desired query
 typedef void(^MessagesDelivered)(NSArray *messages);

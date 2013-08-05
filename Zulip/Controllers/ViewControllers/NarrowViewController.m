@@ -51,6 +51,7 @@
                                                       NSLog(@"Initially loaded %i messages!", [messages count]);
 
                                                       [self loadMessages:messages];
+                                                      [self initiallyLoadedMessages];
                                                   }];
 }
 
@@ -74,6 +75,7 @@
         unread = [NSIndexPath indexPathForRow:[self.messages count] - 1 inSection:0];
     }
     // Scroll to first unread in the middle of the screen
+    NSLog(@"Scrolling to : %@", unread);
     [self.tableView scrollToRowAtIndexPath:unread atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
 }
 
