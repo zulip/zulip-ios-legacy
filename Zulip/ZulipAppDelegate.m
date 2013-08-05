@@ -66,7 +66,7 @@
     [NSURLCache setSharedURLCache:URLCache];
 
     [self.window makeKeyAndVisible];
-    
+
     return YES;
 }
 
@@ -78,6 +78,10 @@
 
 - (void)showErrorScreen:(NSString *)errorMessage
 {
+    if ([self.window.subviews containsObject:self.errorViewController.view]) {
+        return;
+    }
+
     [self.window addSubview:self.errorViewController.view];
     self.errorViewController.errorMessage.text = errorMessage;
 }
@@ -236,7 +240,7 @@
         NSLog(@"Error initializing persistent sqlite store! %@, %@", [error localizedDescription], [error userInfo]);
         abort();
     }
-    
+
     NSLog(@"SQLite URL: %@", storeURL);
 
     return __persistentStoreCoordinator;

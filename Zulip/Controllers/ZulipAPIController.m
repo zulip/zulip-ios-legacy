@@ -12,6 +12,7 @@
 #import "StreamViewController.h"
 #import "RawMessage.h"
 #import "UnreadManager.h"
+#import "LongPoller.h"
 
 #include "KeychainItemWrapper.h"
 
@@ -32,20 +33,14 @@
 @property (nonatomic, retain) NSString *clientID;
 @property (nonatomic, retain) NSString *apiURL;
 
-@property(nonatomic, retain) NSString *queueId;
-
-@property(assign) int lastEventId;
 @property(assign) int maxMessageId;
-@property(assign) int pollFailures;
 
-@property(assign) double backoff;
-@property(assign) double lastRequestTime;
-
-@property(nonatomic, assign) BOOL waitingOnErrorRecovery;
 @property(nonatomic, assign) BOOL loadingInitialMessages;
 
+@property(nonatomic, retain) LongPoller *messagesPoller;
+@property(nonatomic, retain) LongPoller *metadataPoller;
+
 @property(nonatomic, retain) ZulipAppDelegate *appDelegate;
-@property(nonatomic, retain) AFHTTPRequestOperation *pollRequest;
 @end
 
 NSString * const kLongPollMessageNotification = @"LongPollMessages";
@@ -74,13 +69,23 @@ NSString * const kInitialLoadFinished = @"InitialMessagesLoaded";
         NSString *storedApiKey = [keychainItem objectForKey:(__bridge id)kSecValueData];
         NSString *storedEmail = [keychainItem objectForKey:(__bridge id)kSecAttrAccount];
 
+        self.messagesPoller = [[LongPoller alloc] initWithInitialBlock:nil andEventBlock:^(NSArray *events) {
+            [self longPollMessagesReceived:events];
+        }];
+
+        self.metadataPoller = [[LongPoller alloc] initWithInitialBlock:^(NSDictionary *data) {
+            [self metadataLongPollInitialData:data];
+        } andEventBlock:^(NSArray *events) {
+            [self metadataPollEventsReceived:events];
+        }];
+
         if (![storedApiKey isEqualToString:@""]) {
             // We have credentials, so try to reuse them. We may still have to log in if they are stale.
             self.apiKey = storedApiKey;
             self.email = storedEmail;
 
             [ZulipAPIClient setCredentials:self.email withAPIKey:self.apiKey];
-            [self registerForQueue];
+            [self registerForQueues];
         }
     }
 
@@ -89,21 +94,15 @@ NSString * const kInitialLoadFinished = @"InitialMessagesLoaded";
 
 - (void)clearSettings
 {
-    self.queueId = @"";
     self.apiKey = @"";
     self.clientID = @"";
     self.apiURL = @"";
     self.email = @"";
     self.fullName = @"";
     self.backgrounded = NO;
-    self.waitingOnErrorRecovery = NO;
     self.loadingInitialMessages = YES;
     self.pointer = -1;
-    self.lastEventId = -1;
     self.maxMessageId = -1;
-    self.backoff = 0;
-    self.pollFailures = 0;
-    self.pollRequest = nil;
 }
 
 - (void)loadUserSettings
@@ -133,7 +132,7 @@ NSString * const kInitialLoadFinished = @"InitialMessagesLoaded";
         [keychainItem setObject:self.email forKey:(__bridge id)kSecAttrAccount];
 
         [ZulipAPIClient setCredentials:self.email withAPIKey:self.apiKey];
-        [self registerForQueue];
+        [self registerForQueues];
 
         result(YES);
     } failure: ^( AFHTTPRequestOperation *operation , NSError *error ){
@@ -180,51 +179,27 @@ NSString * const kInitialLoadFinished = @"InitialMessagesLoaded";
 - (void)reset
 {
     [self clearSettings];
-    [self registerForQueue];
+    [self registerForQueues];
 }
 
-- (void) registerForQueue
+- (void) registerForQueues
 {
-    // Register for events, then fetch messages
-    [[ZulipAPIClient sharedClient] postPath:@"register" parameters:@{@"apply_markdown": @"false"}
-    success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        self.pollFailures = 0;
+    // Register for messages only
+    NSArray *event_types = @[@"message"];
+    NSDictionary *messagesOpts = @{@"apply_markdown": @"false",
+                                   @"event_types": [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:event_types options:0 error:nil]
+                                                                         encoding:NSUTF8StringEncoding],};
 
-        NSDictionary *json = (NSDictionary *)responseObject;
+    [self.messagesPoller registerWithOptions:messagesOpts];
 
-        self.queueId = [json objectForKey:@"queue_id"];
-        self.lastEventId = [[json objectForKey:@"last_event_id"] intValue];
-        self.maxMessageId = [[json objectForKey:@"max_message_id"] intValue];
-        self.pointer = [[json objectForKey:@"pointer"] longValue];
+    // Metadata
+    event_types = @[@"pointer", @"realm_user", @"subscription"];
+    messagesOpts = @{@"apply_markdown": @"false",
+                     @"event_types": [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:event_types options:0 error:nil]
+                                                              encoding:NSUTF8StringEncoding],
+                     @"long_lived_queue": @"true"};
 
-        // Set the full name from realm_users
-        // TODO save the whole list properly and use it for presence information
-        NSArray *realm_users = [json objectForKey:@"realm_users"];
-        for (NSDictionary *person in realm_users) {
-            if ([[person objectForKey:@"email"] isEqualToString:self.email])
-                self.fullName = [person objectForKey:@"full_name"];
-        }
-
-        NSLog(@"Registered for queue, pointer is %li", self.pointer);
-        NSArray *subscriptions = [json objectForKey:@"subscriptions"];
-        [self loadSubscriptionData:subscriptions];
-
-        // Set up the home view
-        [self.homeViewController initialPopulate];
-
-        // Start long polling
-        [self startPoll];
-
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Failure doing registerForQueue...retrying %@", [error localizedDescription]);
-
-        if (self.pollFailures > 5) {
-            [self.appDelegate showErrorScreen:@"Unable to connect to Zulip."];
-
-        }
-        self.pollFailures++;
-        [self performSelector:@selector(registerForQueue) withObject:self afterDelay:2];
-    }];
+    [self.metadataPoller registerWithOptions:messagesOpts];
 }
 
 - (ZSubscription *) subscriptionForName:(NSString *)name
@@ -276,7 +251,7 @@ NSString * const kInitialLoadFinished = @"InitialMessagesLoaded";
     // Re-start polling
     if (_backgrounded && !backgrounded) {
         NSLog(@"Coming to the foreground!!");
-        [self startPoll];
+//        [self startPoll];
     }
     _backgrounded = backgrounded;
 }
@@ -424,124 +399,61 @@ NSString * const kInitialLoadFinished = @"InitialMessagesLoaded";
         [notificationCenter postNotification:message];
     }
 }
-- (void) startPoll {
-    if (self.pollRequest && [self.pollRequest isExecuting]) {
-        [self.pollRequest cancel];
-        self.pollRequest = 0;
-    }
 
-    [self performSelectorInBackground:@selector(longPoll) withObject: nil];
-}
-
-
-- (void) longPoll {
-    while (([[NSDate date] timeIntervalSince1970] - self.lastRequestTime) < self.backoff) {
-        [NSThread sleepForTimeInterval:.5];
-    }
-
-    self.lastRequestTime = [[NSDate date] timeIntervalSince1970];
-
-    NSDictionary *fields = @{@"apply_markdown": @"false",
-                             @"queue_id": self.queueId,
-                             @"last_event_id": @(self.lastEventId)};
-
-    NSMutableURLRequest *request = [[ZulipAPIClient sharedClient] requestWithMethod:@"GET" path:@"events" parameters:fields];
-    [request setTimeoutInterval:120];
-
-    self.pollRequest = [[ZulipAPIClient sharedClient] HTTPRequestOperationWithRequest:request
-                                                                               success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSDictionary *json = (NSDictionary *)responseObject;
-
-        if (self.waitingOnErrorRecovery == YES) {
-            self.waitingOnErrorRecovery = NO;
-            [self.appDelegate dismissErrorScreen];
-        }
-        self.backoff = 0;
-        self.pollFailures = 0;
-
-        NSMutableArray *messages = [[NSMutableArray alloc] init];
-        for (NSDictionary *event in [json objectForKey:@"events"]) {
-            NSString *eventType = [event objectForKey:@"type"];
-            if ([eventType isEqualToString:@"message"]) {
-                NSMutableDictionary *msg = [[event objectForKey:@"message"] mutableCopy];
-                [msg setValue:[event objectForKey:@"flags"] forKey:@"flags"];
-                [messages addObject:msg];
-            } else if ([eventType isEqualToString:@"pointer"]) {
-                long newPointer = [[event objectForKey:@"pointer"] longValue];
-
-                self.pointer = newPointer;
-            }
-
-            self.lastEventId = MAX(self.lastEventId, [[event objectForKey:@"id"] intValue]);
-        }
-
-        // If we're not hidden/in the background, load the new messages immediately
-        if (!self.backgrounded) {
-            // TODO figure out why the dispatch_async body is never executed
-//            dispatch_async(dispatch_get_main_queue(), ^{
-                [self insertMessages:messages saveToCoreData:YES withCompletionBlock:^(NSArray *finishedMessages) {
-                    NSNotification *longPollMessages = [NSNotification notificationWithName:kLongPollMessageNotification
-                                                                                     object:self
-                                                                                   userInfo:@{kLongPollMessageData: finishedMessages}];
-                    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-                    [notificationCenter postNotification:longPollMessages];
-                }];
-//            });
-        }
-
-        [self performSelectorInBackground:@selector(longPoll) withObject: nil];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Failed to do long poll: %@", [error localizedDescription]);
-
-        BOOL ignoreError = NO;
-
-        // TODO
-        // Ignore 504 errors from nginx, until I can figure out what they are
-        if ([[operation response] statusCode] == 504) {
-            ignoreError = YES;
-        }
-
-        if ([operation isKindOfClass:[AFJSONRequestOperation class]]) {
-            NSDictionary *json = (NSDictionary *)[(AFJSONRequestOperation *)operation responseJSON];
-            NSString *errorMsg = [json objectForKey:@"msg"];
-            if ([[operation response] statusCode] == 400 &&
-                ([errorMsg rangeOfString:@"too old"].location != NSNotFound ||
-                 [errorMsg rangeOfString:@"Bad event queue id"].location != NSNotFound)) {
-                    // Reset if we've been GCed, we need a new event queue and all that
-                    [self reset];
-                    return;
-                }
-        }
-
-        if (!ignoreError) {
-            self.pollFailures++;
-            [self adjustRequestBackoff];
-            if (self.pollFailures > 5 && self.waitingOnErrorRecovery == NO) {
-                self.waitingOnErrorRecovery = YES;
-                [self.appDelegate showErrorScreen:@"Error getting messages. Please try again in a few minutes."];
-            }
-        }
-
-        // Continue polling regardless
-        [self performSelectorInBackground:@selector(longPoll) withObject: nil];
-    }];
-
-    [[ZulipAPIClient sharedClient] enqueueHTTPRequestOperation:self.pollRequest];
-}
-
-- (void) adjustRequestBackoff
+- (void)metadataLongPollInitialData:(NSDictionary *)json
 {
-    if (self.backoff > 4) {
+    self.maxMessageId = [[json objectForKey:@"max_message_id"] intValue];
+    self.pointer = [[json objectForKey:@"pointer"] longValue];
+
+    // Set the full name from realm_users
+    // TODO save the whole list properly and use it for presence information
+    NSArray *realm_users = [json objectForKey:@"realm_users"];
+    for (NSDictionary *person in realm_users) {
+        if ([[person objectForKey:@"email"] isEqualToString:self.email])
+            self.fullName = [person objectForKey:@"full_name"];
+    }
+
+    NSLog(@"Registered for queue, pointer is %li", self.pointer);
+    NSArray *subscriptions = [json objectForKey:@"subscriptions"];
+    [self loadSubscriptionData:subscriptions];
+
+    // Set up the home view
+    [self.homeViewController initialPopulate];
+}
+
+- (void)longPollMessagesReceived:(NSArray *)events
+{
+    // TODO potentially still store if loaded when backgrounded
+    if (self.backgrounded) {
         return;
     }
 
-    if (self.backoff == 0) {
-        self.backoff = .8;
-    } else if (self.backoff < 10) {
-        self.backoff *= 2;
-    } else {
-        self.backoff = 10;
+    NSMutableArray *messages = [[NSMutableArray alloc] init];
+
+    for (NSDictionary *event in events) {
+        NSString *eventType = [event objectForKey:@"type"];
+        if ([eventType isEqualToString:@"message"]) {
+            NSMutableDictionary *msg = [[event objectForKey:@"message"] mutableCopy];
+            [msg setValue:[event objectForKey:@"flags"] forKey:@"flags"];
+            [messages addObject:msg];
+        }
     }
+
+        // TODO figure out why the dispatch_async body is never executed
+//            dispatch_async(dispatch_get_main_queue(), ^{
+    [self insertMessages:messages saveToCoreData:YES withCompletionBlock:^(NSArray *finishedMessages) {
+        NSNotification *longPollMessages = [NSNotification notificationWithName:kLongPollMessageNotification
+                                                                         object:self
+                                                                       userInfo:@{kLongPollMessageData: finishedMessages}];
+        NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+        [notificationCenter postNotification:longPollMessages];
+    }];
+//            });
+}
+
+- (void)metadataPollEventsReceived:(NSArray *)events
+{
+    NSLog(@"Got events: %@", events);
 }
 
 #pragma mark - Core Data Insertion

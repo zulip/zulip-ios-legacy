@@ -44,8 +44,6 @@ typedef void(^MessagesDelivered)(NSArray *messages);
 - (BOOL) loggedIn;
 - (NSString *)domain;
 
-// Registers for an event queue, and sets up initial data
-// Will begin long polling
 - (UIColor *)streamColor:(NSString *)name withDefault:(UIColor *)defaultColor;
 
 - (void)loadMessagesAroundAnchor:(int)anchor before:(int)before after:(int)after withOperators:(NarrowOperators *)operators opts:(NSDictionary *)opts completionBlock:(MessagesDelivered)block;
