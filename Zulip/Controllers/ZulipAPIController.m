@@ -13,6 +13,7 @@
 #import "RawMessage.h"
 #import "UnreadManager.h"
 #import "LongPoller.h"
+#import "RangePair.h"
 
 #include "KeychainItemWrapper.h"
 
@@ -42,6 +43,8 @@
 
 @property(nonatomic, retain) ZulipAppDelegate *appDelegate;
 
+@property(nonatomic, retain) NSMutableArray *rangePairs;
+
 // Messages that are loaded in a narrow (e.g. not saved to Core Data)
 // are kept here as a reference so we can find them by ID
 @property(nonatomic, retain) NSMutableDictionary *ephemeralMessages;
@@ -66,6 +69,8 @@ NSString * const kInitialLoadFinished = @"InitialMessagesLoaded";
 
     if (self) {
         [self clearSettings];
+        [self loadRangesFromFile];
+
         self.appDelegate = (ZulipAppDelegate *)[[UIApplication sharedApplication] delegate];
         _unreadManager = [[UnreadManager alloc] init];
 
@@ -110,6 +115,40 @@ NSString * const kInitialLoadFinished = @"InitialMessagesLoaded";
     self.loadingInitialMessages = YES;
     self.pointer = -1;
     self.maxMessageId = -1;
+    self.rangePairs = [[NSMutableArray alloc] init];
+}
+
+- (NSString *)rangesFilePath
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *filePath = [documentsDirectory stringByAppendingPathComponent:@"Zulip_MessageRanges.data"];
+
+    return filePath;
+}
+
+- (void)loadRangesFromFile
+{
+    NSString *filePath = [self rangesFilePath];
+
+    if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+        return;
+    }
+
+    NSData *data = [[NSFileManager defaultManager] contentsAtPath:filePath];
+    self.rangePairs = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+}
+
+- (void)saveRangesToFile
+{
+    NSString *filePath = [self rangesFilePath];
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.rangePairs];
+    [data writeToFile:filePath atomically:YES];
+}
+
+- (void)applicationWillTerminate
+{
+    [self saveRangesToFile];
 }
 
 - (void)loadUserSettings
@@ -255,9 +294,15 @@ NSString * const kInitialLoadFinished = @"InitialMessagesLoaded";
     if (_backgrounded == backgrounded)
         return;
 
+    // Save range pairs when backgrounded
+    if (backgrounded && !_backgrounded) {
+        [self saveRangesToFile];
+    }
+
     // Re-start polling
     if (_backgrounded && !backgrounded) {
         NSLog(@"Coming to the foreground!!");
+        [self loadRangesFromFile];
 //        [self startPoll];
     }
     _backgrounded = backgrounded;
@@ -295,7 +340,6 @@ NSString * const kInitialLoadFinished = @"InitialMessagesLoaded";
     }
 
     fetchRequest.predicate = predicate;
-
     fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"messageID" ascending:ascending]];
 
     NSError *error = nil;
@@ -303,6 +347,24 @@ NSString * const kInitialLoadFinished = @"InitialMessagesLoaded";
 
     if (ascending == NO) {
         results = [[results reverseObjectEnumerator] allObjects];
+    }
+
+    // We have a list of matching messages from Core Data, and we need to make sure there aren't missing messages
+    // on the server between them. We'll check if the first and last messages are within the same range
+    if ([results count] == fetchRequest.fetchLimit) {
+        ZMessage *first = [results objectAtIndex:0];
+        ZMessage *last = [results lastObject];
+
+        RangePair *firstRange = [RangePair getCurrentRangeOf:[first.messageID intValue] inRangePairs:self.rangePairs];
+        RangePair *lastRange = [RangePair getCurrentRangeOf:[first.messageID intValue] inRangePairs:self.rangePairs];
+
+        NSLog(@"Got first %@ and last %@ ranges for first fetched message %@ and lasdt fetched message %@", firstRange, lastRange, first, last);
+
+        if (![firstRange isEqual:lastRange]) {
+            NSLog(@"Got messages across range boundaries, refetching");
+        } else {
+            NSLog(@"No extra fetching required, using Core Data messages");
+        }
     }
 
     int messagesLeft = 0;
@@ -674,6 +736,13 @@ NSString * const kInitialLoadFinished = @"InitialMessagesLoaded";
             NSLog(@"Error saving new messages: %@ %@", [error localizedDescription], [error userInfo]);
         }
 
+        if ([rawMessages count] > 0) {
+            // Update our message range data structure
+            RawMessage *first = [rawMessages objectAtIndex:0];
+            RawMessage *last = [rawMessages lastObject];
+            RangePair *rangePair = [[RangePair alloc] initWithStart:[first.messageID intValue] andEnd:[last.messageID intValue]];
+            [RangePair extendRanges:self.rangePairs withRange:rangePair];
+        }
 //    });
 }
 

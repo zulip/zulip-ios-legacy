@@ -48,6 +48,8 @@ typedef void(^MessagesDelivered)(NSArray *messages);
 
 - (void)loadMessagesAroundAnchor:(int)anchor before:(int)before after:(int)after withOperators:(NarrowOperators *)operators opts:(NSDictionary *)opts completionBlock:(MessagesDelivered)block;
 
+- (void)applicationWillTerminate;
+
 @property(assign) long pointer;
 @property(assign) BOOL backgrounded;
 @property(nonatomic, retain) NSString *email;

@@ -185,6 +185,7 @@
      Save data if appropriate.
      See also applicationDidEnterBackground:.
      */
+    [[ZulipAPIController sharedInstance] applicationWillTerminate];
 }
 
 #pragma mark - Core Data

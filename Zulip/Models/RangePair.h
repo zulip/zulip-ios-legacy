@@ -8,6 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
-@interface RangePair : NSObject
+@interface RangePair : NSObject <NSCoding>
+
+@property NSUInteger left;
+@property NSUInteger right;
+
+- (id) initWithStart:(NSUInteger)theStart andEnd:(NSUInteger)theEnd;
+- (id) initForComparisonWith:(NSUInteger)messageID;
+
++ (void) extendRanges:(NSMutableArray *)rangePairs withRange:(RangePair*)newRange;
++ (RangePair*) getCurrentRangeOf:(NSUInteger)messageID inRangePairs:(NSArray *)rangePairs;
 
 @end
