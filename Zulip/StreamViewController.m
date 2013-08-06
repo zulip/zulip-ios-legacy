@@ -117,24 +117,58 @@
     [self performSelector:@selector(scrollViewDidEndScrollingAnimation:) withObject:nil afterDelay:0.3];
 }
 
+
+-(void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+{
+//    NSLog(@"WIll end at %f, height is %f", targetContentOffset->y, );
+    CGFloat bottom = self.tableView.contentSize.height - CGRectGetHeight(self.tableView.frame);
+
+    CGFloat bottomPrefetchPadding = 100;
+    if (targetContentOffset->y + bottomPrefetchPadding >= bottom) {
+        [self loadNewerMessages];
+    }
+}
+
 -(void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
-    if ([self.tableView contentOffset].y == 0 && [self.messages count] > 0) {
+    if ([self.tableView contentOffset].y < 0 && [self.messages count] > 0) {
         self.topRow = [self.messages objectAtIndex:0];
         [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[self.topRow.messageID intValue]
                                                                before:15
                                                                 after:0
                                                         withOperators:self.operators
-                                                                 opts:nil
                                                       completionBlock:^(NSArray *messages) {
               [self loadMessages: messages];
 
           }];
-//        [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[self.topRow.messageID intValue] before:15 after:0];
+
+        return;
+    }
+
+    CGFloat bottom = self.tableView.contentSize.height - CGRectGetHeight(self.tableView.frame);
+
+    CGFloat bottomPrefetchPadding = 100;
+    if (self.tableView.contentOffset.y + bottomPrefetchPadding >= bottom) {
+        [self loadNewerMessages];
     }
 }
 
+- (void)loadNewerMessages
+{
+    RawMessage *last = [self.messages lastObject];
+    if ([last.messageID longValue] < [ZulipAPIController sharedInstance].maxServerMessageId) {
+        NSLog(@"Scrolling to bottom and fetching more messages");
+        [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[[ZulipAPIController sharedInstance] pointer]
+                                                               before:0
+                                                                after:40
+                                                        withOperators:self.operators
+                                                      completionBlock:^(NSArray *newerMessages) {
+              NSLog(@"Initially loaded forward %i messages!", [newerMessages count]);
+              [self loadMessages:newerMessages];
+          }];
+    }
+}
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

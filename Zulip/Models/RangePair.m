@@ -24,9 +24,8 @@
 
 - (id) initForComparisonWith:(NSUInteger)messageID
 {
-    //omit checking for valid range
-    if (self = [super init])
-    {
+    // omit checking for valid range
+    if (self = [super init]) {
         self.left = messageID;
         self.right = messageID;
     }
@@ -37,12 +36,9 @@
 {
     self = [super init];
 
-    NSLog(@"Loading NSRangePair from coder");
     if (self) {
         self.left = [[aDecoder decodeObjectForKey:@"left"] unsignedIntegerValue];
         self.right = [[aDecoder decodeObjectForKey:@"right"] unsignedIntegerValue];
-
-        NSLog(@"Loaded: %i %i", self.left, self.right);
     }
 
     return self;
@@ -53,21 +49,21 @@
 
     // binary search for new.left in rangePairs.rights. Save that part of the array as "head"
     NSUInteger indexOfRangePairHead = [rangePairs indexOfObject:newRange inSortedRange:(NSRange){0, [rangePairs count]} options:NSBinarySearchingInsertionIndex|NSBinarySearchingFirstEqual usingComparator:^(RangePair * left, RangePair * right) {
-        if ([left right] < [right left]){
+        if (left.right < right.left) {
             return NSOrderedAscending;
         }
-        if ([left left] > [right right]){
+        if (left.left > right.right) {
             return NSOrderedDescending;
         }
         return NSOrderedSame;
     }];
 
     // binary search for new.right in rangePairs.lefts. Save that part of the array as "tail"
-    NSUInteger indexOfRangePairTail = [rangePairs indexOfObject:newRange inSortedRange:(NSRange){0, [rangePairs count]} options:NSBinarySearchingInsertionIndex|NSBinarySearchingLastEqual usingComparator:^(id left, id right) {
-        if ([left right] < [right left]){
+    NSUInteger indexOfRangePairTail = [rangePairs indexOfObject:newRange inSortedRange:(NSRange){0, [rangePairs count]} options:NSBinarySearchingInsertionIndex|NSBinarySearchingLastEqual usingComparator:^(RangePair *left, RangePair *right) {
+        if (left.right < right.left) {
             return NSOrderedAscending;
         }
-        if ([left left] > [right right]){
+        if (left.left > right.right) {
             return NSOrderedDescending;
         }
         return NSOrderedSame;
@@ -81,47 +77,41 @@
 
     [rangePairs removeAllObjects];
 
-    // if len(middle) == 0
-    if((indexOfRangePairTail) == (indexOfRangePairHead))
-    {
-        //rangePairs = head + [newRange] + tail;
-        [rangePairs addObjectsFromArray:head];
-        [rangePairs addObject:newRange];
-        [rangePairs addObjectsFromArray:tail];
-        return;
-    }
-    else{
-        for(NSUInteger i=0; i<[middle count]; ++i)
-        {
+    if(indexOfRangePairTail != indexOfRangePairHead) {
+        for (NSUInteger i=0; i<[middle count]; ++i) {
             newRange.left = MIN([middle[i] left], [newRange left]);
             newRange.right = MAX([middle[i] right], [newRange right]);
         }
     }
+
+    [rangePairs addObjectsFromArray:head];
+    [rangePairs addObject:newRange];
+    [rangePairs addObjectsFromArray:tail];
 }
 
 
 + (RangePair*) getCurrentRangeOf:(NSUInteger)messageID inRangePairs:(NSArray *)rangePairs
 {
     RangePair* messageRange = [[RangePair alloc] initForComparisonWith:messageID];
-    NSUInteger indexOfPossibleCurrentRange = [rangePairs indexOfObject:messageRange inSortedRange:(NSRange){0, [rangePairs count]} options:NSBinarySearchingInsertionIndex|NSBinarySearchingLastEqual usingComparator:^(RangePair * left, RangePair * right) {
-        if (left.right < right.left){
+    NSUInteger indexOfPossibleCurrentRange = [rangePairs indexOfObject:messageRange inSortedRange:(NSRange){0, [rangePairs count]} options:NSBinarySearchingInsertionIndex|NSBinarySearchingFirstEqual usingComparator:^(RangePair * left, RangePair * right) {
+        if (left.right < right.left) {
             return NSOrderedAscending;
         }
-        if (left.left > right.right){
+        if (left.left > right.right) {
             return NSOrderedDescending;
         }
         return NSOrderedSame;
     }];
-    if (indexOfPossibleCurrentRange == [rangePairs count]){
-        return Nil;
+    if (indexOfPossibleCurrentRange == [rangePairs count]) {
+        return nil;
     }
 
     RangePair* possibleCurrentRange = [rangePairs objectAtIndex:indexOfPossibleCurrentRange];
-    if(messageID >= possibleCurrentRange.left && messageID <= possibleCurrentRange.right){
+    if (messageID >= possibleCurrentRange.left && messageID <= possibleCurrentRange.right) {
         return possibleCurrentRange;
     }
 
-    return Nil;
+    return nil;
 }
 
 - (NSString *)description
@@ -133,8 +123,6 @@
 {
     [coder encodeObject:[NSNumber numberWithUnsignedInteger:self.left] forKey:@"left"];
     [coder encodeObject:[NSNumber numberWithUnsignedInteger:self.right] forKey:@"right"];
-
-    NSLog(@"Encoded range pair to coder!");
 }
 
 

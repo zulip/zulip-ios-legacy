@@ -46,7 +46,6 @@
                                                            before:12
                                                             after:0
                                                     withOperators:self.operators
-                                                             opts:@{}
                                                   completionBlock:^(NSArray *messages) {
                                                       NSLog(@"Initially loaded %i messages!", [messages count]);
 

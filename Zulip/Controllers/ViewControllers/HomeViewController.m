@@ -32,13 +32,6 @@
                                              options:(NSKeyValueObservingOptionNew |
                                                       NSKeyValueObservingOptionOld)
                                              context:nil];
-
-    [[NSNotificationCenter defaultCenter] addObserverForName:kInitialLoadFinished
-                                                      object:nil
-                                                       queue:[NSOperationQueue mainQueue]
-                                                  usingBlock:^(NSNotification *note) {
-                                                      [self initiallyLoadedMessages];
-                                                  }];
     return self;
 }
 
@@ -52,27 +45,41 @@
 
     // Load initial set of messages
     NSLog(@"Initially populating!");
-    [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[[ZulipAPIController sharedInstance] pointer]
-                                                           before:12
-                                                            after:0
-                                                    withOperators:self.operators
-                                                             opts:@{@"fetch_until_latest": @(YES)}
-                                                  completionBlock:^(NSArray *messages) {
-                                                      NSLog(@"Initially loaded %i messages!", [messages count]);
+    NSDictionary *args = @{@"anchor": @([ZulipAPIController sharedInstance].pointer),
+                           @"num_before": @(12),
+                           @"num_after": @(0)};
+    [[ZulipAPIController sharedInstance] getOldMessages:args narrow:self.operators completionBlock:^(NSArray *messages) {
+        [self loadMessages:messages];
+        [self initiallyLoadedMessages];
 
-                                                      [self loadMessages:messages];
-                                                  }];
+        // If there are more messages that the user hasn't seen yet, load **one** batch and then we'll load more as the user scrolls
+        // to the bottom
+        if ([self.messages count] == 0)
+            return;
+
+        RawMessage *last = [self.messages lastObject];
+        if ([last.messageID longValue] < [ZulipAPIController sharedInstance].maxServerMessageId) {
+            // More messages to load
+            [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[[ZulipAPIController sharedInstance] pointer]
+                                                                   before:0
+                                                                    after:20
+                                                            withOperators:self.operators
+                                                          completionBlock:^(NSArray *newerMessages) {
+                NSLog(@"Initially loaded forward %i messages!", [newerMessages count]);
+                [self loadMessages:newerMessages];
+            }];
+        }
+    }];
 }
 
 - (void)resumePopulate
 {
     NSLog(@"Resuming populating!");
     RawMessage *latest = [[self messages] lastObject];
-    [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[latest.messageID intValue] + 1
+    [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[latest.messageID longValue] + 1
                                                            before:0
                                                             after:20
                                                     withOperators:self.operators
-                                                             opts:@{}
                                                   completionBlock:^(NSArray *messages) {
                                                       NSLog(@"Resuming and fetched loaded %i new messages!", [messages count]);
 

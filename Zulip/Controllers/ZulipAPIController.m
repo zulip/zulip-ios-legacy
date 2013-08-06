@@ -1,4 +1,3 @@
-
 //  ZulipAPIController.m
 //  Zulip
 //
@@ -34,16 +33,15 @@
 @property (nonatomic, retain) NSString *clientID;
 @property (nonatomic, retain) NSString *apiURL;
 
-@property(assign) int maxMessageId;
+@property (assign) BOOL loadingInitialMessages;
+@property (assign) long maxLocalMessageId;
 
-@property(nonatomic, assign) BOOL loadingInitialMessages;
+@property (nonatomic, retain) LongPoller *messagesPoller;
+@property (nonatomic, retain) LongPoller *metadataPoller;
 
-@property(nonatomic, retain) LongPoller *messagesPoller;
-@property(nonatomic, retain) LongPoller *metadataPoller;
+@property (nonatomic, retain) ZulipAppDelegate *appDelegate;
 
-@property(nonatomic, retain) ZulipAppDelegate *appDelegate;
-
-@property(nonatomic, retain) NSMutableArray *rangePairs;
+@property (nonatomic, retain) NSMutableArray *rangePairs;
 
 // Messages that are loaded in a narrow (e.g. not saved to Core Data)
 // are kept here as a reference so we can find them by ID
@@ -53,7 +51,6 @@
 
 NSString * const kLongPollMessageNotification = @"LongPollMessages";
 NSString * const kLongPollMessageData = @"LongPollMessageData";
-NSString * const kInitialLoadFinished = @"InitialMessagesLoaded";
 
 
 @implementation ZulipAPIController
@@ -114,7 +111,8 @@ NSString * const kInitialLoadFinished = @"InitialMessagesLoaded";
     self.backgrounded = NO;
     self.loadingInitialMessages = YES;
     self.pointer = -1;
-    self.maxMessageId = -1;
+    self.maxServerMessageId = -1;
+    self.maxLocalMessageId = -1;
     self.rangePairs = [[NSMutableArray alloc] init];
 }
 
@@ -314,7 +312,6 @@ NSString * const kInitialLoadFinished = @"InitialMessagesLoaded";
                            before:(int)before
                             after:(int)after
                     withOperators:(NarrowOperators *)operators
-                             opts:(NSDictionary *)opts
                   completionBlock:(MessagesDelivered)block
 {
     // Try to load the desired messages, either from the cache or from the API
@@ -351,61 +348,42 @@ NSString * const kInitialLoadFinished = @"InitialMessagesLoaded";
 
     // We have a list of matching messages from Core Data, and we need to make sure there aren't missing messages
     // on the server between them. We'll check if the first and last messages are within the same range
-    if ([results count] == fetchRequest.fetchLimit) {
-        ZMessage *first = [results objectAtIndex:0];
-        ZMessage *last = [results lastObject];
 
-        RangePair *firstRange = [RangePair getCurrentRangeOf:[first.messageID intValue] inRangePairs:self.rangePairs];
-        RangePair *lastRange = [RangePair getCurrentRangeOf:[first.messageID intValue] inRangePairs:self.rangePairs];
+    BOOL needsServerFetch = NO;
 
-        NSLog(@"Got first %@ and last %@ ranges for first fetched message %@ and lasdt fetched message %@", firstRange, lastRange, first, last);
-
-        if (![firstRange isEqual:lastRange]) {
-            NSLog(@"Got messages across range boundaries, refetching");
-        } else {
-            NSLog(@"No extra fetching required, using Core Data messages");
-        }
-    }
-
-    int messagesLeft = 0;
     if (error) {
         NSLog(@"Error fetching results from Core Data for message request! %@ %@", [error localizedDescription], [error userInfo]);
     } else {
-        // If we got enough messages, return them directly from local cache
-        if ([results count] >= fetchRequest.fetchLimit) {
-            block([self rawMessagesFromManaged:results]);
+        if ([results count] == fetchRequest.fetchLimit) {
+            ZMessage *first = [results objectAtIndex:0];
+            ZMessage *last = [results lastObject];
 
-            if ([opts valueForKey:@"fetch_until_latest"]) {
-                ZMessage *last = [results lastObject];
-                [self fetchNewestMessages:block withNewestID:[last.messageID longValue] inNarrow:operators];
+            RangePair *firstRange = [RangePair getCurrentRangeOf:[first.messageID intValue] inRangePairs:self.rangePairs];
+            RangePair *lastRange = [RangePair getCurrentRangeOf:[last.messageID intValue] inRangePairs:self.rangePairs];
+
+            NSLog(@"Got first %@ and last %@ ranges for first fetched message %@ and lasdt fetched message %@", firstRange, lastRange, first, last);
+
+            if (!firstRange || !lastRange || ![firstRange isEqual:lastRange]) {
+                NSLog(@"Got messages across range boundaries, refetching");
+                needsServerFetch = YES;
+            } else {
+                NSLog(@"No extra fetching required, using Core Data messages");
+                needsServerFetch = NO;
             }
-            return;
-        } else {
-            messagesLeft = fetchRequest.fetchLimit - [results count];
-        }
-
-        // Send what we already fetched, then do an API query
-        if ([results count] > 0) {
-            block([self rawMessagesFromManaged:results]);
         }
     }
 
-    // Fetch what's left
-    if (before > 0) {
-        before = messagesLeft;
-    } else {
-        after = messagesLeft;
+
+    // If we got enough messages, return them directly from local cache
+    if (!needsServerFetch && [results count] >= fetchRequest.fetchLimit) {
+        block([self rawMessagesFromManaged:results]);
+        return;
     }
 
+    // Fetch messages, since we were not able to fulfill the request locally
     NSMutableDictionary *args = [[NSMutableDictionary alloc] initWithDictionary:@{@"anchor": @(anchor),
                                                                                   @"num_before": @(before),
                                                                                   @"num_after": @(after)}];
-    if (opts) {
-        for (NSString *key in opts) {
-            [args setObject:[opts objectForKey:key] forKey:key];
-        }
-    }
-
     [self getOldMessages:args narrow:operators completionBlock:block];
 }
 
@@ -438,35 +416,9 @@ NSString * const kInitialLoadFinished = @"InitialMessagesLoaded";
         NSDictionary *json = (NSDictionary *)responseObject;
 
         [self insertMessages:[json objectForKey:@"messages"] saveToCoreData:[narrow isHomeView] withCompletionBlock:block];
-
-        if ([args valueForKey:@"fetch_until_latest"]) {
-            NSDictionary *last = [[json objectForKey:@"messages"] lastObject];
-            [self fetchNewestMessages:block withNewestID:[[last objectForKey:@"id"] longValue] inNarrow:narrow];
-        }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Failed to load old messages: %@", [error localizedDescription]);
     }];
-}
-
-- (void)fetchNewestMessages:(MessagesDelivered)block withNewestID:(long)newestID inNarrow:(NarrowOperators *)narrow
-{
-    // If we have more messages to fetch to reach the newest message,
-    // fetch them.
-    // TODO we only support "All messages"
-    if (newestID < self.maxMessageId) {
-        // There are still historical messages to fetch.
-        NSDictionary *args = @{@"anchor": @(newestID + 1),
-                               @"num_before": @(0),
-                               @"num_after": @(20),
-                               @"fetch_until_latest": @(YES)};
-        [self getOldMessages:args narrow:narrow completionBlock:block];
-    } else if (self.loadingInitialMessages) {
-        self.loadingInitialMessages = NO;
-
-        NSNotification *message = [NSNotification notificationWithName:kInitialLoadFinished object:self];
-        NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-        [notificationCenter postNotification:message];
-    }
 }
 
 - (void)metadataLongPollInitialData:(NSDictionary *)json
@@ -491,7 +443,7 @@ NSString * const kInitialLoadFinished = @"InitialMessagesLoaded";
 
 - (void)longPollInitialData:(NSDictionary *)json
 {
-    self.maxMessageId = [[json objectForKey:@"max_message_id"] intValue];
+    self.maxServerMessageId = [[json objectForKey:@"max_message_id"] intValue];
 }
 
 - (void)longPollMessagesReceived:(NSArray *)events
@@ -503,13 +455,25 @@ NSString * const kInitialLoadFinished = @"InitialMessagesLoaded";
 
     NSMutableArray *messages = [[NSMutableArray alloc] init];
 
+    long oldServerMessageId = self.maxServerMessageId;
+
     for (NSDictionary *event in events) {
         NSString *eventType = [event objectForKey:@"type"];
         if ([eventType isEqualToString:@"message"]) {
             NSMutableDictionary *msg = [[event objectForKey:@"message"] mutableCopy];
             [msg setValue:[event objectForKey:@"flags"] forKey:@"flags"];
             [messages addObject:msg];
+
+            long msgId = [[event objectForKey:@"id"] longValue];
+            self.maxServerMessageId = MAX(self.maxServerMessageId, msgId);
         }
+    }
+
+    // If we're not up to date (e.g. our latest message is not the max msg id,
+    // and the user is still reading scrollback, then don't load the new messages,
+    // but just keep the new maxMessageId
+    if (self.maxLocalMessageId < oldServerMessageId) {
+        return;
     }
 
         // TODO figure out why the dispatch_async body is never executed
@@ -740,8 +704,24 @@ NSString * const kInitialLoadFinished = @"InitialMessagesLoaded";
             // Update our message range data structure
             RawMessage *first = [rawMessages objectAtIndex:0];
             RawMessage *last = [rawMessages lastObject];
-            RangePair *rangePair = [[RangePair alloc] initWithStart:[first.messageID intValue] andEnd:[last.messageID intValue]];
+            long firstId = [first.messageID longValue];
+            long lastId = [last.messageID longValue];
+
+            if ([rawMessages count] == 1) {
+                // HACK for 1 message that we get from long polling
+                // When we long poll, we know that there's no missing message
+                // between the new messages and our latest loaded message
+                // so we construct a 2-item range with the latest item
+//                NSAssert2(self.maxServerMessageId == lastId,
+//                          @"Added one long-poll message but not up to date",
+//                          self.maxServerMessageId, lastId);
+                firstId = self.maxLocalMessageId;
+            }
+
+            RangePair *rangePair = [[RangePair alloc] initWithStart:firstId andEnd:lastId];
             [RangePair extendRanges:self.rangePairs withRange:rangePair];
+
+            self.maxLocalMessageId = MAX(self.maxLocalMessageId, [last.messageID longValue]);
         }
 //    });
 }

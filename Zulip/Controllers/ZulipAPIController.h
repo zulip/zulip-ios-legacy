@@ -29,8 +29,6 @@
 extern NSString * const kLongPollMessageNotification;
 extern NSString * const kLongPollMessageData;
 
-extern NSString * const kInitialLoadFinished;
-
 // Callback with resulting RawMessage* from desired query
 typedef void(^MessagesDelivered)(NSArray *messages);
 
@@ -46,12 +44,17 @@ typedef void(^MessagesDelivered)(NSArray *messages);
 
 - (UIColor *)streamColor:(NSString *)name withDefault:(UIColor *)defaultColor;
 
-- (void)loadMessagesAroundAnchor:(int)anchor before:(int)before after:(int)after withOperators:(NarrowOperators *)operators opts:(NSDictionary *)opts completionBlock:(MessagesDelivered)block;
+// Use this to fetch messagesd from **either** the db or zulip api around a certain anchor
+- (void)loadMessagesAroundAnchor:(int)anchor before:(int)before after:(int)after withOperators:(NarrowOperators *)operators completionBlock:(MessagesDelivered)block;
+
+// Use this to force a network request to fetch messages. They will be inserted in core data if the narrow is a Home View narrow
+- (void) getOldMessages:(NSDictionary *)args narrow:(NarrowOperators *)narrow completionBlock:(MessagesDelivered)block;
 
 - (void)applicationWillTerminate;
 
 @property(assign) long pointer;
 @property(assign) BOOL backgrounded;
+@property(assign) long maxServerMessageId;
 @property(nonatomic, retain) NSString *email;
 @property(nonatomic, retain) NSString *fullName;
 @property(nonatomic, retain) StreamViewController *homeViewController;

@@ -29,7 +29,7 @@
 		B3CC439217A701A900C8AF3F /* ZUser.m in Sources */ = {isa = PBXBuildFile; fileRef = B3CC439117A701A900C8AF3F /* ZUser.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		B3CC439617A7F13700C8AF3F /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3CC439517A7F13700C8AF3F /* HomeViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		B3DDD2F817B02A0800F8D387 /* LongPoller.m in Sources */ = {isa = PBXBuildFile; fileRef = B3DDD2F717B02A0800F8D387 /* LongPoller.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		B3E8A76517B146090008EED7 /* RangePair.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E8A76417B146090008EED7 /* RangePair.m */; };
+		B3E8A76517B146090008EED7 /* RangePair.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E8A76417B146090008EED7 /* RangePair.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		B3F50D6C179DADE800F9DAE4 /* AFHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F50D5A179DADE800F9DAE4 /* AFHTTPClient.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		B3F50D6D179DADE800F9DAE4 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F50D5C179DADE800F9DAE4 /* AFHTTPRequestOperation.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		B3F50D6E179DADE800F9DAE4 /* AFImageRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F50D5E179DADE800F9DAE4 /* AFImageRequestOperation.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
