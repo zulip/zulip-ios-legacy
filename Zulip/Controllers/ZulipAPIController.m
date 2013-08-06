@@ -74,7 +74,9 @@ NSString * const kInitialLoadFinished = @"InitialMessagesLoaded";
         NSString *storedApiKey = [keychainItem objectForKey:(__bridge id)kSecValueData];
         NSString *storedEmail = [keychainItem objectForKey:(__bridge id)kSecAttrAccount];
 
-        self.messagesPoller = [[LongPoller alloc] initWithInitialBlock:nil andEventBlock:^(NSArray *events) {
+        self.messagesPoller = [[LongPoller alloc] initWithInitialBlock:^(NSDictionary *data) {
+            [self longPollInitialData:data];
+        } andEventBlock:^(NSArray *events) {
             [self longPollMessagesReceived:events];
         }];
 
@@ -313,7 +315,7 @@ NSString * const kInitialLoadFinished = @"InitialMessagesLoaded";
 
             if ([opts valueForKey:@"fetch_until_latest"]) {
                 ZMessage *last = [results lastObject];
-                [self fetchNewestMessages:block withNewestID:[last.messageID longValue]];
+                [self fetchNewestMessages:block withNewestID:[last.messageID longValue] inNarrow:operators];
             }
             return;
         } else {
@@ -377,14 +379,14 @@ NSString * const kInitialLoadFinished = @"InitialMessagesLoaded";
 
         if ([args valueForKey:@"fetch_until_latest"]) {
             NSDictionary *last = [[json objectForKey:@"messages"] lastObject];
-            [self fetchNewestMessages:block withNewestID:[[last objectForKey:@"id"] longValue]];
+            [self fetchNewestMessages:block withNewestID:[[last objectForKey:@"id"] longValue] inNarrow:narrow];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Failed to load old messages: %@", [error localizedDescription]);
     }];
 }
 
-- (void)fetchNewestMessages:(MessagesDelivered)block withNewestID:(long)newestID
+- (void)fetchNewestMessages:(MessagesDelivered)block withNewestID:(long)newestID inNarrow:(NarrowOperators *)narrow
 {
     // If we have more messages to fetch to reach the newest message,
     // fetch them.
@@ -395,7 +397,7 @@ NSString * const kInitialLoadFinished = @"InitialMessagesLoaded";
                                @"num_before": @(0),
                                @"num_after": @(20),
                                @"fetch_until_latest": @(YES)};
-        [self getOldMessages:args narrow:nil completionBlock:block];
+        [self getOldMessages:args narrow:narrow completionBlock:block];
     } else if (self.loadingInitialMessages) {
         self.loadingInitialMessages = NO;
 
@@ -407,7 +409,6 @@ NSString * const kInitialLoadFinished = @"InitialMessagesLoaded";
 
 - (void)metadataLongPollInitialData:(NSDictionary *)json
 {
-    self.maxMessageId = [[json objectForKey:@"max_message_id"] intValue];
     self.pointer = [[json objectForKey:@"pointer"] longValue];
 
     // Set the full name from realm_users
@@ -424,6 +425,11 @@ NSString * const kInitialLoadFinished = @"InitialMessagesLoaded";
 
     // Set up the home view
     [self.homeViewController initialPopulate];
+}
+
+- (void)longPollInitialData:(NSDictionary *)json
+{
+    self.maxMessageId = [[json objectForKey:@"max_message_id"] intValue];
 }
 
 - (void)longPollMessagesReceived:(NSArray *)events
