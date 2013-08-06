@@ -41,7 +41,7 @@
     self.sender.text = message.sender.full_name;
     self.content.text = message.content;
     // Allow multi-line content.
-    self.content.lineBreakMode = UILineBreakModeWordWrap;
+    self.content.lineBreakMode = NSLineBreakByWordWrapping;
     self.content.numberOfLines = 0;
 
     // Asynchronously load gravatar if needed
@@ -84,7 +84,7 @@
     NSString *cellText = [message valueForKey:@"content"];
     UIFont *cellFont = [UIFont systemFontOfSize:12];
     CGSize constraintSize = CGSizeMake(262.0, CGFLOAT_MAX); // content width from xib = 267.
-    CGSize labelSize = [cellText sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:UILineBreakModeWordWrap];
+    CGSize labelSize = [cellText sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByWordWrapping];
 
     // Full cell height of 77 - default content height of 36 = 41. + a little bit of bottom padding.
     return fmaxf(77.0f, labelSize.height + 45.0f);
@@ -96,7 +96,7 @@
 {
     [super setSelected:selected animated:animated];
 
-    self.content.lineBreakMode = UILineBreakModeWordWrap;
+    self.content.lineBreakMode = NSLineBreakByWordWrapping;
     self.content.numberOfLines = 0;
     [self.content sizeToFit];
 }

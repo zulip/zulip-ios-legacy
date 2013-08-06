@@ -14,7 +14,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.errorMessage.lineBreakMode = UILineBreakModeWordWrap;
+    self.errorMessage.lineBreakMode = NSLineBreakByWordWrapping;
     self.errorMessage.numberOfLines = 0;
 }
 
