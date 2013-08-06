@@ -12,6 +12,8 @@
 #import "ZUser.h"
 #import "ZSubscription.h"
 
+typedef void(^RawMessageChangeHandler)(RawMessage *rawMsg);
+
 /**
  This is a "non-NSManagedObject" ZMessage, for use in the message list.
 
@@ -36,11 +38,18 @@
 @property (nonatomic, retain) ZSubscription *subscription;
 @property (nonatomic, retain) NSArray *messageFlags;
 
+// TODO (is this really needed?)
 - (void)save;
 
 // Flag specific
 - (BOOL)read;
 - (void)setRead:(BOOL)unread;
+
+- (void)addMessageFlags:(NSArray *)flags;
+- (void)removeMessageFlags:(NSArray *)flags;
+
+// Update handler
+- (void)registerForChanges:(RawMessageChangeHandler)handler;
 
 + (RawMessage *)allocFromZMessage:(ZMessage *)message;
 

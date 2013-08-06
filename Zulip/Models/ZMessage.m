@@ -25,6 +25,9 @@
 @dynamic sender;
 @dynamic subscription;
 
+// MANUALLY ADDED BELOW THIS LINE
+@synthesize linkedRawMessage;
+
 - (NSArray *)messageFlags
 {
     if (!self.flagData) {
@@ -44,6 +47,16 @@
 {
     NSMutableArray *new_flags = [NSMutableArray arrayWithArray:[NSKeyedUnarchiver unarchiveObjectWithData:self.flagData]];
     [new_flags addObject:flag];
+
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:new_flags];
+
+    self.flagData = data;
+}
+
+- (void)removeMessageFlag:(NSString *)flag
+{
+    NSMutableArray *new_flags = [NSMutableArray arrayWithArray:[NSKeyedUnarchiver unarchiveObjectWithData:self.flagData]];
+    [new_flags removeObject:flag];
 
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:new_flags];
 

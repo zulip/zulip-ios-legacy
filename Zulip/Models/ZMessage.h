@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class ZSubscription, ZUser;
+@class ZSubscription, ZUser, RawMessage;
 
 @interface ZMessage : NSManagedObject
 
@@ -24,6 +24,17 @@
 @property (nonatomic, retain) NSSet *pm_recipients;
 @property (nonatomic, retain) ZUser *sender;
 @property (nonatomic, retain) ZSubscription *subscription;
+
+// NOTE: These two methods below have been manually added,
+// when regenerating this file make sure to keep them!
+- (NSArray *)messageFlags;
+- (void)setMessageFlags:(NSArray *)flags;
+- (void)addMessageFlag:(NSString *)flag;
+- (void)removeMessageFlag:(NSString *)flag;
+
+// NOTE added manually, retain when regenerating!
+@property (nonatomic, retain) RawMessage *linkedRawMessage;
+
 @end
 
 @interface ZMessage (CoreDataGeneratedAccessors)
@@ -32,11 +43,5 @@
 - (void)removePm_recipientsObject:(ZUser *)value;
 - (void)addPm_recipients:(NSSet *)values;
 - (void)removePm_recipients:(NSSet *)values;
-
-// NOTE: These two methods below have been manually added,
-// when regenerating this file make sure to keep them!
-- (NSArray *)messageFlags;
-- (void)setMessageFlags:(NSArray *)flags;
-- (void)addMessageFlag:(NSString *)flag;
 
 @end

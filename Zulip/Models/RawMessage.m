@@ -8,6 +8,12 @@
 
 #import "RawMessage.h"
 
+@interface RawMessage ()
+
+@property (nonatomic, retain) NSMutableSet *changeHandlers;
+
+@end
+
 @implementation RawMessage
 
 - (id)init
@@ -15,6 +21,7 @@
     self = [super init];
 
     if (self) {
+        self.changeHandlers = [[NSMutableSet alloc] init];
         self.pm_recipients = [[NSMutableSet alloc] init];
     }
 
@@ -32,13 +39,44 @@
         return;
     }
 
-    NSMutableArray *newFlags = [[NSMutableArray alloc] initWithArray:self.messageFlags];
     if (read) {
-        [newFlags addObject:@"read"];
+        [self addMessageFlags:@[@"read"]];
     } else {
-        [newFlags removeObject:@"read"];
+        [self removeMessageFlags:@[@"read"]];
     }
+}
+
+- (void)addMessageFlags:(NSArray *)flags
+{
+    NSMutableArray *newFlags = [[NSMutableArray alloc] initWithArray:self.messageFlags];
+    [newFlags addObjectsFromArray:flags];
     self.messageFlags = newFlags;
+}
+
+- (void)removeMessageFlags:(NSArray *)flags
+{
+    NSMutableArray *newFlags = [[NSMutableArray alloc] initWithArray:self.messageFlags];
+    [newFlags removeObjectsInArray:flags];
+    self.messageFlags = newFlags;
+}
+
+- (void)registerForChanges:(RawMessageChangeHandler)handler
+{
+    [self.changeHandlers addObject:[handler copy]];
+}
+
+- (void)setMessageFlags:(NSArray *)messageFlags
+{
+    _messageFlags = messageFlags;
+
+    [self notifyOfChanges];
+}
+
+- (void)notifyOfChanges
+{
+    for (RawMessageChangeHandler handler in self.changeHandlers) {
+        handler(self);
+    }
 }
 
 + (RawMessage *)allocFromZMessage:(ZMessage *)message
@@ -53,11 +91,12 @@
     raw.timestamp = message.timestamp;
     raw.pm_recipients = [NSMutableSet setWithSet:message.pm_recipients];
     raw.sender = message.sender;
-    
+
     raw.messageFlags = [message messageFlags];
 
     return raw;
 }
+
 
 - (void)save
 {

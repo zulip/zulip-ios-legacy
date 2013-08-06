@@ -41,6 +41,11 @@
 @property(nonatomic, retain) LongPoller *metadataPoller;
 
 @property(nonatomic, retain) ZulipAppDelegate *appDelegate;
+
+// Messages that are loaded in a narrow (e.g. not saved to Core Data)
+// are kept here as a reference so we can find them by ID
+@property(nonatomic, retain) NSMutableDictionary *ephemeralMessages;
+
 @end
 
 NSString * const kLongPollMessageNotification = @"LongPollMessages";
@@ -193,7 +198,7 @@ NSString * const kInitialLoadFinished = @"InitialMessagesLoaded";
     [self.messagesPoller registerWithOptions:messagesOpts];
 
     // Metadata
-    event_types = @[@"pointer", @"realm_user", @"subscription"];
+    event_types = @[@"pointer", @"realm_user", @"subscription", @"update_message", @"update_message_flags"];
     messagesOpts = @{@"apply_markdown": @"false",
                      @"event_types": [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:event_types options:0 error:nil]
                                                               encoding:NSUTF8StringEncoding],
@@ -454,6 +459,65 @@ NSString * const kInitialLoadFinished = @"InitialMessagesLoaded";
 - (void)metadataPollEventsReceived:(NSArray *)events
 {
     NSLog(@"Got events: %@", events);
+
+    for (NSDictionary *event in events) {
+        NSString *eventType = [event objectForKey:@"type"];
+        if ([eventType isEqualToString:@"pointer"]) {
+            long newPointer = [[event objectForKey:@"pointer"] longValue];
+
+            self.pointer = newPointer;
+        } else if ([eventType isEqualToString:@"update_message_flags"]) {
+            BOOL all = [[event objectForKey:@"all"] boolValue];
+
+            NSString *flag = [event objectForKey:@"flag"];
+            NSArray *messageIDs = [event objectForKey:@"messages"];
+            NSString *operation = [event objectForKey:@"operation"];
+
+            [self updateMessages:messageIDs withFlag:flag operation:operation all:all];
+        }
+    }
+}
+
+- (void)updateMessages:(NSArray *)messageIDs withFlag:(NSString *)flag operation:(NSString *)op all:(BOOL)all
+{
+    if (all) {
+        // TODO handle bankruptcy
+        return;
+    }
+
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ZMessage"];
+    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"messageID IN %@", [NSSet setWithArray:messageIDs]];
+
+    NSError *error = nil;
+    NSArray *messages = [[self.appDelegate managedObjectContext] executeFetchRequest:fetchRequest error:&error];
+    if (error) {
+        NSLog(@"Error fetching messages to update from Core Data: %@ %@", [error localizedDescription], [error userInfo]);
+        return;
+    }
+
+    // Update Core Data-backed messages
+    for (ZMessage *msg in messages) {
+        // Update raw msg attached to core data
+        RawMessage *raw = msg.linkedRawMessage;
+
+        if ([op isEqualToString:@"add"]) {
+            [msg addMessageFlag:flag];
+            [raw addMessageFlags:@[flag]];
+        } else if ([op isEqualToString:@"remove"]) {
+            [msg removeMessageFlag:flag];
+            [raw removeMessageFlags:@[flag]];
+        }
+        // TODO notify views!!
+
+    }
+
+    if ([messages count] > 0) {
+        error = nil;
+        [[self.appDelegate managedObjectContext] save:&error];
+        if (error) {
+            NSLog(@"Failed to save flag updates: %@ %@", [error localizedDescription], [error userInfo]);
+        }
+    }
 }
 
 #pragma mark - Core Data Insertion
@@ -523,6 +587,10 @@ NSString * const kInitialLoadFinished = @"InitialMessagesLoaded";
         RawMessage *msg = [self rawMessageFromJSON:json];
         [rawMessages addObject:msg];
         [rawMessagesDict setObject:msg forKey:msg.messageID];
+
+        if (!saveToCD) {
+            [self.ephemeralMessages setObject:msg forKey:msg.messageID];
+        }
     }
 
     // Pass the downloaded messages back to whichever message list asked for it
@@ -590,6 +658,7 @@ NSString * const kInitialLoadFinished = @"InitialMessagesLoaded";
             msg.subscription = rawMsg.subscription;
             [msg setMessageFlags:rawMsg.messageFlags];
 
+            msg.linkedRawMessage = rawMsg;
             [zmessages addObject:msg];
         }
 
@@ -697,6 +766,7 @@ NSString * const kInitialLoadFinished = @"InitialMessagesLoaded";
     NSMutableArray *rawMessages = [[NSMutableArray alloc] init];
     for (ZMessage *msg in messages) {
         RawMessage *raw = [RawMessage allocFromZMessage:msg];
+        msg.linkedRawMessage = raw;
         [rawMessages addObject:raw];
         [self.unreadManager handleIncomingMessage:raw];
     }
