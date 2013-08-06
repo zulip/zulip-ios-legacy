@@ -281,7 +281,7 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
 - (void)registerForMessages
 {
     // Register for all events
-    NSDictionary *messagesOpts = @{@"apply_markdown": @"false"};
+    NSDictionary *messagesOpts = @{@"apply_markdown": @"true"};
 
     [self.messagesPoller registerWithOptions:messagesOpts];
 }
@@ -290,7 +290,7 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
 {
     // Metadata
     NSArray *event_types = @[@"pointer", @"realm_user", @"subscription", @"update_message", @"update_message_flags"];
-    NSDictionary *messagesOpts = @{@"apply_markdown": @"false",
+    NSDictionary *messagesOpts = @{@"apply_markdown": @"true",
                                    @"event_types": [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:event_types options:0 error:nil]
                                                               encoding:NSUTF8StringEncoding],
                                    @"queue_lifespan_secs": @(7 * 24 * 60 * 60)}; // Long-lived queue lives for 1 week
@@ -469,7 +469,7 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
     if (narrow)
         narrowParam = [narrow allocAsJSONPayload];
 
-    NSDictionary *fields = @{@"apply_markdown": @"false",
+    NSDictionary *fields = @{@"apply_markdown": @"true",
                              @"anchor": @(anchor),
                              @"num_before": @([[args objectForKey:@"num_before"] intValue]),
                              @"num_after": @([[args objectForKey:@"num_after"] intValue]),

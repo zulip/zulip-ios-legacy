@@ -9,6 +9,8 @@
 
 #import "AFJSONRequestOperation.h"
 
+#import "RenderedMarkdownMunger.h"
+
 @interface StreamViewController ()
 
 @property (nonatomic, retain) UISegmentedControl *composeButtons;
@@ -91,9 +93,9 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
 
     // TODO re-enable registerNib:forReuseIdentifier once we work out why it is
     // breaking some message content layout on pre-1.4. It greatly speeds up scrolling
-//    [self.tableView registerNib:[UINib nibWithNibName:@"MessageCellView"
-//                                               bundle:nil]
-//         forCellReuseIdentifier:[MessageCell reuseIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:@"MessageCellView"
+                                               bundle:nil]
+         forCellReuseIdentifier:[MessageCell reuseIdentifier]];
 
     self.composeButtons = [[UISegmentedControl alloc] initWithItems:@[[UIImage imageNamed:@"user-toolbar.png"],
                                                                       [UIImage imageNamed:@"bullhorn.png"]]];
@@ -308,6 +310,8 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
     // we want to do an in-order insert so that whether doing the initial backfill or inserting historical messages as requested,
     // this method doesn't require special booleans or state.
     for (RawMessage *message in messages) {
+        [RenderedMarkdownMunger mungeThis:message];
+
         if ([self.msgIds containsObject:message.messageID])
             continue;
         else

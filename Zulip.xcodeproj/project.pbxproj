@@ -10,6 +10,12 @@
 		780CF5E3179608FE0053481C /* ComposeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5DC806A165D347D008B53F9 /* ComposeViewController.m */; };
 		782681C91795CE08009F69F5 /* ComposeViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681C81795CE08009F69F5 /* ComposeViewController~ipad.xib */; };
 		782681CC1795D10C009F69F5 /* LoginViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681CB1795D10C009F69F5 /* LoginViewController~ipad.xib */; };
+		7882800D17B2E5D200D5DC42 /* Zulip.css in Resources */ = {isa = PBXBuildFile; fileRef = 7882800C17B2E2F300D5DC42 /* Zulip.css */; };
+		7882870117B2EDF100D5DC42 /* emoji in Resources */ = {isa = PBXBuildFile; fileRef = 7882870017B2EDE100D5DC42 /* emoji */; };
+		7882F1B217BA9FE700A27601 /* libDTCoreText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7882F1A917BA9F6000A27601 /* libDTCoreText.a */; };
+		7882F1B417BA9FF300A27601 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7882F1B317BA9FF300A27601 /* libxml2.dylib */; };
+		7882F1B617BA9FFD00A27601 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7882F1B517BA9FFD00A27601 /* ImageIO.framework */; };
+		7882F1B817BAA01600A27601 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7882F1B717BAA01600A27601 /* CoreText.framework */; };
 		78B52F061796038F002B26DE /* ErrorViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78B52F051796038F002B26DE /* ErrorViewController~ipad.xib */; };
 		B30F55A217B2D432006DC735 /* LeftSidebarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B30F55A017B2D432006DC735 /* LeftSidebarViewController.m */; };
 		B30F55A317B2D432006DC735 /* LeftSidebarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B30F55A117B2D432006DC735 /* LeftSidebarViewController.xib */; };
@@ -17,8 +23,7 @@
 		B3174BDB17F47B61004C31E4 /* AboutView~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3174BDA17F47B61004C31E4 /* AboutView~iphone.xib */; };
 		B3174BDD17F47B77004C31E4 /* AboutView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3174BDC17F47B77004C31E4 /* AboutView~ipad.xib */; };
 		B3174BE117F47F92004C31E4 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3174BDF17F47F92004C31E4 /* AboutViewController.m */; };
-		7882870117B2EDF100D5DC42 /* emoji in Resources */ = {isa = PBXBuildFile; fileRef = 7882870017B2EDE100D5DC42 /* emoji */; };
-		7882800D17B2E5D200D5DC42 /* Zulip.css in Resources */ = {isa = PBXBuildFile; fileRef = 7882800C17B2E2F300D5DC42 /* Zulip.css */; };
+		B338402D17C3B97A0083A529 /* RenderedMarkdownMunger.m in Sources */ = {isa = PBXBuildFile; fileRef = B338402C17C3B97A0083A529 /* RenderedMarkdownMunger.m */; };
 		B3469795179ED591006D0E9B /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3469794179ED591006D0E9B /* CoreData.framework */; };
 		B34697C517A020D1006D0E9B /* ZulipAPIController.m in Sources */ = {isa = PBXBuildFile; fileRef = B34697C417A020D1006D0E9B /* ZulipAPIController.m */; };
 		B351823117A1B20A00B41D75 /* ZSubscription.m in Sources */ = {isa = PBXBuildFile; fileRef = B351823017A1B20A00B41D75 /* ZSubscription.m */; };
@@ -119,6 +124,55 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		7882F1A417BA9F6000A27601 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7882F19817BA9F5F00A27601 /* DTCoreText.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1D6058910D05DD3D006BFB54;
+			remoteInfo = DemoApp;
+		};
+		7882F1A617BA9F6000A27601 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7882F19817BA9F5F00A27601 /* DTCoreText.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A70F119B14863198009202BF;
+			remoteInfo = "Static Framework";
+		};
+		7882F1A817BA9F6000A27601 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7882F19817BA9F5F00A27601 /* DTCoreText.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A70F11DE148632CD009202BF;
+			remoteInfo = "Static Library";
+		};
+		7882F1AA17BA9F6000A27601 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7882F19817BA9F5F00A27601 /* DTCoreText.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A788CA681486456100E1AFD9;
+			remoteInfo = UnitTest;
+		};
+		7882F1AC17BA9F6000A27601 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7882F19817BA9F5F00A27601 /* DTCoreText.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A7949A5814CC456000A8CCDE;
+			remoteInfo = MacUnitTest;
+		};
+		7882F1AE17BA9F6000A27601 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7882F19817BA9F5F00A27601 /* DTCoreText.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A7F7EFCD1573603100F5A4D0;
+			remoteInfo = "Static Library (no DTFoundation)";
+		};
+		7882F1B017BA9F6000A27601 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7882F19817BA9F5F00A27601 /* DTCoreText.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E2262DC61638331500BFDAD7;
+			remoteInfo = "Mac Framework";
+		};
 		C31673B01620DB6C00CE9FE5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C31673771620DB6A00CE9FE5 /* Project object */;
@@ -132,6 +186,12 @@
 		782681BF1795C513009F69F5 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "iPad/en.lproj/MainWindow~ipad.xib"; sourceTree = "<group>"; };
 		782681C81795CE08009F69F5 /* ComposeViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "ComposeViewController~ipad.xib"; sourceTree = "<group>"; };
 		782681CB1795D10C009F69F5 /* LoginViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "LoginViewController~ipad.xib"; sourceTree = "<group>"; };
+		7882800C17B2E2F300D5DC42 /* Zulip.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Zulip.css; sourceTree = SOURCE_ROOT; };
+		7882870017B2EDE100D5DC42 /* emoji */ = {isa = PBXFileReference; lastKnownFileType = folder; name = emoji; path = Resources/emoji; sourceTree = "<group>"; };
+		7882F19817BA9F5F00A27601 /* DTCoreText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = DTCoreText.xcodeproj; path = ThirdParty/DTCoreText/DTCoreText.xcodeproj; sourceTree = "<group>"; };
+		7882F1B317BA9FF300A27601 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
+		7882F1B517BA9FFD00A27601 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		7882F1B717BAA01600A27601 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		78B52F051796038F002B26DE /* ErrorViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "ErrorViewController~ipad.xib"; sourceTree = "<group>"; };
 		B30F559F17B2D432006DC735 /* LeftSidebarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LeftSidebarViewController.h; path = Controllers/ViewControllers/LeftSidebarViewController.h; sourceTree = "<group>"; };
 		B30F55A017B2D432006DC735 /* LeftSidebarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LeftSidebarViewController.m; path = Controllers/ViewControllers/LeftSidebarViewController.m; sourceTree = "<group>"; };
@@ -144,6 +204,14 @@
 		B3174BDF17F47F92004C31E4 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AboutViewController.m; path = Controllers/ViewControllers/AboutViewController.m; sourceTree = "<group>"; };
 		7882870017B2EDE100D5DC42 /* emoji */ = {isa = PBXFileReference; lastKnownFileType = folder; name = emoji; path = Resources/emoji; sourceTree = "<group>"; };
 		7882800C17B2E2F300D5DC42 /* Zulip.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Zulip.css; sourceTree = SOURCE_ROOT; };
+		7881414D17B4146B00A7A666 /* OffScreenWebViewRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OffScreenWebViewRenderer.h; path = Zulip/OffScreenWebViewRenderer.h; sourceTree = "<group>"; };
+		7881414E17B4146B00A7A666 /* OffScreenWebViewRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OffScreenWebViewRenderer.m; path = Zulip/OffScreenWebViewRenderer.m; sourceTree = "<group>"; };
+		7881415017B417D900A7A666 /* OffScreenWebViewRenderingManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OffScreenWebViewRenderingManager.h; sourceTree = "<group>"; };
+		7881415117B417D900A7A666 /* OffScreenWebViewRenderingManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OffScreenWebViewRenderingManager.m; sourceTree = "<group>"; };
+		78EE4F0617A9AF4B00582E26 /* MessageCellWebView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MessageCellWebView.h; path = Views/MessageCellWebView.h; sourceTree = "<group>"; };
+		78EE4F0717A9AF7F00582E26 /* MessageCellWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessageCellWebView.m; path = Views/MessageCellWebView.m; sourceTree = "<group>"; };
+		B338402B17C3B97A0083A529 /* RenderedMarkdownMunger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderedMarkdownMunger.h; sourceTree = "<group>"; };
+		B338402C17C3B97A0083A529 /* RenderedMarkdownMunger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RenderedMarkdownMunger.m; sourceTree = "<group>"; };
 		B3469794179ED591006D0E9B /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		B34697C317A020D1006D0E9B /* ZulipAPIController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZulipAPIController.h; path = Controllers/ZulipAPIController.h; sourceTree = "<group>"; };
 		B34697C417A020D1006D0E9B /* ZulipAPIController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZulipAPIController.m; path = Controllers/ZulipAPIController.m; sourceTree = "<group>"; };
@@ -289,6 +357,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7882F1B817BAA01600A27601 /* CoreText.framework in Frameworks */,
+				7882F1B617BA9FFD00A27601 /* ImageIO.framework in Frameworks */,
+				7882F1B417BA9FF300A27601 /* libxml2.dylib in Frameworks */,
+				7882F1B217BA9FE700A27601 /* libDTCoreText.a in Frameworks */,
 				B3F5628B17A8074C004B185A /* QuartzCore.framework in Frameworks */,
 				B3469795179ED591006D0E9B /* CoreData.framework in Frameworks */,
 				B3766D2E179DD1DF005FB0D4 /* MobileCoreServices.framework in Frameworks */,
@@ -339,6 +411,37 @@
 			name = iPhone;
 			sourceTree = "<group>";
 		};
+		7882F19717BA9EC700A27601 /* DTCoreText */ = {
+			isa = PBXGroup;
+			children = (
+				7882F19817BA9F5F00A27601 /* DTCoreText.xcodeproj */,
+			);
+			name = DTCoreText;
+			sourceTree = "<group>";
+		};
+		7882F19917BA9F5F00A27601 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7882F1A517BA9F6000A27601 /* RTDemoApp.app */,
+				7882F1A717BA9F6000A27601 /* DTCoreText.framework */,
+				7882F1A917BA9F6000A27601 /* libDTCoreText.a */,
+				7882F1AB17BA9F6000A27601 /* UnitTest.octest */,
+				7882F1AD17BA9F6000A27601 /* MacUnitTest.octest */,
+				7882F1AF17BA9F6000A27601 /* libDTCoreText_no_DTFoundation.a */,
+				7882F1B117BA9F6000A27601 /* DTCoreText.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B338402217C3B9640083A529 /* Markdown */ = {
+			isa = PBXGroup;
+			children = (
+				B338402B17C3B97A0083A529 /* RenderedMarkdownMunger.h */,
+				B338402C17C3B97A0083A529 /* RenderedMarkdownMunger.m */,
+			);
+			name = Markdown;
+			sourceTree = "<group>";
+		};
 		B3107A0717C55A0A000F248E /* MBProgressHUD */ = {
 			isa = PBXGroup;
 			children = (
@@ -374,6 +477,7 @@
 			children = (
 				B3107A0717C55A0A000F248E /* MBProgressHUD */,
 				B376986E17B5857600D29D93 /* JASidePanels */,
+				7882F19717BA9EC700A27601 /* DTCoreText */,
 				B3F50D75179DADF200F9DAE4 /* Crashlytics.framework */,
 				B3F50D58179DADE800F9DAE4 /* AFNetworking */,
 			);
@@ -567,6 +671,9 @@
 		C31673831620DB6B00CE9FE5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7882F1B717BAA01600A27601 /* CoreText.framework */,
+				7882F1B517BA9FFD00A27601 /* ImageIO.framework */,
+				7882F1B317BA9FF300A27601 /* libxml2.dylib */,
 				E50D7572163318D900251D1F /* Security.framework */,
 				B3F5628A17A8074C004B185A /* QuartzCore.framework */,
 				B3469794179ED591006D0E9B /* CoreData.framework */,
@@ -584,6 +691,7 @@
 		C316738A1620DB6B00CE9FE5 /* Zulip */ = {
 			isa = PBXGroup;
 			children = (
+				B338402217C3B9640083A529 /* Markdown */,
 				C31673931620DB6B00CE9FE5 /* ZulipAppDelegate.h */,
 				C31673941620DB6B00CE9FE5 /* ZulipAppDelegate.m */,
 				E50D757716331D7A00251D1F /* KeychainItemWrapper.h */,
@@ -698,6 +806,12 @@
 			mainGroup = C31673751620DB6A00CE9FE5;
 			productRefGroup = C31673811620DB6B00CE9FE5 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 7882F19917BA9F5F00A27601 /* Products */;
+					ProjectRef = 7882F19817BA9F5F00A27601 /* DTCoreText.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				C316737F1620DB6B00CE9FE5 /* Zulip */,
@@ -705,6 +819,58 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		7882F1A517BA9F6000A27601 /* RTDemoApp.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = RTDemoApp.app;
+			remoteRef = 7882F1A417BA9F6000A27601 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7882F1A717BA9F6000A27601 /* DTCoreText.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = DTCoreText.framework;
+			remoteRef = 7882F1A617BA9F6000A27601 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7882F1A917BA9F6000A27601 /* libDTCoreText.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libDTCoreText.a;
+			remoteRef = 7882F1A817BA9F6000A27601 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7882F1AB17BA9F6000A27601 /* UnitTest.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = UnitTest.octest;
+			remoteRef = 7882F1AA17BA9F6000A27601 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7882F1AD17BA9F6000A27601 /* MacUnitTest.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = MacUnitTest.octest;
+			remoteRef = 7882F1AC17BA9F6000A27601 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7882F1AF17BA9F6000A27601 /* libDTCoreText_no_DTFoundation.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libDTCoreText_no_DTFoundation.a;
+			remoteRef = 7882F1AE17BA9F6000A27601 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7882F1B117BA9F6000A27601 /* DTCoreText.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = DTCoreText.framework;
+			remoteRef = 7882F1B017BA9F6000A27601 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		C316737E1620DB6B00CE9FE5 /* Resources */ = {
@@ -832,6 +998,7 @@
 				B3F50D6E179DADE800F9DAE4 /* AFImageRequestOperation.m in Sources */,
 				B3F50D6F179DADE800F9DAE4 /* AFJSONRequestOperation.m in Sources */,
 				B3F50D70179DADE800F9DAE4 /* AFNetworkActivityIndicatorManager.m in Sources */,
+				B338402D17C3B97A0083A529 /* RenderedMarkdownMunger.m in Sources */,
 				B3F50D71179DADE800F9DAE4 /* AFPropertyListRequestOperation.m in Sources */,
 				B3F50D72179DADE800F9DAE4 /* AFURLConnectionOperation.m in Sources */,
 				B3107A0A17C55A33000F248E /* MBProgressHUD.m in Sources */,
@@ -1000,11 +1167,13 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/Zulip/Zulip-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = Zulip;
 				PROVISIONING_PROFILE = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "ThirdParty/DTCoreText/Core/**";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1053,12 +1222,14 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/Zulip/Zulip-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = Zulip;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "52DA1F52-760D-4E9F-B24E-EE6EA7A485DB";
 				RUN_CLANG_STATIC_ANALYZER = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "ThirdParty/DTCoreText/Core/**";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

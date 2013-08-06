@@ -37,6 +37,9 @@ typedef void(^RawMessageChangeHandler)(RawMessage *rawMsg);
 @property (nonatomic, retain) ZUser *sender;
 @property (nonatomic, retain) ZSubscription *subscription;
 @property (nonatomic, retain) NSSet *messageFlags;
+@property (nonatomic, retain) NSAttributedString *attributedString;
+
+@property (nonatomic, assign) BOOL munged;
 
 // TODO (is this really needed?)
 - (void)save;

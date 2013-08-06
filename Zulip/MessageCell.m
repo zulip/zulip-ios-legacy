@@ -43,10 +43,6 @@
     }
 
     self.sender.text = message.sender.full_name;
-    self.content.text = message.content;
-    // Allow multi-line content.
-    self.content.lineBreakMode = NSLineBreakByWordWrapping;
-    self.content.numberOfLines = 0;
 
     // Asynchronously load gravatar if needed
     [self.gravatar setImageWithURL:[NSURL URLWithString:message.avatar_url]];
@@ -65,6 +61,8 @@
     // When a message is on the screen, mark it as read
     message.read = YES;
 
+    _message = message;
+    self.attributedTextView.attributedString = message.attributedString;
 }
 
 - (void)willBeDisplayed
@@ -81,29 +79,43 @@
                                                             alpha:1];
         self.header.textColor = [UIColor whiteColor];
     }
+
+
 }
 
 + (CGFloat)heightForCellWithMessage:(RawMessage *)message
 {
-    NSString *cellText = [message valueForKey:@"content"];
-    UIFont *cellFont = [UIFont systemFontOfSize:12];
-    CGSize constraintSize = CGSizeMake(262.0, CGFLOAT_MAX); // content width from xib = 267.
-    CGSize labelSize = [cellText sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:NSLineBreakByWordWrapping];
+    static dispatch_once_t onceToken;
+    static DTAttributedTextContentView *dummyContentViewPortrait;
+    static DTAttributedTextContentView *dummyContentViewLandscape;
+    static CGFloat portraitContentWidth;
+    static CGFloat landscapeContentWidth;
+    dispatch_once(&onceToken, ^{
+        //53 "pixels" is the number of pixels to the left and right of the message content box.
+        portraitContentWidth = [[UIScreen mainScreen] bounds].size.width - 53.0f;
+        dummyContentViewPortrait = [[DTAttributedTextContentView alloc] initWithFrame:CGRectMake(0, 0, portraitContentWidth, 1)];
+        landscapeContentWidth = [[UIScreen mainScreen] bounds].size.height - 53.0f;
+        dummyContentViewLandscape = [[DTAttributedTextContentView alloc] initWithFrame:CGRectMake(0, 0, landscapeContentWidth, 1)];
+    });
 
-    // Full cell height of 77 - default content height of 36 = 41. + a little bit of bottom padding.
-    return fmaxf(77.0f, labelSize.height + 45.0f);
+    DTAttributedTextContentView *currentDummyContentView;
+    CGFloat contentWidth;
+
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    if (orientation == UIInterfaceOrientationPortrait){
+        currentDummyContentView = dummyContentViewPortrait;
+        contentWidth = portraitContentWidth;
+    } else {
+        currentDummyContentView = dummyContentViewLandscape;
+        contentWidth = landscapeContentWidth;
+    }
+
+    currentDummyContentView.attributedString = message.attributedString;
+
+    return fmaxf(77.0f, [currentDummyContentView suggestedFrameSizeToFitEntireStringConstraintedToWidth:contentWidth].height + 38.0f);
 }
 
 #pragma mark - UITableViewCell
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
-    [super setSelected:selected animated:animated];
-
-    self.content.lineBreakMode = NSLineBreakByWordWrapping;
-    self.content.numberOfLines = 0;
-    [self.content sizeToFit];
-}
 
 - (NSURL *)gravatarUrl:(NSString *)gravatarHash
 {
