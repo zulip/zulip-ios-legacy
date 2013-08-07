@@ -67,12 +67,18 @@
 			break;
 		}
 	}
+
+    if (textField == self.password) {
+        [textField resignFirstResponder];
+        [self login:nil];
+    }
+
 	return NO;
 }
 
 - (void) animateTextField: (UITextField *) textField up: (BOOL) up
 {
-    const int movementDistance = 140; // tweak as needed
+    const int movementDistance = 10; // tweak as needed
     const float movementDuration = 0.3f; // tweak as needed
 
     int movement = (up ? -movementDistance : movementDistance);
@@ -86,16 +92,21 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    if (textField == self.password) {
+    if (textField == self.password && [self hasLessThanFourInchDisplay]) {
         [self animateTextField: textField up: YES];
     }
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    if (textField == self.password) {
+    if (textField == self.password && [self hasLessThanFourInchDisplay]) {
         [self animateTextField: textField up: NO];
     }
+}
+
+- (BOOL)hasLessThanFourInchDisplay {
+    return ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone &&
+            [UIScreen mainScreen].bounds.size.height < 568.0);
 }
 
 @end

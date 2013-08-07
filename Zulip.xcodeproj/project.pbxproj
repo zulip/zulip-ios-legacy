@@ -8,9 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		780CF5E3179608FE0053481C /* ComposeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5DC806A165D347D008B53F9 /* ComposeViewController.m */; };
-		782681C91795CE08009F69F5 /* ComposeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681C81795CE08009F69F5 /* ComposeViewController.xib */; };
-		782681CC1795D10C009F69F5 /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681CB1795D10C009F69F5 /* LoginViewController.xib */; };
-		78B52F061796038F002B26DE /* ErrorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78B52F051796038F002B26DE /* ErrorViewController.xib */; };
+		782681C91795CE08009F69F5 /* ComposeViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681C81795CE08009F69F5 /* ComposeViewController~ipad.xib */; };
+		782681CC1795D10C009F69F5 /* LoginViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681CB1795D10C009F69F5 /* LoginViewController~ipad.xib */; };
+		78B52F061796038F002B26DE /* ErrorViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78B52F051796038F002B26DE /* ErrorViewController~ipad.xib */; };
 		B3469795179ED591006D0E9B /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3469794179ED591006D0E9B /* CoreData.framework */; };
 		B34697C517A020D1006D0E9B /* ZulipAPIController.m in Sources */ = {isa = PBXBuildFile; fileRef = B34697C417A020D1006D0E9B /* ZulipAPIController.m */; };
 		B351823117A1B20A00B41D75 /* ZSubscription.m in Sources */ = {isa = PBXBuildFile; fileRef = B351823017A1B20A00B41D75 /* ZSubscription.m */; };
@@ -20,8 +20,8 @@
 		B3733CFE177A00D900714B6E /* ZulipAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = B3733CFD177A00D900714B6E /* ZulipAPIClient.m */; };
 		B3766D2E179DD1DF005FB0D4 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3766D2D179DD1DF005FB0D4 /* MobileCoreServices.framework */; };
 		B3766D3E179DDBE2005FB0D4 /* Zulip.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B3766D3C179DDBE2005FB0D4 /* Zulip.xcdatamodeld */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		B3CC438A17A6E2E200C8AF3F /* MainWindow-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = C31673961620DB6B00CE9FE5 /* MainWindow-iPhone.xib */; };
-		B3CC438B17A6E2E200C8AF3F /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681BE1795C513009F69F5 /* MainWindow-iPad.xib */; };
+		B3CC438A17A6E2E200C8AF3F /* MainWindow-iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = C31673961620DB6B00CE9FE5 /* MainWindow-iphone.xib */; };
+		B3CC438B17A6E2E200C8AF3F /* MainWindow~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681BE1795C513009F69F5 /* MainWindow~ipad.xib */; };
 		B3CC438D17A6E44C00C8AF3F /* zulip.png in Resources */ = {isa = PBXBuildFile; fileRef = B3CC438C17A6E44C00C8AF3F /* zulip.png */; };
 		B3CC438F17A6E45000C8AF3F /* zulip@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B3CC438E17A6E45000C8AF3F /* zulip@2x.png */; };
 		B3CC439217A701A900C8AF3F /* ZUser.m in Sources */ = {isa = PBXBuildFile; fileRef = B3CC439117A701A900C8AF3F /* ZUser.m */; };
@@ -99,10 +99,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		782681BF1795C513009F69F5 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "iPad/en.lproj/MainWindow-iPad.xib"; sourceTree = "<group>"; };
-		782681C81795CE08009F69F5 /* ComposeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ComposeViewController.xib; sourceTree = "<group>"; };
-		782681CB1795D10C009F69F5 /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
-		78B52F051796038F002B26DE /* ErrorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ErrorViewController.xib; sourceTree = "<group>"; };
+		782681BF1795C513009F69F5 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "iPad/en.lproj/MainWindow~ipad.xib"; sourceTree = "<group>"; };
+		782681C81795CE08009F69F5 /* ComposeViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "ComposeViewController~ipad.xib"; sourceTree = "<group>"; };
+		782681CB1795D10C009F69F5 /* LoginViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "LoginViewController~ipad.xib"; sourceTree = "<group>"; };
+		78B52F051796038F002B26DE /* ErrorViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "ErrorViewController~ipad.xib"; sourceTree = "<group>"; };
 		B3469794179ED591006D0E9B /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		B34697C317A020D1006D0E9B /* ZulipAPIController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZulipAPIController.h; path = Controllers/ZulipAPIController.h; sourceTree = "<group>"; };
 		B34697C417A020D1006D0E9B /* ZulipAPIController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZulipAPIController.m; path = Controllers/ZulipAPIController.m; sourceTree = "<group>"; };
@@ -253,10 +253,10 @@
 		782681BD1795C512009F69F5 /* iPad */ = {
 			isa = PBXGroup;
 			children = (
-				782681C81795CE08009F69F5 /* ComposeViewController.xib */,
-				78B52F051796038F002B26DE /* ErrorViewController.xib */,
-				782681CB1795D10C009F69F5 /* LoginViewController.xib */,
-				782681BE1795C513009F69F5 /* MainWindow-iPad.xib */,
+				782681C81795CE08009F69F5 /* ComposeViewController~ipad.xib */,
+				78B52F051796038F002B26DE /* ErrorViewController~ipad.xib */,
+				782681CB1795D10C009F69F5 /* LoginViewController~ipad.xib */,
+				782681BE1795C513009F69F5 /* MainWindow~ipad.xib */,
 			);
 			name = iPad;
 			sourceTree = "<group>";
@@ -267,7 +267,7 @@
 				E5DC806B165D347D008B53F9 /* ComposeViewController~iphone.xib */,
 				E598E7891634A9940022BF4A /* ErrorViewController~iphone.xib */,
 				E5CDE07B162C88A800BBD773 /* LoginViewController~iphone.xib */,
-				C31673961620DB6B00CE9FE5 /* MainWindow-iPhone.xib */,
+				C31673961620DB6B00CE9FE5 /* MainWindow-iphone.xib */,
 			);
 			name = iPhone;
 			sourceTree = "<group>";
@@ -582,8 +582,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B3CC438A17A6E2E200C8AF3F /* MainWindow-iPhone.xib in Resources */,
-				B3CC438B17A6E2E200C8AF3F /* MainWindow-iPad.xib in Resources */,
+				B3CC438A17A6E2E200C8AF3F /* MainWindow-iphone.xib in Resources */,
+				B3CC438B17A6E2E200C8AF3F /* MainWindow~ipad.xib in Resources */,
 				C316738F1620DB6B00CE9FE5 /* InfoPlist.strings in Resources */,
 				B3E38C4017B29DD900425145 /* bullhorn.png in Resources */,
 				E577A74F16226AFF002D9651 /* MessageCellView.xib in Resources */,
@@ -593,9 +593,9 @@
 				E598E78B1634A9950022BF4A /* ErrorViewController~iphone.xib in Resources */,
 				E5DC806D165D347D008B53F9 /* ComposeViewController~iphone.xib in Resources */,
 				B3733CCF1778C75300714B6E /* Default-568h@2x.png in Resources */,
-				782681C91795CE08009F69F5 /* ComposeViewController.xib in Resources */,
-				782681CC1795D10C009F69F5 /* LoginViewController.xib in Resources */,
-				78B52F061796038F002B26DE /* ErrorViewController.xib in Resources */,
+				782681C91795CE08009F69F5 /* ComposeViewController~ipad.xib in Resources */,
+				782681CC1795D10C009F69F5 /* LoginViewController~ipad.xib in Resources */,
+				78B52F061796038F002B26DE /* ErrorViewController~ipad.xib in Resources */,
 				B3CC438D17A6E44C00C8AF3F /* zulip.png in Resources */,
 				B3CC438F17A6E45000C8AF3F /* zulip@2x.png in Resources */,
 				B3F5629517A81C49004B185A /* SidebarStreamCell.xib in Resources */,
@@ -715,12 +715,12 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		782681BE1795C513009F69F5 /* MainWindow-iPad.xib */ = {
+		782681BE1795C513009F69F5 /* MainWindow~ipad.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				782681BF1795C513009F69F5 /* en */,
 			);
-			name = "MainWindow-iPad.xib";
+			name = "MainWindow~ipad.xib";
 			sourceTree = "<group>";
 		};
 		C316738D1620DB6B00CE9FE5 /* InfoPlist.strings */ = {
@@ -731,12 +731,12 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		C31673961620DB6B00CE9FE5 /* MainWindow-iPhone.xib */ = {
+		C31673961620DB6B00CE9FE5 /* MainWindow-iphone.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				C31673971620DB6B00CE9FE5 /* en */,
 			);
-			name = "MainWindow-iPhone.xib";
+			name = "MainWindow-iphone.xib";
 			sourceTree = "<group>";
 		};
 		C31673B51620DB6C00CE9FE5 /* InfoPlist.strings */ = {
