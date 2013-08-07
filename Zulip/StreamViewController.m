@@ -62,20 +62,18 @@
 
     self.delegate = (ZulipAppDelegate *)[UIApplication sharedApplication].delegate;
 
-    UIImage *composeButtonImage = [UIImage imageNamed:@"glyphicons_355_bullhorn.png"];
+    UIImage *composeButtonImage = [UIImage imageNamed:@"bullhorn.png"];
     UIButton *composeButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [composeButton setImage:composeButtonImage forState:UIControlStateNormal];
-    composeButton.frame = CGRectMake(0.0, 0.0, composeButtonImage.size.width + 40,
-                                     composeButtonImage.size.height);
+    composeButton.frame = CGRectMake(0.0, 0.0, composeButtonImage.size.width + 40, composeButtonImage.size.height);
     [composeButton addTarget:self action:@selector(composeButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *uiBarComposeButton = [[UIBarButtonItem alloc] initWithCustomView:composeButton];
     [[self navigationItem] setRightBarButtonItem:uiBarComposeButton];
 
-    UIImage *composePMButtonImage = [UIImage imageNamed:@"glyphicons_003_user.png"];
+    UIImage *composePMButtonImage = [UIImage imageNamed:@"user-toolbar.png"];
     UIButton *composePMButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [composePMButton setImage:composePMButtonImage forState:UIControlStateNormal];
-    composePMButton.frame = CGRectMake(0.0, 0.0, composeButtonImage.size.width + 40,
-                                       composeButtonImage.size.height);
+    composePMButton.frame = CGRectMake(0.0, 0.0, composeButtonImage.size.width + 40, composeButtonImage.size.height);
     [composePMButton addTarget:self action:@selector(composePMButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *uiBarComposePMButton = [[UIBarButtonItem alloc] initWithCustomView:composePMButton];
     [[self navigationItem] setLeftBarButtonItem:uiBarComposePMButton];
