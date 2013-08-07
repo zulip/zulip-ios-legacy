@@ -36,21 +36,22 @@ typedef void(^RawMessageChangeHandler)(RawMessage *rawMsg);
 @property (nonatomic, retain) NSMutableSet *pm_recipients;
 @property (nonatomic, retain) ZUser *sender;
 @property (nonatomic, retain) ZSubscription *subscription;
-@property (nonatomic, retain) NSArray *messageFlags;
+@property (nonatomic, retain) NSSet *messageFlags;
 
 // TODO (is this really needed?)
 - (void)save;
 
 // Flag specific
-- (BOOL)read;
-- (void)setRead:(BOOL)unread;
+@property (nonatomic) BOOL read;
 
-- (void)addMessageFlags:(NSArray *)flags;
-- (void)removeMessageFlags:(NSArray *)flags;
+- (void)addMessageFlag:(NSString *)flag;
+- (void)removeMessageFlag:(NSString *)flag;
 
 // Update handler
 - (void)registerForChanges:(RawMessageChangeHandler)handler;
 
 + (RawMessage *)allocFromZMessage:(ZMessage *)message;
+@property (nonatomic, weak) ZMessage *linkedZMessage;
+
 
 @end

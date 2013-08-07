@@ -8,10 +8,12 @@
 
 #import "RawMessage.h"
 
+#import "ZulipAppDelegate.h"
+#import "ZulipAPIController.h"
+
 @interface RawMessage ()
 
 @property (nonatomic, retain) NSMutableSet *changeHandlers;
-
 @end
 
 @implementation RawMessage
@@ -23,6 +25,8 @@
     if (self) {
         self.changeHandlers = [[NSMutableSet alloc] init];
         self.pm_recipients = [[NSMutableSet alloc] init];
+        self.linkedZMessage = nil;
+        self.messageFlags = [[NSSet alloc] init];
     }
 
     return self;
@@ -40,23 +44,30 @@
     }
 
     if (read) {
-        [self addMessageFlags:@[@"read"]];
+        [self addMessageFlag:@"read"];
     } else {
-        [self removeMessageFlags:@[@"read"]];
+        [self removeMessageFlag:@"read"];
     }
 }
 
-- (void)addMessageFlags:(NSArray *)flags
+- (void)addMessageFlag:(NSString *)flag
 {
-    NSMutableArray *newFlags = [[NSMutableArray alloc] initWithArray:self.messageFlags];
-    [newFlags addObjectsFromArray:flags];
+    NSMutableSet *newFlags = [[NSMutableSet alloc] initWithSet:self.messageFlags];
+    [newFlags addObject:flag];
+
+    // Save back to the server if there is a change
+    if (![newFlags isEqualToSet:self.messageFlags]) {
+        [[ZulipAPIController sharedInstance] sendMessageFlagsUpdated:self withOperation:@"add" andFlag:flag];
+    }
+
     self.messageFlags = newFlags;
 }
 
-- (void)removeMessageFlags:(NSArray *)flags
+- (void)removeMessageFlag:(NSString *)flag
 {
-    NSMutableArray *newFlags = [[NSMutableArray alloc] initWithArray:self.messageFlags];
-    [newFlags removeObjectsInArray:flags];
+    NSMutableSet *newFlags = [[NSMutableSet alloc] initWithSet:self.messageFlags];
+    [newFlags removeObject:flag];
+
     self.messageFlags = newFlags;
 }
 
@@ -65,11 +76,26 @@
     [self.changeHandlers addObject:[handler copy]];
 }
 
-- (void)setMessageFlags:(NSArray *)messageFlags
+- (void)setMessageFlags:(NSSet *)messageFlags
 {
     _messageFlags = messageFlags;
 
     [self notifyOfChanges];
+
+    // Save to Core Data if necessary
+    if (self.linkedZMessage) {
+        if (![self.messageFlags isEqualToSet:self.linkedZMessage.messageFlags]) {
+            [self.linkedZMessage setMessageFlags:self.messageFlags];
+            ZulipAppDelegate *appDelegate = (ZulipAppDelegate *)[[UIApplication sharedApplication] delegate];
+
+            NSLog(@"SAving flags change to Core Data!!!");
+            NSError *error = nil;
+            [[appDelegate managedObjectContext] save:&error];
+            if (error) {
+                NSLog(@"Erorr saving flags from RawMessage to ZMessage: %@ %@", [error localizedDescription], [error userInfo]);
+            }
+        }
+    }
 }
 
 - (void)notifyOfChanges
@@ -93,6 +119,8 @@
     raw.sender = message.sender;
 
     raw.messageFlags = [message messageFlags];
+
+    raw.linkedZMessage = message;
 
     return raw;
 }

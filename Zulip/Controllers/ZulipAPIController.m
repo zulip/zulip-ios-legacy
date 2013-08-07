@@ -532,30 +532,25 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
     for (ZMessage *msg in messages) {
         // Update raw msg attached to core data
         RawMessage *raw = msg.linkedRawMessage;
-        [rawMessagesToUpdate addObject:raw];
+
+        if (raw) {
+            [rawMessagesToUpdate addObject:raw];
+        }
     }
 
     // Update any RawMessage-only messages (messages loaded in a narrow, not saved to core data)
     for (NSString *msgId in messageIDs) {
         NSNumber *numId = [NSNumber numberWithInt:[msgId intValue]];
         if ([self.ephemeralMessages objectForKey:numId]) {
-
-        }
-    }
-
-    for (ZMessage *msg in messages) {
-        if ([op isEqualToString:@"add"]) {
-            [msg addMessageFlag:flag];
-        } else if ([op isEqualToString:@"remove"]) {
-            [msg removeMessageFlag:flag];
+            [rawMessagesToUpdate addObject:[self.ephemeralMessages objectForKey:numId]];
         }
     }
 
     for (RawMessage *raw in rawMessagesToUpdate) {
         if ([op isEqualToString:@"add"]) {
-            [raw addMessageFlags:@[flag]];
+            [raw addMessageFlag:flag];
         } else if ([op isEqualToString:@"remove"]) {
-            [raw removeMessageFlags:@[flag]];
+            [raw removeMessageFlag:flag];
         }
     }
 
@@ -566,6 +561,20 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
             NSLog(@"Failed to save flag updates: %@ %@", [error localizedDescription], [error userInfo]);
         }
     }
+}
+
+- (void)sendMessageFlagsUpdated:(RawMessage *)message withOperation:(NSString *)operation andFlag:(NSString *)flag
+{
+
+    NSData *data = [NSJSONSerialization dataWithJSONObject:@[message.messageID] options:0 error:nil];
+    NSDictionary *opts = @{@"messages": [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding],
+                           @"flag": flag,
+                           @"op": operation};
+    [[ZulipAPIClient sharedClient] postPath:@"messages/flags" parameters:opts success:^(AFHTTPRequestOperation *afop, id responseObject) {
+        NSLog(@"Successfully updated message dlags");
+    } failure:^(AFHTTPRequestOperation *afop, NSError *error) {
+        NSLog(@"Failed to update message flags %@ %@", [error localizedDescription], [error userInfo]);
+    }];
 }
 
 #pragma mark - Core Data Insertion
@@ -707,6 +716,8 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
             [msg setMessageFlags:rawMsg.messageFlags];
 
             msg.linkedRawMessage = rawMsg;
+            rawMsg.linkedZMessage = msg;
+
             [zmessages addObject:msg];
         }
 
@@ -755,7 +766,7 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
     msg.timestamp = [NSDate dateWithTimeIntervalSince1970:[[msgDict objectForKey:@"timestamp"] intValue]];
     msg.messageID = [NSNumber numberWithInteger:[[msgDict objectForKey:@"id"] integerValue]];
 
-    [msg setMessageFlags:[msgDict objectForKey:@"flags"]];
+    [msg setMessageFlags:[NSSet setWithArray:[msgDict objectForKey:@"flags"]]];
 
     if ([msg.type isEqualToString:@"stream"]) {
         msg.stream_recipient = [msgDict valueForKey:@"display_recipient"];

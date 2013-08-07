@@ -50,6 +50,8 @@ typedef void(^MessagesDelivered)(NSArray *messages);
 // Use this to force a network request to fetch messages. They will be inserted in core data if the narrow is a Home View narrow
 - (void) getOldMessages:(NSDictionary *)args narrow:(NarrowOperators *)narrow completionBlock:(MessagesDelivered)block;
 
+- (void)sendMessageFlagsUpdated:(RawMessage *)message withOperation:(NSString *)operation andFlag:(NSString *)flag;
+
 - (void)applicationWillTerminate;
 
 @property(assign) long pointer;

@@ -79,14 +79,14 @@
         [self start];
 
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Failure doing registerForQueue...retrying %@", [error localizedDescription]);
+        NSLog(@"Failure doing registerWithOptions...retrying %@", [error localizedDescription]);
 
         if (self.pollFailures > 5) {
             [self.appDelegate showErrorScreen:@"Unable to connect to Zulip."];
 
         }
         self.pollFailures++;
-        [self performSelector:@selector(registerForQueue) withObject:self afterDelay:2];
+        [self performSelector:@selector(registerWithOptions:) withObject:self afterDelay:2];
     }];
 }
 

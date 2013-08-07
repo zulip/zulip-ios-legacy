@@ -61,6 +61,9 @@
     [dateFormatter setDateFormat:@"HH:mm"];
     self.timestamp.text = [dateFormatter stringFromDate:message.timestamp];
 
+    // When a message is on the screen, mark it as read
+    message.read = YES;
+
 }
 
 - (void)willBeDisplayed

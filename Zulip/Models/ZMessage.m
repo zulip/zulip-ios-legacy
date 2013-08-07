@@ -28,16 +28,16 @@
 // MANUALLY ADDED BELOW THIS LINE
 @synthesize linkedRawMessage;
 
-- (NSArray *)messageFlags
+- (NSSet *)messageFlags
 {
     if (!self.flagData) {
-        return @[];
+        return [[NSSet alloc] init];
     }
     
     return [NSKeyedUnarchiver unarchiveObjectWithData:self.flagData];
 }
 
-- (void)setMessageFlags:(NSArray *)flags
+- (void)setMessageFlags:(NSSet *)flags
 {
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:flags];
     self.flagData = data;
@@ -45,7 +45,7 @@
 
 - (void)addMessageFlag:(NSString *)flag
 {
-    NSMutableArray *new_flags = [NSMutableArray arrayWithArray:[NSKeyedUnarchiver unarchiveObjectWithData:self.flagData]];
+    NSMutableSet *new_flags = [NSMutableSet setWithSet:[NSKeyedUnarchiver unarchiveObjectWithData:self.flagData]];
     [new_flags addObject:flag];
 
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:new_flags];
@@ -55,7 +55,7 @@
 
 - (void)removeMessageFlag:(NSString *)flag
 {
-    NSMutableArray *new_flags = [NSMutableArray arrayWithArray:[NSKeyedUnarchiver unarchiveObjectWithData:self.flagData]];
+    NSMutableSet *new_flags = [NSMutableSet setWithSet:[NSKeyedUnarchiver unarchiveObjectWithData:self.flagData]];
     [new_flags removeObject:flag];
 
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:new_flags];
