@@ -97,9 +97,14 @@
     return raw;
 }
 
-
 - (void)save
 {
     // TODO
 }
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"<ZMessage sender: %@ id:%li>", self.sender.full_name, [self.messageID longValue]];
+}
+
 @end

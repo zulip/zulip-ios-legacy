@@ -528,19 +528,35 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
     }
 
     // Update Core Data-backed messages
+    NSMutableArray *rawMessagesToUpdate = [[NSMutableArray alloc] init];
     for (ZMessage *msg in messages) {
         // Update raw msg attached to core data
         RawMessage *raw = msg.linkedRawMessage;
+        [rawMessagesToUpdate addObject:raw];
+    }
 
+    // Update any RawMessage-only messages (messages loaded in a narrow, not saved to core data)
+    for (NSString *msgId in messageIDs) {
+        NSNumber *numId = [NSNumber numberWithInt:[msgId intValue]];
+        if ([self.ephemeralMessages objectForKey:numId]) {
+
+        }
+    }
+
+    for (ZMessage *msg in messageIDs) {
         if ([op isEqualToString:@"add"]) {
             [msg addMessageFlag:flag];
-            [raw addMessageFlags:@[flag]];
         } else if ([op isEqualToString:@"remove"]) {
             [msg removeMessageFlag:flag];
+        }
+    }
+
+    for (RawMessage *raw in rawMessagesToUpdate) {
+        if ([op isEqualToString:@"add"]) {
+            [raw addMessageFlags:@[flag]];
+        } else if ([op isEqualToString:@"remove"]) {
             [raw removeMessageFlags:@[flag]];
         }
-        // TODO notify views!!
-
     }
 
     if ([messages count] > 0) {

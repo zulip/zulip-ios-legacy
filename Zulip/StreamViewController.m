@@ -288,7 +288,8 @@
     }
 
     // this block influenced by: http://stackoverflow.com/questions/8180115/nsmutablearray-add-object-with-order
-    // we want to do an in-order insert so that whether doing the initial backfill or inserting historical messages as requested, this method doesn't require special booleans or state.
+    // we want to do an in-order insert so that whether doing the initial backfill or inserting historical messages as requested,
+    // this method doesn't require special booleans or state.
     for (RawMessage *message in messages) {
         if ([self.msgIds containsObject:message.messageID])
             continue;
@@ -299,12 +300,16 @@
                                                    inSortedRange:(NSRange){0, [self.messages count]}
                                                          options:NSBinarySearchingInsertionIndex
                                                  usingComparator:^(id left, id right) {
-                                                     RawMessage *rLeft = (RawMessage *)left;
-                                                     RawMessage *rRight = (RawMessage *)right;
-                                                     return [rLeft.messageID compare:rRight.messageID];
+           RawMessage *rLeft = (RawMessage *)left;
+           RawMessage *rRight = (RawMessage *)right;
+           return [rLeft.messageID compare:rRight.messageID];
         }];
 
         [self.messages insertObject:message atIndex:insertionIndex];
+
+        [message registerForChanges:^(RawMessage *rawMsg) {
+            [self rawMessageDidChange:rawMsg];
+        }];
     }
 
     [self.tableView reloadData];
@@ -329,6 +334,20 @@
             [accepted addObject:msg];
     }
     [self loadMessages:accepted];
+}
+
+#pragma mark - Message Change Observing
+
+- (void)rawMessageDidChange:(RawMessage *)message
+{
+    NSLog(@"Message changed: %@", message);
+    NSUInteger index = [self.messages indexOfObject:message];
+    if (index != NSNotFound) {
+        NSIndexPath *path = [NSIndexPath indexPathForRow:index inSection:0];
+        MessageCell *cell = (MessageCell *)[self.tableView cellForRowAtIndexPath:path];
+
+        [cell setMessage:message];
+    }
 }
 
 #pragma mark - NSKeyValueObserving
