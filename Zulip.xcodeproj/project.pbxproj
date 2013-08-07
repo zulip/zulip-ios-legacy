@@ -17,6 +17,8 @@
 		B3174BDB17F47B61004C31E4 /* AboutView~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3174BDA17F47B61004C31E4 /* AboutView~iphone.xib */; };
 		B3174BDD17F47B77004C31E4 /* AboutView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3174BDC17F47B77004C31E4 /* AboutView~ipad.xib */; };
 		B3174BE117F47F92004C31E4 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3174BDF17F47F92004C31E4 /* AboutViewController.m */; };
+		7882870117B2EDF100D5DC42 /* emoji in Resources */ = {isa = PBXBuildFile; fileRef = 7882870017B2EDE100D5DC42 /* emoji */; };
+		7882800D17B2E5D200D5DC42 /* Zulip.css in Resources */ = {isa = PBXBuildFile; fileRef = 7882800C17B2E2F300D5DC42 /* Zulip.css */; };
 		B3469795179ED591006D0E9B /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3469794179ED591006D0E9B /* CoreData.framework */; };
 		B34697C517A020D1006D0E9B /* ZulipAPIController.m in Sources */ = {isa = PBXBuildFile; fileRef = B34697C417A020D1006D0E9B /* ZulipAPIController.m */; };
 		B351823117A1B20A00B41D75 /* ZSubscription.m in Sources */ = {isa = PBXBuildFile; fileRef = B351823017A1B20A00B41D75 /* ZSubscription.m */; };
@@ -140,6 +142,8 @@
 		B3174BDC17F47B77004C31E4 /* AboutView~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "AboutView~ipad.xib"; path = "Views/AboutView~ipad.xib"; sourceTree = "<group>"; };
 		B3174BDE17F47F92004C31E4 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AboutViewController.h; path = Controllers/ViewControllers/AboutViewController.h; sourceTree = "<group>"; };
 		B3174BDF17F47F92004C31E4 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AboutViewController.m; path = Controllers/ViewControllers/AboutViewController.m; sourceTree = "<group>"; };
+		7882870017B2EDE100D5DC42 /* emoji */ = {isa = PBXFileReference; lastKnownFileType = folder; name = emoji; path = Resources/emoji; sourceTree = "<group>"; };
+		7882800C17B2E2F300D5DC42 /* Zulip.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Zulip.css; sourceTree = SOURCE_ROOT; };
 		B3469794179ED591006D0E9B /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		B34697C317A020D1006D0E9B /* ZulipAPIController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZulipAPIController.h; path = Controllers/ZulipAPIController.h; sourceTree = "<group>"; };
 		B34697C417A020D1006D0E9B /* ZulipAPIController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZulipAPIController.m; path = Controllers/ZulipAPIController.m; sourceTree = "<group>"; };
@@ -349,6 +353,7 @@
 			children = (
 				B39AC2B217F0ED6300EB65B3 /* Launch Images */,
 				B3AA069E17B4357B009B06F0 /* zulip_icon */,
+				7882870017B2EDE100D5DC42 /* emoji */,
 				B3733CCB1778C75300714B6E /* Default-568h@2x.png */,
 				B3F562A917ABEA8D004B185A /* home.png */,
 				B3F562AA17ABEA8D004B185A /* home@2x.png */,
@@ -606,6 +611,7 @@
 				C316738D1620DB6B00CE9FE5 /* InfoPlist.strings */,
 				C31673901620DB6B00CE9FE5 /* main.m */,
 				C31673921620DB6B00CE9FE5 /* Zulip-Prefix.pch */,
+				7882800C17B2E2F300D5DC42 /* Zulip.css */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -708,6 +714,8 @@
 				B3CC438A17A6E2E200C8AF3F /* MainWindow~iphone.xib in Resources */,
 				B3CC438B17A6E2E200C8AF3F /* MainWindow~ipad.xib in Resources */,
 				B376985317B56EB100D29D93 /* Images.xcassets in Resources */,
+				7882870117B2EDF100D5DC42 /* emoji in Resources */,
+				7882800D17B2E5D200D5DC42 /* Zulip.css in Resources */,
 				C316738F1620DB6B00CE9FE5 /* InfoPlist.strings in Resources */,
 				B3174BDB17F47B61004C31E4 /* AboutView~iphone.xib in Resources */,
 				B39AC2C717F0ED9E00EB65B3 /* Default.png in Resources */,

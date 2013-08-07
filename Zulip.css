@@ -1,0 +1,15 @@
+code {
+  padding: 2px 4px;
+  color: #d14;
+  background-color: #f7f7f9;
+  border: 1px solid #e1e1e8;
+}
+
+img {
+  max-height: 200px;
+}
+
+img.emoji {
+  height: 1.4em;
+  width: 1.4em;
+}
