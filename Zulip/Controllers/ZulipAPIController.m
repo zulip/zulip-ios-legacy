@@ -543,7 +543,7 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
         }
     }
 
-    for (ZMessage *msg in messageIDs) {
+    for (ZMessage *msg in messages) {
         if ([op isEqualToString:@"add"]) {
             [msg addMessageFlag:flag];
         } else if ([op isEqualToString:@"remove"]) {

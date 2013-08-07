@@ -62,6 +62,8 @@
 
     self.delegate = (ZulipAppDelegate *)[UIApplication sharedApplication].delegate;
 
+    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+
     UIImage *composeButtonImage = [UIImage imageNamed:@"bullhorn.png"];
     UIButton *composeButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [composeButton setImage:composeButtonImage forState:UIControlStateNormal];

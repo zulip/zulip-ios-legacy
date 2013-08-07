@@ -3,7 +3,7 @@
 #import "NSString+Encode.h"
 #import "ZulipAPIClient.h"
 #import "ZulipAPIController.h"
-#import "StreamsSidebarController.h"
+#import "LeftSidebarViewController.h"
 #import "NarrowViewController.h"
 
 // AFNetworking
@@ -47,7 +47,7 @@
 
     self.sidePanelController.centerPanel = self.navController;
 
-    StreamsSidebarController *sidebar = [[StreamsSidebarController alloc] init];
+    LeftSidebarViewController *sidebar = [[LeftSidebarViewController alloc] initWithNibName:@"LeftSidebarViewController" bundle:nil];
     self.sidePanelController.leftPanel = sidebar;
 
     // Connect the API controller to the home view, and connect to the Zulip API

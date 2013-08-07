@@ -11,6 +11,8 @@
 		782681C91795CE08009F69F5 /* ComposeViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681C81795CE08009F69F5 /* ComposeViewController~ipad.xib */; };
 		782681CC1795D10C009F69F5 /* LoginViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681CB1795D10C009F69F5 /* LoginViewController~ipad.xib */; };
 		78B52F061796038F002B26DE /* ErrorViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78B52F051796038F002B26DE /* ErrorViewController~ipad.xib */; };
+		B30F55A217B2D432006DC735 /* LeftSidebarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B30F55A017B2D432006DC735 /* LeftSidebarViewController.m */; };
+		B30F55A317B2D432006DC735 /* LeftSidebarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B30F55A117B2D432006DC735 /* LeftSidebarViewController.xib */; };
 		B3469795179ED591006D0E9B /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3469794179ED591006D0E9B /* CoreData.framework */; };
 		B34697C517A020D1006D0E9B /* ZulipAPIController.m in Sources */ = {isa = PBXBuildFile; fileRef = B34697C417A020D1006D0E9B /* ZulipAPIController.m */; };
 		B351823117A1B20A00B41D75 /* ZSubscription.m in Sources */ = {isa = PBXBuildFile; fileRef = B351823017A1B20A00B41D75 /* ZSubscription.m */; };
@@ -45,7 +47,6 @@
 		B3F5628817A80724004B185A /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F5628517A80724004B185A /* JASidePanelController.m */; };
 		B3F5628917A80724004B185A /* UIViewController+JASidePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F5628717A80724004B185A /* UIViewController+JASidePanel.m */; };
 		B3F5628B17A8074C004B185A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3F5628A17A8074C004B185A /* QuartzCore.framework */; };
-		B3F5628E17A80804004B185A /* StreamsSidebarController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F5628D17A80804004B185A /* StreamsSidebarController.m */; };
 		B3F5629317A81C37004B185A /* SidebarStreamCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F5629217A81C37004B185A /* SidebarStreamCell.m */; };
 		B3F5629517A81C49004B185A /* SidebarStreamCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3F5629417A81C49004B185A /* SidebarStreamCell.xib */; };
 		B3F5629817A84FD5004B185A /* NarrowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F5629717A84FD5004B185A /* NarrowViewController.m */; };
@@ -103,6 +104,9 @@
 		782681C81795CE08009F69F5 /* ComposeViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "ComposeViewController~ipad.xib"; sourceTree = "<group>"; };
 		782681CB1795D10C009F69F5 /* LoginViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "LoginViewController~ipad.xib"; sourceTree = "<group>"; };
 		78B52F051796038F002B26DE /* ErrorViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "ErrorViewController~ipad.xib"; sourceTree = "<group>"; };
+		B30F559F17B2D432006DC735 /* LeftSidebarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LeftSidebarViewController.h; path = Controllers/ViewControllers/LeftSidebarViewController.h; sourceTree = "<group>"; };
+		B30F55A017B2D432006DC735 /* LeftSidebarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LeftSidebarViewController.m; path = Controllers/ViewControllers/LeftSidebarViewController.m; sourceTree = "<group>"; };
+		B30F55A117B2D432006DC735 /* LeftSidebarViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LeftSidebarViewController.xib; path = Controllers/ViewControllers/LeftSidebarViewController.xib; sourceTree = "<group>"; };
 		B3469794179ED591006D0E9B /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		B34697C317A020D1006D0E9B /* ZulipAPIController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZulipAPIController.h; path = Controllers/ZulipAPIController.h; sourceTree = "<group>"; };
 		B34697C417A020D1006D0E9B /* ZulipAPIController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZulipAPIController.m; path = Controllers/ZulipAPIController.m; sourceTree = "<group>"; };
@@ -155,8 +159,6 @@
 		B3F5628617A80724004B185A /* UIViewController+JASidePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+JASidePanel.h"; path = "ThirdParty/JASidePanels/JASidePanels/Source/UIViewController+JASidePanel.h"; sourceTree = "<group>"; };
 		B3F5628717A80724004B185A /* UIViewController+JASidePanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+JASidePanel.m"; path = "ThirdParty/JASidePanels/JASidePanels/Source/UIViewController+JASidePanel.m"; sourceTree = "<group>"; };
 		B3F5628A17A8074C004B185A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		B3F5628C17A80804004B185A /* StreamsSidebarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StreamsSidebarController.h; path = Controllers/ViewControllers/StreamsSidebarController.h; sourceTree = "<group>"; };
-		B3F5628D17A80804004B185A /* StreamsSidebarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StreamsSidebarController.m; path = Controllers/ViewControllers/StreamsSidebarController.m; sourceTree = "<group>"; };
 		B3F5629117A81C37004B185A /* SidebarStreamCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SidebarStreamCell.h; path = Views/SidebarStreamCell.h; sourceTree = "<group>"; };
 		B3F5629217A81C37004B185A /* SidebarStreamCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SidebarStreamCell.m; path = Views/SidebarStreamCell.m; sourceTree = "<group>"; };
 		B3F5629417A81C49004B185A /* SidebarStreamCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SidebarStreamCell.xib; path = Views/SidebarStreamCell.xib; sourceTree = "<group>"; };
@@ -379,8 +381,9 @@
 				E5DC806A165D347D008B53F9 /* ComposeViewController.m */,
 				E598E7871634A9940022BF4A /* ErrorViewController.h */,
 				E598E7881634A9940022BF4A /* ErrorViewController.m */,
-				B3F5628C17A80804004B185A /* StreamsSidebarController.h */,
-				B3F5628D17A80804004B185A /* StreamsSidebarController.m */,
+				B30F559F17B2D432006DC735 /* LeftSidebarViewController.h */,
+				B30F55A017B2D432006DC735 /* LeftSidebarViewController.m */,
+				B30F55A117B2D432006DC735 /* LeftSidebarViewController.xib */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -598,6 +601,7 @@
 				78B52F061796038F002B26DE /* ErrorViewController~ipad.xib in Resources */,
 				B3CC438D17A6E44C00C8AF3F /* zulip.png in Resources */,
 				B3CC438F17A6E45000C8AF3F /* zulip@2x.png in Resources */,
+				B30F55A317B2D432006DC735 /* LeftSidebarViewController.xib in Resources */,
 				B3F5629517A81C49004B185A /* SidebarStreamCell.xib in Resources */,
 				B3F5629A17A8674B004B185A /* SidebarStreamsHeader.xib in Resources */,
 				B3F562AD17ABEA8D004B185A /* home.png in Resources */,
@@ -658,6 +662,7 @@
 			files = (
 				780CF5E3179608FE0053481C /* ComposeViewController.m in Sources */,
 				C31673911620DB6B00CE9FE5 /* main.m in Sources */,
+				B30F55A217B2D432006DC735 /* LeftSidebarViewController.m in Sources */,
 				C31673951620DB6B00CE9FE5 /* ZulipAppDelegate.m in Sources */,
 				E577A74D16226AC4002D9651 /* MessageCell.m in Sources */,
 				E5CDE07C162C88A800BBD773 /* LoginViewController.m in Sources */,
@@ -683,7 +688,6 @@
 				B3CC439617A7F13700C8AF3F /* HomeViewController.m in Sources */,
 				B3F5628817A80724004B185A /* JASidePanelController.m in Sources */,
 				B3F5628917A80724004B185A /* UIViewController+JASidePanel.m in Sources */,
-				B3F5628E17A80804004B185A /* StreamsSidebarController.m in Sources */,
 				B3F5629317A81C37004B185A /* SidebarStreamCell.m in Sources */,
 				B3F5629817A84FD5004B185A /* NarrowViewController.m in Sources */,
 				B3F5629D17A9A4EE004B185A /* RawMessage.m in Sources */,

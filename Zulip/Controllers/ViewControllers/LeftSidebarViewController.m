@@ -1,12 +1,11 @@
 //
-//  StreamsSidebarController.m
+//  LeftSidebarViewController.m
 //  Zulip
 //
-//  Created by Leonardo Franchi on 7/30/13.
+//  Created by Leonardo Franchi on 8/7/13.
 //
 //
-
-#import "StreamsSidebarController.h"
+#import "LeftSidebarViewController.h"
 #import "ZulipAPIController.h"
 #import "ZulipAppDelegate.h"
 #import "ZUser.h"
@@ -21,7 +20,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 
-@interface StreamsSidebarController () <NSFetchedResultsControllerDelegate>
+@interface LeftSidebarViewController () <NSFetchedResultsControllerDelegate>
 
 @property (nonatomic, retain) NSFetchedResultsController *streamController;
 @property (nonatomic, retain) SidebarStreamsHeader *sidebarStreamsHeader;
@@ -30,7 +29,7 @@
 
 @end
 
-@implementation StreamsSidebarController
+@implementation LeftSidebarViewController
 
 - (id)init
 {
@@ -48,14 +47,16 @@
 
 - (void)viewDidLoad
 {
-    CGRect bounds = CGRectMake(0, 0, 250, 568);
-    self.tableView = [[UITableView alloc] initWithFrame:bounds style:UITableViewStylePlain];
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
     self.tableView.backgroundColor = [UIColor colorWithHexString:@"#F4F5F4" defaultColor:[UIColor whiteColor]];
 
     self.sidebarStreamsHeader = [[SidebarStreamsHeader alloc] init];
+
+    // On iOS 7 with translucent status bars, we move the top down so it's not obscured
+    if ([[[UIDevice currentDevice] systemVersion] compare:@"7.0" options:NSNumericSearch] != NSOrderedAscending) {
+        UIEdgeInsets insets = UIEdgeInsetsMake(15.0, 0.0, 0.0, 0.0);
+        self.tableView.contentInset = insets;
+    }
+
 
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ZSubscription"];
     fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]];
@@ -321,7 +322,7 @@
     } else if (indexPath.section == 3) {
         // Logout
         LoginViewController *loginView = [[LoginViewController alloc] initWithNibName:@"LoginViewController"
-                                                                              bundle:nil];
+                                                                               bundle:nil];
         [self.sidePanelController toggleLeftPanel:self];
 
         ZulipAppDelegate *delegate = (ZulipAppDelegate *)[[UIApplication sharedApplication] delegate];
