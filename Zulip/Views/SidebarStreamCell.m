@@ -37,7 +37,6 @@
     switch (shortcut) {
         case HOME:
         {
-            self.name.text = @"Home";
             // Magic to go  back to the main view
             [op setInHomeView];
             UIImage *image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"home" ofType:@"png"]];
@@ -50,7 +49,6 @@
         }
         case PRIVATE_MESSAGES:
         {
-            self.name.text = @"Private Messages";
             [op setPrivateMessages];
 
             UIImage *image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"user" ofType:@"png"]];
@@ -65,6 +63,7 @@
             break;
     }
 
+    self.name.text = [op title];
     [self setCount:count];
     
     _narrow = op;
@@ -74,7 +73,6 @@
 {
     _shortcut = STREAM;
     _stream = subscription;
-    self.name.text = subscription.name;
 
     NarrowOperators *op = [[NarrowOperators alloc] init];
     [op addStreamNarrow:subscription.name];
@@ -92,6 +90,7 @@
         }
     }
 
+    self.name.text = [op title];
     [self setCount:count];
     [self setBackgroundIfCurrent];
 }

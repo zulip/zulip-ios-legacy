@@ -29,7 +29,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
+    self.title = self.operators.title;
     [self initialPopulate];
 }
 
@@ -62,6 +63,10 @@
 
 - (void)initiallyLoadedMessages
 {
+    if ([self.messages count] == 0) {
+        return;
+    }
+
     NSIndexPath *unread = nil;
     for (NSUInteger i = 0; i < [self.messages count]; i++) {
         RawMessage *msg = [self.messages objectAtIndex:i];
@@ -74,8 +79,8 @@
         unread = [NSIndexPath indexPathForRow:[self.messages count] - 1 inSection:0];
     }
     // Scroll to first unread in the middle of the screen
-    NSLog(@"Scrolling to : %@", unread);
-    [self.tableView scrollToRowAtIndexPath:unread atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
+    NSLog(@"Scrolling to row %i", [unread row]);
+    [self.tableView scrollToRowAtIndexPath:unread atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
 }
 
 @end

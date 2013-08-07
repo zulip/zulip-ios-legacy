@@ -49,6 +49,29 @@
     [self.subpredicates addObject:@[@"stream", streamName]];
 }
 
+- (NSString *)title
+{
+    if (self.home_view) {
+        return @"Home";
+    } else {
+        if ([self.subpredicates count] == 1) {
+            NSArray *pred = [self.subpredicates objectAtIndex:0];
+            if ([pred count] > 0) {
+                NSString *operator = [pred objectAtIndex:0];
+                NSString *operand = [pred objectAtIndex:1];
+                if ([operator isEqualToString:@"stream"]) {
+                    return operand;
+                } else if ([operator isEqualToString:@"is"] &&
+                           [operand isEqualToString:@"private"]) {
+                    return @"Private Messages";
+                }
+            }
+        }
+    }
+
+    return @"Zulip";
+}
+
 - (NSPredicate *)allocAsPredicate
 {
     NSMutableArray *generated = [[NSMutableArray alloc] init];

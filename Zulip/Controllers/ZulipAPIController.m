@@ -361,7 +361,7 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
             RangePair *firstRange = [RangePair getCurrentRangeOf:[first.messageID intValue] inRangePairs:self.rangePairs];
             RangePair *lastRange = [RangePair getCurrentRangeOf:[last.messageID intValue] inRangePairs:self.rangePairs];
 
-            NSLog(@"Got first %@ and last %@ ranges for first fetched message %@ and lasdt fetched message %@", firstRange, lastRange, first, last);
+            NSLog(@"Got first %@ and last %@ ranges for first fetched message and last fetched message", firstRange, lastRange);
 
             if (!firstRange || !lastRange || ![firstRange isEqual:lastRange]) {
                 NSLog(@"Got messages across range boundaries, refetching");

@@ -21,6 +21,8 @@
 
 - (BOOL)isHomeView;
 
+- (NSString *)title;
+
 - (NSPredicate *)allocAsPredicate;
 - (NSString *)allocAsJSONPayload;
 - (BOOL)acceptsMessage:(RawMessage *)msg;
