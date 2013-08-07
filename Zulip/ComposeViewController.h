@@ -12,6 +12,8 @@
 @property(nonatomic,retain) NSString *type;
 @property (nonatomic, retain) NSMutableArray *entryFields;
 
+- (id)initWithReplyTo:(RawMessage *)message;
+
 - (IBAction) send;
 
 @end

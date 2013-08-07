@@ -2,19 +2,25 @@
 #import "ComposeViewController.h"
 #import "ZulipAppDelegate.h"
 #import "ZulipAPIClient.h"
+#import "ZulipAPIController.h"
 
 @interface ComposeViewController ()
+
+@property (nonatomic, retain) RawMessage *replyTo;
 
 @end
 
 @implementation ComposeViewController
 
-@synthesize recipient;
-@synthesize privateRecipient;
-@synthesize subject;
-@synthesize content;
-@synthesize type;
-@synthesize entryFields;
+- (id)initWithReplyTo:(RawMessage *)message
+{
+    self = [super initWithNibName:@"ComposeViewController" bundle:nil];
+    if (self) {
+        self.replyTo = message;
+    }
+
+    return self;
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -27,7 +33,6 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    NSLog(@"view will appear %@", self.type);
 }
 
 - (void)viewDidLoad
@@ -38,19 +43,35 @@
     self.content.clipsToBounds = YES;
     [self.content.layer setBorderColor:[[[UIColor grayColor] colorWithAlphaComponent:0.5] CGColor]];
     [self.content.layer setBorderWidth:2.0];
-    self.content.delegate = self;
-    self.recipient.delegate = self;
-    self.subject.delegate = self;
+
+    self.edgesForExtendedLayout = UIRectEdgeLeft | UIRectEdgeBottom | UIRectEdgeRight;
 
     if ([self.type isEqualToString:@"stream"]) {
-        [self.subject setHidden:NO];
-        [self.recipient setHidden:NO];
-        [self.privateRecipient setHidden:YES];
+        self.subject.hidden = NO;
+
+        self.recipient.hidden = NO;
+        self.recipient.text = self.replyTo.stream_recipient;
+
+        self.subject.text = self.replyTo.subject;
+
+        self.privateRecipient.hidden = YES;
     } else if ([self.type isEqualToString:@"private"]) {
-        [self.subject setHidden:YES];
-        [self.recipient setHidden:YES];
-        [self.privateRecipient setHidden:NO];
+        self.subject.hidden = YES;
+
+        self.recipient.hidden = YES;
+
+        self.privateRecipient.hidden = NO;
+
+        NSSet *recipients = self.replyTo.pm_recipients;
+        NSMutableArray *recipient_array = [[NSMutableArray alloc] init];
+        for (ZUser *recipient in recipients) {
+            if (![recipient.email isEqualToString:[[ZulipAPIController sharedInstance] email]]) {
+                [recipient_array addObject:recipient.email];
+            }
+        }
+        self.privateRecipient.text = [recipient_array componentsJoinedByString:@", "];
     }
+
 
     self.delegate = (ZulipAppDelegate *)[UIApplication sharedApplication].delegate;
 

@@ -214,30 +214,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    ComposeViewController *composeView = [[ComposeViewController alloc]
-                                          initWithNibName:@"ComposeViewController"
-                                          bundle:nil];
-
     RawMessage *message = [self messageAtIndexPath:indexPath];
+    ComposeViewController *composeView = [[ComposeViewController alloc] initWithReplyTo:message];
+
     composeView.type = message.type;
     [[self navigationController] pushViewController:composeView animated:YES];
-
-    if ([message.type isEqualToString:@"stream"]) {
-        composeView.recipient.text = message.stream_recipient;
-        [composeView.subject setHidden:NO];
-        composeView.subject.text = message.subject;
-    } else if ([message.type isEqualToString:@"private"]) {
-        [composeView.subject setHidden:YES];
-
-        NSSet *recipients = message.pm_recipients;
-        NSMutableArray *recipient_array = [[NSMutableArray alloc] init];
-        for (ZUser *recipient in recipients) {
-            if (![recipient.email isEqualToString:[[ZulipAPIController sharedInstance] email]]) {
-                [recipient_array addObject:recipient.email];
-            }
-        }
-        composeView.privateRecipient.text = [recipient_array componentsJoinedByString:@", "];
-    }
 }
 
 #pragma mark - StreamViewController
