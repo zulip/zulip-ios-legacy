@@ -260,8 +260,8 @@
     if ([messages count] > 0) {
         RawMessage *last = [messages lastObject];
 
-//        NSLog(@"Adding %i backlog with last new message; %i", [_batchedInsertingRows count], [lastNewMsg.messageID intValue]);
-        if (last && last.messageID < self.topRow.messageID) {
+//        NSLog(@"Adding %i backlog with last new message; %@ < %@", [messages count], last.messageID, self.topRow.messageID);
+        if (last && ([last.messageID longValue] < [self.topRow.messageID longValue])) {
             insertingAtTop = YES;
             [UIView setAnimationsEnabled:NO];
             offset = [self.tableView contentOffset];
