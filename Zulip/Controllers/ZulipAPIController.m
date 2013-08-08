@@ -30,10 +30,7 @@
 @interface ZulipAPIController ()
 
 @property (nonatomic, retain) NSString *apiKey;
-@property (nonatomic, retain) NSString *clientID;
-@property (nonatomic, retain) NSString *apiURL;
 
-@property (assign) BOOL loadingInitialMessages;
 @property (assign) long maxLocalMessageId;
 
 @property (nonatomic, retain) LongPoller *messagesPoller;
@@ -65,8 +62,11 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
     self = [super init];
 
     if (self) {
-        [self clearSettings];
+        [self clearSettingsForNewUser:YES];
         [self loadRangesFromFile];
+
+        _pointer = [[[NSUserDefaults standardUserDefaults] objectForKey:@"pointer"] longValue];
+        _fullName = [[NSUserDefaults standardUserDefaults] stringForKey:@"fullName"];
 
         self.appDelegate = (ZulipAppDelegate *)[[UIApplication sharedApplication] delegate];
         _unreadManager = [[UnreadManager alloc] init];
@@ -76,17 +76,7 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
         NSString *storedApiKey = [keychainItem objectForKey:(__bridge id)kSecValueData];
         NSString *storedEmail = [keychainItem objectForKey:(__bridge id)kSecAttrAccount];
 
-        self.messagesPoller = [[LongPoller alloc] initWithInitialBlock:^(NSDictionary *data) {
-            [self longPollInitialData:data];
-        } andEventBlock:^(NSArray *events) {
-            [self longPollMessagesReceived:events];
-        }];
-
-        self.metadataPoller = [[LongPoller alloc] initWithInitialBlock:^(NSDictionary *data) {
-            [self metadataLongPollInitialData:data];
-        } andEventBlock:^(NSArray *events) {
-            [self metadataPollEventsReceived:events];
-        }];
+        [self initPollers];
 
         if (![storedApiKey isEqualToString:@""]) {
             // We have credentials, so try to reuse them. We may still have to log in if they are stale.
@@ -94,26 +84,52 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
             self.email = storedEmail;
 
             [ZulipAPIClient setCredentials:self.email withAPIKey:self.apiKey];
-            [self registerForQueues];
+            [self registerForMessages];
+            [self registerForMetadata];
         }
     }
 
     return self;
 }
 
-- (void)clearSettings
+- (void)clearSettingsForNewUser:(BOOL)newUser
 {
-    self.apiKey = @"";
-    self.clientID = @"";
-    self.apiURL = @"";
-    self.email = @"";
-    self.fullName = @"";
+    if (newUser) {
+        self.apiKey = @"";
+        self.email = @"";
+        self.fullName = @"";
+    }
     self.backgrounded = NO;
-    self.loadingInitialMessages = YES;
     self.pointer = -1;
     self.maxServerMessageId = -1;
     self.maxLocalMessageId = -1;
     self.rangePairs = [[NSMutableArray alloc] init];
+}
+
+- (void)initPollers
+{
+    self.messagesPoller = [[LongPoller alloc] initWithInitialBlock:^(NSDictionary *data) {
+        [self messagesPollInitialData:data];
+    } andEventBlock:^(NSArray *events) {
+        [self messagesPollReceivedMessages:events];
+    }];
+    [self.messagesPoller registerErrorHandler:^{
+        [self messagesPollErrorHandler];
+    }];
+
+    self.metadataPoller = [[LongPoller alloc] initWithInitialBlock:^(NSDictionary *data) {
+        [self metadataPollInitialData:data];
+    } andEventBlock:^(NSArray *events) {
+        [self metadataPollEventsReceived:events];
+    }];
+
+    [self.metadataPoller registerErrorHandler:^{
+        [self metadataPollErrorHandler];
+    }];
+
+    // Changing the unique name will force a reload of all database data
+    [self.metadataPoller makePersistentWithUniqueName:@"LongLivedMetadata"];
+
 }
 
 - (NSString *)rangesFilePath
@@ -176,7 +192,8 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
         [keychainItem setObject:self.email forKey:(__bridge id)kSecAttrAccount];
 
         [ZulipAPIClient setCredentials:self.email withAPIKey:self.apiKey];
-        [self registerForQueues];
+        [self registerForMessages];
+        [self registerForMetadata];
 
         result(YES);
     } failure: ^( AFHTTPRequestOperation *operation , NSError *error ){
@@ -191,7 +208,7 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
     // Hide any error screens if visible
     [self.appDelegate dismissErrorScreen];
 
-    [self clearSettings];
+    [self clearSettingsForNewUser:YES];
     KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc]
                                          initWithIdentifier:@"ZulipLogin" accessGroup:nil];
     [keychainItem resetKeychainItem];
@@ -220,13 +237,7 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
     return [NSString stringWithFormat:@"%@-%@", self.email, domainPart];
 }
 
-- (void)reset
-{
-    [self clearSettings];
-    [self registerForQueues];
-}
-
-- (void) registerForQueues
+- (void)registerForMessages
 {
     // Register for messages only
     NSArray *event_types = @[@"message"];
@@ -235,13 +246,16 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
                                                                          encoding:NSUTF8StringEncoding],};
 
     [self.messagesPoller registerWithOptions:messagesOpts];
+}
 
+- (void)registerForMetadata
+{
     // Metadata
-    event_types = @[@"pointer", @"realm_user", @"subscription", @"update_message", @"update_message_flags"];
-    messagesOpts = @{@"apply_markdown": @"false",
-                     @"event_types": [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:event_types options:0 error:nil]
+    NSArray *event_types = @[@"pointer", @"realm_user", @"subscription", @"update_message", @"update_message_flags"];
+    NSDictionary *messagesOpts = @{@"apply_markdown": @"false",
+                                   @"event_types": [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:event_types options:0 error:nil]
                                                               encoding:NSUTF8StringEncoding],
-                     @"long_lived_queue": @"true"};
+                                   @"long_lived_queue": @"true"};
 
     [self.metadataPoller registerWithOptions:messagesOpts];
 }
@@ -280,6 +294,7 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
     NSDictionary *postFields = @{@"pointer": @(_pointer)};
 
     [[ZulipAPIClient sharedClient] putPath:@"users/me/pointer" parameters:postFields success:nil failure:nil];
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithLong:_pointer] forKey:@"pointer"];
 }
 
 - (BOOL)backgrounded
@@ -421,32 +436,41 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
     }];
 }
 
-- (void)metadataLongPollInitialData:(NSDictionary *)json
+- (void)metadataPollInitialData:(NSDictionary *)json
 {
-    self.pointer = [[json objectForKey:@"pointer"] longValue];
-
-    // Set the full name from realm_users
-    // TODO save the whole list properly and use it for presence information
-    NSArray *realm_users = [json objectForKey:@"realm_users"];
-    for (NSDictionary *person in realm_users) {
-        if ([[person objectForKey:@"email"] isEqualToString:self.email])
-            self.fullName = [person objectForKey:@"full_name"];
+    if (json && [json objectForKey:@"pointer"]) {
+        self.pointer = [[json objectForKey:@"pointer"] longValue];
+        [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithLong:self.pointer] forKey:@"pointer"];
     }
 
-    NSLog(@"Registered for queue, pointer is %li", self.pointer);
-    NSArray *subscriptions = [json objectForKey:@"subscriptions"];
-    [self loadSubscriptionData:subscriptions];
+    if (json && [json objectForKey:@"realm_users"]) {
+        // Set the full name from realm_users
+        // TODO save the whole list properly and use it for presence information
+        NSArray *realm_users = [json objectForKey:@"realm_users"];
+        for (NSDictionary *person in realm_users) {
+            if ([[person objectForKey:@"email"] isEqualToString:self.email])
+                self.fullName = [person objectForKey:@"full_name"];
+        }
+
+        [[NSUserDefaults standardUserDefaults] setObject:self.fullName forKey:@"fullName"];
+    }
+
+    if (json && [json objectForKey:@"subscriptions"]) {
+        NSLog(@"Registered for queue, pointer is %li", self.pointer);
+        NSArray *subscriptions = [json objectForKey:@"subscriptions"];
+        [self loadSubscriptionData:subscriptions];
+    }
 
     // Set up the home view
     [self.homeViewController initialPopulate];
 }
 
-- (void)longPollInitialData:(NSDictionary *)json
+- (void)messagesPollInitialData:(NSDictionary *)json
 {
     self.maxServerMessageId = [[json objectForKey:@"max_message_id"] intValue];
 }
 
-- (void)longPollMessagesReceived:(NSArray *)events
+- (void)messagesPollReceivedMessages:(NSArray *)events
 {
     // TODO potentially still store if loaded when backgrounded
     if (self.backgrounded) {
@@ -506,6 +530,44 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
             [self updateMessages:messageIDs withFlag:flag operation:operation all:all];
         }
     }
+}
+
+- (void)messagesPollErrorHandler
+{
+    // If we lose our messages poller, we simply restart our polling and re-fetch messages
+    // around the pointer
+    [self clearSettingsForNewUser:NO];
+
+
+    NSLog(@"Doing messages reset");
+    [self.appDelegate clearNarrowWithAnimation:NO];
+
+    [self.homeViewController initialPopulate];
+
+    [self.messagesPoller reset];
+    [self registerForMessages];
+}
+
+- (void)metadataPollErrorHandler
+{
+    // If we lose our long-lived metadata queue, we force a full-reset and clear the database completely. Starting from scratch
+    NSString *email = self.email;
+    NSString *apiKey = self.apiKey;
+
+    NSLog(@"Doing full reset");
+    [self.metadataPoller reset];
+    [self logout];
+
+    self.apiKey = apiKey;
+    self.email = email;
+
+    KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"ZulipLogin" accessGroup:nil];
+    [keychainItem setObject:self.apiKey forKey:(__bridge id)kSecValueData];
+    [keychainItem setObject:self.email forKey:(__bridge id)kSecAttrAccount];
+
+    [ZulipAPIClient setCredentials:self.email withAPIKey:self.apiKey];
+    [self registerForMessages];
+    [self registerForMetadata];
 }
 
 - (void)updateMessages:(NSArray *)messageIDs withFlag:(NSString *)flag operation:(NSString *)op all:(BOOL)all
@@ -735,9 +797,11 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
                 // When we long poll, we know that there's no missing message
                 // between the new messages and our latest loaded message
                 // so we construct a 2-item range with the latest item
-//                NSAssert2(self.maxServerMessageId == lastId,
-//                          @"Added one long-poll message but not up to date",
-//                          self.maxServerMessageId, lastId);
+                if (firstId == self.maxLocalMessageId) {
+                    // It's possible that on resuming, we get new messages both from
+                    // the long-poll and getOldMessages. If so, just ignore the later call
+                    return;
+                }
                 firstId = self.maxLocalMessageId;
             }
 

@@ -157,7 +157,7 @@
 - (void)loadNewerMessages
 {
     RawMessage *last = [self.messages lastObject];
-    if ([last.messageID longValue] < [ZulipAPIController sharedInstance].maxServerMessageId) {
+    if (last && [last.messageID longValue] < [ZulipAPIController sharedInstance].maxServerMessageId) {
         NSLog(@"Scrolling to bottom and fetching more messages");
         [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[[ZulipAPIController sharedInstance] pointer]
                                                                before:0
