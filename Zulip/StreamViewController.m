@@ -301,9 +301,9 @@
         [self.tableView setContentOffset:offset];
         [UIView setAnimationsEnabled:YES];
 
-        int peek_height = 20;
+        int peek_height = 10;
         CGRect peek = CGRectMake(0, offset.y - peek_height, self.tableView.bounds.size.width, peek_height);
-        [self.tableView scrollRectToVisible:peek animated:YES];
+        [self.tableView scrollRectToVisible:peek animated:NO];
     }
 }
 
