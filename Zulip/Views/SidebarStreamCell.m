@@ -105,7 +105,7 @@
         // This is the current narrow, highlight it
         self.backgroundColor = [UIColor colorWithHexString:@"#CCD6CC" defaultColor:[UIColor grayColor]];
     } else {
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor clearColor];
     }
 }
 
