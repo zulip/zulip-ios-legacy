@@ -490,8 +490,6 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
 
 - (void)metadataPollEventsReceived:(NSArray *)events
 {
-    NSLog(@"Got events: %@", events);
-
     for (NSDictionary *event in events) {
         NSString *eventType = [event objectForKey:@"type"];
         if ([eventType isEqualToString:@"pointer"]) {
@@ -570,9 +568,7 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
     NSDictionary *opts = @{@"messages": [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding],
                            @"flag": flag,
                            @"op": operation};
-    [[ZulipAPIClient sharedClient] postPath:@"messages/flags" parameters:opts success:^(AFHTTPRequestOperation *afop, id responseObject) {
-        NSLog(@"Successfully updated message dlags");
-    } failure:^(AFHTTPRequestOperation *afop, NSError *error) {
+    [[ZulipAPIClient sharedClient] postPath:@"messages/flags" parameters:opts success:nil failure:^(AFHTTPRequestOperation *afop, NSError *error) {
         NSLog(@"Failed to update message flags %@ %@", [error localizedDescription], [error userInfo]);
     }];
 }

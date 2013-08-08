@@ -321,7 +321,6 @@
 
 - (void)rawMessageDidChange:(RawMessage *)message
 {
-    NSLog(@"Message changed: %@", message);
     NSUInteger index = [self.messages indexOfObject:message];
     if (index != NSNotFound) {
         NSIndexPath *path = [NSIndexPath indexPathForRow:index inSection:0];

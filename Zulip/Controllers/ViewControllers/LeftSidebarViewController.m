@@ -9,6 +9,7 @@
 #import "ZulipAPIController.h"
 #import "ZulipAppDelegate.h"
 #import "ZUser.h"
+#import "UnreadManager.h"
 
 // Various cells
 #import "SidebarStreamCell.h"
@@ -31,15 +32,22 @@
 
 @implementation LeftSidebarViewController
 
-- (id)init
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-    self = [super init];
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
 
     if (self) {
         self.streamController = 0;
         self.sidebarStreamsHeader = 0;
 
         self.avatar_url = 0;
+
+        [[NSNotificationCenter defaultCenter] addObserverForName:ZUnreadCountChangeNotification
+                                                          object:nil
+                                                           queue:[NSOperationQueue mainQueue]
+                                                      usingBlock:^(NSNotification *note) {
+            [self handleMessageCountChangedNotification:[[note userInfo] objectForKey:ZUnreadCountChangeNotificationData]];
+        }];
     }
 
     return self;
@@ -390,9 +398,22 @@
     }
 }
 
-
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
     [self.tableView endUpdates];
+}
+
+#pragma mark - NotificationCenter
+
+- (void)handleMessageCountChangedNotification:(NSDictionary *)unreadCounts
+{
+    // Only update visible cells as other cells will get configureCell: called
+    // when they become visible
+    for (UITableViewCell *cell in [self.tableView visibleCells]) {
+        if(cell && [cell isKindOfClass:[SidebarStreamCell class]]) {
+            SidebarStreamCell *streamCell = (SidebarStreamCell *)cell;
+            [streamCell setUnreadCount:unreadCounts];
+        }
+    }
 }
 
 @end

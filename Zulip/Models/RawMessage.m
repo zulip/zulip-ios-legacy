@@ -10,6 +10,7 @@
 
 #import "ZulipAppDelegate.h"
 #import "ZulipAPIController.h"
+#import "UnreadManager.h"
 
 @interface RawMessage ()
 
@@ -47,6 +48,10 @@
         [self addMessageFlag:@"read"];
     } else {
         [self removeMessageFlag:@"read"];
+    }
+
+    if (read) {
+        [[[ZulipAPIController sharedInstance] unreadManager] markMessageRead:self];
     }
 }
 
@@ -88,11 +93,10 @@
             [self.linkedZMessage setMessageFlags:self.messageFlags];
             ZulipAppDelegate *appDelegate = (ZulipAppDelegate *)[[UIApplication sharedApplication] delegate];
 
-            NSLog(@"SAving flags change to Core Data!!!");
             NSError *error = nil;
             [[appDelegate managedObjectContext] save:&error];
             if (error) {
-                NSLog(@"Erorr saving flags from RawMessage to ZMessage: %@ %@", [error localizedDescription], [error userInfo]);
+                NSLog(@"Error saving flags from RawMessage to ZMessage: %@ %@", [error localizedDescription], [error userInfo]);
             }
         }
     }

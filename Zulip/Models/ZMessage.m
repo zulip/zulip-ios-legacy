@@ -43,24 +43,4 @@
     self.flagData = data;
 }
 
-- (void)addMessageFlag:(NSString *)flag
-{
-    NSMutableSet *new_flags = [NSMutableSet setWithSet:[NSKeyedUnarchiver unarchiveObjectWithData:self.flagData]];
-    [new_flags addObject:flag];
-
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:new_flags];
-
-    self.flagData = data;
-}
-
-- (void)removeMessageFlag:(NSString *)flag
-{
-    NSMutableSet *new_flags = [NSMutableSet setWithSet:[NSKeyedUnarchiver unarchiveObjectWithData:self.flagData]];
-    [new_flags removeObject:flag];
-
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:new_flags];
-
-    self.flagData = data;
-}
-
 @end

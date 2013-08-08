@@ -27,10 +27,10 @@
 
 // NOTE: These two methods below have been manually added,
 // when regenerating this file make sure to keep them!
+// Do not use these directly. Use RawMessage objects
+// to manipulate messages
 - (NSSet *)messageFlags;
 - (void)setMessageFlags:(NSSet *)flags;
-- (void)addMessageFlag:(NSString *)flag;
-- (void)removeMessageFlag:(NSString *)flag;
 
 // NOTE added manually, retain when regenerating!
 @property (nonatomic, retain) RawMessage *linkedRawMessage;

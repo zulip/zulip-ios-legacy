@@ -14,6 +14,9 @@
  Keeps track of unread counts for streams and views,
  and sends out NSNotifications for when they change
  */
+extern NSString * const ZUnreadCountChangeNotification;
+extern NSString * const ZUnreadCountChangeNotificationData;
+
 @interface UnreadManager : NSObject
 
 @property (nonatomic, retain, readonly) NSDictionary *unreadCounts;

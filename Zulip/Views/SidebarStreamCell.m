@@ -82,16 +82,9 @@
     self.gravatar.image = [self streamColorSwatchWithSize:size andColor:subscription.color];
 
     NSDictionary *unread_counts = [[[ZulipAPIController sharedInstance] unreadManager] unreadCounts];
-    int count = 0;
-    if ([unread_counts objectForKey:@"streams"]) {
-        NSDictionary *streams = [unread_counts objectForKey:@"streams"];
-        if ([streams objectForKey:subscription.name]) {
-            count = [[streams objectForKey:subscription.name] intValue];
-        }
-    }
+    [self setUnreadCount:unread_counts];
 
     self.name.text = [op title];
-    [self setCount:count];
     [self setBackgroundIfCurrent];
 }
 
@@ -114,6 +107,22 @@
     } else {
         self.backgroundColor = [UIColor whiteColor];
     }
+}
+
+- (void)setUnreadCount:(NSDictionary *)unreadCounts
+{
+    if (!self.stream) {
+        return;
+    }
+
+    int count = 0;
+    if ([unreadCounts objectForKey:@"streams"]) {
+        NSDictionary *streams = [unreadCounts objectForKey:@"streams"];
+        if ([streams objectForKey:self.stream.name]) {
+            count = [[streams objectForKey:self.stream.name] intValue];
+        }
+    }
+    [self setCount:count];
 }
 
 #pragma mark - Drawing Methods

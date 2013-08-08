@@ -27,5 +27,6 @@ typedef enum {
 @property (nonatomic, retain, readonly) NarrowOperators *narrow;
 
 - (void)setBackgroundIfCurrent;
+- (void)setUnreadCount:(NSDictionary *)unreadCounts;
 
 @end

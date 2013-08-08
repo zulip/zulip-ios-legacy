@@ -16,6 +16,9 @@
 
 @end
 
+NSString * const ZUnreadCountChangeNotification = @"UnreadMessageCountNotification";
+NSString * const ZUnreadCountChangeNotificationData = @"UnreadMessageCountNotificationData";
+
 @implementation UnreadManager
 
 - (id)init
@@ -95,6 +98,11 @@
     [unread_counts setObject:stream_counts forKey:@"streams"];
     
     _unreadCounts = unread_counts;
+
+    NSNotification *unreadChanges = [NSNotification notificationWithName:ZUnreadCountChangeNotification
+                                                                  object:self
+                                                                userInfo:@{ZUnreadCountChangeNotificationData: self.unreadCounts}];
+    [[NSNotificationCenter defaultCenter] postNotification:unreadChanges];
 }
 
 @end
