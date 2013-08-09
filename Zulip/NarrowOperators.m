@@ -44,6 +44,14 @@
     [self.subpredicates addObject:@[@"is", @"private"]];
 }
 
+- (BOOL)isPrivateMessages
+{
+    return ([self.subpredicates count] == 1) &&
+           ([[[self.subpredicates objectAtIndex:0] objectAtIndex:0] isEqualToString:@"is"]) &&
+           ([[[self.subpredicates objectAtIndex:0] objectAtIndex:1] isEqualToString:@"private"]);
+
+}
+
 - (void)addStreamNarrow:(NSString *)streamName
 {
     [self.subpredicates addObject:@[@"stream", streamName]];

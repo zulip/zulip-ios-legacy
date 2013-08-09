@@ -31,9 +31,6 @@
     _shortcut = shortcut;
     NarrowOperators *op = [[NarrowOperators alloc] init];
 
-    NSDictionary *unread_counts = [[[ZulipAPIController sharedInstance] unreadManager] unreadCounts];
-    int count = 0;
-
     switch (shortcut) {
         case HOME:
         {
@@ -41,10 +38,6 @@
             [op setInHomeView];
             UIImage *image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"home" ofType:@"png"]];
             self.gravatar.image = image;
-
-            if ([unread_counts objectForKey:@"home"]) {
-                count = [[unread_counts objectForKey:@"home"] intValue];
-            }
             break;
         }
         case PRIVATE_MESSAGES:
@@ -53,10 +46,6 @@
 
             UIImage *image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"user" ofType:@"png"]];
             self.gravatar.image = image;
-
-            if ([unread_counts objectForKey:@"pms"]) {
-                count = [[unread_counts objectForKey:@"pms"] intValue];
-            }
             break;
         }
         default:
@@ -64,8 +53,10 @@
     }
 
     self.name.text = [op title];
-    [self setCount:count];
-    
+
+    NSDictionary *unread_counts = [[[ZulipAPIController sharedInstance] unreadManager] unreadCounts];
+    [self setUnreadCount:unread_counts];
+
     _narrow = op;
 }
 
@@ -111,15 +102,21 @@
 
 - (void)setUnreadCount:(NSDictionary *)unreadCounts
 {
-    if (!self.stream) {
-        return;
-    }
-
     int count = 0;
-    if ([unreadCounts objectForKey:@"streams"]) {
-        NSDictionary *streams = [unreadCounts objectForKey:@"streams"];
-        if ([streams objectForKey:self.stream.name]) {
-            count = [[streams objectForKey:self.stream.name] intValue];
+    if (self.narrow.isHomeView) {
+        if ([unreadCounts objectForKey:@"home"]) {
+            count = [[unreadCounts objectForKey:@"home"] intValue];
+        }
+    } else if (self.narrow.isPrivateMessages) {
+        if ([unreadCounts objectForKey:@"pms"]) {
+            count = [[unreadCounts objectForKey:@"pms"] intValue];
+        }
+    } else {
+        if ([unreadCounts objectForKey:@"streams"]) {
+            NSDictionary *streams = [unreadCounts objectForKey:@"streams"];
+            if ([streams objectForKey:self.stream.name]) {
+                count = [[streams objectForKey:self.stream.name] intValue];
+            }
         }
     }
     [self setCount:count];

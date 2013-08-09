@@ -20,6 +20,7 @@
 - (void)addStreamNarrow:(NSString *)streamName;
 
 - (BOOL)isHomeView;
+- (BOOL)isPrivateMessages;
 
 - (NSString *)title;
 
