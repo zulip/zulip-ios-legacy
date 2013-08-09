@@ -102,15 +102,21 @@
     if ([self.tableView.visibleCells count] == 0)
         return;
 
-    UITableViewCell *cell = [self.tableView.visibleCells objectAtIndex:0];
-    if (!cell)
-        return;
+    // Find the message in the middle of the screen, and that's where
+    // our pointer will be updated to
+    CGPoint middle = CGPointMake(CGRectGetMidX(self.tableView.bounds), CGRectGetMidY(self.tableView.bounds));
+    NSIndexPath *path = [self.tableView indexPathForRowAtPoint:middle];
+    // If there's no message in the middle, just take the first one
+    if (!path) {
+        path = [self.tableView indexPathForCell:[self.tableView.visibleCells objectAtIndex:0]];
 
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:[self.tableView.visibleCells objectAtIndex:0]];
-    if (!indexPath)
-        return;
+        // Shouldn't happen, but...
+        if (!path) {
+            return;
+        }
+    }
 
-    RawMessage *message = [self.messages objectAtIndex:indexPath.row];
+    RawMessage *message = [self.messages objectAtIndex:path.row];
 
     self.scrollToPointer = [message.messageID longValue];
     [[ZulipAPIController sharedInstance] setPointer:[message.messageID longValue]];
