@@ -110,12 +110,8 @@
         narrowController = [[NarrowViewController alloc] initWithOperators:narrowOperators];
         [self.narrows setObject:narrowController forKey:(id)narrowOperators];
     }
-
-    if ([self isNarrowed])
-        [self.navController popToRootViewControllerAnimated:NO];
-
-
-    [self.navController pushViewController:narrowController animated:NO];
+    [self.navController setViewControllers:@[narrowController] animated:YES];
+    [self.sidePanelController _placeButtonForLeftPanel];
     [self.sidePanelController toggleLeftPanel:self];
 }
 
@@ -142,7 +138,7 @@
 - (void)clearNarrowWithAnimation:(BOOL)animated
 {
     if ([self isNarrowed]) {
-        [self.navController popToRootViewControllerAnimated:animated];
+        [self.navController setViewControllers:@[self.homeViewController] animated:YES];
         [self.sidePanelController toggleLeftPanel:self];
     }
 }

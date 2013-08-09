@@ -41,6 +41,8 @@
 		B376986B17B56F0900D29D93 /* zulip-1024.png in Resources */ = {isa = PBXBuildFile; fileRef = B376985E17B56F0900D29D93 /* zulip-1024.png */; };
 		B376986C17B56F0900D29D93 /* zulip.png in Resources */ = {isa = PBXBuildFile; fileRef = B376985F17B56F0900D29D93 /* zulip.png */; };
 		B376986D17B56F0900D29D93 /* zulip@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B376986017B56F0900D29D93 /* zulip@2x.png */; };
+		B376987317B5857600D29D93 /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = B376987017B5857600D29D93 /* JASidePanelController.m */; };
+		B376987417B5857600D29D93 /* UIViewController+JASidePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = B376987217B5857600D29D93 /* UIViewController+JASidePanel.m */; };
 		B3CC438A17A6E2E200C8AF3F /* MainWindow-iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = C31673961620DB6B00CE9FE5 /* MainWindow-iphone.xib */; };
 		B3CC438B17A6E2E200C8AF3F /* MainWindow~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681BE1795C513009F69F5 /* MainWindow~ipad.xib */; };
 		B3CC439217A701A900C8AF3F /* ZUser.m in Sources */ = {isa = PBXBuildFile; fileRef = B3CC439117A701A900C8AF3F /* ZUser.m */; };
@@ -57,8 +59,6 @@
 		B3F50D73179DADE800F9DAE4 /* AFXMLRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F50D69179DADE800F9DAE4 /* AFXMLRequestOperation.m */; };
 		B3F50D74179DADE800F9DAE4 /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F50D6B179DADE800F9DAE4 /* UIImageView+AFNetworking.m */; };
 		B3F50D76179DADF200F9DAE4 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3F50D75179DADF200F9DAE4 /* Crashlytics.framework */; };
-		B3F5628817A80724004B185A /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F5628517A80724004B185A /* JASidePanelController.m */; };
-		B3F5628917A80724004B185A /* UIViewController+JASidePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F5628717A80724004B185A /* UIViewController+JASidePanel.m */; };
 		B3F5628B17A8074C004B185A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3F5628A17A8074C004B185A /* QuartzCore.framework */; };
 		B3F5629317A81C37004B185A /* SidebarStreamCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F5629217A81C37004B185A /* SidebarStreamCell.m */; };
 		B3F5629517A81C49004B185A /* SidebarStreamCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3F5629417A81C49004B185A /* SidebarStreamCell.xib */; };
@@ -153,6 +153,10 @@
 		B376985E17B56F0900D29D93 /* zulip-1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "zulip-1024.png"; path = "Resources/zulip-1024.png"; sourceTree = "<group>"; };
 		B376985F17B56F0900D29D93 /* zulip.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = zulip.png; path = Resources/zulip.png; sourceTree = "<group>"; };
 		B376986017B56F0900D29D93 /* zulip@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "zulip@2x.png"; path = "Resources/zulip@2x.png"; sourceTree = "<group>"; };
+		B376986F17B5857600D29D93 /* JASidePanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JASidePanelController.h; sourceTree = "<group>"; };
+		B376987017B5857600D29D93 /* JASidePanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JASidePanelController.m; sourceTree = "<group>"; };
+		B376987117B5857600D29D93 /* UIViewController+JASidePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+JASidePanel.h"; sourceTree = "<group>"; };
+		B376987217B5857600D29D93 /* UIViewController+JASidePanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+JASidePanel.m"; sourceTree = "<group>"; };
 		B3CC439017A701A900C8AF3F /* ZUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZUser.h; path = Models/ZUser.h; sourceTree = "<group>"; };
 		B3CC439117A701A900C8AF3F /* ZUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZUser.m; path = Models/ZUser.m; sourceTree = "<group>"; };
 		B3CC439417A7F13700C8AF3F /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HomeViewController.h; path = Controllers/ViewControllers/HomeViewController.h; sourceTree = "<group>"; };
@@ -181,10 +185,6 @@
 		B3F50D6A179DADE800F9DAE4 /* UIImageView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+AFNetworking.h"; sourceTree = "<group>"; };
 		B3F50D6B179DADE800F9DAE4 /* UIImageView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+AFNetworking.m"; sourceTree = "<group>"; };
 		B3F50D75179DADF200F9DAE4 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = ThirdParty/Crashlytics.framework; sourceTree = "<group>"; };
-		B3F5628417A80724004B185A /* JASidePanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JASidePanelController.h; path = ThirdParty/JASidePanels/JASidePanels/Source/JASidePanelController.h; sourceTree = "<group>"; };
-		B3F5628517A80724004B185A /* JASidePanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JASidePanelController.m; path = ThirdParty/JASidePanels/JASidePanels/Source/JASidePanelController.m; sourceTree = "<group>"; };
-		B3F5628617A80724004B185A /* UIViewController+JASidePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+JASidePanel.h"; path = "ThirdParty/JASidePanels/JASidePanels/Source/UIViewController+JASidePanel.h"; sourceTree = "<group>"; };
-		B3F5628717A80724004B185A /* UIViewController+JASidePanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+JASidePanel.m"; path = "ThirdParty/JASidePanels/JASidePanels/Source/UIViewController+JASidePanel.m"; sourceTree = "<group>"; };
 		B3F5628A17A8074C004B185A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		B3F5629117A81C37004B185A /* SidebarStreamCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SidebarStreamCell.h; path = Views/SidebarStreamCell.h; sourceTree = "<group>"; };
 		B3F5629217A81C37004B185A /* SidebarStreamCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SidebarStreamCell.m; path = Views/SidebarStreamCell.m; sourceTree = "<group>"; };
@@ -323,7 +323,7 @@
 		B3733CDC1779E9F800714B6E /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
-				B3F5628317A8071C004B185A /* JASidePanels */,
+				B376986E17B5857600D29D93 /* JASidePanels */,
 				B3F50D75179DADF200F9DAE4 /* Crashlytics.framework */,
 				B3F50D58179DADE800F9DAE4 /* AFNetworking */,
 			);
@@ -389,6 +389,18 @@
 				B3E8A76417B146090008EED7 /* RangePair.m */,
 			);
 			name = Models;
+			sourceTree = "<group>";
+		};
+		B376986E17B5857600D29D93 /* JASidePanels */ = {
+			isa = PBXGroup;
+			children = (
+				B376986F17B5857600D29D93 /* JASidePanelController.h */,
+				B376987017B5857600D29D93 /* JASidePanelController.m */,
+				B376987117B5857600D29D93 /* UIViewController+JASidePanel.h */,
+				B376987217B5857600D29D93 /* UIViewController+JASidePanel.m */,
+			);
+			name = JASidePanels;
+			path = ThirdParty/JASidePanels;
 			sourceTree = "<group>";
 		};
 		B3AA069E17B4357B009B06F0 /* zulip_icon */ = {
@@ -459,17 +471,6 @@
 			);
 			name = AFNetworking;
 			path = ThirdParty/AFNetworking;
-			sourceTree = "<group>";
-		};
-		B3F5628317A8071C004B185A /* JASidePanels */ = {
-			isa = PBXGroup;
-			children = (
-				B3F5628417A80724004B185A /* JASidePanelController.h */,
-				B3F5628517A80724004B185A /* JASidePanelController.m */,
-				B3F5628617A80724004B185A /* UIViewController+JASidePanel.h */,
-				B3F5628717A80724004B185A /* UIViewController+JASidePanel.m */,
-			);
-			name = JASidePanels;
 			sourceTree = "<group>";
 		};
 		C31673751620DB6A00CE9FE5 = {
@@ -731,12 +732,14 @@
 				B30F55A217B2D432006DC735 /* LeftSidebarViewController.m in Sources */,
 				C31673951620DB6B00CE9FE5 /* ZulipAppDelegate.m in Sources */,
 				E577A74D16226AC4002D9651 /* MessageCell.m in Sources */,
+				B376987417B5857600D29D93 /* UIViewController+JASidePanel.m in Sources */,
 				E5CDE07C162C88A800BBD773 /* LoginViewController.m in Sources */,
 				B376984917B52FD500D29D93 /* PreferencesWrapper.m in Sources */,
 				E50D757916331D7A00251D1F /* KeychainItemWrapper.m in Sources */,
 				E5726A2816332BF800ED8BB1 /* StreamViewController.m in Sources */,
 				E598E78A1634A9950022BF4A /* ErrorViewController.m in Sources */,
 				E570A8BF169DF81E0072BC7E /* NSString+Encode.m in Sources */,
+				B376987317B5857600D29D93 /* JASidePanelController.m in Sources */,
 				B3733CD81778D5DD00714B6E /* UIColor+HexColor.m in Sources */,
 				B3733CFE177A00D900714B6E /* ZulipAPIClient.m in Sources */,
 				B3F50D6C179DADE800F9DAE4 /* AFHTTPClient.m in Sources */,
@@ -753,8 +756,6 @@
 				B351823117A1B20A00B41D75 /* ZSubscription.m in Sources */,
 				B3CC439217A701A900C8AF3F /* ZUser.m in Sources */,
 				B3CC439617A7F13700C8AF3F /* HomeViewController.m in Sources */,
-				B3F5628817A80724004B185A /* JASidePanelController.m in Sources */,
-				B3F5628917A80724004B185A /* UIViewController+JASidePanel.m in Sources */,
 				B3F5629317A81C37004B185A /* SidebarStreamCell.m in Sources */,
 				B3F5629817A84FD5004B185A /* NarrowViewController.m in Sources */,
 				B3F5629D17A9A4EE004B185A /* RawMessage.m in Sources */,
