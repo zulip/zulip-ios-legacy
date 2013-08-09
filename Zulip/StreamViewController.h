@@ -16,7 +16,6 @@
 @property (nonatomic, retain) NarrowOperators *operators;
 
 // Generic message list implementations
-- (void)composeButtonPressed;
 - (int)rowWithId:(int)messageId;
 
 - (void)initialPopulate;
