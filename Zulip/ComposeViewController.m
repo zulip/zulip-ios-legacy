@@ -44,7 +44,10 @@
     [self.content.layer setBorderColor:[[[UIColor grayColor] colorWithAlphaComponent:0.5] CGColor]];
     [self.content.layer setBorderWidth:2.0];
 
-    self.edgesForExtendedLayout = UIRectEdgeLeft | UIRectEdgeBottom | UIRectEdgeRight;
+    // On iOS 7, don't extend our content under the toolbar
+    if ([[[UIDevice currentDevice] systemVersion] compare:@"7.0" options:NSNumericSearch] != NSOrderedAscending) {
+        self.edgesForExtendedLayout = UIRectEdgeLeft | UIRectEdgeBottom | UIRectEdgeRight;
+    }
 
     if ([self.type isEqualToString:@"stream"]) {
         self.subject.hidden = NO;

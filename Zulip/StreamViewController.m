@@ -132,7 +132,7 @@
 -(void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
-    if ([self.tableView contentOffset].y < 0 && [self.messages count] > 0) {
+    if (self.tableView.contentOffset.y <= 0 && [self.messages count] > 0) {
         self.topRow = [self.messages objectAtIndex:0];
         [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[self.topRow.messageID longValue] - 1
                                                                before:15
