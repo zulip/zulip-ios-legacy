@@ -499,7 +499,7 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
             [msg setValue:[event objectForKey:@"flags"] forKey:@"flags"];
             [messages addObject:msg];
 
-            long msgId = [[event objectForKey:@"id"] longValue];
+            long msgId = [[msg objectForKey:@"id"] longValue];
             self.maxServerMessageId = MAX(self.maxServerMessageId, msgId);
         }
     }
