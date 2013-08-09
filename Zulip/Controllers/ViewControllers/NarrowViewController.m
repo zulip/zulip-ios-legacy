@@ -103,7 +103,7 @@
     }
     // Scroll to first unread in the middle of the screen
     NSLog(@"Scrolling to row %i", [unread row]);
-    [self.tableView scrollToRowAtIndexPath:unread atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+    [self.tableView scrollToRowAtIndexPath:unread atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
 }
 
 @end
