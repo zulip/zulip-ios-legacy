@@ -23,28 +23,29 @@
 		B3766D2E179DD1DF005FB0D4 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3766D2D179DD1DF005FB0D4 /* MobileCoreServices.framework */; };
 		B3766D3E179DDBE2005FB0D4 /* Zulip.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B3766D3C179DDBE2005FB0D4 /* Zulip.xcdatamodeld */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		B376984917B52FD500D29D93 /* PreferencesWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = B376984817B52FD500D29D93 /* PreferencesWrapper.m */; };
-		B3AA06AC17B4359F009B06F0 /* zulip-29.png in Resources */ = {isa = PBXBuildFile; fileRef = B3AA069F17B4359F009B06F0 /* zulip-29.png */; };
-		B3AA06AD17B4359F009B06F0 /* zulip-50.png in Resources */ = {isa = PBXBuildFile; fileRef = B3AA06A017B4359F009B06F0 /* zulip-50.png */; };
-		B3AA06AE17B4359F009B06F0 /* zulip.png in Resources */ = {isa = PBXBuildFile; fileRef = B3AA06A117B4359F009B06F0 /* zulip.png */; };
-		B3AA06AF17B4359F009B06F0 /* zulip-58.png in Resources */ = {isa = PBXBuildFile; fileRef = B3AA06A217B4359F009B06F0 /* zulip-58.png */; };
-		B3AA06B017B4359F009B06F0 /* zulip-72.png in Resources */ = {isa = PBXBuildFile; fileRef = B3AA06A317B4359F009B06F0 /* zulip-72.png */; };
-		B3AA06B117B4359F009B06F0 /* zulip-76.png in Resources */ = {isa = PBXBuildFile; fileRef = B3AA06A417B4359F009B06F0 /* zulip-76.png */; };
-		B3AA06B217B4359F009B06F0 /* zulip-80.png in Resources */ = {isa = PBXBuildFile; fileRef = B3AA06A517B4359F009B06F0 /* zulip-80.png */; };
-		B3AA06B317B4359F009B06F0 /* zulip@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B3AA06A617B4359F009B06F0 /* zulip@2x.png */; };
-		B3AA06B417B4359F009B06F0 /* zulip-120.png in Resources */ = {isa = PBXBuildFile; fileRef = B3AA06A717B4359F009B06F0 /* zulip-120.png */; };
-		B3AA06B517B4359F009B06F0 /* zulip-144.png in Resources */ = {isa = PBXBuildFile; fileRef = B3AA06A817B4359F009B06F0 /* zulip-144.png */; };
-		B3AA06B617B4359F009B06F0 /* zulip-152.png in Resources */ = {isa = PBXBuildFile; fileRef = B3AA06A917B4359F009B06F0 /* zulip-152.png */; };
-		B3AA06B717B4359F009B06F0 /* zulip-512.png in Resources */ = {isa = PBXBuildFile; fileRef = B3AA06AA17B4359F009B06F0 /* zulip-512.png */; };
-		B3AA06B817B4359F009B06F0 /* zulip-1024.png in Resources */ = {isa = PBXBuildFile; fileRef = B3AA06AB17B4359F009B06F0 /* zulip-1024.png */; };
+		B376984E17B56E8300D29D93 /* bullhorn.png in Resources */ = {isa = PBXBuildFile; fileRef = B376984A17B56E8300D29D93 /* bullhorn.png */; };
+		B376984F17B56E8300D29D93 /* bullhorn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B376984B17B56E8300D29D93 /* bullhorn@2x.png */; };
+		B376985017B56E8300D29D93 /* user-toolbar.png in Resources */ = {isa = PBXBuildFile; fileRef = B376984C17B56E8300D29D93 /* user-toolbar.png */; };
+		B376985117B56E8300D29D93 /* user-toolbar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B376984D17B56E8300D29D93 /* user-toolbar@2x.png */; };
+		B376985317B56EB100D29D93 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B376985217B56EB100D29D93 /* Images.xcassets */; };
+		B376986117B56F0900D29D93 /* zulip-29.png in Resources */ = {isa = PBXBuildFile; fileRef = B376985417B56F0900D29D93 /* zulip-29.png */; };
+		B376986217B56F0900D29D93 /* zulip-50.png in Resources */ = {isa = PBXBuildFile; fileRef = B376985517B56F0900D29D93 /* zulip-50.png */; };
+		B376986317B56F0900D29D93 /* zulip-58.png in Resources */ = {isa = PBXBuildFile; fileRef = B376985617B56F0900D29D93 /* zulip-58.png */; };
+		B376986417B56F0900D29D93 /* zulip-72.png in Resources */ = {isa = PBXBuildFile; fileRef = B376985717B56F0900D29D93 /* zulip-72.png */; };
+		B376986517B56F0900D29D93 /* zulip-76.png in Resources */ = {isa = PBXBuildFile; fileRef = B376985817B56F0900D29D93 /* zulip-76.png */; };
+		B376986617B56F0900D29D93 /* zulip-80.png in Resources */ = {isa = PBXBuildFile; fileRef = B376985917B56F0900D29D93 /* zulip-80.png */; };
+		B376986717B56F0900D29D93 /* zulip-120.png in Resources */ = {isa = PBXBuildFile; fileRef = B376985A17B56F0900D29D93 /* zulip-120.png */; };
+		B376986817B56F0900D29D93 /* zulip-144.png in Resources */ = {isa = PBXBuildFile; fileRef = B376985B17B56F0900D29D93 /* zulip-144.png */; };
+		B376986917B56F0900D29D93 /* zulip-152.png in Resources */ = {isa = PBXBuildFile; fileRef = B376985C17B56F0900D29D93 /* zulip-152.png */; };
+		B376986A17B56F0900D29D93 /* zulip-512.png in Resources */ = {isa = PBXBuildFile; fileRef = B376985D17B56F0900D29D93 /* zulip-512.png */; };
+		B376986B17B56F0900D29D93 /* zulip-1024.png in Resources */ = {isa = PBXBuildFile; fileRef = B376985E17B56F0900D29D93 /* zulip-1024.png */; };
+		B376986C17B56F0900D29D93 /* zulip.png in Resources */ = {isa = PBXBuildFile; fileRef = B376985F17B56F0900D29D93 /* zulip.png */; };
+		B376986D17B56F0900D29D93 /* zulip@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B376986017B56F0900D29D93 /* zulip@2x.png */; };
 		B3CC438A17A6E2E200C8AF3F /* MainWindow-iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = C31673961620DB6B00CE9FE5 /* MainWindow-iphone.xib */; };
 		B3CC438B17A6E2E200C8AF3F /* MainWindow~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681BE1795C513009F69F5 /* MainWindow~ipad.xib */; };
 		B3CC439217A701A900C8AF3F /* ZUser.m in Sources */ = {isa = PBXBuildFile; fileRef = B3CC439117A701A900C8AF3F /* ZUser.m */; };
 		B3CC439617A7F13700C8AF3F /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3CC439517A7F13700C8AF3F /* HomeViewController.m */; };
 		B3DDD2F817B02A0800F8D387 /* LongPoller.m in Sources */ = {isa = PBXBuildFile; fileRef = B3DDD2F717B02A0800F8D387 /* LongPoller.m */; };
-		B3E38C4017B29DD900425145 /* bullhorn.png in Resources */ = {isa = PBXBuildFile; fileRef = B3E38C3E17B29DD900425145 /* bullhorn.png */; };
-		B3E38C4117B29DD900425145 /* bullhorn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B3E38C3F17B29DD900425145 /* bullhorn@2x.png */; };
-		B3E38C4417B29F6600425145 /* user-toolbar.png in Resources */ = {isa = PBXBuildFile; fileRef = B3E38C4217B29F6600425145 /* user-toolbar.png */; };
-		B3E38C4517B29F6600425145 /* user-toolbar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B3E38C4317B29F6600425145 /* user-toolbar@2x.png */; };
 		B3E8A76517B146090008EED7 /* RangePair.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E8A76417B146090008EED7 /* RangePair.m */; };
 		B3F50D6C179DADE800F9DAE4 /* AFHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F50D5A179DADE800F9DAE4 /* AFHTTPClient.m */; };
 		B3F50D6D179DADE800F9DAE4 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F50D5C179DADE800F9DAE4 /* AFHTTPRequestOperation.m */; };
@@ -134,29 +135,30 @@
 		B3766D3D179DDBE2005FB0D4 /* Zulip.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Zulip.xcdatamodel; sourceTree = "<group>"; };
 		B376984717B52FD500D29D93 /* PreferencesWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesWrapper.h; sourceTree = "<group>"; };
 		B376984817B52FD500D29D93 /* PreferencesWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesWrapper.m; sourceTree = "<group>"; };
-		B3AA069F17B4359F009B06F0 /* zulip-29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zulip-29.png"; sourceTree = "<group>"; };
-		B3AA06A017B4359F009B06F0 /* zulip-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zulip-50.png"; sourceTree = "<group>"; };
-		B3AA06A117B4359F009B06F0 /* zulip.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zulip.png; sourceTree = "<group>"; };
-		B3AA06A217B4359F009B06F0 /* zulip-58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zulip-58.png"; sourceTree = "<group>"; };
-		B3AA06A317B4359F009B06F0 /* zulip-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zulip-72.png"; sourceTree = "<group>"; };
-		B3AA06A417B4359F009B06F0 /* zulip-76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zulip-76.png"; sourceTree = "<group>"; };
-		B3AA06A517B4359F009B06F0 /* zulip-80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zulip-80.png"; sourceTree = "<group>"; };
-		B3AA06A617B4359F009B06F0 /* zulip@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zulip@2x.png"; sourceTree = "<group>"; };
-		B3AA06A717B4359F009B06F0 /* zulip-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zulip-120.png"; sourceTree = "<group>"; };
-		B3AA06A817B4359F009B06F0 /* zulip-144.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zulip-144.png"; sourceTree = "<group>"; };
-		B3AA06A917B4359F009B06F0 /* zulip-152.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zulip-152.png"; sourceTree = "<group>"; };
-		B3AA06AA17B4359F009B06F0 /* zulip-512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zulip-512.png"; sourceTree = "<group>"; };
-		B3AA06AB17B4359F009B06F0 /* zulip-1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zulip-1024.png"; sourceTree = "<group>"; };
+		B376984A17B56E8300D29D93 /* bullhorn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bullhorn.png; path = Resources/bullhorn.png; sourceTree = "<group>"; };
+		B376984B17B56E8300D29D93 /* bullhorn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bullhorn@2x.png"; path = "Resources/bullhorn@2x.png"; sourceTree = "<group>"; };
+		B376984C17B56E8300D29D93 /* user-toolbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "user-toolbar.png"; path = "Resources/user-toolbar.png"; sourceTree = "<group>"; };
+		B376984D17B56E8300D29D93 /* user-toolbar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "user-toolbar@2x.png"; path = "Resources/user-toolbar@2x.png"; sourceTree = "<group>"; };
+		B376985217B56EB100D29D93 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		B376985417B56F0900D29D93 /* zulip-29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "zulip-29.png"; path = "Resources/zulip-29.png"; sourceTree = "<group>"; };
+		B376985517B56F0900D29D93 /* zulip-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "zulip-50.png"; path = "Resources/zulip-50.png"; sourceTree = "<group>"; };
+		B376985617B56F0900D29D93 /* zulip-58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "zulip-58.png"; path = "Resources/zulip-58.png"; sourceTree = "<group>"; };
+		B376985717B56F0900D29D93 /* zulip-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "zulip-72.png"; path = "Resources/zulip-72.png"; sourceTree = "<group>"; };
+		B376985817B56F0900D29D93 /* zulip-76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "zulip-76.png"; path = "Resources/zulip-76.png"; sourceTree = "<group>"; };
+		B376985917B56F0900D29D93 /* zulip-80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "zulip-80.png"; path = "Resources/zulip-80.png"; sourceTree = "<group>"; };
+		B376985A17B56F0900D29D93 /* zulip-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "zulip-120.png"; path = "Resources/zulip-120.png"; sourceTree = "<group>"; };
+		B376985B17B56F0900D29D93 /* zulip-144.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "zulip-144.png"; path = "Resources/zulip-144.png"; sourceTree = "<group>"; };
+		B376985C17B56F0900D29D93 /* zulip-152.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "zulip-152.png"; path = "Resources/zulip-152.png"; sourceTree = "<group>"; };
+		B376985D17B56F0900D29D93 /* zulip-512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "zulip-512.png"; path = "Resources/zulip-512.png"; sourceTree = "<group>"; };
+		B376985E17B56F0900D29D93 /* zulip-1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "zulip-1024.png"; path = "Resources/zulip-1024.png"; sourceTree = "<group>"; };
+		B376985F17B56F0900D29D93 /* zulip.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = zulip.png; path = Resources/zulip.png; sourceTree = "<group>"; };
+		B376986017B56F0900D29D93 /* zulip@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "zulip@2x.png"; path = "Resources/zulip@2x.png"; sourceTree = "<group>"; };
 		B3CC439017A701A900C8AF3F /* ZUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZUser.h; path = Models/ZUser.h; sourceTree = "<group>"; };
 		B3CC439117A701A900C8AF3F /* ZUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZUser.m; path = Models/ZUser.m; sourceTree = "<group>"; };
 		B3CC439417A7F13700C8AF3F /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HomeViewController.h; path = Controllers/ViewControllers/HomeViewController.h; sourceTree = "<group>"; };
 		B3CC439517A7F13700C8AF3F /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HomeViewController.m; path = Controllers/ViewControllers/HomeViewController.m; sourceTree = "<group>"; };
 		B3DDD2F617B02A0800F8D387 /* LongPoller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LongPoller.h; path = Controllers/LongPoller.h; sourceTree = "<group>"; };
 		B3DDD2F717B02A0800F8D387 /* LongPoller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LongPoller.m; path = Controllers/LongPoller.m; sourceTree = "<group>"; };
-		B3E38C3E17B29DD900425145 /* bullhorn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bullhorn.png; sourceTree = "<group>"; };
-		B3E38C3F17B29DD900425145 /* bullhorn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bullhorn@2x.png"; sourceTree = "<group>"; };
-		B3E38C4217B29F6600425145 /* user-toolbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "user-toolbar.png"; sourceTree = "<group>"; };
-		B3E38C4317B29F6600425145 /* user-toolbar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "user-toolbar@2x.png"; sourceTree = "<group>"; };
 		B3E8A76317B146090008EED7 /* RangePair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RangePair.h; path = Models/RangePair.h; sourceTree = "<group>"; };
 		B3E8A76417B146090008EED7 /* RangePair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RangePair.m; path = Models/RangePair.m; sourceTree = "<group>"; };
 		B3F50D59179DADE800F9DAE4 /* AFHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPClient.h; sourceTree = "<group>"; };
@@ -308,12 +310,12 @@
 				B3F562AA17ABEA8D004B185A /* home@2x.png */,
 				B3F562AB17ABEA8D004B185A /* user.png */,
 				B3F562AC17ABEA8D004B185A /* user@2x.png */,
-				B3E38C4217B29F6600425145 /* user-toolbar.png */,
-				B3E38C4317B29F6600425145 /* user-toolbar@2x.png */,
-				B3E38C3E17B29DD900425145 /* bullhorn.png */,
-				B3E38C3F17B29DD900425145 /* bullhorn@2x.png */,
 				B3F562B417ABFD5C004B185A /* my_avatar_placeholder.png */,
 				B3F562B517ABFD5C004B185A /* my_avatar_placeholder@2x.png */,
+				B376984A17B56E8300D29D93 /* bullhorn.png */,
+				B376984B17B56E8300D29D93 /* bullhorn@2x.png */,
+				B376984C17B56E8300D29D93 /* user-toolbar.png */,
+				B376984D17B56E8300D29D93 /* user-toolbar@2x.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -392,19 +394,19 @@
 		B3AA069E17B4357B009B06F0 /* zulip_icon */ = {
 			isa = PBXGroup;
 			children = (
-				B3AA069F17B4359F009B06F0 /* zulip-29.png */,
-				B3AA06A017B4359F009B06F0 /* zulip-50.png */,
-				B3AA06A117B4359F009B06F0 /* zulip.png */,
-				B3AA06A217B4359F009B06F0 /* zulip-58.png */,
-				B3AA06A317B4359F009B06F0 /* zulip-72.png */,
-				B3AA06A417B4359F009B06F0 /* zulip-76.png */,
-				B3AA06A517B4359F009B06F0 /* zulip-80.png */,
-				B3AA06A617B4359F009B06F0 /* zulip@2x.png */,
-				B3AA06A717B4359F009B06F0 /* zulip-120.png */,
-				B3AA06A817B4359F009B06F0 /* zulip-144.png */,
-				B3AA06A917B4359F009B06F0 /* zulip-152.png */,
-				B3AA06AA17B4359F009B06F0 /* zulip-512.png */,
-				B3AA06AB17B4359F009B06F0 /* zulip-1024.png */,
+				B376985417B56F0900D29D93 /* zulip-29.png */,
+				B376985517B56F0900D29D93 /* zulip-50.png */,
+				B376985617B56F0900D29D93 /* zulip-58.png */,
+				B376985717B56F0900D29D93 /* zulip-72.png */,
+				B376985817B56F0900D29D93 /* zulip-76.png */,
+				B376985917B56F0900D29D93 /* zulip-80.png */,
+				B376985A17B56F0900D29D93 /* zulip-120.png */,
+				B376985B17B56F0900D29D93 /* zulip-144.png */,
+				B376985C17B56F0900D29D93 /* zulip-152.png */,
+				B376985D17B56F0900D29D93 /* zulip-512.png */,
+				B376985E17B56F0900D29D93 /* zulip-1024.png */,
+				B376985F17B56F0900D29D93 /* zulip.png */,
+				B376986017B56F0900D29D93 /* zulip@2x.png */,
 			);
 			name = zulip_icon;
 			sourceTree = "<group>";
@@ -526,6 +528,7 @@
 				B3733CFD177A00D900714B6E /* ZulipAPIClient.m */,
 				C316738B1620DB6B00CE9FE5 /* Supporting Files */,
 				B3766D31179DD6CF005FB0D4 /* Categories */,
+				B376985217B56EB100D29D93 /* Images.xcassets */,
 			);
 			path = Zulip;
 			sourceTree = "<group>";
@@ -638,41 +641,42 @@
 			files = (
 				B3CC438A17A6E2E200C8AF3F /* MainWindow-iphone.xib in Resources */,
 				B3CC438B17A6E2E200C8AF3F /* MainWindow~ipad.xib in Resources */,
-				B3AA06B117B4359F009B06F0 /* zulip-76.png in Resources */,
+				B376985317B56EB100D29D93 /* Images.xcassets in Resources */,
 				C316738F1620DB6B00CE9FE5 /* InfoPlist.strings in Resources */,
-				B3E38C4017B29DD900425145 /* bullhorn.png in Resources */,
-				B3AA06B817B4359F009B06F0 /* zulip-1024.png in Resources */,
 				E577A74F16226AFF002D9651 /* MessageCellView.xib in Resources */,
-				B3AA06AC17B4359F009B06F0 /* zulip-29.png in Resources */,
-				B3E38C4517B29F6600425145 /* user-toolbar@2x.png in Resources */,
-				B3AA06B217B4359F009B06F0 /* zulip-80.png in Resources */,
-				B3AA06B517B4359F009B06F0 /* zulip-144.png in Resources */,
+				B376984F17B56E8300D29D93 /* bullhorn@2x.png in Resources */,
+				B376985017B56E8300D29D93 /* user-toolbar.png in Resources */,
+				B376986717B56F0900D29D93 /* zulip-120.png in Resources */,
+				B376986817B56F0900D29D93 /* zulip-144.png in Resources */,
 				E5CDE07D162C88A800BBD773 /* LoginViewController~iphone.xib in Resources */,
+				B376986317B56F0900D29D93 /* zulip-58.png in Resources */,
 				E5726A2916332BF800ED8BB1 /* StreamViewController.xib in Resources */,
+				B376984E17B56E8300D29D93 /* bullhorn.png in Resources */,
 				E598E78B1634A9950022BF4A /* ErrorViewController~iphone.xib in Resources */,
+				B376986417B56F0900D29D93 /* zulip-72.png in Resources */,
 				E5DC806D165D347D008B53F9 /* ComposeViewController~iphone.xib in Resources */,
-				B3AA06B317B4359F009B06F0 /* zulip@2x.png in Resources */,
 				B3733CCF1778C75300714B6E /* Default-568h@2x.png in Resources */,
+				B376986117B56F0900D29D93 /* zulip-29.png in Resources */,
 				782681C91795CE08009F69F5 /* ComposeViewController~ipad.xib in Resources */,
+				B376986B17B56F0900D29D93 /* zulip-1024.png in Resources */,
+				B376986917B56F0900D29D93 /* zulip-152.png in Resources */,
+				B376986A17B56F0900D29D93 /* zulip-512.png in Resources */,
 				782681CC1795D10C009F69F5 /* LoginViewController~ipad.xib in Resources */,
 				78B52F061796038F002B26DE /* ErrorViewController~ipad.xib in Resources */,
-				B3AA06B417B4359F009B06F0 /* zulip-120.png in Resources */,
+				B376986517B56F0900D29D93 /* zulip-76.png in Resources */,
 				B30F55A317B2D432006DC735 /* LeftSidebarViewController.xib in Resources */,
-				B3AA06AD17B4359F009B06F0 /* zulip-50.png in Resources */,
+				B376985117B56E8300D29D93 /* user-toolbar@2x.png in Resources */,
 				B3F5629517A81C49004B185A /* SidebarStreamCell.xib in Resources */,
 				B3F5629A17A8674B004B185A /* SidebarStreamsHeader.xib in Resources */,
-				B3AA06B017B4359F009B06F0 /* zulip-72.png in Resources */,
-				B3AA06B617B4359F009B06F0 /* zulip-152.png in Resources */,
-				B3AA06AF17B4359F009B06F0 /* zulip-58.png in Resources */,
+				B376986617B56F0900D29D93 /* zulip-80.png in Resources */,
+				B376986D17B56F0900D29D93 /* zulip@2x.png in Resources */,
 				B3F562AD17ABEA8D004B185A /* home.png in Resources */,
-				B3AA06B717B4359F009B06F0 /* zulip-512.png in Resources */,
-				B3E38C4117B29DD900425145 /* bullhorn@2x.png in Resources */,
+				B376986217B56F0900D29D93 /* zulip-50.png in Resources */,
 				B3F562AE17ABEA8D004B185A /* home@2x.png in Resources */,
 				B3F562AF17ABEA8D004B185A /* user.png in Resources */,
 				B3F562B017ABEA8D004B185A /* user@2x.png in Resources */,
-				B3AA06AE17B4359F009B06F0 /* zulip.png in Resources */,
 				B3F562B617ABFD5C004B185A /* my_avatar_placeholder.png in Resources */,
-				B3E38C4417B29F6600425145 /* user-toolbar.png in Resources */,
+				B376986C17B56F0900D29D93 /* zulip.png in Resources */,
 				B3F562B717ABFD5C004B185A /* my_avatar_placeholder@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -869,6 +873,8 @@
 		C31673BF1620DB6C00CE9FE5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
@@ -919,6 +925,8 @@
 		C31673C01620DB6C00CE9FE5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;

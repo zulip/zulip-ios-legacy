@@ -11,45 +11,9 @@
 	<key>CFBundleIconFile</key>
 	<string></string>
 	<key>CFBundleIcons</key>
-	<dict>
-		<key>CFBundlePrimaryIcon</key>
-		<dict>
-			<key>CFBundleIconFiles</key>
-			<array>
-				<string>zulip-80</string>
-				<string>zulip-58</string>
-				<string>zulip-120</string>
-				<string>zulip-114</string>
-				<string>zulip-57</string>
-				<string>zulip-29</string>
-				<string></string>
-				<string>zulip.png</string>
-				<string>zulip@2x.png</string>
-			</array>
-		</dict>
-	</dict>
+	<dict/>
 	<key>CFBundleIcons~ipad</key>
-	<dict>
-		<key>CFBundlePrimaryIcon</key>
-		<dict>
-			<key>CFBundleIconFiles</key>
-			<array>
-				<string>zulip-58</string>
-				<string>zulip-80</string>
-				<string>zulip-50</string>
-				<string>zulip-152</string>
-				<string>zulip-76</string>
-				<string>zulip-144</string>
-				<string>zulip-120</string>
-				<string>zulip-114</string>
-				<string>zulip-57</string>
-				<string>zulip-29</string>
-				<string></string>
-				<string>zulip.png</string>
-				<string>zulip@2x.png</string>
-			</array>
-		</dict>
-	</dict>
+	<dict/>
 	<key>CFBundleIdentifier</key>
 	<string>Zulip.${PRODUCT_NAME:rfc1034identifier}</string>
 	<key>CFBundleInfoDictionaryVersion</key>
