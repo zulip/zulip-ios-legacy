@@ -48,11 +48,34 @@
                                                             after:0
                                                     withOperators:self.operators
                                                   completionBlock:^(NSArray *messages) {
-                                                      NSLog(@"Initially loaded %i messages!", [messages count]);
+      NSLog(@"Initially loaded %i messages!", [messages count]);
 
-                                                      [self loadMessages:messages];
-                                                      [self initiallyLoadedMessages];
-                                                  }];
+      [self loadMessages:messages];
+
+      if ([self.messages count] == 0)
+          return;
+
+      // TODO: This is very similar (but not exactly the same as) HomeViewController.m:60
+      //       We should find a way to consolidate the ugly loadMessageAroundAnchor: method call
+      RawMessage *last = [self.messages lastObject];
+      if ([last.messageID longValue] < [ZulipAPIController sharedInstance].maxServerMessageId) {
+          // More messages to load
+          [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[[ZulipAPIController sharedInstance] pointer]
+                                                                 before:0
+                                                                  after:20
+                                                          withOperators:self.operators
+                                                        completionBlock:^(NSArray *newerMessages) {
+            NSLog(@"Initially loaded forward %i messages!", [newerMessages count]);
+            [self loadMessages:newerMessages];
+            [self initiallyLoadedMessages];
+        }];
+      } else {
+          [self initiallyLoadedMessages];
+      }
+
+
+      [self initiallyLoadedMessages];
+    }];
 }
 
 - (void)resumePopulate
