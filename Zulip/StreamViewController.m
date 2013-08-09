@@ -192,6 +192,10 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if ([self.messages count] == 0) {
+        return nil;
+    }
+
     RawMessage *message = [self messageAtIndexPath:indexPath];
 
     MessageCell *cell = (MessageCell *)[self.tableView dequeueReusableCellWithIdentifier:

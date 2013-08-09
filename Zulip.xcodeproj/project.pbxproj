@@ -22,6 +22,7 @@
 		B3733CFE177A00D900714B6E /* ZulipAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = B3733CFD177A00D900714B6E /* ZulipAPIClient.m */; };
 		B3766D2E179DD1DF005FB0D4 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3766D2D179DD1DF005FB0D4 /* MobileCoreServices.framework */; };
 		B3766D3E179DDBE2005FB0D4 /* Zulip.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B3766D3C179DDBE2005FB0D4 /* Zulip.xcdatamodeld */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		B376984917B52FD500D29D93 /* PreferencesWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = B376984817B52FD500D29D93 /* PreferencesWrapper.m */; };
 		B3AA06AC17B4359F009B06F0 /* zulip-29.png in Resources */ = {isa = PBXBuildFile; fileRef = B3AA069F17B4359F009B06F0 /* zulip-29.png */; };
 		B3AA06AD17B4359F009B06F0 /* zulip-50.png in Resources */ = {isa = PBXBuildFile; fileRef = B3AA06A017B4359F009B06F0 /* zulip-50.png */; };
 		B3AA06AE17B4359F009B06F0 /* zulip.png in Resources */ = {isa = PBXBuildFile; fileRef = B3AA06A117B4359F009B06F0 /* zulip.png */; };
@@ -131,6 +132,8 @@
 		B3733CFD177A00D900714B6E /* ZulipAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZulipAPIClient.m; sourceTree = "<group>"; };
 		B3766D2D179DD1DF005FB0D4 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		B3766D3D179DDBE2005FB0D4 /* Zulip.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Zulip.xcdatamodel; sourceTree = "<group>"; };
+		B376984717B52FD500D29D93 /* PreferencesWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesWrapper.h; sourceTree = "<group>"; };
+		B376984817B52FD500D29D93 /* PreferencesWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesWrapper.m; sourceTree = "<group>"; };
 		B3AA069F17B4359F009B06F0 /* zulip-29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zulip-29.png"; sourceTree = "<group>"; };
 		B3AA06A017B4359F009B06F0 /* zulip-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zulip-50.png"; sourceTree = "<group>"; };
 		B3AA06A117B4359F009B06F0 /* zulip.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zulip.png; sourceTree = "<group>"; };
@@ -517,6 +520,8 @@
 				B3766D32179DD701005FB0D4 /* Models */,
 				B3766D30179DD675005FB0D4 /* Views */,
 				B3766D2F179DD668005FB0D4 /* Controllers */,
+				B376984717B52FD500D29D93 /* PreferencesWrapper.h */,
+				B376984817B52FD500D29D93 /* PreferencesWrapper.m */,
 				B3733CFC177A00D900714B6E /* ZulipAPIClient.h */,
 				B3733CFD177A00D900714B6E /* ZulipAPIClient.m */,
 				C316738B1620DB6B00CE9FE5 /* Supporting Files */,
@@ -723,6 +728,7 @@
 				C31673951620DB6B00CE9FE5 /* ZulipAppDelegate.m in Sources */,
 				E577A74D16226AC4002D9651 /* MessageCell.m in Sources */,
 				E5CDE07C162C88A800BBD773 /* LoginViewController.m in Sources */,
+				B376984917B52FD500D29D93 /* PreferencesWrapper.m in Sources */,
 				E50D757916331D7A00251D1F /* KeychainItemWrapper.m in Sources */,
 				E5726A2816332BF800ED8BB1 /* StreamViewController.m in Sources */,
 				E598E78A1634A9950022BF4A /* ErrorViewController.m in Sources */,

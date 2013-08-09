@@ -13,6 +13,7 @@
 #import "UnreadManager.h"
 #import "LongPoller.h"
 #import "RangePair.h"
+#import "PreferencesWrapper.h"
 
 #include "KeychainItemWrapper.h"
 
@@ -65,9 +66,6 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
         [self clearSettingsForNewUser:YES];
         [self loadRangesFromFile];
 
-        _pointer = [[[NSUserDefaults standardUserDefaults] objectForKey:@"pointer"] longValue];
-        _fullName = [[NSUserDefaults standardUserDefaults] stringForKey:@"fullName"];
-
         self.appDelegate = (ZulipAppDelegate *)[[UIApplication sharedApplication] delegate];
         _unreadManager = [[UnreadManager alloc] init];
 
@@ -84,6 +82,11 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
             self.email = storedEmail;
 
             [ZulipAPIClient setCredentials:self.email withAPIKey:self.apiKey];
+
+            [[PreferencesWrapper sharedInstance] setDomain:[self domain]];
+            _pointer = [[PreferencesWrapper sharedInstance] pointer];
+            _fullName = [[PreferencesWrapper sharedInstance] fullName];
+
             [self registerForMessages];
             [self registerForMetadata];
         }
@@ -194,6 +197,8 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
         [keychainItem setObject:self.email forKey:(__bridge id)kSecAttrAccount];
 
         [ZulipAPIClient setCredentials:self.email withAPIKey:self.apiKey];
+        [[PreferencesWrapper sharedInstance] setDomain:[self domain]];
+
         [self registerForMessages];
         [self registerForMetadata];
 
@@ -299,7 +304,8 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
     NSDictionary *postFields = @{@"pointer": @(_pointer)};
 
     [[ZulipAPIClient sharedClient] putPath:@"users/me/pointer" parameters:postFields success:nil failure:nil];
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithLong:_pointer] forKey:@"pointer"];
+
+    [[PreferencesWrapper sharedInstance] setPointer:_pointer];
 }
 
 - (BOOL)backgrounded
@@ -445,7 +451,7 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
 {
     if (json && [json objectForKey:@"pointer"]) {
         self.pointer = [[json objectForKey:@"pointer"] longValue];
-        [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithLong:self.pointer] forKey:@"pointer"];
+        [[PreferencesWrapper sharedInstance] setPointer:self.pointer];
     }
 
     if (json && [json objectForKey:@"realm_users"]) {
@@ -457,7 +463,7 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
                 self.fullName = [person objectForKey:@"full_name"];
         }
 
-        [[NSUserDefaults standardUserDefaults] setObject:self.fullName forKey:@"fullName"];
+        [[PreferencesWrapper sharedInstance] setFullName:self.fullName];
     }
 
     if (json && [json objectForKey:@"subscriptions"]) {
@@ -571,6 +577,8 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
     [keychainItem setObject:self.email forKey:(__bridge id)kSecAttrAccount];
 
     [ZulipAPIClient setCredentials:self.email withAPIKey:self.apiKey];
+    [[PreferencesWrapper sharedInstance] setDomain:[self domain]];
+
     [self registerForMessages];
     [self registerForMetadata];
 }

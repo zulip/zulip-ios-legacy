@@ -10,6 +10,7 @@
 
 #import "ZulipAPIClient.h"
 #import "ZulipAppDelegate.h"
+#import "PreferencesWrapper.h"
 
 #import "AFHTTPRequestOperation.h"
 #import "AFJSONRequestOperation.h"
@@ -71,7 +72,7 @@
     self.waitingOnErrorRecovery = NO;
 
     if (self.persistentQueue) {
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:self.persistentName];
+        [[PreferencesWrapper sharedInstance] removeKey:self.persistentName];
     }
 }
 
@@ -92,7 +93,8 @@
     // If we have a persistent queue, we load our queue id from NSUserDefaults
     // and use that automatically if it's found
     if (self.persistentQueue) {
-        NSDictionary *queueData = [[NSUserDefaults standardUserDefaults] dictionaryForKey:self.persistentName];
+        NSDictionary *queueData = [[PreferencesWrapper sharedInstance] persistentQueueWithName:self.persistentName];
+
         if (queueData) {
             self.queueId = [queueData objectForKey:@"queueId"];
 
@@ -133,8 +135,7 @@
         if (self.needsSavingToDefaults && self.persistentQueue) {
             NSDictionary *data = @{@"queueId": self.queueId,
                                    @"lastEventId": @(self.lastEventId)};
-            [[NSUserDefaults standardUserDefaults] setObject:data forKey:self.persistentName];
-            [[NSUserDefaults standardUserDefaults] synchronize];
+            [[PreferencesWrapper sharedInstance] setPersistentQueue:data forName:self.persistentName];
 
             self.needsSavingToDefaults = NO;
         }
