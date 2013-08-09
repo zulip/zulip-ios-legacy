@@ -170,12 +170,14 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
     // Load initial activity status, etc
 }
 
-- (void) login:(NSString *)username password:(NSString *)password result:(void (^) (bool success))result;
+- (void)login:(NSString *)username password:(NSString *)password result:(void (^) (bool success))result;
 {
     NSDictionary *postFields =  @{@"username": username,
                                   @"password": password};
 
     NSLog(@"Trying to log in: %@", postFields);
+    [ZulipAPIClient setEmailForDomain:username];
+
     [[ZulipAPIClient sharedClient] postPath:@"fetch_api_key" parameters:postFields success:^(AFHTTPRequestOperation *operation , id responseObject) {
         NSDictionary *jsonDict = (NSDictionary *)responseObject;
 
@@ -212,7 +214,10 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
     KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc]
                                          initWithIdentifier:@"ZulipLogin" accessGroup:nil];
     [keychainItem resetKeychainItem];
-    [[ZulipAPIClient sharedClient] logout];
+
+    if ([self loggedIn]) {
+        [[ZulipAPIClient sharedClient] logout];
+    }
 
     [self.appDelegate reloadCoreData];
 }

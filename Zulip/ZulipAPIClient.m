@@ -7,11 +7,16 @@
 static NSString *email = nil;
 static BOOL debug = NO;
 
-+ (void)setCredentials:(NSString *)user_email withAPIKey:(NSString *)key {
-    email = user_email;
++ (void)setCredentials:(NSString *)userEmail withAPIKey:(NSString *)key {
+    email = userEmail;
 
     [[ZulipAPIClient sharedClient] setAuthorizationHeaderWithUsername:email password:key];
 
+}
+
++ (void)setEmailForDomain:(NSString *)userEmail
+{
+    email = userEmail;
 }
 
 static dispatch_once_t *onceTokenPointer;
