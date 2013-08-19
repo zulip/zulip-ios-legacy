@@ -43,7 +43,9 @@
 
 // Messages that are loaded in a narrow (e.g. not saved to Core Data)
 // are kept here as a reference so we can find them by ID
-@property(nonatomic, retain) NSMutableDictionary *ephemeralMessages;
+@property (nonatomic, retain) NSMutableDictionary *ephemeralMessages;
+
+@property (nonatomic, retain) NSMutableDictionary *cachedStreamColors;
 
 @end
 
@@ -109,6 +111,7 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
     self.maxServerMessageId = -1;
     self.maxLocalMessageId = -1;
     self.rangePairs = [[NSMutableArray alloc] init];
+    self.cachedStreamColors = [[NSMutableDictionary alloc] init];
 }
 
 - (void)initPollers
@@ -460,7 +463,13 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
     [[ZulipAPIClient sharedClient] getPath:@"messages" parameters:fields success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *json = (NSDictionary *)responseObject;
 
-        [self insertMessages:[json objectForKey:@"messages"] saveToCoreData:[narrow isHomeView] withCompletionBlock:block];
+        if ([NSThread isMainThread]) {
+            [self insertMessages:[json objectForKey:@"messages"] saveToCoreData:[narrow isHomeView] withCompletionBlock:block];
+        } else {
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [self insertMessages:[json objectForKey:@"messages"] saveToCoreData:[narrow isHomeView] withCompletionBlock:block];
+            });
+        }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Failed to load old messages: %@", [error localizedDescription]);
     }];
@@ -950,22 +959,48 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
 #pragma mark - Core Data Getters
 
 - (UIColor *)streamColor:(NSString *)name withDefault:(UIColor *)defaultColor {
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ZSubscription"];
-    request.predicate = [NSPredicate predicateWithFormat:@"name = %@", name];
-
-
-    NSError *error = nil;
-    NSArray *results = [[self.appDelegate managedObjectContext] executeFetchRequest:request error:&error];
-    if (error) {
-        NSLog(@"Error fetching subscription to get color: %@, %@", [error localizedDescription], [error userInfo]);
-        return defaultColor;
-    } else if ([results count] == 0) {
-        NSLog(@"Error loading stream data to fetch color, %@", name);
-        return defaultColor;
+    if ([self.cachedStreamColors objectForKey:name]) {
+        return [self.cachedStreamColors objectForKey:name];
     }
 
-    ZSubscription *sub = [results objectAtIndex:0];
-    return [UIColor colorWithHexString:sub.color defaultColor:defaultColor];
+    // Loading color from Core Data has to be on the main thread, so we pass the resulting UIColor
+    // back out of the block
+    __block UIColor *color;
+
+    void (^fetchBlock)(void) = ^ {
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ZSubscription"];
+        request.predicate = [NSPredicate predicateWithFormat:@"name = %@", name];
+
+        NSError *error = nil;
+        NSArray *results = [[self.appDelegate managedObjectContext] executeFetchRequest:request error:&error];
+        if (error) {
+            NSLog(@"Error fetching subscription to get color: %@, %@", [error localizedDescription], [error userInfo]);
+            color = defaultColor;
+            return;
+        } else if ([results count] == 0) {
+            NSLog(@"Error loading stream data to fetch color, %@", name);
+            color = defaultColor;
+            return;
+        }
+
+        ZSubscription *sub = [results objectAtIndex:0];
+        color = [UIColor colorWithHexString:sub.color defaultColor:defaultColor];
+    };
+
+    // Calling dispatch_sync from the main thread results in a deadlock,
+    // so only use dispatch_sync if we're on a background thread
+    if ([NSThread isMainThread]) {
+        fetchBlock();
+    } else {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            fetchBlock();
+        });
+    }
+
+    if (![color isEqual:defaultColor]) {
+        [self.cachedStreamColors setObject:color forKey:name];
+    }
+    return color;
 }
 
 // Singleton
