@@ -14,8 +14,6 @@
 @property (nonatomic, retain) UISegmentedControl *composeButtons;
 
 @property (nonatomic, retain) RawMessage *topRow;
-@property (nonatomic, retain) IBOutlet MessageCell *messageCell;
-
 @property (nonatomic,retain) ZulipAppDelegate *delegate;
 
 @end
@@ -202,12 +200,10 @@
 
     RawMessage *message = [self messageAtIndexPath:indexPath];
 
-    MessageCell *cell = (MessageCell *)[self.tableView dequeueReusableCellWithIdentifier:
-                                        [MessageCell reuseIdentifier]];
+    MessageCell *cell = (MessageCell *)[self.tableView dequeueReusableCellWithIdentifier:[MessageCell reuseIdentifier]];
     if (cell == nil) {
-        [[NSBundle mainBundle] loadNibNamed:@"MessageCellView" owner:self options:nil];
-        cell = self.messageCell;
-        self.messageCell = nil;
+        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"MessageCellView" owner:self options:nil];
+        cell = (MessageCell *)[objects objectAtIndex:0];
     }
 
     [cell setMessage:message];
