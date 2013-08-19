@@ -32,6 +32,12 @@
     bottomBorder.layer.shadowOpacity = 0.1f;
 
     [self.view addSubview:bottomBorder];
+
+    // On iOS 7 we keep the background translucent
+    if ([[[UIDevice currentDevice] systemVersion] compare:@"7.0" options:NSNumericSearch] != NSOrderedAscending) {
+        self.view.backgroundColor = [UIColor clearColor];
+    }
+
 }
 
 @end

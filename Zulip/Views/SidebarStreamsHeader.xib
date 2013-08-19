@@ -42,6 +42,7 @@
 						<string key="NSFrame">{{11, -2}, {59, 21}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<int key="IBUIContentMode">4</int>
@@ -74,8 +75,8 @@
 				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="128638339"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
-					<int key="NSColorSpace">3</int>
-					<bytes key="NSWhite">MCAwAA</bytes>
+					<int key="NSColorSpace">2</int>
+					<bytes key="NSRGB">MC45NDUwOTgwMzkyIDAuOTUyOTQxMTc2NSAwLjk0NTA5ODAzOTIAA</bytes>
 				</object>
 				<bool key="IBUIOpaque">NO</bool>
 				<bool key="IBUIUserInteractionEnabled">NO</bool>
