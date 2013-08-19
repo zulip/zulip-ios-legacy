@@ -27,7 +27,7 @@
     id ret = [super initWithStyle:style];
     self.messages = [[NSMutableArray alloc] init];
     self.msgIds = [[NSMutableSet alloc] init];
-    self.topRow = 0;
+    self.topRow = nil;
 
     // Listen to long polling messages
     [[NSNotificationCenter defaultCenter] addObserverForName:kLongPollMessageNotification
@@ -36,6 +36,14 @@
                                                   usingBlock:^(NSNotification *note) {
                                                       NSArray *messages = [[note userInfo] objectForKey:kLongPollMessageData];
                                                       [self handleLongPollMessages:messages];
+                                                  }];
+
+    // Reset on logout
+    [[NSNotificationCenter defaultCenter] addObserverForName:kLogoutNotification
+                                                      object:nil
+                                                       queue:[NSOperationQueue mainQueue]
+                                                  usingBlock:^(NSNotification *note) {
+                                                      [self clearMessages];
                                                   }];
 
     // KVO watch for resume from background
@@ -52,7 +60,8 @@
 {
     [self.messages removeAllObjects];
     [self.msgIds removeAllObjects];
-    self.topRow = 0;
+    self.topRow = nil;
+    [self.tableView reloadData];
 }
 
 #pragma mark - UIViewController

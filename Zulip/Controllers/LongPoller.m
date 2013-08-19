@@ -63,7 +63,6 @@
 
 - (void)reset
 {
-    self.handler = nil;
     self.lastEventId = -1;
     self.backoff = 0;
     self.pollFailures = 0;

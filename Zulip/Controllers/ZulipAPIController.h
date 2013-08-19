@@ -29,6 +29,10 @@
 extern NSString * const kLongPollMessageNotification;
 extern NSString * const kLongPollMessageData;
 
+// Login and logout notifications
+extern NSString * const kLogoutNotification;
+extern NSString * const kLoginNotification;
+
 // Callback with resulting RawMessage* from desired query
 typedef void(^MessagesDelivered)(NSArray *messages);
 

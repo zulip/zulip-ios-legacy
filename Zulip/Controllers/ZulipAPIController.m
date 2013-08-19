@@ -49,6 +49,8 @@
 
 NSString * const kLongPollMessageNotification = @"LongPollMessages";
 NSString * const kLongPollMessageData = @"LongPollMessageData";
+NSString * const kLogoutNotification = @"ZulipLogoutNotification";
+NSString * const kLoginNotification = @"ZulipLoginNotification";
 
 
 @implementation ZulipAPIController
@@ -203,6 +205,12 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
         [self registerForMetadata];
 
         result(YES);
+
+        NSNotification *loginNotification = [NSNotification notificationWithName:kLoginNotification
+                                                                           object:self
+                                                                         userInfo:nil];
+        [[NSNotificationCenter defaultCenter] postNotification:loginNotification];
+
     } failure: ^( AFHTTPRequestOperation *operation , NSError *error ){
         NSLog(@"Failed to fetch_api_key %@", [error localizedDescription]);
 
@@ -215,19 +223,30 @@ NSString * const kLongPollMessageData = @"LongPollMessageData";
     // Hide any error screens if visible
     [self.appDelegate dismissErrorScreen];
 
+    // Stop pollers
+    [self.messagesPoller reset];
+    [self.metadataPoller reset];
+
+    BOOL wasLoggedIn = [self loggedIn];
+
     [self clearSettingsForNewUser:YES];
     KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc]
                                          initWithIdentifier:@"ZulipLogin" accessGroup:nil];
     [keychainItem resetKeychainItem];
 
-    if ([self loggedIn]) {
+    [self.appDelegate reloadCoreData];
+
+    if (wasLoggedIn) {
+        NSNotification *logoutNotification = [NSNotification notificationWithName:kLogoutNotification
+                                                                           object:self
+                                                                         userInfo:nil];
+        [[NSNotificationCenter defaultCenter] postNotification:logoutNotification];
+
         [[ZulipAPIClient sharedClient] logout];
     }
-
-    [self.appDelegate reloadCoreData];
 }
 
-- (BOOL) loggedIn
+- (BOOL)loggedIn
 {
     return ![self.apiKey isEqualToString:@""];
 }

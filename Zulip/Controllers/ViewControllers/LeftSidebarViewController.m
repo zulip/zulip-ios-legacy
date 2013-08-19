@@ -48,6 +48,21 @@
                                                       usingBlock:^(NSNotification *note) {
             [self handleMessageCountChangedNotification:[[note userInfo] objectForKey:ZUnreadCountChangeNotificationData]];
         }];
+
+        // Reset on logout/login
+        [[NSNotificationCenter defaultCenter] addObserverForName:kLogoutNotification
+                                                          object:nil
+                                                           queue:[NSOperationQueue mainQueue]
+                                                      usingBlock:^(NSNotification *note) {
+                                                          [self reset];
+                                                      }];
+
+        [[NSNotificationCenter defaultCenter] addObserverForName:kLoginNotification
+                                                          object:nil
+                                                           queue:[NSOperationQueue mainQueue]
+                                                      usingBlock:^(NSNotification *note) {
+                                                          [self reset];
+                                                      }];
     }
 
     return self;
@@ -65,7 +80,11 @@
         self.tableView.contentInset = insets;
     }
 
+    [self setupFetchedResultsController];
+}
 
+- (void)setupFetchedResultsController
+{
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ZSubscription"];
     fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]];
 
@@ -99,11 +118,19 @@
         ZUser *user = (ZUser *)[results objectAtIndex:0];
         self.avatar_url = user.avatar_url;
     }
+
 }
 
 - (void)viewDidUnload
 {
     self.streamController = 0;
+}
+
+- (void)reset
+{
+    self.streamController = 0;
+    [self setupFetchedResultsController];
+    [self.tableView reloadData];
 }
 
 #pragma mark - UITableViewDataSource
@@ -269,7 +296,7 @@
         case 3:
         {
             // Logout (Settings?)
-            cell.textLabel.text = @"Switch User";
+            cell.textLabel.text = @"Logout";
             cell.textLabel.font = [UIFont boldSystemFontOfSize:12.0];
             break;
         }
@@ -329,6 +356,8 @@
         }
     } else if (indexPath.section == 3) {
         // Logout
+        [[ZulipAPIController sharedInstance] logout];
+
         LoginViewController *loginView = [[LoginViewController alloc] initWithNibName:@"LoginViewController"
                                                                                bundle:nil];
         [self.sidePanelController toggleLeftPanel:self];
