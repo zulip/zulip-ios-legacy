@@ -73,6 +73,10 @@
 
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 
+    [self.tableView registerNib:[UINib nibWithNibName:@"MessageCellView"
+                                               bundle:nil]
+         forCellReuseIdentifier:[MessageCell reuseIdentifier]];
+
     self.composeButtons = [[UISegmentedControl alloc] initWithItems:@[[UIImage imageNamed:@"user-toolbar.png"],
                                                                       [UIImage imageNamed:@"bullhorn.png"]]];
     self.composeButtons.segmentedControlStyle = UISegmentedControlStyleBar;

@@ -6,13 +6,21 @@
 
 #include <QuartzCore/QuartzCore.h>
 
+@interface MessageCell ()
+
+@property (nonatomic, retain) NSDateFormatter *dateFormatter;
+
+@end
+
 @implementation MessageCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        // Initialization code
+        self.dateFormatter = [[NSDateFormatter alloc] init];
+        [self.dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
+        [self.dateFormatter setDateFormat:@"HH:mm"];
     }
     return self;
 }
@@ -56,10 +64,7 @@
     [layer setMasksToBounds:YES];
     [layer setCornerRadius:21.0f];
 
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
-    [dateFormatter setDateFormat:@"HH:mm"];
-    self.timestamp.text = [dateFormatter stringFromDate:message.timestamp];
+    self.timestamp.text = [self.dateFormatter stringFromDate:message.timestamp];
 
     // When a message is on the screen, mark it as read
     message.read = YES;
