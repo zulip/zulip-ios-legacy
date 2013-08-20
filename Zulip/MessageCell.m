@@ -14,15 +14,11 @@
 
 @implementation MessageCell
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+- (void)awakeFromNib
 {
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self) {
-        self.dateFormatter = [[NSDateFormatter alloc] init];
-        [self.dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
-        [self.dateFormatter setDateFormat:@"HH:mm"];
-    }
-    return self;
+    self.dateFormatter = [[NSDateFormatter alloc] init];
+    [self.dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
+    [self.dateFormatter setDateFormat:@"HH:mm"];
 }
 
 - (void)setMessage:(RawMessage *)message
