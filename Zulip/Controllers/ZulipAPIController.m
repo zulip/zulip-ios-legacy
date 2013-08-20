@@ -183,7 +183,6 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
     NSDictionary *postFields =  @{@"username": username,
                                   @"password": password};
 
-    NSLog(@"Trying to log in: %@", postFields);
     [ZulipAPIClient setEmailForDomain:username];
 
     [[ZulipAPIClient sharedClient] postPath:@"fetch_api_key" parameters:postFields success:^(AFHTTPRequestOperation *operation , id responseObject) {
