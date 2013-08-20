@@ -39,8 +39,6 @@
     self.sidePanelController.panningLimitedToTopViewController = NO;
 
     self.homeViewController = [[HomeViewController alloc] init];
-    // Bottom padding so you can see new messages arrive.
-    self.homeViewController.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, 200.0, 0.0);
     self.navController = [[UINavigationController alloc] initWithRootViewController:self.homeViewController];
 
     [self.narrows setObject:self.homeViewController forKey:(id)self.homeViewController.operators];

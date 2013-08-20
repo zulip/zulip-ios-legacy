@@ -51,6 +51,9 @@
                                                       NSKeyValueObservingOptionOld)
                                              context:nil];
 
+    // Bottom padding so you can see new messages arrive.
+    self.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, 200.0, 0.0);
+
     return ret;
 }
 
