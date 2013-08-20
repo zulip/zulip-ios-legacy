@@ -287,7 +287,7 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
     NSDictionary *messagesOpts = @{@"apply_markdown": @"false",
                                    @"event_types": [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:event_types options:0 error:nil]
                                                               encoding:NSUTF8StringEncoding],
-                                   @"long_lived_queue": @"true"};
+                                   @"queue_lifespan_secs": @(7 * 24 * 60 * 60)}; // Long-lived queue lives for 1 week
 
     [self.metadataPoller registerWithOptions:messagesOpts];
 }
