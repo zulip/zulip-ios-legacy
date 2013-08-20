@@ -56,7 +56,6 @@
     if (![[ZulipAPIController sharedInstance] loggedIn]) {
         // No credentials stored; we need to log in.
         self.loginViewController = [[LoginViewController alloc] init];
-        self.navController.navigationBarHidden = YES;
         self.sidePanelController.recognizesPanGesture = NO;
         [self.navController pushViewController:self.loginViewController animated:YES];
     }
@@ -74,7 +73,6 @@
 
 - (void)dismissLoginScreen
 {
-    [self.navController setNavigationBarHidden:NO animated:YES];
     self.sidePanelController.recognizesPanGesture = YES;
     [self.navController popViewControllerAnimated:YES];
 }

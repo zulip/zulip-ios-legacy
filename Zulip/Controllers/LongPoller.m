@@ -66,6 +66,7 @@
     self.lastEventId = -1;
     self.backoff = 0;
     self.pollFailures = 0;
+    [self.pollRequest cancel];
     self.pollRequest = nil;
     self.queueId = @"";
     self.waitingOnErrorRecovery = NO;
@@ -202,6 +203,11 @@
       [self performSelectorInBackground:@selector(longPoll) withObject: nil];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
       NSLog(@"Failed to do long poll: %@", [error localizedDescription]);
+
+      if (self.pollRequest == nil)  {
+          // We were aborted by calling [reset], so stop the poll loop
+          return;
+      }
 
       BOOL ignoreError = NO;
 

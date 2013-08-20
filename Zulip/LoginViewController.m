@@ -22,6 +22,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
+
     self.password.secureTextEntry = YES;
     appDelegate = (ZulipAppDelegate *)[[UIApplication sharedApplication] delegate];
 
@@ -37,6 +39,11 @@
 
     // Focus on email field.
     [self.email becomeFirstResponder];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
 - (void)didReceiveMemoryWarning
