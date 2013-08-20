@@ -46,8 +46,9 @@
 
 - (IBAction) login: (id) sender
 {
+    NSString *trimmedEmail = [email.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     [[ZulipAPIController sharedInstance] logout];
-    [[ZulipAPIController sharedInstance] login:email.text password:password.text result:^(bool loggedIn) {
+    [[ZulipAPIController sharedInstance] login:trimmedEmail password:password.text result:^(bool loggedIn) {
         if (loggedIn) {
             [appDelegate dismissLoginScreen];
         } else {
