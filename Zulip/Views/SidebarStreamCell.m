@@ -54,10 +54,10 @@
 
     self.name.text = [op title];
 
+    _narrow = op;
+
     NSDictionary *unread_counts = [[[ZulipAPIController sharedInstance] unreadManager] unreadCounts];
     [self setUnreadCount:unread_counts];
-
-    _narrow = op;
 }
 
 - (void)setStream:(ZSubscription *)subscription
