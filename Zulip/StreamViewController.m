@@ -73,9 +73,11 @@
 
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 
-    [self.tableView registerNib:[UINib nibWithNibName:@"MessageCellView"
-                                               bundle:nil]
-         forCellReuseIdentifier:[MessageCell reuseIdentifier]];
+    // TODO re-enable registerNib:forReuseIdentifier once we work out why it is
+    // breaking some message content layout on pre-1.4. It greatly speeds up scrolling
+//    [self.tableView registerNib:[UINib nibWithNibName:@"MessageCellView"
+//                                               bundle:nil]
+//         forCellReuseIdentifier:[MessageCell reuseIdentifier]];
 
     self.composeButtons = [[UISegmentedControl alloc] initWithItems:@[[UIImage imageNamed:@"user-toolbar.png"],
                                                                       [UIImage imageNamed:@"bullhorn.png"]]];
