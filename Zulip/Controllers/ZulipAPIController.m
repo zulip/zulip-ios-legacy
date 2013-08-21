@@ -648,7 +648,13 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
 
     for (RawMessage *raw in rawMessagesToUpdate) {
         if ([op isEqualToString:@"add"]) {
-            [raw addMessageFlag:flag];
+            // We handle read flags explicitly so we mark them
+            // as read in our unread manager
+            if ([flag isEqualToString:@"read"]) {
+                [raw setRead:YES];
+            } else {
+                [raw addMessageFlag:flag];
+            }
         } else if ([op isEqualToString:@"remove"]) {
             [raw removeMessageFlag:flag];
         }
