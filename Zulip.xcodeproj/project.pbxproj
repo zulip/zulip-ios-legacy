@@ -157,7 +157,7 @@
 		B376987017B5857600D29D93 /* JASidePanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JASidePanelController.m; sourceTree = "<group>"; };
 		B376987117B5857600D29D93 /* UIViewController+JASidePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+JASidePanel.h"; sourceTree = "<group>"; };
 		B376987217B5857600D29D93 /* UIViewController+JASidePanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+JASidePanel.m"; sourceTree = "<group>"; };
-		B376987517B5879300D29D93 /* Zulip 1.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Zulip 1.0.xcdatamodel"; sourceTree = "<group>"; };
+		B376987517B5879300D29D93 /* Zulip 1.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Zulip 1.0.xcdatamodel"; sourceTree = "<group>"; };
 		B3CC439017A701A900C8AF3F /* ZUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZUser.h; path = Models/ZUser.h; sourceTree = "<group>"; };
 		B3CC439117A701A900C8AF3F /* ZUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZUser.m; path = Models/ZUser.m; sourceTree = "<group>"; };
 		B3CC439417A7F13700C8AF3F /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HomeViewController.h; path = Controllers/ViewControllers/HomeViewController.h; sourceTree = "<group>"; };
@@ -951,6 +951,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Zulip/Zulip-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = NS_BLOCK_ASSERTIONS;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
