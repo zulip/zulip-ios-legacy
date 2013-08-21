@@ -727,7 +727,13 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
     }];
 
     for (NSString *subName in removed) {
-        [[self.appDelegate managedObjectContext] deleteObject:[oldSubsDict objectForKey:@"subName"]];
+        ZSubscription *sub = [oldSubsDict objectForKey:subName];
+        if (!sub) {
+            CLS_LOG(@"Got invalid subscription that we are trying to remove!");
+            NSAssert2(NO, @"Invalid subscription to remove: %@, %@", subName, oldSubsDict);
+            continue;
+        }
+        [[self.appDelegate managedObjectContext] deleteObject:sub];
     }
 
     error = NULL;
