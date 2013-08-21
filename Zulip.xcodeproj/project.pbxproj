@@ -17,6 +17,18 @@
 		7882F1B617BA9FFD00A27601 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7882F1B517BA9FFD00A27601 /* ImageIO.framework */; };
 		7882F1B817BAA01600A27601 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7882F1B717BAA01600A27601 /* CoreText.framework */; };
 		78B52F061796038F002B26DE /* ErrorViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78B52F051796038F002B26DE /* ErrorViewController~ipad.xib */; };
+		78BE8D3717C52D0100330433 /* SourceSansPro-Black-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 78BE8D0E17C5101A00330433 /* SourceSansPro-Black-webfont.ttf */; };
+		78BE8D3817C52D0100330433 /* SourceSansPro-BlackIt-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 78BE8D0F17C5101A00330433 /* SourceSansPro-BlackIt-webfont.ttf */; };
+		78BE8D3917C52D0100330433 /* SourceSansPro-Bold-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 78BE8D1017C5101A00330433 /* SourceSansPro-Bold-webfont.ttf */; };
+		78BE8D3A17C52D0100330433 /* SourceSansPro-BoldIt-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 78BE8D1117C5101A00330433 /* SourceSansPro-BoldIt-webfont.ttf */; };
+		78BE8D3B17C52D0100330433 /* SourceSansPro-ExtraLight-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 78BE8D1217C5101A00330433 /* SourceSansPro-ExtraLight-webfont.ttf */; };
+		78BE8D3C17C52D0100330433 /* SourceSansPro-ExtraLightIt-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 78BE8D1317C5101A00330433 /* SourceSansPro-ExtraLightIt-webfont.ttf */; };
+		78BE8D3D17C52D0100330433 /* SourceSansPro-It-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 78BE8D1417C5101A00330433 /* SourceSansPro-It-webfont.ttf */; };
+		78BE8D3E17C52D0100330433 /* SourceSansPro-Light-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 78BE8D1517C5101A00330433 /* SourceSansPro-Light-webfont.ttf */; };
+		78BE8D3F17C52D0100330433 /* SourceSansPro-LightIt-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 78BE8D1617C5101A00330433 /* SourceSansPro-LightIt-webfont.ttf */; };
+		78BE8D4017C52D0100330433 /* SourceSansPro-Regular-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 78BE8D1717C5101A00330433 /* SourceSansPro-Regular-webfont.ttf */; };
+		78BE8D4117C52D0100330433 /* SourceSansPro-Semibold-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 78BE8D1817C5101A00330433 /* SourceSansPro-Semibold-webfont.ttf */; };
+		78BE8D4217C52D0100330433 /* SourceSansPro-SemiboldIt-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 78BE8D1917C5101A00330433 /* SourceSansPro-SemiboldIt-webfont.ttf */; };
 		B30F55A217B2D432006DC735 /* LeftSidebarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B30F55A017B2D432006DC735 /* LeftSidebarViewController.m */; };
 		B30F55A317B2D432006DC735 /* LeftSidebarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B30F55A117B2D432006DC735 /* LeftSidebarViewController.xib */; };
 		B3107A0A17C55A33000F248E /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = B3107A0917C55A33000F248E /* MBProgressHUD.m */; };
@@ -193,6 +205,18 @@
 		7882F1B517BA9FFD00A27601 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		7882F1B717BAA01600A27601 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		78B52F051796038F002B26DE /* ErrorViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "ErrorViewController~ipad.xib"; sourceTree = "<group>"; };
+		78BE8D0E17C5101A00330433 /* SourceSansPro-Black-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SourceSansPro-Black-webfont.ttf"; path = "Resources/fonts/SourceSansPro-Black-webfont.ttf"; sourceTree = "<group>"; };
+		78BE8D0F17C5101A00330433 /* SourceSansPro-BlackIt-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SourceSansPro-BlackIt-webfont.ttf"; path = "Resources/fonts/SourceSansPro-BlackIt-webfont.ttf"; sourceTree = "<group>"; };
+		78BE8D1017C5101A00330433 /* SourceSansPro-Bold-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SourceSansPro-Bold-webfont.ttf"; path = "Resources/fonts/SourceSansPro-Bold-webfont.ttf"; sourceTree = "<group>"; };
+		78BE8D1117C5101A00330433 /* SourceSansPro-BoldIt-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SourceSansPro-BoldIt-webfont.ttf"; path = "Resources/fonts/SourceSansPro-BoldIt-webfont.ttf"; sourceTree = "<group>"; };
+		78BE8D1217C5101A00330433 /* SourceSansPro-ExtraLight-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SourceSansPro-ExtraLight-webfont.ttf"; path = "Resources/fonts/SourceSansPro-ExtraLight-webfont.ttf"; sourceTree = "<group>"; };
+		78BE8D1317C5101A00330433 /* SourceSansPro-ExtraLightIt-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SourceSansPro-ExtraLightIt-webfont.ttf"; path = "Resources/fonts/SourceSansPro-ExtraLightIt-webfont.ttf"; sourceTree = "<group>"; };
+		78BE8D1417C5101A00330433 /* SourceSansPro-It-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SourceSansPro-It-webfont.ttf"; path = "Resources/fonts/SourceSansPro-It-webfont.ttf"; sourceTree = "<group>"; };
+		78BE8D1517C5101A00330433 /* SourceSansPro-Light-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SourceSansPro-Light-webfont.ttf"; path = "Resources/fonts/SourceSansPro-Light-webfont.ttf"; sourceTree = "<group>"; };
+		78BE8D1617C5101A00330433 /* SourceSansPro-LightIt-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SourceSansPro-LightIt-webfont.ttf"; path = "Resources/fonts/SourceSansPro-LightIt-webfont.ttf"; sourceTree = "<group>"; };
+		78BE8D1717C5101A00330433 /* SourceSansPro-Regular-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SourceSansPro-Regular-webfont.ttf"; path = "Resources/fonts/SourceSansPro-Regular-webfont.ttf"; sourceTree = "<group>"; };
+		78BE8D1817C5101A00330433 /* SourceSansPro-Semibold-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SourceSansPro-Semibold-webfont.ttf"; path = "Resources/fonts/SourceSansPro-Semibold-webfont.ttf"; sourceTree = "<group>"; };
+		78BE8D1917C5101A00330433 /* SourceSansPro-SemiboldIt-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SourceSansPro-SemiboldIt-webfont.ttf"; path = "Resources/fonts/SourceSansPro-SemiboldIt-webfont.ttf"; sourceTree = "<group>"; };
 		B30F559F17B2D432006DC735 /* LeftSidebarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LeftSidebarViewController.h; path = Controllers/ViewControllers/LeftSidebarViewController.h; sourceTree = "<group>"; };
 		B30F55A017B2D432006DC735 /* LeftSidebarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LeftSidebarViewController.m; path = Controllers/ViewControllers/LeftSidebarViewController.m; sourceTree = "<group>"; };
 		B30F55A117B2D432006DC735 /* LeftSidebarViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LeftSidebarViewController.xib; path = Controllers/ViewControllers/LeftSidebarViewController.xib; sourceTree = "<group>"; };
@@ -202,14 +226,6 @@
 		B3174BDC17F47B77004C31E4 /* AboutView~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "AboutView~ipad.xib"; path = "Views/AboutView~ipad.xib"; sourceTree = "<group>"; };
 		B3174BDE17F47F92004C31E4 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AboutViewController.h; path = Controllers/ViewControllers/AboutViewController.h; sourceTree = "<group>"; };
 		B3174BDF17F47F92004C31E4 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AboutViewController.m; path = Controllers/ViewControllers/AboutViewController.m; sourceTree = "<group>"; };
-		7882870017B2EDE100D5DC42 /* emoji */ = {isa = PBXFileReference; lastKnownFileType = folder; name = emoji; path = Resources/emoji; sourceTree = "<group>"; };
-		7882800C17B2E2F300D5DC42 /* Zulip.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Zulip.css; sourceTree = SOURCE_ROOT; };
-		7881414D17B4146B00A7A666 /* OffScreenWebViewRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OffScreenWebViewRenderer.h; path = Zulip/OffScreenWebViewRenderer.h; sourceTree = "<group>"; };
-		7881414E17B4146B00A7A666 /* OffScreenWebViewRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OffScreenWebViewRenderer.m; path = Zulip/OffScreenWebViewRenderer.m; sourceTree = "<group>"; };
-		7881415017B417D900A7A666 /* OffScreenWebViewRenderingManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OffScreenWebViewRenderingManager.h; sourceTree = "<group>"; };
-		7881415117B417D900A7A666 /* OffScreenWebViewRenderingManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OffScreenWebViewRenderingManager.m; sourceTree = "<group>"; };
-		78EE4F0617A9AF4B00582E26 /* MessageCellWebView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MessageCellWebView.h; path = Views/MessageCellWebView.h; sourceTree = "<group>"; };
-		78EE4F0717A9AF7F00582E26 /* MessageCellWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessageCellWebView.m; path = Views/MessageCellWebView.m; sourceTree = "<group>"; };
 		B338402B17C3B97A0083A529 /* RenderedMarkdownMunger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderedMarkdownMunger.h; sourceTree = "<group>"; };
 		B338402C17C3B97A0083A529 /* RenderedMarkdownMunger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RenderedMarkdownMunger.m; sourceTree = "<group>"; };
 		B3469794179ED591006D0E9B /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -433,6 +449,25 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		78BE8D0D17C5100800330433 /* fonts */ = {
+			isa = PBXGroup;
+			children = (
+				78BE8D0E17C5101A00330433 /* SourceSansPro-Black-webfont.ttf */,
+				78BE8D0F17C5101A00330433 /* SourceSansPro-BlackIt-webfont.ttf */,
+				78BE8D1017C5101A00330433 /* SourceSansPro-Bold-webfont.ttf */,
+				78BE8D1117C5101A00330433 /* SourceSansPro-BoldIt-webfont.ttf */,
+				78BE8D1217C5101A00330433 /* SourceSansPro-ExtraLight-webfont.ttf */,
+				78BE8D1317C5101A00330433 /* SourceSansPro-ExtraLightIt-webfont.ttf */,
+				78BE8D1417C5101A00330433 /* SourceSansPro-It-webfont.ttf */,
+				78BE8D1517C5101A00330433 /* SourceSansPro-Light-webfont.ttf */,
+				78BE8D1617C5101A00330433 /* SourceSansPro-LightIt-webfont.ttf */,
+				78BE8D1717C5101A00330433 /* SourceSansPro-Regular-webfont.ttf */,
+				78BE8D1817C5101A00330433 /* SourceSansPro-Semibold-webfont.ttf */,
+				78BE8D1917C5101A00330433 /* SourceSansPro-SemiboldIt-webfont.ttf */,
+			);
+			name = fonts;
+			sourceTree = "<group>";
+		};
 		B338402217C3B9640083A529 /* Markdown */ = {
 			isa = PBXGroup;
 			children = (
@@ -454,9 +489,10 @@
 		B3733CCA1778C63400714B6E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				78BE8D0D17C5100800330433 /* fonts */,
+				7882870017B2EDE100D5DC42 /* emoji */,
 				B39AC2B217F0ED6300EB65B3 /* Launch Images */,
 				B3AA069E17B4357B009B06F0 /* zulip_icon */,
-				7882870017B2EDE100D5DC42 /* emoji */,
 				B3733CCB1778C75300714B6E /* Default-568h@2x.png */,
 				B3F562A917ABEA8D004B185A /* home.png */,
 				B3F562AA17ABEA8D004B185A /* home@2x.png */,
@@ -877,6 +913,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				78BE8D3717C52D0100330433 /* SourceSansPro-Black-webfont.ttf in Resources */,
+				78BE8D3817C52D0100330433 /* SourceSansPro-BlackIt-webfont.ttf in Resources */,
+				78BE8D3917C52D0100330433 /* SourceSansPro-Bold-webfont.ttf in Resources */,
+				78BE8D3A17C52D0100330433 /* SourceSansPro-BoldIt-webfont.ttf in Resources */,
+				78BE8D3B17C52D0100330433 /* SourceSansPro-ExtraLight-webfont.ttf in Resources */,
+				78BE8D3C17C52D0100330433 /* SourceSansPro-ExtraLightIt-webfont.ttf in Resources */,
+				78BE8D3D17C52D0100330433 /* SourceSansPro-It-webfont.ttf in Resources */,
+				78BE8D3E17C52D0100330433 /* SourceSansPro-Light-webfont.ttf in Resources */,
+				78BE8D3F17C52D0100330433 /* SourceSansPro-LightIt-webfont.ttf in Resources */,
+				78BE8D4017C52D0100330433 /* SourceSansPro-Regular-webfont.ttf in Resources */,
+				78BE8D4117C52D0100330433 /* SourceSansPro-Semibold-webfont.ttf in Resources */,
+				78BE8D4217C52D0100330433 /* SourceSansPro-SemiboldIt-webfont.ttf in Resources */,
 				B3CC438A17A6E2E200C8AF3F /* MainWindow~iphone.xib in Resources */,
 				B3CC438B17A6E2E200C8AF3F /* MainWindow~ipad.xib in Resources */,
 				B376985317B56EB100D29D93 /* Images.xcassets in Resources */,

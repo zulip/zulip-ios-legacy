@@ -16,7 +16,7 @@
     static NSDictionary *options;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        options = [NSDictionary dictionaryWithObject:[[DTCSSStylesheet alloc] initWithStyleBlock:@"pre {\n"
+        options = @{DTDefaultStyleSheet: [[DTCSSStylesheet alloc] initWithStyleBlock:@"pre {\n"
                                                                 "    background-color: '#F5F5F5';\n"
                                                                 ""
                                                                 "}\n"
@@ -25,6 +25,10 @@
                                                                 "    border-left-color: #dddddd;\n"
                                                                 "    border-left-style: solid;\n"
                                                                 "    border-left: 5px;\n"
+                                                                "}"
+
+                                                                "a {\n"
+                                                                "    color: #0088cc\n"
                                                                 "}"
 
                                                                 "code {\n"
@@ -47,7 +51,9 @@
                                                                 "img.emoji {\n"
                                                                 "height: 1.4em;\n"
                                                                 "width: 1.4em;\n"
-                                                                "}\n"] forKey:DTDefaultStyleSheet];
+                                                                "}\n"],
+                    DTDefaultFontFamily: @"Source Sans Pro",
+                    DTDefaultFontSize: @"12pt"};
     });
     if (message.munged) {
         NSLog(@"Tried to munge message %@, with content %@, that's already been munged. Ya done goofed, probably.", message, message.content);
