@@ -8,6 +8,8 @@
 
 #import "NarrowOperators.h"
 
+#import <Crashlytics/Crashlytics.h>
+
 @interface NarrowOperators ()
 
 @property (assign) BOOL home_view;
@@ -127,7 +129,7 @@
     NSError *error = nil;
     NSData *data = [NSJSONSerialization dataWithJSONObject:narrow options:0 error:&error];
     if (error) {
-        NSLog(@"Failed to convert narrow parmams to JSON: %@ %@", [error localizedDescription], [error userInfo]);
+        CLS_LOG(@"Failed to convert narrow parmams to JSON: %@ %@", [error localizedDescription], [error userInfo]);
         return @"{}";
     }
     return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];

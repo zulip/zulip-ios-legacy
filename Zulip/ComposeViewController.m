@@ -1,8 +1,10 @@
-#import <QuartzCore/QuartzCore.h>
 #import "ComposeViewController.h"
 #import "ZulipAppDelegate.h"
 #import "ZulipAPIClient.h"
 #import "ZulipAPIController.h"
+
+#import <QuartzCore/QuartzCore.h>
+#import <Crashlytics/Crashlytics.h>
 
 @interface ComposeViewController ()
 
@@ -120,7 +122,7 @@
     }
 
     [[ZulipAPIClient sharedClient] postPath:@"messages" parameters:postFields success:nil failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error posting message: %@", [error localizedDescription]);
+        CLS_LOG(@"Error posting message: %@", [error localizedDescription]);
     }];
 
     [self.delegate.navController popViewControllerAnimated:YES];

@@ -233,11 +233,11 @@
     NSError *error = nil;
     [__persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error];
     if (error) {
-        NSLog(@"Error initializing persistent sqlite store! %@, %@", [error localizedDescription], [error userInfo]);
+        CLS_LOG(@"Error initializing persistent sqlite store! %@, %@", [error localizedDescription], [error userInfo]);
         abort();
     }
 
-    NSLog(@"SQLite URL: %@", storeURL);
+    CLS_LOG(@"SQLite URL: %@", storeURL);
 
     return __persistentStoreCoordinator;
 }

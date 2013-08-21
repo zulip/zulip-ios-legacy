@@ -27,6 +27,8 @@
 // Categories
 #import "UIColor+HexColor.h"
 
+#import <Crashlytics/Crashlytics.h>
+
 // Private category to let us declare "private" member properties
 @interface ZulipAPIController ()
 
@@ -214,7 +216,7 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
         [[NSNotificationCenter defaultCenter] postNotification:loginNotification];
 
     } failure: ^( AFHTTPRequestOperation *operation , NSError *error ){
-        NSLog(@"Failed to fetch_api_key %@", [error localizedDescription]);
+        CLS_LOG(@"Failed to fetch_api_key %@", [error localizedDescription]);
 
         result(NO);
     }];
@@ -346,7 +348,7 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
 
     // Re-start polling
     if (_backgrounded && !backgrounded) {
-        NSLog(@"Coming to the foreground!!");
+        CLS_LOG(@"Coming to the foreground!!");
         [self loadRangesFromFile];
 //        [self startPoll];
     }
@@ -399,7 +401,7 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
     BOOL needsServerFetch = NO;
 
     if (error) {
-        NSLog(@"Error fetching results from Core Data for message request! %@ %@", [error localizedDescription], [error userInfo]);
+        CLS_LOG(@"Error fetching results from Core Data for message request! %@ %@", [error localizedDescription], [error userInfo]);
     } else {
         if ([results count] == fetchRequest.fetchLimit) {
             ZMessage *first = [results objectAtIndex:0];
@@ -408,13 +410,13 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
             RangePair *firstRange = [RangePair getCurrentRangeOf:[first.messageID intValue] inRangePairs:self.rangePairs];
             RangePair *lastRange = [RangePair getCurrentRangeOf:[last.messageID intValue] inRangePairs:self.rangePairs];
 
-            NSLog(@"Got first %@ and last %@ ranges for first fetched message and last fetched message", firstRange, lastRange);
+            CLS_LOG(@"Got first %@ and last %@ ranges for first fetched message and last fetched message", firstRange, lastRange);
 
             if (!firstRange || !lastRange || ![firstRange isEqual:lastRange]) {
-                NSLog(@"Got messages across range boundaries, refetching");
+                CLS_LOG(@"Got messages across range boundaries, refetching");
                 needsServerFetch = YES;
             } else {
-                NSLog(@"No extra fetching required, using Core Data messages");
+                CLS_LOG(@"No extra fetching required, using Core Data messages");
                 needsServerFetch = NO;
             }
         }
@@ -470,7 +472,7 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
             });
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Failed to load old messages: %@", [error localizedDescription]);
+        CLS_LOG(@"Failed to load old messages: %@", [error localizedDescription]);
     }];
 }
 
@@ -494,7 +496,7 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
     }
 
     if (json && [json objectForKey:@"subscriptions"]) {
-        NSLog(@"Registered for queue, pointer is %li", self.pointer);
+        CLS_LOG(@"Registered for queue, pointer is %li", self.pointer);
         NSArray *subscriptions = [json objectForKey:@"subscriptions"];
         [self loadSubscriptionData:subscriptions];
     }
@@ -577,7 +579,7 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
     [self clearSettingsForNewUser:NO];
 
 
-    NSLog(@"Doing messages reset");
+    CLS_LOG(@"Doing messages reset");
     [self.appDelegate clearNarrowWithAnimation:NO];
 
     [self.homeViewController initialPopulate];
@@ -592,7 +594,7 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
     NSString *email = self.email;
     NSString *apiKey = self.apiKey;
 
-    NSLog(@"Doing full reset");
+    CLS_LOG(@"Doing full reset");
     [self.metadataPoller reset];
     [self logout];
 
@@ -623,7 +625,7 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
     NSError *error = nil;
     NSArray *messages = [[self.appDelegate managedObjectContext] executeFetchRequest:fetchRequest error:&error];
     if (error) {
-        NSLog(@"Error fetching messages to update from Core Data: %@ %@", [error localizedDescription], [error userInfo]);
+        CLS_LOG(@"Error fetching messages to update from Core Data: %@ %@", [error localizedDescription], [error userInfo]);
         return;
     }
 
@@ -664,7 +666,7 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
         error = nil;
         [[self.appDelegate managedObjectContext] save:&error];
         if (error) {
-            NSLog(@"Failed to save flag updates: %@ %@", [error localizedDescription], [error userInfo]);
+            CLS_LOG(@"Failed to save flag updates: %@ %@", [error localizedDescription], [error userInfo]);
         }
     }
 }
@@ -677,7 +679,7 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
                            @"flag": flag,
                            @"op": operation};
     [[ZulipAPIClient sharedClient] postPath:@"messages/flags" parameters:opts success:nil failure:^(AFHTTPRequestOperation *afop, NSError *error) {
-        NSLog(@"Failed to update message flags %@ %@", [error localizedDescription], [error userInfo]);
+        CLS_LOG(@"Failed to update message flags %@ %@", [error localizedDescription], [error userInfo]);
     }];
 }
 
@@ -692,7 +694,7 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
     NSError *error = NULL;
     NSArray *subs = [[self.appDelegate managedObjectContext] executeFetchRequest:req error:&error];
     if (error) {
-        NSLog(@"Failed to load subscriptions from database: %@", [error localizedDescription]);
+        CLS_LOG(@"Failed to load subscriptions from database: %@", [error localizedDescription]);
         return;
     }
 
@@ -739,7 +741,7 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
     error = NULL;
     [[self.appDelegate managedObjectContext] save:&error];
     if (error) {
-        NSLog(@"Failed to save subscription updates: %@", [error localizedDescription]);
+        CLS_LOG(@"Failed to save subscription updates: %@", [error localizedDescription]);
     }
 }
 
@@ -786,7 +788,7 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
         NSError *error = nil;
         NSArray *existing = [[self.appDelegate managedObjectContext] executeFetchRequest:fetchRequest error:&error];
         if (error) {
-            NSLog(@"Error fetching existing messages in insertMessages: %@ %@", [error localizedDescription], [error userInfo]);
+            CLS_LOG(@"Error fetching existing messages in insertMessages: %@ %@", [error localizedDescription], [error userInfo]);
             return;
         }
 
@@ -834,7 +836,7 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
         error = nil;
         [[self.appDelegate managedObjectContext] save:&error];
         if (error) {
-            NSLog(@"Error saving new messages: %@ %@", [error localizedDescription], [error userInfo]);
+            CLS_LOG(@"Error saving new messages: %@ %@", [error localizedDescription], [error userInfo]);
         }
 
         if ([rawMessages count] > 0) {
@@ -919,7 +921,7 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
     NSError *error = nil;
     NSArray *results = [[self.appDelegate managedObjectContext] executeFetchRequest:request error:&error];
     if (error) {
-        NSLog(@"Error fetching ZUser: %@ %@", [error localizedDescription], [error userInfo]);
+        CLS_LOG(@"Error fetching ZUser: %@ %@", [error localizedDescription], [error userInfo]);
 
         return nil;
     }
@@ -929,7 +931,7 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
         user = (ZUser *)[results objectAtIndex:0];
     } else {
         if (![personDict objectForKey:@"id"]) {
-            NSLog(@"Tried to add a new person without an ID?! %@", personDict);
+            CLS_LOG(@"Tried to add a new person without an ID?! %@", personDict);
             return nil;
         }
 
@@ -946,7 +948,7 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
         error = nil;
         [[self.appDelegate managedObjectContext] save:&error];
         if (error) {
-            NSLog(@"Error saving ZUser: %@ %@", [error localizedDescription], [error userInfo]);
+            CLS_LOG(@"Error saving ZUser: %@ %@", [error localizedDescription], [error userInfo]);
 
             return nil;
         }
@@ -985,11 +987,11 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
         NSError *error = nil;
         NSArray *results = [[self.appDelegate managedObjectContext] executeFetchRequest:request error:&error];
         if (error) {
-            NSLog(@"Error fetching subscription to get color: %@, %@", [error localizedDescription], [error userInfo]);
+            CLS_LOG(@"Error fetching subscription to get color: %@, %@", [error localizedDescription], [error userInfo]);
             color = defaultColor;
             return;
         } else if ([results count] == 0) {
-            NSLog(@"Error loading stream data to fetch color, %@", name);
+            CLS_LOG(@"Error loading stream data to fetch color, %@", name);
             color = defaultColor;
             return;
         }

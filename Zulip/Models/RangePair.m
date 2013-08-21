@@ -8,6 +8,8 @@
 
 #import "RangePair.h"
 
+#import <Crashlytics/Crashlytics.h>
+
 @implementation RangePair
 
 - (id) initWithStart:(NSUInteger)theStart andEnd:(NSUInteger)theEnd
@@ -16,7 +18,10 @@
     {
         self.left = theStart;
         self.right = theEnd;
-        NSAssert2(self.left < self.right, @"invalid range given: [%i, %i]", self.left, self.right);
+        if (self.left >= self.right) {
+            CLS_LOG(@"Invalid range given to RangePair: [%i, %i]", self.left, self.right);
+            NSAssert2(self.left < self.right, @"invalid range given: [%i, %i]", self.left, self.right);
+        }
 
     }
     return self;

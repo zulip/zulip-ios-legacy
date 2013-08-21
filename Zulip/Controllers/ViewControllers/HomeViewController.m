@@ -9,6 +9,8 @@
 #import "HomeViewController.h"
 #import "ZulipAPIController.h"
 
+#import <Crashlytics/Crashlytics.h>
+
 @interface HomeViewController ()
 
 @property(assign) long scrollToPointer;
@@ -44,7 +46,6 @@
     }
 
     // Load initial set of messages
-    NSLog(@"Initially populating!");
     NSDictionary *args = @{@"anchor": @([ZulipAPIController sharedInstance].pointer),
                            @"num_before": @(12),
                            @"num_after": @(0)};
@@ -65,7 +66,7 @@
                                                                     after:20
                                                             withOperators:self.operators
                                                           completionBlock:^(NSArray *newerMessages) {
-                NSLog(@"Initially loaded forward %i messages!", [newerMessages count]);
+                CLS_LOG(@"Initially loaded forward %i messages!", [newerMessages count]);
                 [self loadMessages:newerMessages];
             }];
         }
@@ -74,14 +75,13 @@
 
 - (void)resumePopulate
 {
-    NSLog(@"Resuming populating!");
     RawMessage *latest = [[self messages] lastObject];
     [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[latest.messageID longValue] + 1
                                                            before:0
                                                             after:20
                                                     withOperators:self.operators
                                                   completionBlock:^(NSArray *messages) {
-                                                      NSLog(@"Resuming and fetched loaded %i new messages!", [messages count]);
+                                                      CLS_LOG(@"Resuming and fetched loaded %i new messages!", [messages count]);
 
                                                       [self loadMessages:messages];
                                                   }];
@@ -127,7 +127,7 @@
 {
     int pointerRowNum = [self rowWithId:newPointer];
     if (pointerRowNum > -1) {
-        NSLog(@"Scrolling to pointer %li", newPointer);
+        CLS_LOG(@"Scrolling to pointer %li", newPointer);
         // If the pointer is already in our table, but not visible, scroll to it
         // but don't try to clear and refetch messages.
         [self.tableView scrollToRowAtIndexPath:[NSIndexPath
@@ -150,9 +150,9 @@
 - (void)initiallyLoadedMessages
 {
     long pointer = [[ZulipAPIController sharedInstance] pointer];
-//    NSLog(@"Pointer is %li and rowWithID is %i", pointer, [self rowWithId:pointer]);
+//    CLS_LOG(@"Pointer is %li and rowWithID is %i", pointer, [self rowWithId:pointer]);
     if ([self rowWithId:pointer] > -1) {
-        NSLog(@"Done with initial load, scrolling to pointer");
+        CLS_LOG(@"Done with initial load, scrolling to pointer");
         [self scrollToPointer:pointer animated:NO];
     }
 }

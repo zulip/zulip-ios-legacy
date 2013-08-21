@@ -2,6 +2,8 @@
 #import "ZulipAppDelegate.h"
 #import "ZulipAPIController.h"
 
+#import <Crashlytics/Crashlytics.h>
+
 @interface LoginViewController ()
 
 @end
@@ -59,7 +61,7 @@
         if (loggedIn) {
             [appDelegate dismissLoginScreen];
         } else {
-            NSLog(@"Failed to login!");
+            CLS_LOG(@"Failed to login!");
             [self.email resignFirstResponder];
             [self.password resignFirstResponder];
             [appDelegate showErrorScreen:@"Unable to login. Please try again."];

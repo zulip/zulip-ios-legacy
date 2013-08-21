@@ -12,6 +12,8 @@
 #import "ZulipAPIController.h"
 #import "UnreadManager.h"
 
+#import <Crashlytics/Crashlytics.h>
+
 @interface RawMessage ()
 
 @property (nonatomic, retain) NSMutableSet *changeHandlers;
@@ -96,7 +98,7 @@
             NSError *error = nil;
             [[appDelegate managedObjectContext] save:&error];
             if (error) {
-                NSLog(@"Error saving flags from RawMessage to ZMessage: %@ %@", [error localizedDescription], [error userInfo]);
+                CLS_LOG(@"Error saving flags from RawMessage to ZMessage: %@ %@", [error localizedDescription], [error userInfo]);
             }
         }
     }

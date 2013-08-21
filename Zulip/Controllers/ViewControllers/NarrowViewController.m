@@ -9,6 +9,8 @@
 #import "NarrowViewController.h"
 #import "ZulipAPIController.h"
 
+#import <Crashlytics/Crashlytics.h>
+
 @interface NarrowViewController ()
 
 @end
@@ -48,7 +50,7 @@
                                                             after:0
                                                     withOperators:self.operators
                                                   completionBlock:^(NSArray *messages) {
-      NSLog(@"Initially loaded %i messages!", [messages count]);
+      CLS_LOG(@"Initially loaded %i messages!", [messages count]);
 
       [self loadMessages:messages];
 
@@ -65,7 +67,7 @@
                                                                   after:20
                                                           withOperators:self.operators
                                                         completionBlock:^(NSArray *newerMessages) {
-            NSLog(@"Initially loaded forward %i messages!", [newerMessages count]);
+            CLS_LOG(@"Initially loaded forward %i messages!", [newerMessages count]);
             [self loadMessages:newerMessages];
             [self initiallyLoadedMessages];
         }];
@@ -80,7 +82,6 @@
 
 - (void)resumePopulate
 {
-    NSLog(@"Resuming populating!");
 }
 
 
@@ -102,7 +103,7 @@
         unread = [NSIndexPath indexPathForRow:[self.messages count] - 1 inSection:0];
     }
     // Scroll to first unread in the middle of the screen
-    NSLog(@"Scrolling to row %i", [unread row]);
+    CLS_LOG(@"Scrolling to row %i", [unread row]);
     [self.tableView scrollToRowAtIndexPath:unread atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
 }
 

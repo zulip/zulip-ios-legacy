@@ -20,6 +20,7 @@
 #import "UIColor+HexColor.h"
 
 #import <QuartzCore/QuartzCore.h>
+#import <Crashlytics/Crashlytics.h>
 
 @interface LeftSidebarViewController () <NSFetchedResultsControllerDelegate>
 
@@ -101,7 +102,7 @@
     NSError *error = nil;
     [self.streamController performFetch:&error];
     if (error) {
-        NSLog(@"Failed to fetch Subscriptions from core data: %@ %@", [error localizedDescription], [error userInfo]);
+        CLS_LOG(@"Failed to fetch Subscriptions from core data: %@ %@", [error localizedDescription], [error userInfo]);
     }
 
     // Fetch user's gravatar if it's there
@@ -112,7 +113,7 @@
     error = nil;
     NSArray *results = [[appDelegate managedObjectContext] executeFetchRequest:fetchRequest error:&error];
     if (error) {
-        NSLog(@"Failed to fetch user profile: %@ %@", [error localizedDescription], [error userInfo]);
+        CLS_LOG(@"Failed to fetch user profile: %@ %@", [error localizedDescription], [error userInfo]);
     }
     if ([results count] > 0) {
         ZUser *user = (ZUser *)[results objectAtIndex:0];
@@ -208,7 +209,7 @@
             break;
         }
         default:
-            NSLog(@"MISSING TABLE VIEW CELL!? %@", indexPath);
+            CLS_LOG(@"MISSING TABLE VIEW CELL!? %@", indexPath);
             break;
     }
     [self configureCell:cell atIndexPath:indexPath];
@@ -301,7 +302,7 @@
             break;
         }
         default:
-            NSLog(@"MISSING TABLE VIEW CELL!? %@", indexPath);
+            CLS_LOG(@"MISSING TABLE VIEW CELL!? %@", indexPath);
     }
 }
 
@@ -351,7 +352,7 @@
             if (cell.narrow) {
                 [appDelegate narrowWithOperators:cell.narrow];
             } else {
-                NSLog(@"ERROR: Trying to narrow but have a null NarrowOperators!!");
+                CLS_LOG(@"ERROR: Trying to narrow but have a null NarrowOperators!!");
             }
         }
     } else if (indexPath.section == 3) {
