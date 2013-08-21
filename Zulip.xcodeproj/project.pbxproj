@@ -13,6 +13,7 @@
 		78B52F061796038F002B26DE /* ErrorViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78B52F051796038F002B26DE /* ErrorViewController~ipad.xib */; };
 		B30F55A217B2D432006DC735 /* LeftSidebarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B30F55A017B2D432006DC735 /* LeftSidebarViewController.m */; };
 		B30F55A317B2D432006DC735 /* LeftSidebarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B30F55A117B2D432006DC735 /* LeftSidebarViewController.xib */; };
+		B3107A0A17C55A33000F248E /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = B3107A0917C55A33000F248E /* MBProgressHUD.m */; };
 		B3469795179ED591006D0E9B /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3469794179ED591006D0E9B /* CoreData.framework */; };
 		B34697C517A020D1006D0E9B /* ZulipAPIController.m in Sources */ = {isa = PBXBuildFile; fileRef = B34697C417A020D1006D0E9B /* ZulipAPIController.m */; };
 		B351823117A1B20A00B41D75 /* ZSubscription.m in Sources */ = {isa = PBXBuildFile; fileRef = B351823017A1B20A00B41D75 /* ZSubscription.m */; };
@@ -120,6 +121,8 @@
 		B30F559F17B2D432006DC735 /* LeftSidebarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LeftSidebarViewController.h; path = Controllers/ViewControllers/LeftSidebarViewController.h; sourceTree = "<group>"; };
 		B30F55A017B2D432006DC735 /* LeftSidebarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LeftSidebarViewController.m; path = Controllers/ViewControllers/LeftSidebarViewController.m; sourceTree = "<group>"; };
 		B30F55A117B2D432006DC735 /* LeftSidebarViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LeftSidebarViewController.xib; path = Controllers/ViewControllers/LeftSidebarViewController.xib; sourceTree = "<group>"; };
+		B3107A0817C55A33000F248E /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBProgressHUD.h; path = ThirdParty/MBProgressHUD/MBProgressHUD.h; sourceTree = "<group>"; };
+		B3107A0917C55A33000F248E /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = ThirdParty/MBProgressHUD/MBProgressHUD.m; sourceTree = "<group>"; };
 		B3469794179ED591006D0E9B /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		B34697C317A020D1006D0E9B /* ZulipAPIController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZulipAPIController.h; path = Controllers/ZulipAPIController.h; sourceTree = "<group>"; };
 		B34697C417A020D1006D0E9B /* ZulipAPIController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZulipAPIController.m; path = Controllers/ZulipAPIController.m; sourceTree = "<group>"; };
@@ -302,6 +305,15 @@
 			name = iPhone;
 			sourceTree = "<group>";
 		};
+		B3107A0717C55A0A000F248E /* MBProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				B3107A0817C55A33000F248E /* MBProgressHUD.h */,
+				B3107A0917C55A33000F248E /* MBProgressHUD.m */,
+			);
+			name = MBProgressHUD;
+			sourceTree = "<group>";
+		};
 		B3733CCA1778C63400714B6E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -324,6 +336,7 @@
 		B3733CDC1779E9F800714B6E /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
+				B3107A0717C55A0A000F248E /* MBProgressHUD */,
 				B376986E17B5857600D29D93 /* JASidePanels */,
 				B3F50D75179DADF200F9DAE4 /* Crashlytics.framework */,
 				B3F50D58179DADE800F9DAE4 /* AFNetworking */,
@@ -750,6 +763,7 @@
 				B3F50D70179DADE800F9DAE4 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				B3F50D71179DADE800F9DAE4 /* AFPropertyListRequestOperation.m in Sources */,
 				B3F50D72179DADE800F9DAE4 /* AFURLConnectionOperation.m in Sources */,
+				B3107A0A17C55A33000F248E /* MBProgressHUD.m in Sources */,
 				B3F50D73179DADE800F9DAE4 /* AFXMLRequestOperation.m in Sources */,
 				B3F50D74179DADE800F9DAE4 /* UIImageView+AFNetworking.m in Sources */,
 				B3766D3E179DDBE2005FB0D4 /* Zulip.xcdatamodeld in Sources */,

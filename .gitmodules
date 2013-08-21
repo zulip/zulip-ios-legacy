@@ -1,0 +1,3 @@
+[submodule "ThirdParty/MBProgressHUD"]
+	path = ThirdParty/MBProgressHUD
+	url = git@github.com:lfranchi/MBProgressHUD

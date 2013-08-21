@@ -9,6 +9,8 @@
 #import "HomeViewController.h"
 #import "ZulipAPIController.h"
 
+#import "MBProgressHUD.h"
+
 #import <Crashlytics/Crashlytics.h>
 
 @interface HomeViewController ()
@@ -45,6 +47,8 @@
         [self clearMessages];
     }
 
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+
     // Load initial set of messages
     NSDictionary *args = @{@"anchor": @([ZulipAPIController sharedInstance].pointer),
                            @"num_before": @(12),
@@ -68,6 +72,7 @@
                                                           completionBlock:^(NSArray *newerMessages) {
                 CLS_LOG(@"Initially loaded forward %i messages!", [newerMessages count]);
                 [self loadMessages:newerMessages];
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
             }];
         }
     }];
