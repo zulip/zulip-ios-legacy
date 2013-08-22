@@ -15,7 +15,10 @@
 
 @interface HomeViewController ()
 
-@property(assign) long scrollToPointer;
+@property (nonatomic, assign) long scrollToPointer;
+
+@property (nonatomic, assign) BOOL initiallyPopulating;
+@property (nonatomic, assign) BOOL pointerUpdateRequiresRefetch;
 
 @end
 
@@ -26,6 +29,8 @@
     self = [super init];
 
     self.scrollToPointer = -1;
+    self.initiallyPopulating = YES;
+    self.pointerUpdateRequiresRefetch = NO;
 
     self.operators = [[NarrowOperators alloc] init];
     [self.operators setInHomeView];
@@ -47,13 +52,25 @@
         [self clearMessages];
     }
 
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    if (![MBProgressHUD HUDForView:self.view]) {
+        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    }
 
     // Load initial set of messages
     NSDictionary *args = @{@"anchor": @([ZulipAPIController sharedInstance].pointer),
                            @"num_before": @(12),
                            @"num_after": @(0)};
     [[ZulipAPIController sharedInstance] getOldMessages:args narrow:self.operators completionBlock:^(NSArray *messages) {
+
+        if (self.pointerUpdateRequiresRefetch) {
+            self.pointerUpdateRequiresRefetch = NO;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self initialPopulate];
+            });
+            return;
+        }
+
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
         [self loadMessages:messages];
         [self initiallyLoadedMessages];
 
@@ -62,7 +79,12 @@
         if ([self.messages count] == 0)
             return;
 
+        NSLog(@"Loaded %i initial messages", [self.messages count]);
         RawMessage *last = [self.messages lastObject];
+
+        NSLog(@"More messages to load?, last id is %li and max server id is %li",
+              [last.messageID longValue],
+              [ZulipAPIController sharedInstance].maxServerMessageId);
         if ([last.messageID longValue] < [ZulipAPIController sharedInstance].maxServerMessageId) {
             // More messages to load
             [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[[ZulipAPIController sharedInstance] pointer]
@@ -72,7 +94,6 @@
                                                           completionBlock:^(NSArray *newerMessages) {
                 CLS_LOG(@"Initially loaded forward %i messages!", [newerMessages count]);
                 [self loadMessages:newerMessages];
-                [MBProgressHUD hideHUDForView:self.view animated:YES];
             }];
         }
     }];
@@ -80,6 +101,7 @@
 
 - (void)resumePopulate
 {
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     RawMessage *latest = [[self messages] lastObject];
     [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[latest.messageID longValue] + 1
                                                            before:0
@@ -89,6 +111,7 @@
                                                       CLS_LOG(@"Resuming and fetched loaded %i new messages!", [messages count]);
 
                                                       [self loadMessages:messages];
+                                                      [MBProgressHUD hideHUDForView:self.view animated:YES];
                                                   }];
 }
 
@@ -158,6 +181,7 @@
 //    CLS_LOG(@"Pointer is %li and rowWithID is %i", pointer, [self rowWithId:pointer]);
     if ([self rowWithId:pointer] > -1) {
         CLS_LOG(@"Done with initial load, scrolling to pointer");
+        self.initiallyPopulating = NO;
         [self scrollToPointer:pointer animated:NO];
     }
 }
@@ -182,6 +206,16 @@
         long new = [[change objectForKey:NSKeyValueChangeNewKey] longValue];
 
         if (new > old && new > self.scrollToPointer) {
+
+            // It's possible we loaded an old pointer value
+            // from our NSUserDefaults on startup, and have received
+            // the real user's pointer (after registering for events)
+            // In this case we want to throw away the messages we've fetched
+            // and instead fetch messages around the real current pointer.
+            if (self.initiallyPopulating) {
+                self.pointerUpdateRequiresRefetch = YES;
+            }
+
             [self scrollToPointer:new animated:YES];
         }
     }
