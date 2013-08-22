@@ -155,7 +155,6 @@
 {
     int pointerRowNum = [self rowWithId:newPointer];
     if (pointerRowNum > -1) {
-        CLS_LOG(@"Scrolling to pointer %li", newPointer);
         // If the pointer is already in our table, but not visible, scroll to it
         // but don't try to clear and refetch messages.
         [self.tableView scrollToRowAtIndexPath:[NSIndexPath
