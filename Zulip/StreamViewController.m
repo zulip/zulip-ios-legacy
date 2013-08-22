@@ -56,9 +56,6 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
                                                       NSKeyValueObservingOptionOld)
                                              context:nil];
 
-    // Bottom padding so you can see new messages arrive.
-    self.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, 200.0, 0.0);
-
     return ret;
 }
 
@@ -80,6 +77,9 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
     self.delegate = (ZulipAppDelegate *)[UIApplication sharedApplication].delegate;
 
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+
+    // Bottom padding so you can see new messages arrive.
+    self.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, 200.0, 0.0);
 
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(refreshControlRefreshRequested:) forControlEvents:UIControlEventValueChanged];
