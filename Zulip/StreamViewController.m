@@ -14,9 +14,13 @@
 @property (nonatomic, retain) UISegmentedControl *composeButtons;
 
 @property (nonatomic, retain) RawMessage *topRow;
-@property (nonatomic,retain) ZulipAppDelegate *delegate;
+@property (nonatomic, retain) ZulipAppDelegate *delegate;
+
+@property (nonatomic, assign) BOOL waitingForRefresh;
 
 @end
+
+static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
 
 @implementation StreamViewController
 
@@ -26,6 +30,7 @@
     self.messages = [[NSMutableArray alloc] init];
     self.msgIds = [[NSMutableSet alloc] init];
     self.topRow = nil;
+    self.waitingForRefresh = NO;
 
     // Listen to long polling messages
     [[NSNotificationCenter defaultCenter] addObserverForName:kLongPollMessageNotification
@@ -76,6 +81,14 @@
 
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    [self.refreshControl addTarget:self action:@selector(refreshControlRefreshRequested:) forControlEvents:UIControlEventValueChanged];
+    self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:kLoadingIndicatorDefaultMessage];
+
+    // Always bounce vertically so that the UIRefreshController properly
+    // occupies space above messages
+    self.tableView.alwaysBounceVertical = YES;
+
     // TODO re-enable registerNib:forReuseIdentifier once we work out why it is
     // breaking some message content layout on pre-1.4. It greatly speeds up scrolling
 //    [self.tableView registerNib:[UINib nibWithNibName:@"MessageCellView"
@@ -117,6 +130,13 @@
 - (void)resumePopulate
 {}
 
+- (void)refreshControlRefreshRequested:(UIRefreshControl *)refresh
+{
+    refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Fetching older messages..."];
+
+    self.waitingForRefresh = YES;
+}
+
 #pragma mark - UIScrollView
 
 // We want to load messages **after** the scroll & deceleration is finished.
@@ -143,16 +163,23 @@
 -(void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
-    if (self.tableView.contentOffset.y <= 0 && [self.messages count] > 0) {
-        self.topRow = [self.messages objectAtIndex:0];
-        [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[self.topRow.messageID longValue] - 1
-                                                               before:15
-                                                                after:0
-                                                        withOperators:self.operators
-                                                      completionBlock:^(NSArray *messages) {
-              [self loadMessages: messages];
+    if (self.waitingForRefresh) {
+        self.waitingForRefresh = NO;
 
-          }];
+        if ([self.messages count] > 0) {
+            self.topRow = [self.messages objectAtIndex:0];
+            [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[self.topRow.messageID longValue] - 1
+                                                                   before:15
+                                                                    after:0
+                                                            withOperators:self.operators
+                                                          completionBlock:^(NSArray *messages) {
+                  [self.refreshControl endRefreshing];
+                  self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:kLoadingIndicatorDefaultMessage];
+
+                  [self loadMessages: messages];
+
+              }];
+        }
 
         return;
     }
@@ -310,7 +337,9 @@
         [self.tableView setContentOffset:offset];
         [UIView setAnimationsEnabled:YES];
 
-        int peek_height = 10;
+        // Maintain the same scroll position, and replace the "Loading more messages"
+        // banner with the newly loaded messages
+        CGFloat peek_height =  CGRectGetHeight(self.refreshControl.bounds);
         CGRect peek = CGRectMake(0, offset.y - peek_height, self.tableView.bounds.size.width, peek_height);
         [self.tableView scrollRectToVisible:peek animated:NO];
     }
