@@ -8,9 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		780CF5E3179608FE0053481C /* ComposeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5DC806A165D347D008B53F9 /* ComposeViewController.m */; };
-		782681C91795CE08009F69F5 /* ComposeViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681C81795CE08009F69F5 /* ComposeViewController~ipad.xib */; };
-		782681CC1795D10C009F69F5 /* LoginViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681CB1795D10C009F69F5 /* LoginViewController~ipad.xib */; };
-		78B52F061796038F002B26DE /* ErrorViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78B52F051796038F002B26DE /* ErrorViewController~ipad.xib */; };
+		782681C91795CE08009F69F5 /* ComposeViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681C81795CE08009F69F5 /* ComposeViewController-iPad.xib */; };
+		782681CC1795D10C009F69F5 /* LoginViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681CB1795D10C009F69F5 /* LoginViewController-iPad.xib */; };
+		78B52F061796038F002B26DE /* ErrorViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78B52F051796038F002B26DE /* ErrorViewController-iPad.xib */; };
 		B30F55A217B2D432006DC735 /* LeftSidebarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B30F55A017B2D432006DC735 /* LeftSidebarViewController.m */; };
 		B30F55A317B2D432006DC735 /* LeftSidebarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B30F55A117B2D432006DC735 /* LeftSidebarViewController.xib */; };
 		B3107A0A17C55A33000F248E /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = B3107A0917C55A33000F248E /* MBProgressHUD.m */; };
@@ -45,7 +45,7 @@
 		B376987317B5857600D29D93 /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = B376987017B5857600D29D93 /* JASidePanelController.m */; };
 		B376987417B5857600D29D93 /* UIViewController+JASidePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = B376987217B5857600D29D93 /* UIViewController+JASidePanel.m */; };
 		B3CC438A17A6E2E200C8AF3F /* MainWindow-iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = C31673961620DB6B00CE9FE5 /* MainWindow-iphone.xib */; };
-		B3CC438B17A6E2E200C8AF3F /* MainWindow~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681BE1795C513009F69F5 /* MainWindow~ipad.xib */; };
+		B3CC438B17A6E2E200C8AF3F /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681BE1795C513009F69F5 /* MainWindow-iPad.xib */; };
 		B3CC439217A701A900C8AF3F /* ZUser.m in Sources */ = {isa = PBXBuildFile; fileRef = B3CC439117A701A900C8AF3F /* ZUser.m */; };
 		B3CC439617A7F13700C8AF3F /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3CC439517A7F13700C8AF3F /* HomeViewController.m */; };
 		B3DDD2F817B02A0800F8D387 /* LongPoller.m in Sources */ = {isa = PBXBuildFile; fileRef = B3DDD2F717B02A0800F8D387 /* LongPoller.m */; };
@@ -114,10 +114,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		782681BF1795C513009F69F5 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "iPad/en.lproj/MainWindow~ipad.xib"; sourceTree = "<group>"; };
-		782681C81795CE08009F69F5 /* ComposeViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "ComposeViewController~ipad.xib"; sourceTree = "<group>"; };
-		782681CB1795D10C009F69F5 /* LoginViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "LoginViewController~ipad.xib"; sourceTree = "<group>"; };
-		78B52F051796038F002B26DE /* ErrorViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "ErrorViewController~ipad.xib"; sourceTree = "<group>"; };
+		782681BF1795C513009F69F5 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "iPad/en.lproj/MainWindow-iPad.xib"; sourceTree = "<group>"; };
+		782681C81795CE08009F69F5 /* ComposeViewController-iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "ComposeViewController-iPad.xib"; sourceTree = "<group>"; };
+		782681CB1795D10C009F69F5 /* LoginViewController-iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "LoginViewController-iPad.xib"; sourceTree = "<group>"; };
+		78B52F051796038F002B26DE /* ErrorViewController-iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "ErrorViewController-iPad.xib"; sourceTree = "<group>"; };
 		B30F559F17B2D432006DC735 /* LeftSidebarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LeftSidebarViewController.h; path = Controllers/ViewControllers/LeftSidebarViewController.h; sourceTree = "<group>"; };
 		B30F55A017B2D432006DC735 /* LeftSidebarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LeftSidebarViewController.m; path = Controllers/ViewControllers/LeftSidebarViewController.m; sourceTree = "<group>"; };
 		B30F55A117B2D432006DC735 /* LeftSidebarViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LeftSidebarViewController.xib; path = Controllers/ViewControllers/LeftSidebarViewController.xib; sourceTree = "<group>"; };
@@ -286,10 +286,10 @@
 		782681BD1795C512009F69F5 /* iPad */ = {
 			isa = PBXGroup;
 			children = (
-				782681C81795CE08009F69F5 /* ComposeViewController~ipad.xib */,
-				78B52F051796038F002B26DE /* ErrorViewController~ipad.xib */,
-				782681CB1795D10C009F69F5 /* LoginViewController~ipad.xib */,
-				782681BE1795C513009F69F5 /* MainWindow~ipad.xib */,
+				782681C81795CE08009F69F5 /* ComposeViewController-iPad.xib */,
+				78B52F051796038F002B26DE /* ErrorViewController-iPad.xib */,
+				782681CB1795D10C009F69F5 /* LoginViewController-iPad.xib */,
+				782681BE1795C513009F69F5 /* MainWindow-iPad.xib */,
 			);
 			name = iPad;
 			sourceTree = "<group>";
@@ -655,7 +655,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B3CC438A17A6E2E200C8AF3F /* MainWindow-iphone.xib in Resources */,
-				B3CC438B17A6E2E200C8AF3F /* MainWindow~ipad.xib in Resources */,
+				B3CC438B17A6E2E200C8AF3F /* MainWindow-iPad.xib in Resources */,
 				B376985317B56EB100D29D93 /* Images.xcassets in Resources */,
 				C316738F1620DB6B00CE9FE5 /* InfoPlist.strings in Resources */,
 				E577A74F16226AFF002D9651 /* MessageCellView.xib in Resources */,
@@ -672,12 +672,12 @@
 				E5DC806D165D347D008B53F9 /* ComposeViewController~iphone.xib in Resources */,
 				B3733CCF1778C75300714B6E /* Default-568h@2x.png in Resources */,
 				B376986117B56F0900D29D93 /* zulip-29.png in Resources */,
-				782681C91795CE08009F69F5 /* ComposeViewController~ipad.xib in Resources */,
+				782681C91795CE08009F69F5 /* ComposeViewController-iPad.xib in Resources */,
 				B376986B17B56F0900D29D93 /* zulip-1024.png in Resources */,
 				B376986917B56F0900D29D93 /* zulip-152.png in Resources */,
 				B376986A17B56F0900D29D93 /* zulip-512.png in Resources */,
-				782681CC1795D10C009F69F5 /* LoginViewController~ipad.xib in Resources */,
-				78B52F061796038F002B26DE /* ErrorViewController~ipad.xib in Resources */,
+				782681CC1795D10C009F69F5 /* LoginViewController-iPad.xib in Resources */,
+				78B52F061796038F002B26DE /* ErrorViewController-iPad.xib in Resources */,
 				B376986517B56F0900D29D93 /* zulip-76.png in Resources */,
 				B30F55A317B2D432006DC735 /* LeftSidebarViewController.xib in Resources */,
 				B376985117B56E8300D29D93 /* user-toolbar@2x.png in Resources */,
@@ -802,12 +802,12 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		782681BE1795C513009F69F5 /* MainWindow~ipad.xib */ = {
+		782681BE1795C513009F69F5 /* MainWindow-iPad.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				782681BF1795C513009F69F5 /* en */,
 			);
-			name = "MainWindow~ipad.xib";
+			name = "MainWindow-iPad.xib";
 			sourceTree = "<group>";
 		};
 		C316738D1620DB6B00CE9FE5 /* InfoPlist.strings */ = {
