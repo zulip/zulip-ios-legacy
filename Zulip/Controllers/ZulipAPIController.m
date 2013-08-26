@@ -846,7 +846,7 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
             long firstId = [first.messageID longValue];
             long lastId = [last.messageID longValue];
 
-            if ([rawMessages count] == 1) {
+            if ([rawMessages count] == 1 && self.maxLocalMessageId > -1) {
                 // HACK for 1 message that we get from long polling
                 // When we long poll, we know that there's no missing message
                 // between the new messages and our latest loaded message
