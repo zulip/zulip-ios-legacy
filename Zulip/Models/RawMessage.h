@@ -50,6 +50,10 @@ typedef void(^RawMessageChangeHandler)(RawMessage *rawMsg);
 // Update handler
 - (void)registerForChanges:(RawMessageChangeHandler)handler;
 
+// Set to YES when updating from Zulip API, disables writeback
+// of changes
+@property (nonatomic, assign) BOOL disableUpdates;
+
 + (RawMessage *)allocFromZMessage:(ZMessage *)message;
 @property (nonatomic, weak) ZMessage *linkedZMessage;
 

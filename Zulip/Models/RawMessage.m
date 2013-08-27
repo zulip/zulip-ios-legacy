@@ -30,6 +30,7 @@
         self.pm_recipients = [[NSMutableSet alloc] init];
         self.linkedZMessage = nil;
         self.messageFlags = [[NSSet alloc] init];
+        self.disableUpdates = NO;
     }
 
     return self;
@@ -63,7 +64,7 @@
     [newFlags addObject:flag];
 
     // Save back to the server if there is a change
-    if (![newFlags isEqualToSet:self.messageFlags]) {
+    if (![newFlags isEqualToSet:self.messageFlags] && !self.disableUpdates) {
         [[ZulipAPIController sharedInstance] sendMessageFlagsUpdated:self withOperation:@"add" andFlag:flag];
     }
 

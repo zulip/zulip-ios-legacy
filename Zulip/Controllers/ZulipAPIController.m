@@ -649,6 +649,7 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
     }
 
     for (RawMessage *raw in rawMessagesToUpdate) {
+        raw.disableUpdates = YES;
         if ([op isEqualToString:@"add"]) {
             // We handle read flags explicitly so we mark them
             // as read in our unread manager
@@ -660,6 +661,7 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
         } else if ([op isEqualToString:@"remove"]) {
             [raw removeMessageFlag:flag];
         }
+        raw.disableUpdates = NO;
     }
 
     if ([messages count] > 0) {
