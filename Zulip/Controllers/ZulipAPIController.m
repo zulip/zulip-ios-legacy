@@ -43,6 +43,9 @@
 
 @property (nonatomic, retain) NSMutableArray *rangePairs;
 
+@property (nonatomic, retain) NSMutableDictionary *queuedFlagUpdates;
+@property (nonatomic, retain) NSTimer *flagTimer;
+
 // Messages that are loaded in a narrow (e.g. not saved to Core Data)
 // are kept here as a reference so we can find them by ID
 @property (nonatomic, retain) NSMutableDictionary *ephemeralMessages;
@@ -114,6 +117,8 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
     self.maxLocalMessageId = -1;
     self.rangePairs = [[NSMutableArray alloc] init];
     self.cachedStreamColors = [[NSMutableDictionary alloc] init];
+    self.queuedFlagUpdates = [[NSMutableDictionary alloc] init];
+    self.flagTimer = nil;
 }
 
 - (void)initPollers
@@ -675,14 +680,52 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
 
 - (void)sendMessageFlagsUpdated:(RawMessage *)message withOperation:(NSString *)operation andFlag:(NSString *)flag
 {
+    if (self.flagTimer) {
+        [self.flagTimer invalidate];
+    }
 
-    NSData *data = [NSJSONSerialization dataWithJSONObject:@[message.messageID] options:0 error:nil];
-    NSDictionary *opts = @{@"messages": [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding],
-                           @"flag": flag,
-                           @"op": operation};
-    [[ZulipAPIClient sharedClient] postPath:@"messages/flags" parameters:opts success:nil failure:^(AFHTTPRequestOperation *afop, NSError *error) {
-        CLS_LOG(@"Failed to update message flags %@ %@", [error localizedDescription], [error userInfo]);
-    }];
+    self.flagTimer = [NSTimer timerWithTimeInterval:2.0 target:self selector:@selector(sendMessageFlagsTimerExpired) userInfo:nil repeats:NO];
+    [[NSRunLoop mainRunLoop] addTimer:self.flagTimer forMode:@"NSDefaultRunLoopMode"];
+
+    // Store this flag update in our queued flag data structure:
+    // { flag: { add:    [message, message, message],
+    //           remove: [message, ...] }
+    // }
+    NSMutableDictionary *opDict;
+    if (![self.queuedFlagUpdates objectForKey:flag]) {
+        opDict = [NSMutableDictionary dictionaryWithDictionary:@{operation: [[NSMutableArray alloc] init]}];
+        [self.queuedFlagUpdates setObject:opDict forKey:flag];
+    } else {
+        opDict = [self.queuedFlagUpdates objectForKey:flag];
+        if (![opDict objectForKey:operation]) {
+            [opDict setObject:[[NSMutableArray alloc] init] forKey:operation];
+        }
+    }
+
+    [[opDict objectForKey:operation] addObject:message.messageID];
+}
+
+- (void)sendMessageFlagsTimerExpired
+{
+    if (self.queuedFlagUpdates && [self.queuedFlagUpdates count] > 0) {
+        for (NSString *flag in self.queuedFlagUpdates) {
+            NSDictionary *updates = [self.queuedFlagUpdates valueForKey:flag];
+
+            for (NSString *op in updates) {
+                NSArray *messageIDs = [updates objectForKey:op];
+
+                NSData *data = [NSJSONSerialization dataWithJSONObject:messageIDs options:0 error:nil];
+                NSDictionary *opts = @{@"messages": [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding],
+                                       @"flag": flag,
+                                       @"op": op};
+                [[ZulipAPIClient sharedClient] postPath:@"messages/flags" parameters:opts success:nil failure:^(AFHTTPRequestOperation *afop, NSError *error) {
+                    CLS_LOG(@"Failed to update message flags %@ %@", [error localizedDescription], [error userInfo]);
+                }];
+            }
+        }
+        self.queuedFlagUpdates = [[NSMutableDictionary alloc] init];
+    }
+    self.flagTimer = nil;
 }
 
 #pragma mark - Core Data Insertion
