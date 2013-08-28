@@ -512,6 +512,11 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
 
 - (void)messagesPollInitialData:(NSDictionary *)json
 {
+    if (json && [json objectForKey:@"pointer"]) {
+        self.pointer = [[json objectForKey:@"pointer"] longValue];
+        [[PreferencesWrapper sharedInstance] setPointer:self.pointer];
+    }
+
     self.maxServerMessageId = [[json objectForKey:@"max_message_id"] intValue];
 }
 
