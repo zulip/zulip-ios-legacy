@@ -56,6 +56,8 @@
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     }
 
+    self.initiallyPopulating = YES;
+
     // Load initial set of messages
     NSDictionary *args = @{@"anchor": @([ZulipAPIController sharedInstance].pointer),
                            @"num_before": @(12),
