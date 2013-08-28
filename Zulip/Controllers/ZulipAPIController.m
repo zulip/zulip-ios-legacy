@@ -329,10 +329,19 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
         return;
 
     _pointer = pointer;
-    NSDictionary *postFields = @{@"pointer": @(_pointer)};
 
+    NSDictionary *postFields = @{@"pointer": @(_pointer)};
     [[ZulipAPIClient sharedClient] putPath:@"users/me/pointer" parameters:postFields success:nil failure:nil];
 
+    [[PreferencesWrapper sharedInstance] setPointer:_pointer];
+}
+
+- (void)setPointerFromServer:(long)pointer
+{
+    if (pointer <= _pointer)
+        return;
+
+    _pointer = pointer;
     [[PreferencesWrapper sharedInstance] setPointer:_pointer];
 }
 
@@ -484,7 +493,7 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
 - (void)metadataPollInitialData:(NSDictionary *)json
 {
     if (json && [json objectForKey:@"pointer"]) {
-        self.pointer = [[json objectForKey:@"pointer"] longValue];
+       [self setPointerFromServer:[[json objectForKey:@"pointer"] longValue]];
         [[PreferencesWrapper sharedInstance] setPointer:self.pointer];
     }
 
@@ -513,7 +522,7 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
 - (void)messagesPollInitialData:(NSDictionary *)json
 {
     if (json && [json objectForKey:@"pointer"]) {
-        self.pointer = [[json objectForKey:@"pointer"] longValue];
+        [self setPointerFromServer:[[json objectForKey:@"pointer"] longValue]];
         [[PreferencesWrapper sharedInstance] setPointer:self.pointer];
     }
 
