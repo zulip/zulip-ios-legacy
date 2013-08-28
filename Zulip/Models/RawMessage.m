@@ -86,6 +86,10 @@
 
 - (void)setMessageFlags:(NSSet *)messageFlags
 {
+    if ([_messageFlags isEqualToSet:messageFlags]) {
+        return;
+    }
+
     _messageFlags = messageFlags;
 
     [self notifyOfChanges];
