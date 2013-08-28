@@ -39,6 +39,8 @@
 @property (nonatomic, retain) LongPoller *messagesPoller;
 @property (nonatomic, retain) LongPoller *metadataPoller;
 
+@property (nonatomic, assign) BOOL messagesPollFailed;
+
 @property (nonatomic, retain) ZulipAppDelegate *appDelegate;
 
 @property (nonatomic, retain) NSMutableArray *rangePairs;
@@ -113,6 +115,7 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
     }
     self.backgrounded = NO;
     self.pointer = -1;
+    self.messagesPollFailed = NO;
     self.maxServerMessageId = -1;
     self.maxLocalMessageId = -1;
     self.rangePairs = [[NSMutableArray alloc] init];
@@ -277,11 +280,8 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
 
 - (void)registerForMessages
 {
-    // Register for messages only
-    NSArray *event_types = @[@"message"];
-    NSDictionary *messagesOpts = @{@"apply_markdown": @"false",
-                                   @"event_types": [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:event_types options:0 error:nil]
-                                                                         encoding:NSUTF8StringEncoding],};
+    // Register for all events
+    NSDictionary *messagesOpts = @{@"apply_markdown": @"false"};
 
     [self.messagesPoller registerWithOptions:messagesOpts];
 }
@@ -517,50 +517,28 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
 
 - (void)messagesPollReceivedMessages:(NSArray *)events
 {
-    // TODO potentially still store if loaded when backgrounded
-    if (self.backgrounded) {
-        return;
-    }
-
-    NSMutableArray *messages = [[NSMutableArray alloc] init];
-
-    long oldServerMessageId = self.maxServerMessageId;
-
-    for (NSDictionary *event in events) {
-        NSString *eventType = [event objectForKey:@"type"];
-        if ([eventType isEqualToString:@"message"]) {
-            NSMutableDictionary *msg = [[event objectForKey:@"message"] mutableCopy];
-            [msg setValue:[event objectForKey:@"flags"] forKey:@"flags"];
-            [messages addObject:msg];
-
-            long msgId = [[msg objectForKey:@"id"] longValue];
-            self.maxServerMessageId = MAX(self.maxServerMessageId, msgId);
-        }
-    }
-
-    // If we're not up to date (e.g. our latest message is not the max msg id,
-    // and the user is still reading scrollback, then don't load the new messages,
-    // but just keep the new maxMessageId
-    if (self.maxLocalMessageId < oldServerMessageId) {
-        return;
-    }
-
-        // TODO figure out why the dispatch_async body is never executed
-//            dispatch_async(dispatch_get_main_queue(), ^{
-    [self insertMessages:messages saveToCoreData:YES withCompletionBlock:^(NSArray *finishedMessages) {
-        NSNotification *longPollMessages = [NSNotification notificationWithName:kLongPollMessageNotification
-                                                                         object:self
-                                                                       userInfo:@{kLongPollMessageData: finishedMessages}];
-        NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-        [notificationCenter postNotification:longPollMessages];
-    }];
-//            });
+    [self eventsReceived:events fromPoller:self.messagesPoller];
 }
 
 - (void)metadataPollEventsReceived:(NSArray *)events
 {
+    // We use our long-lived metadata queue only in the event of
+    // of our main message queue having been garbage collected.
+    // In that event, once we've drained our missed events, we
+    // go back to ignoring them from this queue
+    if (self.messagesPollFailed) {
+        [self eventsReceived:events fromPoller:self.metadataPoller];
+        self.messagesPollFailed = NO;
+    }
+}
+
+- (void)eventsReceived:(NSArray *)events fromPoller:(LongPoller *)poller {
+    NSMutableArray *messages = [[NSMutableArray alloc] init];
+    long oldServerMessageId = self.maxServerMessageId;
+
     for (NSDictionary *event in events) {
         NSString *eventType = [event objectForKey:@"type"];
+
         if ([eventType isEqualToString:@"pointer"]) {
             long newPointer = [[event objectForKey:@"pointer"] longValue];
 
@@ -573,8 +551,46 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
             NSString *operation = [event objectForKey:@"operation"];
 
             [self updateMessages:messageIDs withFlag:flag operation:operation all:all];
+        } else if ([eventType isEqualToString:@"message"]) {
+            NSMutableDictionary *msg = [[event objectForKey:@"message"] mutableCopy];
+            [msg setValue:[event objectForKey:@"flags"] forKey:@"flags"];
+            [messages addObject:msg];
+
+            long msgId = [[msg objectForKey:@"id"] longValue];
+            self.maxServerMessageId = MAX(self.maxServerMessageId, msgId);
+        }
+
+        // Insert batches of message update events as soon as we receive them, as
+        // further events (update pointer for example) might depend on us having
+        // already added the messages to our message list
+        if (![eventType isEqualToString:@"message"] && [messages count] > 0) {
+            [self insertMessagesFromServer:messages withOldMaxServerId:oldServerMessageId];
+            messages = [[NSMutableArray alloc] init];
+            oldServerMessageId = self.maxServerMessageId;
         }
     }
+
+    if ([messages count] > 0) {
+        [self insertMessagesFromServer:messages withOldMaxServerId:oldServerMessageId];
+    }
+}
+
+- (void)insertMessagesFromServer:(NSArray *)messages withOldMaxServerId:(long)oldServerMessageId
+{
+    // If we're not up to date (e.g. our latest message is not the max msg id,
+    // and the user is still reading scrollback, then don't load the new messages,
+    // but just keep the new maxMessageId
+    if (self.maxLocalMessageId < oldServerMessageId) {
+        return;
+    }
+
+    [self insertMessages:messages saveToCoreData:YES withCompletionBlock:^(NSArray *finishedMessages) {
+        NSNotification *longPollMessages = [NSNotification notificationWithName:kLongPollMessageNotification
+                                                                         object:self
+                                                                       userInfo:@{kLongPollMessageData: finishedMessages}];
+        NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+        [notificationCenter postNotification:longPollMessages];
+    }];
 }
 
 - (void)messagesPollErrorHandler
@@ -583,6 +599,7 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
     // around the pointer
     [self clearSettingsForNewUser:NO];
 
+    self.messagesPollFailed = YES;
 
     CLS_LOG(@"Doing messages reset");
     [self.appDelegate clearNarrowWithAnimation:NO];
