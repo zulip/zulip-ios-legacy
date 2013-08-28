@@ -101,22 +101,6 @@
     }];
 }
 
-- (void)resumePopulate
-{
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    RawMessage *latest = [[self messages] lastObject];
-    [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[latest.messageID longValue] + 1
-                                                           before:0
-                                                            after:20
-                                                    withOperators:self.operators
-                                                  completionBlock:^(NSArray *messages) {
-                                                      CLS_LOG(@"Resuming and fetched loaded %i new messages!", [messages count]);
-
-                                                      [self loadMessages:messages];
-                                                      [MBProgressHUD hideHUDForView:self.view animated:YES];
-                                                  }];
-}
-
 - (void)loadMessages:(NSArray *)messages
 {
     // Do extra filtering to remove not-in-home-view stream messages here
