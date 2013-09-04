@@ -361,7 +361,7 @@
 
         LoginViewController *loginView = [[LoginViewController alloc] initWithNibName:@"LoginViewController"
                                                                                bundle:nil];
-        [self.sidePanelController toggleLeftPanel:self];
+        [self.findSidePanelController toggleLeftPanel:self];
 
         ZulipAppDelegate *delegate = (ZulipAppDelegate *)[[UIApplication sharedApplication] delegate];
         [[delegate navController] pushViewController:loginView animated:YES];

@@ -34,6 +34,6 @@
 @interface UIViewController (JASidePanel)
 
 // The nearest ancestor in the view controller hierarchy that is a side panel controller.
-@property (nonatomic, weak, readonly) JASidePanelController *sidePanelController;
+@property (nonatomic, weak, readonly) JASidePanelController *findSidePanelController;
 
 @end
