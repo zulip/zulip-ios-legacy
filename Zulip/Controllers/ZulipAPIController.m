@@ -341,7 +341,10 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
     if (pointer <= _pointer)
         return;
 
+    [self willChangeValueForKey:@"pointer"];
     _pointer = pointer;
+    [self didChangeValueForKey:@"pointer"];
+
     [[PreferencesWrapper sharedInstance] setPointer:_pointer];
 }
 
