@@ -8,6 +8,8 @@
 
 #import "UnreadManager.h"
 
+#import <Crashlytics/Crashlytics.h>
+
 @interface UnreadManager ()
 
 @property (nonatomic, retain) NSMutableDictionary *stream_unread;
@@ -39,12 +41,18 @@ NSString * const ZUnreadCountChangeNotificationData = @"UnreadMessageCountNotifi
         return;
 
     if (message.subscription) {
-        // Stream message
-        NSString *stream = message.subscription.name;
+        if (message.subscription.name) {
+            // Stream message that we have stream information for
+            NSString *stream = message.subscription.name;
 
-        NSMutableSet *stream_set = [self setForStream:stream];
-        [stream_set addObject:message.messageID];
-        [self.stream_unread setObject:stream_set forKey:stream];
+            NSMutableSet *stream_set = [self setForStream:stream];
+            [stream_set addObject:message.messageID];
+            [self.stream_unread setObject:stream_set forKey:stream];
+        } else {
+            // FIXME: Send log message to server once we have a runtime
+            //        logging system.
+            CLS_LOG(@"Found ZSubscription in message without name: %@", message);
+        }
     } else {
         // PM
         [self.pms_unread addObject:message.messageID];
