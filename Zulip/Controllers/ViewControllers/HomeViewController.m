@@ -136,6 +136,10 @@
     [[ZulipAPIController sharedInstance] setPointer:[message.messageID longValue]];
 }
 
+- (BOOL)hasMessageIDLoaded:(long)messageId
+{
+    return [self rowWithId:messageId] > -1;
+}
 
 - (void)scrollToPointer:(long)newPointer animated:(BOOL)animated
 {
@@ -190,17 +194,24 @@
         long old = [[change objectForKey:NSKeyValueChangeOldKey] longValue];
         long new = [[change objectForKey:NSKeyValueChangeNewKey] longValue];
 
-        if (new > old && new > self.scrollToPointer) {
+        NSLog(@"Got pointer changed from %li to %li and scroll: %li", old, new, self.scrollToPointer);
+        if (new <= old || new <= self.scrollToPointer) {
+            // No changes, or we caused the scroll ourselves
+            return;
+        }
 
-            // It's possible we loaded an old pointer value
-            // from our NSUserDefaults on startup, and have received
-            // the real user's pointer (after registering for events)
-            // In this case we want to throw away the messages we've fetched
-            // and instead fetch messages around the real current pointer.
-            if (self.initiallyPopulating) {
-                self.pointerUpdateRequiresRefetch = YES;
-            }
-
+        // It's possible we loaded an old pointer value
+        // from our NSUserDefaults on startup, and have received
+        // the real user's pointer (after registering for events)
+        // In this case we want to throw away the messages we've fetched
+        // and instead fetch messages around the real current pointer.
+        if (self.initiallyPopulating) {
+            self.pointerUpdateRequiresRefetch = YES;
+        } else if (![self hasMessageIDLoaded:new]) {
+            // New pointer came in after we loaded older position,
+            // so reload to pointer
+            [self initialPopulate];
+        } else {
             [self scrollToPointer:new animated:YES];
         }
     }
