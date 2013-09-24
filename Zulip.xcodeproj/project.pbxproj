@@ -44,6 +44,17 @@
 		B376986D17B56F0900D29D93 /* zulip@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B376986017B56F0900D29D93 /* zulip@2x.png */; };
 		B376987317B5857600D29D93 /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = B376987017B5857600D29D93 /* JASidePanelController.m */; };
 		B376987417B5857600D29D93 /* UIViewController+JASidePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = B376987217B5857600D29D93 /* UIViewController+JASidePanel.m */; };
+		B39AC2BE17F0ED9E00EB65B3 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B39AC2B317F0ED9E00EB65B3 /* Default-568h@2x.png */; };
+		B39AC2BF17F0ED9E00EB65B3 /* Default-iOS7-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = B39AC2B417F0ED9E00EB65B3 /* Default-iOS7-Landscape.png */; };
+		B39AC2C017F0ED9E00EB65B3 /* Default-iOS7-Landscape@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B39AC2B517F0ED9E00EB65B3 /* Default-iOS7-Landscape@2x.png */; };
+		B39AC2C117F0ED9E00EB65B3 /* Default-iOS7-Portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = B39AC2B617F0ED9E00EB65B3 /* Default-iOS7-Portrait.png */; };
+		B39AC2C217F0ED9E00EB65B3 /* Default-iOS7-Portrait@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B39AC2B717F0ED9E00EB65B3 /* Default-iOS7-Portrait@2x.png */; };
+		B39AC2C317F0ED9E00EB65B3 /* Default-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = B39AC2B817F0ED9E00EB65B3 /* Default-Landscape.png */; };
+		B39AC2C417F0ED9E00EB65B3 /* Default-Landscape@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B39AC2B917F0ED9E00EB65B3 /* Default-Landscape@2x.png */; };
+		B39AC2C517F0ED9E00EB65B3 /* Default-Portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = B39AC2BA17F0ED9E00EB65B3 /* Default-Portrait.png */; };
+		B39AC2C617F0ED9E00EB65B3 /* Default-Portrait@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B39AC2BB17F0ED9E00EB65B3 /* Default-Portrait@2x.png */; };
+		B39AC2C717F0ED9E00EB65B3 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = B39AC2BC17F0ED9E00EB65B3 /* Default.png */; };
+		B39AC2C817F0ED9E00EB65B3 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B39AC2BD17F0ED9E00EB65B3 /* Default@2x.png */; };
 		B3CC438A17A6E2E200C8AF3F /* MainWindow~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = C31673961620DB6B00CE9FE5 /* MainWindow~iphone.xib */; };
 		B3CC438B17A6E2E200C8AF3F /* MainWindow~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681BE1795C513009F69F5 /* MainWindow~ipad.xib */; };
 		B3CC439217A701A900C8AF3F /* ZUser.m in Sources */ = {isa = PBXBuildFile; fileRef = B3CC439117A701A900C8AF3F /* ZUser.m */; };
@@ -161,6 +172,17 @@
 		B376987117B5857600D29D93 /* UIViewController+JASidePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+JASidePanel.h"; sourceTree = "<group>"; };
 		B376987217B5857600D29D93 /* UIViewController+JASidePanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+JASidePanel.m"; sourceTree = "<group>"; };
 		B376987517B5879300D29D93 /* Zulip 1.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Zulip 1.0.xcdatamodel"; sourceTree = "<group>"; };
+		B39AC2B317F0ED9E00EB65B3 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "Resources/Launch Images/Default-568h@2x.png"; sourceTree = "<group>"; };
+		B39AC2B417F0ED9E00EB65B3 /* Default-iOS7-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-iOS7-Landscape.png"; path = "Resources/Launch Images/Default-iOS7-Landscape.png"; sourceTree = "<group>"; };
+		B39AC2B517F0ED9E00EB65B3 /* Default-iOS7-Landscape@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-iOS7-Landscape@2x.png"; path = "Resources/Launch Images/Default-iOS7-Landscape@2x.png"; sourceTree = "<group>"; };
+		B39AC2B617F0ED9E00EB65B3 /* Default-iOS7-Portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-iOS7-Portrait.png"; path = "Resources/Launch Images/Default-iOS7-Portrait.png"; sourceTree = "<group>"; };
+		B39AC2B717F0ED9E00EB65B3 /* Default-iOS7-Portrait@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-iOS7-Portrait@2x.png"; path = "Resources/Launch Images/Default-iOS7-Portrait@2x.png"; sourceTree = "<group>"; };
+		B39AC2B817F0ED9E00EB65B3 /* Default-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape.png"; path = "Resources/Launch Images/Default-Landscape.png"; sourceTree = "<group>"; };
+		B39AC2B917F0ED9E00EB65B3 /* Default-Landscape@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape@2x.png"; path = "Resources/Launch Images/Default-Landscape@2x.png"; sourceTree = "<group>"; };
+		B39AC2BA17F0ED9E00EB65B3 /* Default-Portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Portrait.png"; path = "Resources/Launch Images/Default-Portrait.png"; sourceTree = "<group>"; };
+		B39AC2BB17F0ED9E00EB65B3 /* Default-Portrait@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Portrait@2x.png"; path = "Resources/Launch Images/Default-Portrait@2x.png"; sourceTree = "<group>"; };
+		B39AC2BC17F0ED9E00EB65B3 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = "Resources/Launch Images/Default.png"; sourceTree = "<group>"; };
+		B39AC2BD17F0ED9E00EB65B3 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Resources/Launch Images/Default@2x.png"; sourceTree = "<group>"; };
 		B3CC439017A701A900C8AF3F /* ZUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZUser.h; path = Models/ZUser.h; sourceTree = "<group>"; };
 		B3CC439117A701A900C8AF3F /* ZUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZUser.m; path = Models/ZUser.m; sourceTree = "<group>"; };
 		B3CC439417A7F13700C8AF3F /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HomeViewController.h; path = Controllers/ViewControllers/HomeViewController.h; sourceTree = "<group>"; };
@@ -317,6 +339,7 @@
 		B3733CCA1778C63400714B6E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				B39AC2B217F0ED6300EB65B3 /* Launch Images */,
 				B3AA069E17B4357B009B06F0 /* zulip_icon */,
 				B3733CCB1778C75300714B6E /* Default-568h@2x.png */,
 				B3F562A917ABEA8D004B185A /* home.png */,
@@ -415,6 +438,24 @@
 			);
 			name = JASidePanels;
 			path = ThirdParty/JASidePanels;
+			sourceTree = "<group>";
+		};
+		B39AC2B217F0ED6300EB65B3 /* Launch Images */ = {
+			isa = PBXGroup;
+			children = (
+				B39AC2B317F0ED9E00EB65B3 /* Default-568h@2x.png */,
+				B39AC2B417F0ED9E00EB65B3 /* Default-iOS7-Landscape.png */,
+				B39AC2B517F0ED9E00EB65B3 /* Default-iOS7-Landscape@2x.png */,
+				B39AC2B617F0ED9E00EB65B3 /* Default-iOS7-Portrait.png */,
+				B39AC2B717F0ED9E00EB65B3 /* Default-iOS7-Portrait@2x.png */,
+				B39AC2B817F0ED9E00EB65B3 /* Default-Landscape.png */,
+				B39AC2B917F0ED9E00EB65B3 /* Default-Landscape@2x.png */,
+				B39AC2BA17F0ED9E00EB65B3 /* Default-Portrait.png */,
+				B39AC2BB17F0ED9E00EB65B3 /* Default-Portrait@2x.png */,
+				B39AC2BC17F0ED9E00EB65B3 /* Default.png */,
+				B39AC2BD17F0ED9E00EB65B3 /* Default@2x.png */,
+			);
+			name = "Launch Images";
 			sourceTree = "<group>";
 		};
 		B3AA069E17B4357B009B06F0 /* zulip_icon */ = {
@@ -658,22 +699,32 @@
 				B3CC438B17A6E2E200C8AF3F /* MainWindow~ipad.xib in Resources */,
 				B376985317B56EB100D29D93 /* Images.xcassets in Resources */,
 				C316738F1620DB6B00CE9FE5 /* InfoPlist.strings in Resources */,
+				B39AC2C717F0ED9E00EB65B3 /* Default.png in Resources */,
 				E577A74F16226AFF002D9651 /* MessageCellView.xib in Resources */,
 				B376984F17B56E8300D29D93 /* bullhorn@2x.png in Resources */,
 				B376985017B56E8300D29D93 /* user-toolbar.png in Resources */,
 				B376986717B56F0900D29D93 /* zulip-120.png in Resources */,
 				B376986817B56F0900D29D93 /* zulip-144.png in Resources */,
 				E5CDE07D162C88A800BBD773 /* LoginViewController~iphone.xib in Resources */,
+				B39AC2C417F0ED9E00EB65B3 /* Default-Landscape@2x.png in Resources */,
+				B39AC2C817F0ED9E00EB65B3 /* Default@2x.png in Resources */,
+				B39AC2BF17F0ED9E00EB65B3 /* Default-iOS7-Landscape.png in Resources */,
 				B376986317B56F0900D29D93 /* zulip-58.png in Resources */,
 				E5726A2916332BF800ED8BB1 /* StreamViewController.xib in Resources */,
 				B376984E17B56E8300D29D93 /* bullhorn.png in Resources */,
+				B39AC2BE17F0ED9E00EB65B3 /* Default-568h@2x.png in Resources */,
+				B39AC2C217F0ED9E00EB65B3 /* Default-iOS7-Portrait@2x.png in Resources */,
+				B39AC2C517F0ED9E00EB65B3 /* Default-Portrait.png in Resources */,
 				E598E78B1634A9950022BF4A /* ErrorViewController~iphone.xib in Resources */,
+				B39AC2C117F0ED9E00EB65B3 /* Default-iOS7-Portrait.png in Resources */,
 				B376986417B56F0900D29D93 /* zulip-72.png in Resources */,
 				E5DC806D165D347D008B53F9 /* ComposeViewController~iphone.xib in Resources */,
 				B3733CCF1778C75300714B6E /* Default-568h@2x.png in Resources */,
 				B376986117B56F0900D29D93 /* zulip-29.png in Resources */,
 				782681C91795CE08009F69F5 /* ComposeViewController~ipad.xib in Resources */,
+				B39AC2C317F0ED9E00EB65B3 /* Default-Landscape.png in Resources */,
 				B376986B17B56F0900D29D93 /* zulip-1024.png in Resources */,
+				B39AC2C617F0ED9E00EB65B3 /* Default-Portrait@2x.png in Resources */,
 				B376986917B56F0900D29D93 /* zulip-152.png in Resources */,
 				B376986A17B56F0900D29D93 /* zulip-512.png in Resources */,
 				782681CC1795D10C009F69F5 /* LoginViewController~ipad.xib in Resources */,
@@ -692,6 +743,7 @@
 				B3F562B017ABEA8D004B185A /* user@2x.png in Resources */,
 				B3F562B617ABFD5C004B185A /* my_avatar_placeholder.png in Resources */,
 				B376986C17B56F0900D29D93 /* zulip.png in Resources */,
+				B39AC2C017F0ED9E00EB65B3 /* Default-iOS7-Landscape@2x.png in Resources */,
 				B3F562B717ABFD5C004B185A /* my_avatar_placeholder@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -890,7 +942,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
@@ -942,7 +993,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
