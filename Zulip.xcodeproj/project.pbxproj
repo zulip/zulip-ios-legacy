@@ -668,7 +668,7 @@
 				LastUpgradeCheck = 0460;
 				TargetAttributes = {
 					C316737F1620DB6B00CE9FE5 = {
-						DevelopmentTeam = 56LJSQP537;
+						DevelopmentTeam = 3LFBS647PP;
 					};
 				};
 			};
@@ -1035,7 +1035,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Zulip/Zulip-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = Zulip;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "97517A04-AD88-49CB-A190-A33BBF7A5C06";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				RUN_CLANG_STATIC_ANALYZER = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
