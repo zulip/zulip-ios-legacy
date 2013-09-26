@@ -17,5 +17,5 @@
 @property (nonatomic, retain) NSMutableArray *entryFields;
 
 - (IBAction) login: (id) sender;
-
+- (IBAction) about: (id)sender;
 @end

@@ -5,6 +5,7 @@
 #import "ZulipAPIController.h"
 #import "LeftSidebarViewController.h"
 #import "NarrowViewController.h"
+#import "AboutViewController.h"
 
 // AFNetworking
 #import "AFNetworkActivityIndicatorManager.h"
@@ -88,6 +89,12 @@
 - (void)dismissErrorScreen
 {
     [self.errorViewController.view removeFromSuperview];
+}
+
+-(void)showAboutScreen
+{
+    AboutViewController *about = [[AboutViewController alloc] initWithNibName:@"AboutView" bundle:nil];
+    [self.navController pushViewController:about animated:YES];
 }
 
 - (void)reloadCoreData

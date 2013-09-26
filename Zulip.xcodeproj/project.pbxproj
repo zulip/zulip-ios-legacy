@@ -14,6 +14,9 @@
 		B30F55A217B2D432006DC735 /* LeftSidebarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B30F55A017B2D432006DC735 /* LeftSidebarViewController.m */; };
 		B30F55A317B2D432006DC735 /* LeftSidebarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B30F55A117B2D432006DC735 /* LeftSidebarViewController.xib */; };
 		B3107A0A17C55A33000F248E /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = B3107A0917C55A33000F248E /* MBProgressHUD.m */; };
+		B3174BDB17F47B61004C31E4 /* AboutView~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3174BDA17F47B61004C31E4 /* AboutView~iphone.xib */; };
+		B3174BDD17F47B77004C31E4 /* AboutView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3174BDC17F47B77004C31E4 /* AboutView~ipad.xib */; };
+		B3174BE117F47F92004C31E4 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3174BDF17F47F92004C31E4 /* AboutViewController.m */; };
 		B3469795179ED591006D0E9B /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3469794179ED591006D0E9B /* CoreData.framework */; };
 		B34697C517A020D1006D0E9B /* ZulipAPIController.m in Sources */ = {isa = PBXBuildFile; fileRef = B34697C417A020D1006D0E9B /* ZulipAPIController.m */; };
 		B351823117A1B20A00B41D75 /* ZSubscription.m in Sources */ = {isa = PBXBuildFile; fileRef = B351823017A1B20A00B41D75 /* ZSubscription.m */; };
@@ -134,6 +137,10 @@
 		B30F55A117B2D432006DC735 /* LeftSidebarViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LeftSidebarViewController.xib; path = Controllers/ViewControllers/LeftSidebarViewController.xib; sourceTree = "<group>"; };
 		B3107A0817C55A33000F248E /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBProgressHUD.h; path = ThirdParty/MBProgressHUD/MBProgressHUD.h; sourceTree = "<group>"; };
 		B3107A0917C55A33000F248E /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = ThirdParty/MBProgressHUD/MBProgressHUD.m; sourceTree = "<group>"; };
+		B3174BDA17F47B61004C31E4 /* AboutView~iphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "AboutView~iphone.xib"; path = "Views/AboutView~iphone.xib"; sourceTree = "<group>"; };
+		B3174BDC17F47B77004C31E4 /* AboutView~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "AboutView~ipad.xib"; path = "Views/AboutView~ipad.xib"; sourceTree = "<group>"; };
+		B3174BDE17F47F92004C31E4 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AboutViewController.h; path = Controllers/ViewControllers/AboutViewController.h; sourceTree = "<group>"; };
+		B3174BDF17F47F92004C31E4 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AboutViewController.m; path = Controllers/ViewControllers/AboutViewController.m; sourceTree = "<group>"; };
 		B3469794179ED591006D0E9B /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		B34697C317A020D1006D0E9B /* ZulipAPIController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZulipAPIController.h; path = Controllers/ZulipAPIController.h; sourceTree = "<group>"; };
 		B34697C417A020D1006D0E9B /* ZulipAPIController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZulipAPIController.m; path = Controllers/ZulipAPIController.m; sourceTree = "<group>"; };
@@ -312,6 +319,7 @@
 				78B52F051796038F002B26DE /* ErrorViewController~ipad.xib */,
 				782681CB1795D10C009F69F5 /* LoginViewController~ipad.xib */,
 				782681BE1795C513009F69F5 /* MainWindow~ipad.xib */,
+				B3174BDC17F47B77004C31E4 /* AboutView~ipad.xib */,
 			);
 			name = iPad;
 			sourceTree = "<group>";
@@ -323,6 +331,7 @@
 				E598E7891634A9940022BF4A /* ErrorViewController~iphone.xib */,
 				E5CDE07B162C88A800BBD773 /* LoginViewController~iphone.xib */,
 				C31673961620DB6B00CE9FE5 /* MainWindow~iphone.xib */,
+				B3174BDA17F47B61004C31E4 /* AboutView~iphone.xib */,
 			);
 			name = iPhone;
 			sourceTree = "<group>";
@@ -497,6 +506,8 @@
 				B30F559F17B2D432006DC735 /* LeftSidebarViewController.h */,
 				B30F55A017B2D432006DC735 /* LeftSidebarViewController.m */,
 				B30F55A117B2D432006DC735 /* LeftSidebarViewController.xib */,
+				B3174BDE17F47F92004C31E4 /* AboutViewController.h */,
+				B3174BDF17F47F92004C31E4 /* AboutViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -699,6 +710,7 @@
 				B3CC438B17A6E2E200C8AF3F /* MainWindow~ipad.xib in Resources */,
 				B376985317B56EB100D29D93 /* Images.xcassets in Resources */,
 				C316738F1620DB6B00CE9FE5 /* InfoPlist.strings in Resources */,
+				B3174BDB17F47B61004C31E4 /* AboutView~iphone.xib in Resources */,
 				B39AC2C717F0ED9E00EB65B3 /* Default.png in Resources */,
 				E577A74F16226AFF002D9651 /* MessageCellView.xib in Resources */,
 				B376984F17B56E8300D29D93 /* bullhorn@2x.png in Resources */,
@@ -715,6 +727,7 @@
 				B39AC2BE17F0ED9E00EB65B3 /* Default-568h@2x.png in Resources */,
 				B39AC2C217F0ED9E00EB65B3 /* Default-iOS7-Portrait@2x.png in Resources */,
 				B39AC2C517F0ED9E00EB65B3 /* Default-Portrait.png in Resources */,
+				B3174BDD17F47B77004C31E4 /* AboutView~ipad.xib in Resources */,
 				E598E78B1634A9950022BF4A /* ErrorViewController~iphone.xib in Resources */,
 				B39AC2C117F0ED9E00EB65B3 /* Default-iOS7-Portrait.png in Resources */,
 				B376986417B56F0900D29D93 /* zulip-72.png in Resources */,
@@ -819,6 +832,7 @@
 				B3F50D73179DADE800F9DAE4 /* AFXMLRequestOperation.m in Sources */,
 				B3F50D74179DADE800F9DAE4 /* UIImageView+AFNetworking.m in Sources */,
 				B3766D3E179DDBE2005FB0D4 /* Zulip.xcdatamodeld in Sources */,
+				B3174BE117F47F92004C31E4 /* AboutViewController.m in Sources */,
 				B34697C517A020D1006D0E9B /* ZulipAPIController.m in Sources */,
 				B351823117A1B20A00B41D75 /* ZSubscription.m in Sources */,
 				B3CC439217A701A900C8AF3F /* ZUser.m in Sources */,

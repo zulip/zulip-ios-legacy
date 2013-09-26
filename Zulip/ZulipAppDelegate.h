@@ -24,6 +24,7 @@
 - (void) showErrorScreen:(NSString *)errorMessage;
 - (void) dismissErrorScreen;
 - (void) dismissLoginScreen;
+- (void) showAboutScreen;
 
 // Narrowing
 - (void) narrowWithOperators:(NarrowOperators *)narrow;

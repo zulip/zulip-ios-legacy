@@ -69,6 +69,11 @@
     }];
 }
 
+- (IBAction) about:(id)sender
+{
+    [appDelegate showAboutScreen];
+}
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
 	// Find the next entry field
 	for (UIView *view in self.entryFields) {
