@@ -20,7 +20,6 @@
 		B3469795179ED591006D0E9B /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3469794179ED591006D0E9B /* CoreData.framework */; };
 		B34697C517A020D1006D0E9B /* ZulipAPIController.m in Sources */ = {isa = PBXBuildFile; fileRef = B34697C417A020D1006D0E9B /* ZulipAPIController.m */; };
 		B351823117A1B20A00B41D75 /* ZSubscription.m in Sources */ = {isa = PBXBuildFile; fileRef = B351823017A1B20A00B41D75 /* ZSubscription.m */; };
-		B3733CCF1778C75300714B6E /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B3733CCB1778C75300714B6E /* Default-568h@2x.png */; };
 		B3733CD81778D5DD00714B6E /* UIColor+HexColor.m in Sources */ = {isa = PBXBuildFile; fileRef = B3733CD71778D5DD00714B6E /* UIColor+HexColor.m */; };
 		B3733CFB1779F7FD00714B6E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3733CFA1779F7FD00714B6E /* SystemConfiguration.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		B3733CFE177A00D900714B6E /* ZulipAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = B3733CFD177A00D900714B6E /* ZulipAPIClient.m */; };
@@ -676,7 +675,7 @@
 		C31673771620DB6A00CE9FE5 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0500;
 				TargetAttributes = {
 					C316737F1620DB6B00CE9FE5 = {
 						DevelopmentTeam = 3LFBS647PP;
@@ -732,7 +731,6 @@
 				B39AC2C117F0ED9E00EB65B3 /* Default-iOS7-Portrait.png in Resources */,
 				B376986417B56F0900D29D93 /* zulip-72.png in Resources */,
 				E5DC806D165D347D008B53F9 /* ComposeViewController~iphone.xib in Resources */,
-				B3733CCF1778C75300714B6E /* Default-568h@2x.png in Resources */,
 				B376986117B56F0900D29D93 /* zulip-29.png in Resources */,
 				782681C91795CE08009F69F5 /* ComposeViewController~ipad.xib in Resources */,
 				B39AC2C317F0ED9E00EB65B3 /* Default-Landscape.png in Resources */,
@@ -907,7 +905,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Jessica McKellar (9QY7MX763F)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -925,6 +922,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "BF07EDC8-DDDB-4D74-BF8C-67CDBA82A75F";
 				SDKROOT = iphoneos;
 			};
@@ -934,7 +932,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Jessica McKellar (9QY7MX763F)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
