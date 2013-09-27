@@ -23,7 +23,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.4</string>
+	<string>1.5</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
@@ -34,6 +34,21 @@
 	<string>MainWindow~iphone</string>
 	<key>NSMainNibFile~ipad</key>
 	<string>MainWindow~ipad</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>SourceSansPro-Black-webfont.ttf</string>
+		<string>SourceSansPro-BlackIt-webfont.ttf</string>
+		<string>SourceSansPro-Bold-webfont.ttf</string>
+		<string>SourceSansPro-BoldIt-webfont.ttf</string>
+		<string>SourceSansPro-ExtraLight-webfont.ttf</string>
+		<string>SourceSansPro-ExtraLightIt-webfont.ttf</string>
+		<string>SourceSansPro-It-webfont.ttf</string>
+		<string>SourceSansPro-Light-webfont.ttf</string>
+		<string>SourceSansPro-LightIt-webfont.ttf</string>
+		<string>SourceSansPro-Regular-webfont.ttf</string>
+		<string>SourceSansPro-Semibold-webfont.ttf</string>
+		<string>SourceSansPro-SemiboldIt-webfont.ttf</string>
+	</array>
 	<key>UILaunchImages~ipad</key>
 	<array>
 		<dict>
@@ -62,21 +77,6 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>UIAppFonts</key>
-	<array>
-		<string>SourceSansPro-Black-webfont.ttf</string>
-		<string>SourceSansPro-BlackIt-webfont.ttf</string>
-		<string>SourceSansPro-Bold-webfont.ttf</string>
-		<string>SourceSansPro-BoldIt-webfont.ttf</string>
-		<string>SourceSansPro-ExtraLight-webfont.ttf</string>
-		<string>SourceSansPro-ExtraLightIt-webfont.ttf</string>
-		<string>SourceSansPro-It-webfont.ttf</string>
-		<string>SourceSansPro-Light-webfont.ttf</string>
-		<string>SourceSansPro-LightIt-webfont.ttf</string>
-		<string>SourceSansPro-Regular-webfont.ttf</string>
-		<string>SourceSansPro-Semibold-webfont.ttf</string>
-		<string>SourceSansPro-SemiboldIt-webfont.ttf</string>
 	</array>
 </dict>
 </plist>
