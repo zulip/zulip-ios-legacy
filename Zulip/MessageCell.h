@@ -5,7 +5,15 @@
 
 #import "RawMessage.h"
 
-@interface MessageCell : UITableViewCell
+@protocol MessageCellDelegate <NSObject>
+
+@optional
+- (void)openLink:(NSURL *)URL;
+
+@end
+
+
+@interface MessageCell : UITableViewCell <DTAttributedTextContentViewDelegate>
 
 - (void)setMessage:(RawMessage *)message;
 - (void)willBeDisplayed;
@@ -24,5 +32,7 @@
 @property (strong, nonatomic) NSString *recipient;
 
 @property (strong, nonatomic) RawMessage *message;
+
+@property (nonatomic, weak) IBOutlet id <MessageCellDelegate> delegate;
 
 @end

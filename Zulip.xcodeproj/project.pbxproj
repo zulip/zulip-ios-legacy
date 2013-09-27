@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		51BA4F5517F6069300BBF48C /* BrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51BA4F4D17F6069300BBF48C /* BrowserViewController.m */; };
+		51BA4F5617F6069300BBF48C /* BrowserViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 51BA4F4E17F6069300BBF48C /* BrowserViewController.xib */; };
+		51BA4F5717F6069300BBF48C /* left.png in Resources */ = {isa = PBXBuildFile; fileRef = 51BA4F4F17F6069300BBF48C /* left.png */; };
+		51BA4F5817F6069300BBF48C /* left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 51BA4F5017F6069300BBF48C /* left@2x.png */; };
+		51BA4F5A17F6069300BBF48C /* right.png in Resources */ = {isa = PBXBuildFile; fileRef = 51BA4F5317F6069300BBF48C /* right.png */; };
+		51BA4F5B17F6069300BBF48C /* right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 51BA4F5417F6069300BBF48C /* right@2x.png */; };
 		780CF5E3179608FE0053481C /* ComposeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5DC806A165D347D008B53F9 /* ComposeViewController.m */; };
 		782681C91795CE08009F69F5 /* ComposeViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681C81795CE08009F69F5 /* ComposeViewController~ipad.xib */; };
 		782681CC1795D10C009F69F5 /* LoginViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681CB1795D10C009F69F5 /* LoginViewController~ipad.xib */; };
@@ -195,6 +201,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		51BA4F4C17F6069300BBF48C /* BrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrowserViewController.h; sourceTree = "<group>"; };
+		51BA4F4D17F6069300BBF48C /* BrowserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrowserViewController.m; sourceTree = "<group>"; };
+		51BA4F4E17F6069300BBF48C /* BrowserViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BrowserViewController.xib; sourceTree = "<group>"; };
+		51BA4F4F17F6069300BBF48C /* left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = left.png; sourceTree = "<group>"; };
+		51BA4F5017F6069300BBF48C /* left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "left@2x.png"; sourceTree = "<group>"; };
+		51BA4F5317F6069300BBF48C /* right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = right.png; sourceTree = "<group>"; };
+		51BA4F5417F6069300BBF48C /* right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "right@2x.png"; sourceTree = "<group>"; };
 		782681BF1795C513009F69F5 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "iPad/en.lproj/MainWindow~ipad.xib"; sourceTree = "<group>"; };
 		782681C81795CE08009F69F5 /* ComposeViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "ComposeViewController~ipad.xib"; sourceTree = "<group>"; };
 		782681CB1795D10C009F69F5 /* LoginViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "LoginViewController~ipad.xib"; sourceTree = "<group>"; };
@@ -403,6 +416,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		51BA4F4B17F6069300BBF48C /* BrowserViewController (Copy to your App) */ = {
+			isa = PBXGroup;
+			children = (
+				51BA4F4C17F6069300BBF48C /* BrowserViewController.h */,
+				51BA4F4D17F6069300BBF48C /* BrowserViewController.m */,
+				51BA4F4E17F6069300BBF48C /* BrowserViewController.xib */,
+				51BA4F4F17F6069300BBF48C /* left.png */,
+				51BA4F5017F6069300BBF48C /* left@2x.png */,
+				51BA4F5317F6069300BBF48C /* right.png */,
+				51BA4F5417F6069300BBF48C /* right@2x.png */,
+			);
+			name = "BrowserViewController (Copy to your App)";
+			path = "ThirdParty/WebViewController/Browser Demo/BrowserViewController (Copy to your App)";
+			sourceTree = "<group>";
+		};
 		782681BD1795C512009F69F5 /* iPad */ = {
 			isa = PBXGroup;
 			children = (
@@ -468,15 +496,6 @@
 			name = fonts;
 			sourceTree = "<group>";
 		};
-		B338402217C3B9640083A529 /* Markdown */ = {
-			isa = PBXGroup;
-			children = (
-				B338402B17C3B97A0083A529 /* RenderedMarkdownMunger.h */,
-				B338402C17C3B97A0083A529 /* RenderedMarkdownMunger.m */,
-			);
-			name = Markdown;
-			sourceTree = "<group>";
-		};
 		B3107A0717C55A0A000F248E /* MBProgressHUD */ = {
 			isa = PBXGroup;
 			children = (
@@ -484,6 +503,15 @@
 				B3107A0917C55A33000F248E /* MBProgressHUD.m */,
 			);
 			name = MBProgressHUD;
+			sourceTree = "<group>";
+		};
+		B338402217C3B9640083A529 /* Markdown */ = {
+			isa = PBXGroup;
+			children = (
+				B338402B17C3B97A0083A529 /* RenderedMarkdownMunger.h */,
+				B338402C17C3B97A0083A529 /* RenderedMarkdownMunger.m */,
+			);
+			name = Markdown;
 			sourceTree = "<group>";
 		};
 		B3733CCA1778C63400714B6E /* Resources */ = {
@@ -511,6 +539,7 @@
 		B3733CDC1779E9F800714B6E /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
+				51BA4F4B17F6069300BBF48C /* BrowserViewController (Copy to your App) */,
 				B3107A0717C55A0A000F248E /* MBProgressHUD */,
 				B376986E17B5857600D29D93 /* JASidePanels */,
 				7882F19717BA9EC700A27601 /* DTCoreText */,
@@ -936,7 +965,9 @@
 				E577A74F16226AFF002D9651 /* MessageCellView.xib in Resources */,
 				B376984F17B56E8300D29D93 /* bullhorn@2x.png in Resources */,
 				B376985017B56E8300D29D93 /* user-toolbar.png in Resources */,
+				51BA4F5B17F6069300BBF48C /* right@2x.png in Resources */,
 				B376986717B56F0900D29D93 /* zulip-120.png in Resources */,
+				51BA4F5717F6069300BBF48C /* left.png in Resources */,
 				B376986817B56F0900D29D93 /* zulip-144.png in Resources */,
 				E5CDE07D162C88A800BBD773 /* LoginViewController~iphone.xib in Resources */,
 				B39AC2C417F0ED9E00EB65B3 /* Default-Landscape@2x.png in Resources */,
@@ -952,6 +983,7 @@
 				E598E78B1634A9950022BF4A /* ErrorViewController~iphone.xib in Resources */,
 				B39AC2C117F0ED9E00EB65B3 /* Default-iOS7-Portrait.png in Resources */,
 				B376986417B56F0900D29D93 /* zulip-72.png in Resources */,
+				51BA4F5617F6069300BBF48C /* BrowserViewController.xib in Resources */,
 				E5DC806D165D347D008B53F9 /* ComposeViewController~iphone.xib in Resources */,
 				B376986117B56F0900D29D93 /* zulip-29.png in Resources */,
 				782681C91795CE08009F69F5 /* ComposeViewController~ipad.xib in Resources */,
@@ -974,8 +1006,10 @@
 				B3F562AE17ABEA8D004B185A /* home@2x.png in Resources */,
 				B3F562AF17ABEA8D004B185A /* user.png in Resources */,
 				B3F562B017ABEA8D004B185A /* user@2x.png in Resources */,
+				51BA4F5817F6069300BBF48C /* left@2x.png in Resources */,
 				B3F562B617ABFD5C004B185A /* my_avatar_placeholder.png in Resources */,
 				B376986C17B56F0900D29D93 /* zulip.png in Resources */,
+				51BA4F5A17F6069300BBF48C /* right.png in Resources */,
 				B39AC2C017F0ED9E00EB65B3 /* Default-iOS7-Landscape@2x.png in Resources */,
 				B3F562B717ABFD5C004B185A /* my_avatar_placeholder@2x.png in Resources */,
 			);
@@ -1037,6 +1071,7 @@
 				E50D757916331D7A00251D1F /* KeychainItemWrapper.m in Sources */,
 				E5726A2816332BF800ED8BB1 /* StreamViewController.m in Sources */,
 				E598E78A1634A9950022BF4A /* ErrorViewController.m in Sources */,
+				51BA4F5517F6069300BBF48C /* BrowserViewController.m in Sources */,
 				E570A8BF169DF81E0072BC7E /* NSString+Encode.m in Sources */,
 				B376987317B5857600D29D93 /* JASidePanelController.m in Sources */,
 				B3733CD81778D5DD00714B6E /* UIColor+HexColor.m in Sources */,

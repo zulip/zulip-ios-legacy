@@ -10,6 +10,7 @@
 #import "AFJSONRequestOperation.h"
 
 #import "RenderedMarkdownMunger.h"
+#import "BrowserViewController.h"
 
 @interface StreamViewController ()
 
@@ -245,6 +246,7 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
     }
 
     [cell setMessage:message];
+    cell.delegate = self;
 
     return cell;
 }
@@ -261,6 +263,12 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
 
     composeView.type = message.type;
     [[self navigationController] pushViewController:composeView animated:YES];
+}
+
+- (void)openLink:(NSURL *)URL
+{
+    BrowserViewController* webView = [[BrowserViewController alloc] initWithUrls:URL];
+    [[self navigationController] pushViewController:webView animated:YES];
 }
 
 #pragma mark - StreamViewController

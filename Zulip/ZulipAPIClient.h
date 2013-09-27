@@ -14,4 +14,6 @@
 
 - (void) logout;
 
+@property NSURL *apiURL;
+
 @end

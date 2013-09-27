@@ -29,18 +29,20 @@ static dispatch_once_t *onceTokenPointer;
     static dispatch_once_t onceToken;
     onceTokenPointer = &onceToken;
     dispatch_once(&onceToken, ^{
-        NSString *apiURL;
+        NSString *apiURLString;
 
         if (debug == YES) {
-            apiURL = @"http://localhost:9991/api/v1";
+            apiURLString = @"http://localhost:9991/api/v1";
         } else if (email != nil && [[email lowercaseString] hasSuffix:@"@zulip.com"]) {
-            apiURL = @"https://staging.zulip.com/api/v1/";
+            apiURLString = @"https://staging.zulip.com/api/v1/";
         } else {
-            apiURL = @"https://api.zulip.com/v1/";
+            apiURLString = @"https://api.zulip.com/v1/";
         }
 
-        CLS_LOG(@"Loading URL: %@", apiURL);
-        _sharedClient = [[ZulipAPIClient alloc] initWithBaseURL:[NSURL URLWithString:apiURL]];
+        CLS_LOG(@"Loading URL: %@", apiURLString);
+        NSURL *apiURL = [NSURL URLWithString:apiURLString];
+        _sharedClient = [[ZulipAPIClient alloc] initWithBaseURL:apiURL];
+        _sharedClient.apiURL = apiURL;
     });
 
     return _sharedClient;

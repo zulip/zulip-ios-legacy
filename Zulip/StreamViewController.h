@@ -9,7 +9,7 @@
 
 //@end
 
-@interface StreamViewController : UITableViewController
+@interface StreamViewController : UITableViewController <MessageCellDelegate>
 
 @property (nonatomic, retain) NSMutableArray *messages;
 @property (nonatomic, retain) NSMutableSet *msgIds;

@@ -3,6 +3,7 @@
 #import "UIImageView+AFNetworking.h"
 #import "ZUser.h"
 #import "ZulipAPIController.h"
+#import "ZulipAPIClient.h"
 
 #include <QuartzCore/QuartzCore.h>
 
@@ -63,6 +64,7 @@
 
     _message = message;
     self.attributedTextView.attributedString = message.attributedString;
+    self.attributedTextView.delegate = self;
 }
 
 - (void)willBeDisplayed
@@ -135,6 +137,37 @@
 
 + (NSString *)reuseIdentifier {
     return @"CustomCellIdentifier";
+}
+
+#pragma mark - DTAttributedTextContentViewDelegate
+// Derived from example snippet from
+// http://blog.smartlogicsolutions.com/2013/04/02/ios-development-dtattributedtextview-instead-of-uiwebview/
+- (UIView *)attributedTextContentView:(DTAttributedTextContentView *)attributedTextContentView
+                          viewForLink:(NSURL *)url
+                           identifier:(NSString *)identifier
+                                frame:(CGRect)frame
+{
+    DTLinkButton *linkButton = [[DTLinkButton alloc] initWithFrame:frame];
+    linkButton.URL = url;
+    [linkButton addTarget:self action:@selector(linkClicked:) forControlEvents:UIControlEventTouchDown];
+
+    return linkButton;
+}
+
+- (IBAction)linkClicked:(DTLinkButton *)sender
+{
+    if ([_delegate respondsToSelector:@selector(openLink:)])
+    {
+        [sender.URL baseURL];
+        if (([[sender.URL host] isEqual:[[[ZulipAPIClient sharedClient] apiURL] host]])
+            && ([[sender.URL path]  isEqual: @"/"]))
+        {
+            NSLog(@"FIXME: this application cannot yet open narrows");
+        } else
+        {
+            [_delegate openLink:sender.URL];
+        }
+    }
 }
 
 @end
