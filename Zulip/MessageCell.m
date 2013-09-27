@@ -71,6 +71,8 @@
 {
     if ([self.type isEqualToString:@"stream"]) {
         self.headerBar.backgroundColor = [[ZulipAPIController sharedInstance] streamColor:self.recipient withDefault:[MessageCell defaultStreamColor]];
+        self.backgroundColor = [UIColor clearColor];
+        self.header.textColor = [UIColor blackColor];
     } else {
         // For non-stream messages, color cell background pale yellow (#FEFFE0).
         self.backgroundColor = [UIColor colorWithRed:255.0/255 green:254.0/255
