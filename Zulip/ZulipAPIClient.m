@@ -42,6 +42,12 @@ static dispatch_once_t *onceTokenPointer;
         CLS_LOG(@"Loading URL: %@", apiURLString);
         NSURL *apiURL = [NSURL URLWithString:apiURLString];
         _sharedClient = [[ZulipAPIClient alloc] initWithBaseURL:apiURL];
+
+        NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+        NSString *userAgent = [NSString stringWithFormat:@"ZulipApple/%@/%@", version, [[UIDevice currentDevice] systemVersion]];
+
+        [_sharedClient setDefaultHeader:@"User-Agent" value:userAgent];
+
         _sharedClient.apiURL = apiURL;
     });
 
