@@ -29,6 +29,9 @@
 
 #import <Crashlytics/Crashlytics.h>
 
+// for md5
+#import <CommonCrypto/CommonDigest.h>
+
 // Private category to let us declare "private" member properties
 @interface ZulipAPIController ()
 
@@ -112,6 +115,7 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
         self.apiKey = @"";
         self.email = @"";
         self.fullName = @"";
+        self.FullNameLookupDict = [[NSMutableDictionary alloc] init];
     }
     self.backgrounded = NO;
     self.pointer = -1;
@@ -372,6 +376,7 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
     if (_backgrounded && !backgrounded) {
         CLS_LOG(@"Coming to the foreground!!");
         [self loadRangesFromFile];
+        [self loadUsersListFromCoreData];
 //        [self startPoll];
     }
     _backgrounded = backgrounded;
@@ -510,11 +515,15 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
         // TODO save the whole list properly and use it for presence information
         NSArray *realm_users = [json objectForKey:@"realm_users"];
         for (NSDictionary *person in realm_users) {
+            [self addPerson:person andSave:YES];
             if ([[person objectForKey:@"email"] isEqualToString:self.email])
                 self.fullName = [person objectForKey:@"full_name"];
         }
 
         [[PreferencesWrapper sharedInstance] setFullName:self.fullName];
+    } else if (![json objectForKey:@"realm_users"])
+    {
+        [self loadUsersListFromCoreData];
     }
 
     if (json && [json objectForKey:@"subscriptions"]) {
@@ -997,10 +1006,14 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
 
 - (ZUser *)addPerson:(NSDictionary *)personDict andSave:(BOOL)save
 {
-    int userID = [[personDict objectForKey:@"id"] intValue];
-
+    if ([personDict objectForKey:@"full_name"]  && [personDict objectForKey:@"email"])
+    {
+        [self.FullNameLookupDict setObject:[personDict objectForKey:@"full_name"] forKey:[personDict objectForKey:@"email"]];
+    }
+    //TODO: have a system for non-gravatar avatars when personDict['avatar_url'] isn't set.
+    NSString * email = [personDict objectForKey:@"email"];
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ZUser"];
-    request.predicate = [NSPredicate predicateWithFormat:@"userID == %i", userID];
+    request.predicate = [NSPredicate predicateWithFormat:@"email == %@", email];
 
     NSError *error = nil;
     NSArray *results = [[self.appDelegate managedObjectContext] executeFetchRequest:request error:&error];
@@ -1014,18 +1027,24 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
     if ([results count] != 0) {
         user = (ZUser *)[results objectAtIndex:0];
     } else {
-        if (![personDict objectForKey:@"id"]) {
-            CLS_LOG(@"Tried to add a new person without an ID?! %@", personDict);
+        if (![personDict objectForKey:@"email"]) {
+            CLS_LOG(@"Tried to add a new person without an email?! %@", personDict);
             return nil;
         }
 
         user = [NSEntityDescription insertNewObjectForEntityForName:@"ZUser" inManagedObjectContext:[self.appDelegate managedObjectContext]];
-        user.userID = @(userID);
     }
-    NSArray *stringProperties = @[@"email", @"avatar_url", @"full_name"];
+    NSArray *stringProperties = @[@"email", @"full_name"];
     for (NSString *prop in stringProperties) {
         // Use KVC to set the property value by the string name
         [user setValue:[personDict valueForKey:prop] forKey:prop];
+    }
+
+    // if the avatar is specified use it. Otherwise set it to the gravatar url.
+    if ([personDict valueForKey:@"avatar_url"]) {
+        [user setValue:[personDict valueForKey:@"avatar_url"] forKey:@"avatar_url"];
+    } else {
+        [user setValue:[self gravatarUrl:user.email] forKey:@"avatar_url"];
     }
 
     if (save) {
@@ -1039,6 +1058,57 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
     }
 
     return user;
+}
+
+- (NSString *)gravatarUrl:(NSString *)email
+{
+
+    email = [[email stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] lowercaseString];
+    const char *ptr = [email UTF8String];
+    unsigned char md5Buffer[CC_MD5_DIGEST_LENGTH];
+    CC_MD5(ptr, strlen(ptr), md5Buffer);
+
+    NSMutableString *gravatarHash = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
+    for(int i = 0; i < CC_MD5_DIGEST_LENGTH; i++)
+        [gravatarHash appendFormat:@"%02x",md5Buffer[i]];
+
+    return [NSString stringWithFormat:
+            @"https://secure.gravatar.com/avatar/%@?d=identicon",
+            gravatarHash];
+}
+
+- (ZUser*)getPersonFromCoreDataWithEmail:(NSString *)email
+{
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ZUser"];
+    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"email == %@", email];
+    fetchRequest.fetchLimit = 1;
+
+    NSError *error = nil;
+    NSArray *results = [[self.appDelegate managedObjectContext] executeFetchRequest:fetchRequest error:&error];
+    if (error) {
+        CLS_LOG(@"Failed to fetch user profile: %@ %@", [error localizedDescription], [error userInfo]);
+    }
+    if ([results count] > 0) {
+        return [results objectAtIndex:0];
+    }
+    return nil;
+}
+
+- (void)loadUsersListFromCoreData
+{
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ZUser"];
+    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"email.length>0"];
+    NSError *error = nil;
+    NSArray *results = [[self.appDelegate managedObjectContext] executeFetchRequest:fetchRequest error:&error];
+    if (error) {
+        CLS_LOG(@"Failed to fetch user list: %@ %@", [error localizedDescription], [error userInfo]);
+    }
+    if ([results count] > 0) {
+        for (ZUser *result in results)
+        {
+            [self.FullNameLookupDict setObject:result.full_name forKey:result.email];
+        }
+    }
 }
 
 - (NSArray *)rawMessagesFromManaged:(NSArray *)messages

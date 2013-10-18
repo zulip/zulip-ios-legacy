@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4488.2" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4510" systemVersion="12F37" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3715.3"/>
+        <deployment defaultVersion="1552" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ComposeViewController">
             <connections>
+                <outlet property="completionsTableView" destination="aiZ-rR-jey" id="19e-aJ-NYS"/>
                 <outlet property="content" destination="52" id="74"/>
                 <outlet property="privateRecipient" destination="109" id="112"/>
                 <outlet property="recipient" destination="12" id="83"/>
@@ -15,30 +16,36 @@
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="1">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+        <view contentMode="redraw" id="1">
+            <rect key="frame" x="0.0" y="0.0" width="568" height="320"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Stream" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="12">
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Stream" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="12">
                     <rect key="frame" x="13" y="20" width="121" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="width" priority="999" constant="121" id="HuM-9G-lhJ"/>
+                    </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocorrectionType="no" enablesReturnKeyAutomatically="YES"/>
                     <connections>
                         <outlet property="delegate" destination="-1" id="7rh-br-YNU"/>
                     </connections>
                 </textField>
-                <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Subject" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="23">
-                    <rect key="frame" x="142" y="20" width="166" height="30"/>
+                <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Subject" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="23">
+                    <rect key="frame" x="390" y="20" width="166" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="width" priority="999" constant="166" id="HRP-3S-Otp"/>
+                    </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocorrectionType="no" enablesReturnKeyAutomatically="YES"/>
                     <connections>
                         <outlet property="delegate" destination="-1" id="ADP-Vr-XwH"/>
                     </connections>
                 </textField>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="39">
-                    <rect key="frame" x="13" y="152" width="295" height="44"/>
+                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="39">
+                    <rect key="frame" x="13" y="152" width="543" height="44"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                     <state key="normal" title="Send">
@@ -48,8 +55,8 @@
                         <action selector="send" destination="-1" eventType="touchDown" id="82"/>
                     </connections>
                 </button>
-                <textView clipsSubviews="YES" multipleTouchEnabled="YES" tag="2" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="52">
-                    <rect key="frame" x="13" y="58" width="295" height="86"/>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" tag="2" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="52">
+                    <rect key="frame" x="13" y="58" width="543" height="86"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -58,8 +65,8 @@
                         <outlet property="delegate" destination="-1" id="Kuo-nF-P6l"/>
                     </connections>
                 </textView>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="One or more people..." minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="109">
-                    <rect key="frame" x="13" y="20" width="295" height="30"/>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="One or more people..." adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="109">
+                    <rect key="frame" x="13" y="20" width="543" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits"/>
@@ -67,9 +74,38 @@
                         <outlet property="delegate" destination="-1" id="Rez-pf-BiL"/>
                     </connections>
                 </textField>
+                <tableView opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" keyboardDismissMode="interactive" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="aiZ-rR-jey">
+                    <rect key="frame" x="0.0" y="50" width="568" height="270"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="LHI-nx-m2q"/>
+                        <outlet property="delegate" destination="-1" id="IaO-jc-Zy4"/>
+                    </connections>
+                </tableView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="52" firstAttribute="leading" secondItem="39" secondAttribute="leading" id="5di-PT-McS"/>
+                <constraint firstItem="52" firstAttribute="leading" secondItem="12" secondAttribute="leading" id="Dmv-kn-lF8"/>
+                <constraint firstItem="aiZ-rR-jey" firstAttribute="top" secondItem="1" secondAttribute="top" constant="50" id="HSS-iO-LMD"/>
+                <constraint firstItem="52" firstAttribute="top" secondItem="1" secondAttribute="top" constant="58" id="JXj-ZZ-Bb4"/>
+                <constraint firstItem="52" firstAttribute="top" secondItem="109" secondAttribute="bottom" constant="8" symbolic="YES" id="LqD-Kh-ACB"/>
+                <constraint firstItem="52" firstAttribute="leading" secondItem="109" secondAttribute="leading" id="UvH-it-auB"/>
+                <constraint firstItem="aiZ-rR-jey" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="ao2-L2-Diy"/>
+                <constraint firstItem="52" firstAttribute="top" secondItem="12" secondAttribute="bottom" constant="8" symbolic="YES" id="cEs-rP-We7"/>
+                <constraint firstItem="52" firstAttribute="trailing" secondItem="109" secondAttribute="trailing" id="g9g-fP-OkO"/>
+                <constraint firstItem="52" firstAttribute="trailing" secondItem="23" secondAttribute="trailing" id="h8c-dn-oJW"/>
+                <constraint firstAttribute="trailing" secondItem="aiZ-rR-jey" secondAttribute="trailing" id="kBl-Yp-0UV"/>
+                <constraint firstItem="52" firstAttribute="top" secondItem="23" secondAttribute="bottom" constant="8" symbolic="YES" id="kLj-xQ-LLH"/>
+                <constraint firstItem="aiZ-rR-jey" firstAttribute="centerY" secondItem="1" secondAttribute="centerY" id="no1-zn-EX0"/>
+                <constraint firstItem="52" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="13" id="pGK-ok-UAZ"/>
+                <constraint firstItem="39" firstAttribute="top" secondItem="52" secondAttribute="bottom" constant="8" symbolic="YES" id="txa-v6-lNW"/>
+                <constraint firstItem="52" firstAttribute="centerX" secondItem="aiZ-rR-jey" secondAttribute="centerX" id="vdx-Ag-1I8"/>
+                <constraint firstItem="52" firstAttribute="trailing" secondItem="39" secondAttribute="trailing" id="wNX-GU-ViE"/>
+            </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+            <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
     </objects>

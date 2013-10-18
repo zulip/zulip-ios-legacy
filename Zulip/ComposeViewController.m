@@ -2,6 +2,9 @@
 #import "ZulipAppDelegate.h"
 #import "ZulipAPIClient.h"
 #import "ZulipAPIController.h"
+#import "UserCell.h"
+
+#import "UIImageView+AFNetworking.h"
 
 #import <QuartzCore/QuartzCore.h>
 #import <Crashlytics/Crashlytics.h>
@@ -13,6 +16,8 @@
 @end
 
 @implementation ComposeViewController
+
+#pragma mark Setup/Teardown methods
 
 - (id)initWithReplyTo:(RawMessage *)message
 {
@@ -29,6 +34,8 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        self.completionMatches = [[NSMutableArray alloc] init];
+        self.FullNameLookupDict = [[ZulipAPIController sharedInstance] FullNameLookupDict];
     }
     return self;
 }
@@ -50,6 +57,9 @@
     if ([[[UIDevice currentDevice] systemVersion] compare:@"7.0" options:NSNumericSearch] != NSOrderedAscending) {
         self.edgesForExtendedLayout = UIRectEdgeLeft | UIRectEdgeBottom | UIRectEdgeRight;
     }
+
+    self.completionsTableView.hidden = YES;
+    [self.completionsTableView reloadData];
 
     if ([self.type isEqualToString:@"stream"]) {
         self.subject.hidden = NO;
@@ -97,6 +107,8 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark Zulip methods
+
 - (IBAction)send
 {
     [self.content resignFirstResponder];
@@ -128,15 +140,116 @@
     [self.delegate.navController popViewControllerAnimated:YES];
 }
 
-- (void)textViewDidBeginEditing:(UITextView *)textView
+- (void)getCompletionResultsWithQuery:(NSString*)searchString
 {
-    //[self animateTextView: textView up: YES];
+    static NSMutableOrderedSet *prefixEmailMatches;
+    static NSMutableOrderedSet *prefixNameMatches;
+    static NSMutableOrderedSet *nonPrefixMatches;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        prefixEmailMatches = [[NSMutableOrderedSet alloc] init];
+        prefixNameMatches = [[NSMutableOrderedSet alloc] init];
+        nonPrefixMatches = [[NSMutableOrderedSet alloc] init];
+    });
+
+    searchString = [searchString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+
+    [prefixEmailMatches removeAllObjects];
+    [prefixNameMatches removeAllObjects];
+    [nonPrefixMatches removeAllObjects];
+    [self.completionMatches removeAllObjects];
+    // match by email
+    for(NSString *candidate in [self.FullNameLookupDict allKeys])
+    {
+        NSUInteger index = [candidate rangeOfString:searchString options:NSCaseInsensitiveSearch].location;
+        if (index == 0) {
+            if ([[candidate lowercaseString] isEqualToString:[searchString lowercaseString]]) {
+                // got exact match: hide the completions
+                self.completionsTableView.hidden = YES;
+                return;
+            }
+            [prefixEmailMatches addObject:candidate];
+        } else if (index != NSNotFound) {
+            [nonPrefixMatches addObject:candidate];
+        }
+    }
+    // match by full name
+    for(NSString *candidate in [self.FullNameLookupDict allKeys])
+    {
+        NSUInteger index = [self.FullNameLookupDict[candidate] rangeOfString:searchString options:NSCaseInsensitiveSearch].location;
+        if (index == 0) {
+            //cannot hide the completions table, because you cannot PM by full name.
+            [prefixNameMatches addObject:candidate];
+        } else if (index != NSNotFound) {
+            [nonPrefixMatches addObject:candidate];
+        }
+    }
+
+    [prefixEmailMatches removeObjectsInArray:[prefixNameMatches array]];
+
+
+    // sorry Leo, I tried. This prioritizes by non-bots then bots in the categories of
+    // prefix-matches (names first, then emails) and then non-prefix-matches
+    for(NSString *result in prefixNameMatches)
+    {
+        if ([result rangeOfString:@"-bot@"].location == NSNotFound)
+            [self.completionMatches addObject:result];
+    }
+    for(NSString *result in prefixNameMatches)
+    {
+        if ([result rangeOfString:@"-bot@"].location != NSNotFound)
+            [self.completionMatches addObject:result];
+    }
+    for(NSString *result in prefixEmailMatches)
+    {
+        if ([result rangeOfString:@"-bot@"].location == NSNotFound)
+            [self.completionMatches addObject:result];
+    }
+    for(NSString *result in prefixEmailMatches)
+    {
+        if ([result rangeOfString:@"-bot@"].location != NSNotFound)
+            [self.completionMatches addObject:result];
+    }
+    for(NSString *result in nonPrefixMatches)
+    {
+        if ([result rangeOfString:@"-bot@"].location == NSNotFound)
+            [self.completionMatches addObject:result];
+    }
+    for(NSString *result in nonPrefixMatches)
+    {
+        if ([result rangeOfString:@"-bot@"].location != NSNotFound)
+            [self.completionMatches addObject:result];
+    }
+
+    if ([self.completionMatches count])
+    {
+        self.completionsTableView.hidden = NO;
+        [self.completionsTableView reloadData];
+    } else
+    {
+        self.completionsTableView.hidden = YES;
+    }
 }
 
-- (void)textViewDidEndEditing:(UITextView *)textView
++ (NSArray*)splitUpRecipientsInString:(NSString*)string
 {
-    //[self animateTextView: textView up: NO];
+    // as in the web app, we assume email addresses don't have "," or ";" in them
+    NSError *error=NULL;
+    NSString* normalizedString = [[NSRegularExpression regularExpressionWithPattern:@"\\s*[,;]\\s*" options:0 error:&error] stringByReplacingMatchesInString:string options:0 range:NSMakeRange(0, [string length]) withTemplate:@","];
+    return [normalizedString componentsSeparatedByString:@","];
 }
+
++ (NSString*)replaceLastItemInStringList:(NSString*)string withString:(NSString*)replacementString
+{
+    NSMutableArray* components = [NSMutableArray arrayWithArray:[self splitUpRecipientsInString:string]];
+    [components removeLastObject];
+    [components addObject:replacementString];
+
+    return [components componentsJoinedByString:@", "];
+}
+
+// recipient/stream/topic textfields
+#pragma mark UITextFieldDelegate methods
 
 - (void) animateTextView: (UITextView *) textView up: (BOOL) up
 {
@@ -153,6 +266,14 @@
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    // take the first autocomplete suggestion and start composing the message content
+    if (textField == self.privateRecipient && ![self.completionsTableView isHidden])
+    {
+        [self tableView:self.completionsTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+        [self.content becomeFirstResponder];
+        return NO;
+    }
+
 	// Find the next entry field
 	for (UIView *view in self.entryFields) {
 		if (view.tag == (textField.tag + 1)) {
@@ -162,5 +283,56 @@
 	}
 	return NO;
 }
+
+// called whenever characters are typed (or deleted)
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if (textField == self.privateRecipient)
+    {
+        NSString *searchString = [textField.text stringByReplacingCharactersInRange:range withString:string];
+        searchString = [ComposeViewController splitUpRecipientsInString:searchString].lastObject;
+        [self getCompletionResultsWithQuery:searchString];
+    }
+    return YES;
+}
+
+// compose box textview
+#pragma mark UITextViewDelegate methods
+
+// recipient completions tableview
+#pragma mark UITableViewDataSource methods
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger) section {
+    return self.completionMatches.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSString *email = [self.completionMatches objectAtIndex:indexPath.row];
+
+    UserCell * cell = [tableView dequeueReusableCellWithIdentifier:[UserCell reuseIdentifier]];
+    if (cell == nil) {
+        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"UserCellView" owner:self options:nil];
+        cell = (UserCell *)[objects objectAtIndex:0];
+    }
+    [cell setUserWithEmail:email];
+
+    return cell;
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 55;
+}
+
+#pragma mark UITableViewDelegate methods
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    UserCell *selectedCell = (UserCell *)[tableView cellForRowAtIndexPath:indexPath];
+    self.privateRecipient.text = [NSString stringWithFormat:@"%@, ",
+                                  [ComposeViewController replaceLastItemInStringList:
+                                   self.privateRecipient.text withString:
+                                   selectedCell.email]];
+    self.completionsTableView.hidden = YES;
+}
+
 
 @end

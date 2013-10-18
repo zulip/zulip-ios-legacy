@@ -106,20 +106,11 @@
     }
 
     // Fetch user's gravatar if it's there
-    fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ZUser"];
-    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"email LIKE %@", [[ZulipAPIController sharedInstance] email]];
-    fetchRequest.fetchLimit = 1;
-
-    error = nil;
-    NSArray *results = [[appDelegate managedObjectContext] executeFetchRequest:fetchRequest error:&error];
-    if (error) {
-        CLS_LOG(@"Failed to fetch user profile: %@ %@", [error localizedDescription], [error userInfo]);
-    }
-    if ([results count] > 0) {
-        ZUser *user = (ZUser *)[results objectAtIndex:0];
+    ZUser *user =[[ZulipAPIController sharedInstance] getPersonFromCoreDataWithEmail:[[ZulipAPIController sharedInstance] email]];
+    if (user)
+    {
         self.avatar_url = user.avatar_url;
     }
-
 }
 
 - (void)viewDidUnload

@@ -35,6 +35,8 @@
 		78BE8D4017C52D0100330433 /* SourceSansPro-Regular-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 78BE8D1717C5101A00330433 /* SourceSansPro-Regular-webfont.ttf */; };
 		78BE8D4117C52D0100330433 /* SourceSansPro-Semibold-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 78BE8D1817C5101A00330433 /* SourceSansPro-Semibold-webfont.ttf */; };
 		78BE8D4217C52D0100330433 /* SourceSansPro-SemiboldIt-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 78BE8D1917C5101A00330433 /* SourceSansPro-SemiboldIt-webfont.ttf */; };
+		78C6F29218159AEA00AFDF6C /* UserCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78C6F29118159AEA00AFDF6C /* UserCellView.xib */; };
+		78C6F29D18159CEC00AFDF6C /* UserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 78C6F29C18159CEC00AFDF6C /* UserCell.m */; };
 		B30F55A217B2D432006DC735 /* LeftSidebarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B30F55A017B2D432006DC735 /* LeftSidebarViewController.m */; };
 		B30F55A317B2D432006DC735 /* LeftSidebarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B30F55A117B2D432006DC735 /* LeftSidebarViewController.xib */; };
 		B3107A0A17C55A33000F248E /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = B3107A0917C55A33000F248E /* MBProgressHUD.m */; };
@@ -230,6 +232,9 @@
 		78BE8D1717C5101A00330433 /* SourceSansPro-Regular-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SourceSansPro-Regular-webfont.ttf"; path = "Resources/fonts/SourceSansPro-Regular-webfont.ttf"; sourceTree = "<group>"; };
 		78BE8D1817C5101A00330433 /* SourceSansPro-Semibold-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SourceSansPro-Semibold-webfont.ttf"; path = "Resources/fonts/SourceSansPro-Semibold-webfont.ttf"; sourceTree = "<group>"; };
 		78BE8D1917C5101A00330433 /* SourceSansPro-SemiboldIt-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SourceSansPro-SemiboldIt-webfont.ttf"; path = "Resources/fonts/SourceSansPro-SemiboldIt-webfont.ttf"; sourceTree = "<group>"; };
+		78C6F29118159AEA00AFDF6C /* UserCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = UserCellView.xib; path = Views/UserCellView.xib; sourceTree = "<group>"; };
+		78C6F29B18159CEC00AFDF6C /* UserCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserCell.h; path = Views/UserCell.h; sourceTree = "<group>"; };
+		78C6F29C18159CEC00AFDF6C /* UserCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserCell.m; path = Views/UserCell.m; sourceTree = "<group>"; };
 		B30F559F17B2D432006DC735 /* LeftSidebarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LeftSidebarViewController.h; path = Controllers/ViewControllers/LeftSidebarViewController.h; sourceTree = "<group>"; };
 		B30F55A017B2D432006DC735 /* LeftSidebarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LeftSidebarViewController.m; path = Controllers/ViewControllers/LeftSidebarViewController.m; sourceTree = "<group>"; };
 		B30F55A117B2D432006DC735 /* LeftSidebarViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LeftSidebarViewController.xib; path = Controllers/ViewControllers/LeftSidebarViewController.xib; sourceTree = "<group>"; };
@@ -577,6 +582,9 @@
 				B3F5629917A8674B004B185A /* SidebarStreamsHeader.xib */,
 				B3F562B117ABEB85004B185A /* SidebarStreamsHeader.h */,
 				B3F562B217ABEB85004B185A /* SidebarStreamsHeader.m */,
+				78C6F29118159AEA00AFDF6C /* UserCellView.xib */,
+				78C6F29B18159CEC00AFDF6C /* UserCell.h */,
+				78C6F29C18159CEC00AFDF6C /* UserCell.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -952,6 +960,7 @@
 				78BE8D3E17C52D0100330433 /* SourceSansPro-Light-webfont.ttf in Resources */,
 				78BE8D3F17C52D0100330433 /* SourceSansPro-LightIt-webfont.ttf in Resources */,
 				78BE8D4017C52D0100330433 /* SourceSansPro-Regular-webfont.ttf in Resources */,
+				78C6F29218159AEA00AFDF6C /* UserCellView.xib in Resources */,
 				78BE8D4117C52D0100330433 /* SourceSansPro-Semibold-webfont.ttf in Resources */,
 				78BE8D4217C52D0100330433 /* SourceSansPro-SemiboldIt-webfont.ttf in Resources */,
 				B3CC438A17A6E2E200C8AF3F /* MainWindow~iphone.xib in Resources */,
@@ -1078,6 +1087,7 @@
 				B3733CFE177A00D900714B6E /* ZulipAPIClient.m in Sources */,
 				B3F50D6C179DADE800F9DAE4 /* AFHTTPClient.m in Sources */,
 				B3F50D6D179DADE800F9DAE4 /* AFHTTPRequestOperation.m in Sources */,
+				78C6F29D18159CEC00AFDF6C /* UserCell.m in Sources */,
 				B3F50D6E179DADE800F9DAE4 /* AFImageRequestOperation.m in Sources */,
 				B3F50D6F179DADE800F9DAE4 /* AFJSONRequestOperation.m in Sources */,
 				B3F50D70179DADE800F9DAE4 /* AFNetworkActivityIndicatorManager.m in Sources */,

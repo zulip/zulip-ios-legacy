@@ -121,14 +121,6 @@
 
 #pragma mark - UITableViewCell
 
-- (NSURL *)gravatarUrl:(NSString *)gravatarHash
-{
-    return [NSURL URLWithString:
-            [NSString stringWithFormat:
-             @"https://secure.gravatar.com/avatar/%@?d=identicon&s=30",
-             gravatarHash]];
-}
-
 
 + (UIColor *)defaultStreamColor {
     return [UIColor colorWithRed:187.0f/255

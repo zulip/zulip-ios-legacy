@@ -56,6 +56,8 @@ typedef void(^MessagesDelivered)(NSArray *messages);
 
 - (void)sendMessageFlagsUpdated:(RawMessage *)message withOperation:(NSString *)operation andFlag:(NSString *)flag;
 
+- (ZUser*)getPersonFromCoreDataWithEmail:(NSString *)email;
+
 - (void)applicationWillTerminate;
 
 @property(assign) long pointer;
@@ -65,6 +67,7 @@ typedef void(^MessagesDelivered)(NSArray *messages);
 @property(nonatomic, retain) NSString *fullName;
 @property(nonatomic, retain) StreamViewController *homeViewController;
 @property(nonatomic, retain, readonly) UnreadManager *unreadManager;
+@property(nonatomic, retain) NSMutableDictionary *FullNameLookupDict;
 
 
 @end
