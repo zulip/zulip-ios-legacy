@@ -11,7 +11,16 @@
 
 #import <Crashlytics/Crashlytics.h>
 
+typedef enum  {
+    // Ugh Obj-C at making enum values globally visible
+    NarrowScrollToFirstUnread = 0,
+    NarrowScrollToMessageID = 1
+} InitialScrollSettings;
+
 @interface NarrowViewController ()
+
+@property (nonatomic, assign) InitialScrollSettings initialScrollSetting;
+@property (nonatomic, assign) long scrollMessageID;
 
 @end
 
@@ -23,10 +32,13 @@
 
     if (self) {
         self.operators = operators;
+        self.initialScrollSetting = NarrowScrollToFirstUnread;
+        self.scrollMessageID = -1;
     }
 
     return self;
 }
+
 
 - (void)viewDidLoad
 {
@@ -34,6 +46,18 @@
 
     self.title = self.operators.title;
     [self initialPopulate];
+}
+
+- (void)scrollToMessageID:(long)messageId
+{
+    int rowToScroll = [self rowWithId:self.scrollMessageID];
+    if (rowToScroll > -1) {
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:rowToScroll inSection:0]
+                              atScrollPosition:UITableViewScrollPositionMiddle animated:NO]; ;
+    } else {
+        self.initialScrollSetting = NarrowScrollToMessageID;
+        self.scrollMessageID = messageId;
+    }
 }
 
 #pragma mark - StreamViewControllerDelegate
@@ -69,14 +93,14 @@
                                                         completionBlock:^(NSArray *newerMessages) {
             CLS_LOG(@"Initially loaded forward %i messages!", [newerMessages count]);
             [self loadMessages:newerMessages];
-            [self initiallyLoadedMessages];
+            [self newMessagesLoaded];
         }];
       } else {
-          [self initiallyLoadedMessages];
+          [self newMessagesLoaded];
       }
 
 
-      [self initiallyLoadedMessages];
+      [self newMessagesLoaded];
     }];
 }
 
@@ -84,13 +108,8 @@
 {
 }
 
-
-- (void)initiallyLoadedMessages
+- (NSIndexPath *)indexOfFirstUnread
 {
-    if ([self.messages count] == 0) {
-        return;
-    }
-
     NSIndexPath *unread = nil;
     for (NSUInteger i = 0; i < [self.messages count]; i++) {
         RawMessage *msg = [self.messages objectAtIndex:i];
@@ -99,12 +118,42 @@
             break;
         }
     }
-    if (!unread) {
-        unread = [NSIndexPath indexPathForRow:[self.messages count] - 1 inSection:0];
+    return unread;
+}
+
+- (NSIndexPath *)indexOfScrollToMessage:(long)messageID
+{
+    int rowToScroll = [self rowWithId:self.scrollMessageID];
+    if (rowToScroll == -1) {
+        CLS_LOG(@"Narrow initially loaded messages but DID NOT FIND scroll-to message id %li", self.scrollMessageID);
+        return nil;
     }
-    // Scroll to first unread in the middle of the screen
-    CLS_LOG(@"Scrolling to row %i", [unread row]);
-    [self.tableView scrollToRowAtIndexPath:unread atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
+    return[NSIndexPath indexPathForRow:rowToScroll inSection:0];
+}
+
+- (void)newMessagesLoaded
+{
+    if ([self.messages count] == 0) {
+        return;
+    }
+
+    NSIndexPath *target = nil;
+    if (self.initialScrollSetting == NarrowScrollToFirstUnread) {
+        target = [self indexOfFirstUnread];
+    } else if (self.initialScrollSetting == NarrowScrollToMessageID &&
+               self.scrollMessageID > -1) {
+        target = [self indexOfScrollToMessage:self.scrollMessageID];
+    } else {
+        CLS_LOG(@"New messages loaded in narrow but BAD scroll data!");
+        return;
+    }
+
+    if (!target) {
+        target = [NSIndexPath indexPathForRow:[self.messages count] - 1 inSection:0];
+    }
+    // Scroll to desired message in the middle of the screen
+    CLS_LOG(@"Scrolling to desired row on narrow, with setting %i and target %@", self.initialScrollSetting, target);
+    [self.tableView scrollToRowAtIndexPath:target atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
 }
 
 @end
