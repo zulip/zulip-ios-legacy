@@ -84,6 +84,7 @@
 		B39AC2C617F0ED9E00EB65B3 /* Default-Portrait@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B39AC2BB17F0ED9E00EB65B3 /* Default-Portrait@2x.png */; };
 		B39AC2C717F0ED9E00EB65B3 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = B39AC2BC17F0ED9E00EB65B3 /* Default.png */; };
 		B39AC2C817F0ED9E00EB65B3 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B39AC2BD17F0ED9E00EB65B3 /* Default@2x.png */; };
+		B3BA5B031816D1A000EFFC74 /* NSArray+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = B3BA5B021816D1A000EFFC74 /* NSArray+Blocks.m */; };
 		B3CC438A17A6E2E200C8AF3F /* MainWindow~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = C31673961620DB6B00CE9FE5 /* MainWindow~iphone.xib */; };
 		B3CC438B17A6E2E200C8AF3F /* MainWindow~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681BE1795C513009F69F5 /* MainWindow~ipad.xib */; };
 		B3CC439217A701A900C8AF3F /* ZUser.m in Sources */ = {isa = PBXBuildFile; fileRef = B3CC439117A701A900C8AF3F /* ZUser.m */; };
@@ -295,6 +296,8 @@
 		B39AC2BB17F0ED9E00EB65B3 /* Default-Portrait@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Portrait@2x.png"; path = "Resources/Launch Images/Default-Portrait@2x.png"; sourceTree = "<group>"; };
 		B39AC2BC17F0ED9E00EB65B3 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = "Resources/Launch Images/Default.png"; sourceTree = "<group>"; };
 		B39AC2BD17F0ED9E00EB65B3 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Resources/Launch Images/Default@2x.png"; sourceTree = "<group>"; };
+		B3BA5B011816D1A000EFFC74 /* NSArray+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSArray+Blocks.h"; path = "Categories/NSArray+Blocks.h"; sourceTree = "<group>"; };
+		B3BA5B021816D1A000EFFC74 /* NSArray+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSArray+Blocks.m"; path = "Categories/NSArray+Blocks.m"; sourceTree = "<group>"; };
 		B3CC439017A701A900C8AF3F /* ZUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZUser.h; path = Models/ZUser.h; sourceTree = "<group>"; };
 		B3CC439117A701A900C8AF3F /* ZUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZUser.m; path = Models/ZUser.m; sourceTree = "<group>"; };
 		B3CC439417A7F13700C8AF3F /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HomeViewController.h; path = Controllers/ViewControllers/HomeViewController.h; sourceTree = "<group>"; };
@@ -596,6 +599,8 @@
 				E570A8BE169DF81E0072BC7E /* NSString+Encode.m */,
 				B3733CD61778D5DD00714B6E /* UIColor+HexColor.h */,
 				B3733CD71778D5DD00714B6E /* UIColor+HexColor.m */,
+				B3BA5B011816D1A000EFFC74 /* NSArray+Blocks.h */,
+				B3BA5B021816D1A000EFFC74 /* NSArray+Blocks.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -1111,6 +1116,7 @@
 				B3F562BE17AC30BC004B185A /* ZMessage.m in Sources */,
 				B3F562C117AC3C65004B185A /* UnreadManager.m in Sources */,
 				B3DDD2F817B02A0800F8D387 /* LongPoller.m in Sources */,
+				B3BA5B031816D1A000EFFC74 /* NSArray+Blocks.m in Sources */,
 				B3E8A76517B146090008EED7 /* RangePair.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
