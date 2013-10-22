@@ -190,6 +190,11 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
 
 - (void)login:(NSString *)username password:(NSString *)password result:(void (^) (bool success))result;
 {
+    if (!username || !password) {
+        result(NO);
+        return;
+    }
+
     NSDictionary *postFields =  @{@"username": username,
                                   @"password": password};
 
