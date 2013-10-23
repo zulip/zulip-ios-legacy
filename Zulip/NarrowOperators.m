@@ -205,4 +205,9 @@
     return NO;
 }
 
+- (NSUInteger)hash
+{
+    return [[self allocAsJSONPayload] hash];
+}
+
 @end
