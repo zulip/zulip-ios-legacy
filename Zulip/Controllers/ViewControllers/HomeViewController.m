@@ -8,6 +8,8 @@
 
 #import "HomeViewController.h"
 #import "ZulipAPIController.h"
+#import "ZulipAppDelegate.h"
+#import "NSArray+Blocks.h"
 
 #import "MBProgressHUD.h"
 
@@ -106,8 +108,39 @@
     // Do extra filtering to remove not-in-home-view stream messages here
     // Messages we get out of the DB are already filtered, but we get all messages
     // from the server (since there's no "in home view only" narrow
-
     NSArray *filtered = [messages filteredArrayUsingPredicate:[self.operators allocAsPredicate]];
+
+    // Narrow to specific loaded message if we received a push notification while we were closed
+    ZulipAppDelegate *appDelegate = (ZulipAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if ([appDelegate.notifiedWithMessages count] > 0) {
+        // If we have more than one message that we were notified for (in different narrows),
+        // then we just show the home view and do nothing
+        NSArray *pushMessages = [messages filter:^BOOL(id obj) {
+            RawMessage *msg = (RawMessage *)obj;
+
+            NSArray *foundPushMessages = [appDelegate.notifiedWithMessages filter:^BOOL(id innerObj) {
+                return [(NSNumber *)innerObj compare:msg.messageID] == NSOrderedSame;
+            }];
+
+            return [foundPushMessages count] > 0;
+        }];
+
+        NSMutableSet *narrows = [[NSMutableSet alloc] init];
+        for (RawMessage *msg in pushMessages) {
+            [narrows addObject:[NarrowOperators operatorsFromMessage:msg]];
+        }
+        if ([narrows count] == 1) {
+            // Exactly one type message, lets display that narrow
+            RawMessage *newestPushMessage = [pushMessages lastObject];
+            [appDelegate narrowWithOperators:[[narrows allObjects] objectAtIndex:0] thenDisplayId:[newestPushMessage.messageID longValue]];
+        }
+
+        // Remove any messages that we handled
+        appDelegate.notifiedWithMessages = [appDelegate.notifiedWithMessages filter:^BOOL(id obj) {
+            return ![pushMessages containsObject:obj];
+        }];
+
+    }
     [super loadMessages:filtered];
 }
 

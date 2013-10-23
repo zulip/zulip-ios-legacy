@@ -63,6 +63,8 @@ NSString * const kLongPollMessageNotification = @"LongPollMessages";
 NSString * const kLongPollMessageData = @"LongPollMessageData";
 NSString * const kLogoutNotification = @"ZulipLogoutNotification";
 NSString * const kLoginNotification = @"ZulipLoginNotification";
+NSString * const kPushNotificationMessagePayloadNotification = @"PushNotificationMessagePayload";
+NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage";
 
 
 @implementation ZulipAPIController
@@ -372,12 +374,10 @@ NSString * const kLoginNotification = @"ZulipLoginNotification";
         [self saveRangesToFile];
     }
 
-    // Re-start polling
     if (_backgrounded && !backgrounded) {
         CLS_LOG(@"Coming to the foreground!!");
         [self loadRangesFromFile];
         [self loadUsersListFromCoreData];
-//        [self startPoll];
     }
     _backgrounded = backgrounded;
 }

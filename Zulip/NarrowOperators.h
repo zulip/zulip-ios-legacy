@@ -15,6 +15,8 @@
  */
 @interface NarrowOperators : NSObject
 
++ (NarrowOperators *) operatorsFromMessage:(RawMessage *)msg;
+
 - (void)setInHomeView;
 - (void)setPrivateMessages;
 - (void)addStreamNarrow:(NSString *)streamName;

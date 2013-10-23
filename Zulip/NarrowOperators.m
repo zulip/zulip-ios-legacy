@@ -30,6 +30,22 @@
     return self;
 }
 
++ (NarrowOperators *)operatorsFromMessage:(RawMessage *)msg
+{
+    NarrowOperators *narrow = [[NarrowOperators alloc] init];
+
+    if (msg.subscription) {
+        // Stream message, narrow to stream/topic
+        // TODO we don't support narrowing to topics yet
+        [narrow addStreamNarrow:msg.stream_recipient];
+    } else {
+        // PM
+        [narrow setPrivateMessages];
+    }
+
+    return narrow;
+}
+
 - (void)setInHomeView
 {
     [self.subpredicates addObject:[NSPredicate predicateWithFormat:@"( subscription == NIL ) OR ( subscription.in_home_view == YES )"]];

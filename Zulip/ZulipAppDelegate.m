@@ -6,6 +6,7 @@
 #import "LeftSidebarViewController.h"
 #import "NarrowViewController.h"
 #import "AboutViewController.h"
+#import "NSArray+Blocks.h"
 
 // AFNetworking
 #import "AFNetworkActivityIndicatorManager.h"
@@ -29,10 +30,22 @@
 @synthesize managedObjectModel = __managedObjectModel;
 @synthesize persistentStoreCoordinator = __persistentStoreCoordinator;
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+-(id) init
+{
+    self = [super init];
+    if (self) {
+        self.wakingFromBackground = NO;
+        self.notifiedWithMessages = @[];
+    }
+
+    return self;
+}
+
+-(BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [Crashlytics startWithAPIKey:@"7c523eb4efdbd264d6d4a7403ee7a683b733a9bd"];
 
+    // Set up our views
     self.errorViewController = [[ErrorViewController alloc] init];
 
     self.sidePanelController = [[JASidePanelController alloc] init];
@@ -65,6 +78,17 @@
     NSURLCache *URLCache = [[NSURLCache alloc] initWithMemoryCapacity:4 * 1024 * 1024 diskCapacity:20 * 1024 * 1024 diskPath:nil];
     [NSURLCache setSharedURLCache:URLCache];
 
+    // Register with APNS for push notifications
+    UIRemoteNotificationType allowedNotifications = UIRemoteNotificationTypeAlert |
+                                                    UIRemoteNotificationTypeSound |
+                                                    UIRemoteNotificationTypeBadge;
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:allowedNotifications];
+
+    if ([launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey]) {
+        // We were launched from a push notification
+        NSDictionary *info_dict = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+        [self handlePushNotification:info_dict];
+    }
     [self.window makeKeyAndVisible];
 
     return YES;
@@ -104,6 +128,8 @@
     __persistentStoreCoordinator = 0;
 }
 
+#pragma mark - Narrowing
+
 - (void)narrowWithOperators:(NarrowOperators *)narrowOperators;
 {
     NarrowViewController *narrowController;
@@ -115,7 +141,17 @@
     }
     [self.navController setViewControllers:@[narrowController] animated:YES];
     [self.sidePanelController _placeButtonForLeftPanel];
-    [self.sidePanelController toggleLeftPanel:self];
+
+    if (self.sidePanelController.state == JASidePanelLeftVisible) {
+        [self.sidePanelController toggleLeftPanel:self];
+    }
+}
+
+- (void)narrowWithOperators:(NarrowOperators *)narrow thenDisplayId:(long)messageId
+{
+    [self narrowWithOperators:narrow];
+    NarrowViewController *narrowViewController = (NarrowViewController *)self.navController.topViewController;
+    [narrowViewController scrollToMessageID:messageId];
 }
 
 - (BOOL)isNarrowed
@@ -167,17 +203,13 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
-    /*
-     Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-     */
+    self.wakingFromBackground = YES;
     [[ZulipAPIController sharedInstance] setBackgrounded:NO];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    /*
-     Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-     */
+    self.wakingFromBackground = NO;
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -188,6 +220,67 @@
      See also applicationDidEnterBackground:.
      */
     [[ZulipAPIController sharedInstance] applicationWillTerminate];
+}
+
+#pragma mark - APNS
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+    // mark b64 as __block __weak so it sticks around after this method is done executing (since the block passed to NSNotification
+    // references is).
+    __block __weak NSString *b64 = [deviceToken base64Encoding];
+    [[ZulipAPIClient sharedClient] postPath:@"users/me/apns_device_token" parameters:@{@"token": b64} success:nil failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        CLS_LOG(@"Failed to send APNS device token to Zulip servers %@ %@", [error localizedDescription], [error userInfo]);
+    }];
+
+    // Remove our token from the server when logging out
+    // Only do this removal once, and then unregister the notification that we set up
+    __block __weak id observer =
+        [[NSNotificationCenter defaultCenter]
+            addObserverForName:kLogoutNotification
+                        object:nil
+                         queue:[NSOperationQueue mainQueue]
+                    usingBlock:^(NSNotification *note) {
+                        [[UIApplication sharedApplication] unregisterForRemoteNotifications];
+
+                        if (!b64) {
+                            return;
+                        }
+
+                        [[ZulipAPIClient sharedClient] deletePath:@"/users/me/apns_device_token" parameters:@{@"token": b64} success:nil failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                  CLS_LOG(@"Failed to delete APNS token from Zulip servers %@ %@", [error localizedDescription], [error userInfo]);
+                              }];
+
+                        [[NSNotificationCenter defaultCenter] removeObserver:observer name:kLogoutNotification object:nil];
+          }];
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+{
+    CLS_LOG(@"Failed to register for remote notifications: %@ %@", [error localizedDescription], [error userInfo]);
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+    [self handlePushNotification:userInfo];
+}
+
+- (void)handlePushNotification:(NSDictionary *)zulipInfoDict
+{
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+
+    if (self.wakingFromBackground) {
+        NSDictionary *data = [zulipInfoDict objectForKey:@"zulip"];
+        if (data) {
+            NSArray *messageIDs = [data objectForKey:@"message_ids"];
+            if (messageIDs) {
+                messageIDs = [messageIDs map:^id(id obj) {
+                    return [NSNumber numberWithLongLong:[(NSString *)obj longLongValue]];
+                }];
+                self.notifiedWithMessages = messageIDs;
+            }
+        }
+    }
 }
 
 #pragma mark - Core Data

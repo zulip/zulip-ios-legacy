@@ -33,6 +33,12 @@ extern NSString * const kLongPollMessageData;
 extern NSString * const kLogoutNotification;
 extern NSString * const kLoginNotification;
 
+// Long poll message notifications
+// Once we've loaded from the server messages that
+// we were push-notified for, this is fired
+extern NSString * const kPushNotificationMessagePayloadNotification;
+extern NSString * const kPushNotificationMessagePayloadData;
+
 // Callback with resulting RawMessage* from desired query
 typedef void(^MessagesDelivered)(NSArray *messages);
 

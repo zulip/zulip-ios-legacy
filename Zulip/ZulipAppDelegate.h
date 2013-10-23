@@ -16,6 +16,11 @@
 @property (nonatomic, retain) HomeViewController *homeViewController;
 @property (nonatomic, retain) ErrorViewController *errorViewController;
 
+// Push notifications
+@property (nonatomic, assign) BOOL wakingFromBackground;
+// List of NSNumber * Message IDs that were included in the push notification update
+@property (nonatomic, retain) NSArray *notifiedWithMessages;
+
 // Core Data bits
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
@@ -28,6 +33,7 @@
 
 // Narrowing
 - (void) narrowWithOperators:(NarrowOperators *)narrow;
+- (void) narrowWithOperators:(NarrowOperators *)narrow thenDisplayId:(long)messageId;
 - (BOOL) isNarrowed;
 - (NarrowOperators *)currentNarrow;
 - (void) clearNarrowWithAnimation:(BOOL)animation;
