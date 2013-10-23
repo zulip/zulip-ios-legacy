@@ -862,102 +862,97 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
         return;
     }
 
-    // Do the core data inserting asynchronously
-    // TODO figure out why body of dispatch_async is not being called
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//        code
-        // Insert/Update messages into Core Data.
-        // First we fetch existing messages to update
-        // Then we update/create any missing ones
+    // Insert/Update messages into Core Data.
+    // First we fetch existing messages to update
+    // Then we update/create any missing ones
 
-        // Extract message IDs to insert
-        // NOTE: messages MUST be already sorted in ascending order!
-        NSArray *ids = [messages valueForKey:@"id"];
+    // Extract message IDs to insert
+    // NOTE: messages MUST be already sorted in ascending order!
+    NSArray *ids = [messages valueForKey:@"id"];
 
-        // Extract messages that already exist, sorted ascending
-        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ZMessage"];
-        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(messageID IN %@)", ids];
-        fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"messageID" ascending:YES]];
-        NSError *error = nil;
-        NSArray *existing = [[self.appDelegate managedObjectContext] executeFetchRequest:fetchRequest error:&error];
-        if (error) {
-            CLS_LOG(@"Error fetching existing messages in insertMessages: %@ %@", [error localizedDescription], [error userInfo]);
-            return;
+    // Extract messages that already exist, sorted ascending
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ZMessage"];
+    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(messageID IN %@)", ids];
+    fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"messageID" ascending:YES]];
+    NSError *error = nil;
+    NSArray *existing = [[self.appDelegate managedObjectContext] executeFetchRequest:fetchRequest error:&error];
+    if (error) {
+        CLS_LOG(@"Error fetching existing messages in insertMessages: %@ %@", [error localizedDescription], [error userInfo]);
+        return;
+    }
+
+    // Now we have a list of (sorted) new IDs and existing ZMessages. Walk through them in order and insert/update
+    NSUInteger newMsgIdx = 0, existingMsgIdx = 0;
+
+    NSMutableArray *zmessages = [[NSMutableArray alloc] init];
+    while (newMsgIdx < [ids count]) {
+        int msgId = [[ids objectAtIndex:newMsgIdx] intValue];
+        RawMessage *rawMsg = [rawMessagesDict objectForKey:@(msgId)];
+
+        ZMessage *msg = nil;
+        if (existingMsgIdx < [existing count])
+            msg = [existing objectAtIndex:existingMsgIdx];
+
+        // If we got a matching ZMessage for this ID, we want to update
+        if (msg && msgId == [msg.messageID intValue]) {
+            newMsgIdx++;
+            existingMsgIdx++;
+        } else {
+            // Otherwise this message is NOT in Core Data, so insert and move to the next new message
+            msg = [NSEntityDescription insertNewObjectForEntityForName:@"ZMessage" inManagedObjectContext:[self.appDelegate managedObjectContext]];
+            msg.messageID = @(msgId);
+
+            newMsgIdx++;
         }
 
-        // Now we have a list of (sorted) new IDs and existing ZMessages. Walk through them in order and insert/update
-        NSUInteger newMsgIdx = 0, existingMsgIdx = 0;
+        msg.content = rawMsg.content;
+        msg.avatar_url = rawMsg.avatar_url;
+        msg.subject = rawMsg.subject;
+        msg.type = rawMsg.type;
+        msg.timestamp = rawMsg.timestamp;
+        msg.pm_recipients = rawMsg.pm_recipients;
+        msg.sender = rawMsg.sender;
+        msg.stream_recipient = rawMsg.stream_recipient;
+        msg.subscription = rawMsg.subscription;
+        [msg setMessageFlags:rawMsg.messageFlags];
 
-        NSMutableArray *zmessages = [[NSMutableArray alloc] init];
-        while (newMsgIdx < [ids count]) {
-            int msgId = [[ids objectAtIndex:newMsgIdx] intValue];
-            RawMessage *rawMsg = [rawMessagesDict objectForKey:@(msgId)];
+        msg.linkedRawMessage = rawMsg;
+        rawMsg.linkedZMessage = msg;
 
-            ZMessage *msg = nil;
-            if (existingMsgIdx < [existing count])
-                msg = [existing objectAtIndex:existingMsgIdx];
+        [zmessages addObject:msg];
+    }
 
-            // If we got a matching ZMessage for this ID, we want to update
-            if (msg && msgId == [msg.messageID intValue]) {
-                newMsgIdx++;
-                existingMsgIdx++;
-            } else {
-                // Otherwise this message is NOT in Core Data, so insert and move to the next new message
-                msg = [NSEntityDescription insertNewObjectForEntityForName:@"ZMessage" inManagedObjectContext:[self.appDelegate managedObjectContext]];
-                msg.messageID = @(msgId);
+    error = nil;
+    [[self.appDelegate managedObjectContext] save:&error];
+    if (error) {
+        CLS_LOG(@"Error saving new messages: %@ %@", [error localizedDescription], [error userInfo]);
+    }
 
-                newMsgIdx++;
+    if ([rawMessages count] > 0) {
+        // Update our message range data structure
+        RawMessage *first = [rawMessages objectAtIndex:0];
+        RawMessage *last = [rawMessages lastObject];
+        long firstId = [first.messageID longValue];
+        long lastId = [last.messageID longValue];
+
+        if ([rawMessages count] == 1 && self.maxLocalMessageId > -1) {
+            // HACK for 1 message that we get from long polling
+            // When we long poll, we know that there's no missing message
+            // between the new messages and our latest loaded message
+            // so we construct a 2-item range with the latest item
+            if (firstId == self.maxLocalMessageId) {
+                // It's possible that on resuming, we get new messages both from
+                // the long-poll and getOldMessages. If so, just ignore the later call
+                return;
             }
-
-            msg.content = rawMsg.content;
-            msg.avatar_url = rawMsg.avatar_url;
-            msg.subject = rawMsg.subject;
-            msg.type = rawMsg.type;
-            msg.timestamp = rawMsg.timestamp;
-            msg.pm_recipients = rawMsg.pm_recipients;
-            msg.sender = rawMsg.sender;
-            msg.stream_recipient = rawMsg.stream_recipient;
-            msg.subscription = rawMsg.subscription;
-            [msg setMessageFlags:rawMsg.messageFlags];
-
-            msg.linkedRawMessage = rawMsg;
-            rawMsg.linkedZMessage = msg;
-
-            [zmessages addObject:msg];
+            firstId = self.maxLocalMessageId;
         }
 
-        error = nil;
-        [[self.appDelegate managedObjectContext] save:&error];
-        if (error) {
-            CLS_LOG(@"Error saving new messages: %@ %@", [error localizedDescription], [error userInfo]);
-        }
+        RangePair *rangePair = [[RangePair alloc] initWithStart:firstId andEnd:lastId];
+        [RangePair extendRanges:self.rangePairs withRange:rangePair];
 
-        if ([rawMessages count] > 0) {
-            // Update our message range data structure
-            RawMessage *first = [rawMessages objectAtIndex:0];
-            RawMessage *last = [rawMessages lastObject];
-            long firstId = [first.messageID longValue];
-            long lastId = [last.messageID longValue];
-
-            if ([rawMessages count] == 1 && self.maxLocalMessageId > -1) {
-                // HACK for 1 message that we get from long polling
-                // When we long poll, we know that there's no missing message
-                // between the new messages and our latest loaded message
-                // so we construct a 2-item range with the latest item
-                if (firstId == self.maxLocalMessageId) {
-                    // It's possible that on resuming, we get new messages both from
-                    // the long-poll and getOldMessages. If so, just ignore the later call
-                    return;
-                }
-                firstId = self.maxLocalMessageId;
-            }
-
-            RangePair *rangePair = [[RangePair alloc] initWithStart:firstId andEnd:lastId];
-            [RangePair extendRanges:self.rangePairs withRange:rangePair];
-
-            self.maxLocalMessageId = MAX(self.maxLocalMessageId, [last.messageID longValue]);
-        }
-//    });
+        self.maxLocalMessageId = MAX(self.maxLocalMessageId, [last.messageID longValue]);
+    }
 }
 
 
