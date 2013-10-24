@@ -59,7 +59,7 @@ NSString * const ZUnreadCountChangeNotificationData = @"UnreadMessageCountNotifi
     }
 
     // In home view
-    if (!message.subscription || message.subscription.in_home_view) {
+    if (!message.subscription || [message.subscription.in_home_view boolValue]) {
         [self.home_unread addObject:message.messageID];
     }
 
