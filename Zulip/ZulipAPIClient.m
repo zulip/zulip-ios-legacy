@@ -64,6 +64,8 @@ static dispatch_once_t *onceTokenPointer;
         return nil;
     }
 
+    self.client = @"ios";
+
     [self registerHTTPOperationClass:[AFJSONRequestOperation class]];
 
     // Accept HTTP Header; see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
@@ -71,6 +73,8 @@ static dispatch_once_t *onceTokenPointer;
 
     return self;
 }
+
+#pragma mark - AFHTTPClient reimplementations
 
 - (AFHTTPRequestOperation *)HTTPRequestOperationWithRequest:(NSURLRequest *)urlRequest success:(void ( ^ ) ( AFHTTPRequestOperation *operation , id responseObject ))success failure:(void ( ^ ) ( AFHTTPRequestOperation *operation , NSError *error ))failure {
     // Reimplement to print out error messages from JSON content
@@ -91,6 +95,39 @@ static dispatch_once_t *onceTokenPointer;
 
     if (debug)
         NSLog(@"Sending API request for: %@", [[urlRequest URL] path]);
+
     return [super HTTPRequestOperationWithRequest:urlRequest success:success failure:my_failure];
 }
+
+// Send client string with all requests
+
+- (NSDictionary *)addClientToParams:(NSDictionary *)parameters {
+    if (!parameters) {
+        parameters = @{};
+    }
+    NSMutableDictionary *mutatedParams = [NSMutableDictionary dictionaryWithDictionary:parameters];
+    [mutatedParams setObject:self.client forKey:@"client"];
+    return mutatedParams;
+}
+
+- (void)getPath:(NSString *)path parameters:(NSDictionary *)parameters success:(void ( ^ ) ( AFHTTPRequestOperation *operation , id responseObject ))success failure:(void ( ^ ) ( AFHTTPRequestOperation *operation , NSError *error ))failure
+{
+    return [super getPath:path parameters:[self addClientToParams:parameters] success:success failure:failure];
+}
+
+- (void)patchPath:(NSString *)path parameters:(NSDictionary *)parameters success:(void ( ^ ) ( AFHTTPRequestOperation *operation , id responseObject ))success failure:(void ( ^ ) ( AFHTTPRequestOperation *operation , NSError *error ))failure
+{
+    return [super patchPath:path parameters:[self addClientToParams:parameters] success:success failure:failure];
+}
+
+- (void)postPath:(NSString *)path parameters:(NSDictionary *)parameters success:(void ( ^ ) ( AFHTTPRequestOperation *operation , id responseObject ))success failure:(void ( ^ ) ( AFHTTPRequestOperation *operation , NSError *error ))failure
+{
+    return [super postPath:path parameters:[self addClientToParams:parameters] success:success failure:failure];
+}
+
+- (void)putPath:(NSString *)path parameters:(NSDictionary *)parameters success:(void ( ^ ) ( AFHTTPRequestOperation *operation , id responseObject ))success failure:(void ( ^ ) ( AFHTTPRequestOperation *operation , NSError *error ))failure
+{
+    return [super putPath:path parameters:[self addClientToParams:parameters] success:success failure:failure];
+}
+
 @end

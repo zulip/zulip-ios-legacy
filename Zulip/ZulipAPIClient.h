@@ -15,5 +15,6 @@
 - (void) logout;
 
 @property NSURL *apiURL;
+@property (nonatomic, retain) NSString *client;
 
 @end
