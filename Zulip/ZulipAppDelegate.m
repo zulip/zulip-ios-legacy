@@ -89,6 +89,10 @@
         NSDictionary *info_dict = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
         [self handlePushNotification:info_dict];
     }
+
+    // Set the app badge to 0 when launching
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+
     [self.window makeKeyAndVisible];
 
     return YES;
@@ -204,6 +208,10 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     self.wakingFromBackground = YES;
+
+    // Set the app badge to 0 when coming to front
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+
     [[ZulipAPIController sharedInstance] setBackgrounded:NO];
 }
 
@@ -267,8 +275,6 @@
 
 - (void)handlePushNotification:(NSDictionary *)zulipInfoDict
 {
-    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
-
     if (self.wakingFromBackground) {
         NSDictionary *data = [zulipInfoDict objectForKey:@"zulip"];
         if (data) {
