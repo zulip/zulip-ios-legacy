@@ -12,7 +12,7 @@
 @property(nonatomic,retain) ZulipAppDelegate *delegate;
 @property(nonatomic,retain) NSString *type;
 @property (nonatomic, retain) NSMutableArray *entryFields;
-@property (nonatomic, copy) NSDictionary *FullNameLookupDict;
+@property (nonatomic, copy) NSDictionary *fullNameLookupDict;
 @property (nonatomic, retain) NSMutableArray *completionMatches;
 
 - (id)initWithReplyTo:(RawMessage *)message;

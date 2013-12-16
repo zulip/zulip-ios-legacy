@@ -117,7 +117,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
         self.apiKey = @"";
         self.email = @"";
         self.fullName = @"";
-        self.FullNameLookupDict = [[NSMutableDictionary alloc] init];
+        self.fullNameLookupDict = [[NSMutableDictionary alloc] init];
     }
     self.backgrounded = NO;
     self.pointer = -1;
@@ -1003,7 +1003,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
 {
     if ([personDict objectForKey:@"full_name"]  && [personDict objectForKey:@"email"])
     {
-        [self.FullNameLookupDict setObject:[personDict objectForKey:@"full_name"] forKey:[personDict objectForKey:@"email"]];
+        [self.fullNameLookupDict setObject:[personDict objectForKey:@"full_name"] forKey:[personDict objectForKey:@"email"]];
     }
     //TODO: have a system for non-gravatar avatars when personDict['avatar_url'] isn't set.
     NSString * email = [personDict objectForKey:@"email"];
@@ -1101,7 +1101,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
     if ([results count] > 0) {
         for (ZUser *result in results)
         {
-            [self.FullNameLookupDict setObject:result.full_name forKey:result.email];
+            [self.fullNameLookupDict setObject:result.full_name forKey:result.email];
         }
     }
 }

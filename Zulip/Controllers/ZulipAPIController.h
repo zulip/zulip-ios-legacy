@@ -73,7 +73,7 @@ typedef void(^MessagesDelivered)(NSArray *messages);
 @property(nonatomic, retain) NSString *fullName;
 @property(nonatomic, retain) StreamViewController *homeViewController;
 @property(nonatomic, retain, readonly) UnreadManager *unreadManager;
-@property(nonatomic, retain) NSMutableDictionary *FullNameLookupDict;
+@property(nonatomic, retain) NSMutableDictionary *fullNameLookupDict;
 
 
 @end

@@ -35,7 +35,7 @@
     if (self) {
         // Custom initialization
         self.completionMatches = [[NSMutableArray alloc] init];
-        self.FullNameLookupDict = [[ZulipAPIController sharedInstance] FullNameLookupDict];
+        self.fullNameLookupDict = [[ZulipAPIController sharedInstance] fullNameLookupDict];
     }
     return self;
 }
@@ -159,7 +159,7 @@
     [nonPrefixMatches removeAllObjects];
     [self.completionMatches removeAllObjects];
     // match by email
-    for(NSString *candidate in [self.FullNameLookupDict allKeys])
+    for(NSString *candidate in [self.fullNameLookupDict allKeys])
     {
         NSUInteger index = [candidate rangeOfString:searchString options:NSCaseInsensitiveSearch].location;
         if (index == 0) {
@@ -174,9 +174,9 @@
         }
     }
     // match by full name
-    for(NSString *candidate in [self.FullNameLookupDict allKeys])
+    for(NSString *candidate in [self.fullNameLookupDict allKeys])
     {
-        NSUInteger index = [self.FullNameLookupDict[candidate] rangeOfString:searchString options:NSCaseInsensitiveSearch].location;
+        NSUInteger index = [self.fullNameLookupDict[candidate] rangeOfString:searchString options:NSCaseInsensitiveSearch].location;
         if (index == 0) {
             //cannot hide the completions table, because you cannot PM by full name.
             [prefixNameMatches addObject:candidate];
