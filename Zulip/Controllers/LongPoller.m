@@ -152,7 +152,7 @@
 
         }
         self.pollFailures++;
-        [self performSelector:@selector(registerWithOptions:) withObject:self afterDelay:2];
+        [self performSelector:@selector(registerWithOptions:) withObject:opts afterDelay:2];
     }];
 }
 
