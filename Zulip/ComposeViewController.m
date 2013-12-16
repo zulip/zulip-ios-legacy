@@ -24,8 +24,8 @@
     self = [super initWithNibName:@"ComposeViewController" bundle:nil];
     if (self) {
         self.replyTo = message;
+        [self sharedInit];
     }
-
     return self;
 }
 
@@ -33,11 +33,15 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
-        self.completionMatches = [[NSMutableArray alloc] init];
-        self.fullNameLookupDict = [[ZulipAPIController sharedInstance] fullNameLookupDict];
+        [self sharedInit];
     }
     return self;
+}
+
+- (void)sharedInit
+{
+    self.completionMatches = [[NSMutableArray alloc] init];
+    self.fullNameLookupDict = [[ZulipAPIController sharedInstance] fullNameLookupDict];
 }
 
 - (void)viewWillAppear:(BOOL)animated
