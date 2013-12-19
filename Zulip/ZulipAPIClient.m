@@ -44,7 +44,7 @@ static dispatch_once_t *onceTokenPointer;
         _sharedClient = [[ZulipAPIClient alloc] initWithBaseURL:apiURL];
 
         NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-        NSString *userAgent = [NSString stringWithFormat:@"ZulipMobile/%@ (iOS; %@)", version, [[UIDevice currentDevice] systemVersion]];
+        NSString *userAgent = [NSString stringWithFormat:@"ZulipiOS/%@ (%@; %@)", version, [[UIDevice currentDevice] model], [[UIDevice currentDevice] systemVersion]];
 
         [_sharedClient setDefaultHeader:@"User-Agent" value:userAgent];
 
