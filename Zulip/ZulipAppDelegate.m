@@ -339,8 +339,25 @@
     NSError *error = nil;
     [__persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error];
     if (error) {
-        CLS_LOG(@"Error initializing persistent sqlite store! %@, %@", [error localizedDescription], [error userInfo]);
-        abort();
+
+        // TODO HACK
+        // One time hack to remove data storage on migration failure so we still launch
+        error = nil;
+        if ([[NSFileManager defaultManager] fileExistsAtPath:[storeURL path]]) {
+            if (![[NSFileManager defaultManager] removeItemAtPath:[storeURL path] error:&error]) {
+                CLS_LOG(@"Failed deleting sqlite file at %@: %@, %@", [storeURL path], error, [error userInfo]);
+                abort();
+            }
+
+            CLS_LOG(@"Failed to migrate, removed SQLite file and trying again");
+        }
+
+        // Try once more to open our persistent store coordinator
+        [__persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error];
+        if (error) {
+            CLS_LOG(@"Error initializing persistent sqlite store! %@, %@", [error localizedDescription], [error userInfo]);
+            abort();
+        }
     }
 
     CLS_LOG(@"SQLite URL: %@", storeURL);
