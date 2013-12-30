@@ -4,6 +4,7 @@
 #import "ZulipAPIClient.h"
 #import "ZulipAPIController.h"
 #import "LeftSidebarViewController.h"
+#import "RightSidebarViewController.h"
 #import "NarrowViewController.h"
 #import "AboutViewController.h"
 #import "PresenceManager.h"
@@ -71,6 +72,8 @@
                                                   usingBlock:^(NSNotification *note) {
                                                       [self sendCachedAPNSToken];
                                                   }];
+    RightSidebarViewController *rightSidebar = [[RightSidebarViewController alloc] init];
+    self.sidePanelController.rightPanel = rightSidebar;
 
     // Connect the API controller to the home view, and connect to the Zulip API
     [[ZulipAPIController sharedInstance] setHomeViewController:self.homeViewController];

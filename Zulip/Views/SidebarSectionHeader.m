@@ -6,18 +6,23 @@
 //
 //
 
-#import "SidebarStreamsHeader.h"
+#import "SidebarSectionHeader.h"
 
 #import <QuartzCore/QuartzCore.h>
 
-@implementation SidebarStreamsHeader
+@implementation SidebarSectionHeader
+
+- (instancetype)initWithTitle:(NSString *)title {
+    if (self = [self init]) {
+        self.sectionTitle = title;
+    }
+
+    return self;
+}
 
 - (id)init
 {
-    self = [super initWithNibName:@"SidebarStreamsHeader" bundle:[NSBundle mainBundle]];
-    if (self) {
-        // Initialization code
-    }
+    self = [super initWithNibName:@"SidebarSectionHeader" bundle:[NSBundle mainBundle]];
     return self;
 }
 
@@ -38,6 +43,12 @@
         self.view.backgroundColor = [UIColor clearColor];
     }
 
+    self.label.text = self.sectionTitle;
+}
+
+- (void)setSectionTitle:(NSString *)sectionTitle {
+    _sectionTitle = sectionTitle;
+    self.label.text = _sectionTitle;
 }
 
 @end

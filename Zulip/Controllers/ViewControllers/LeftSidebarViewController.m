@@ -13,7 +13,7 @@
 
 // Various cells
 #import "SidebarStreamCell.h"
-#import "SidebarStreamsHeader.h"
+#import "SidebarSectionHeader.h"
 
 #import "UIViewController+JASidePanel.h"
 #import "UIImageView+AFNetworking.h"
@@ -25,7 +25,7 @@
 @interface LeftSidebarViewController () <NSFetchedResultsControllerDelegate>
 
 @property (nonatomic, retain) NSFetchedResultsController *streamController;
-@property (nonatomic, retain) SidebarStreamsHeader *sidebarStreamsHeader;
+@property (nonatomic, retain) SidebarSectionHeader *sidebarStreamsHeader;
 
 @property (nonatomic, retain) NSString *avatar_url;
 
@@ -73,7 +73,7 @@
 {
     self.tableView.backgroundColor = [UIColor colorWithHexString:@"#F4F5F4" defaultColor:[UIColor whiteColor]];
 
-    self.sidebarStreamsHeader = [[SidebarStreamsHeader alloc] init];
+    self.sidebarStreamsHeader = [[SidebarSectionHeader alloc] initWithTitle:@"Streams"];
 
     // On iOS 7 with translucent status bars, we move the top down so it's not obscured
     if ([[[UIDevice currentDevice] systemVersion] compare:@"7.0" options:NSNumericSearch] != NSOrderedAscending) {

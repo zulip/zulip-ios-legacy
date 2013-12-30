@@ -40,6 +40,9 @@
 		A62B8B5B187A0ACE00D1691B /* UIView+Layout.m in Sources */ = {isa = PBXBuildFile; fileRef = A62B8B5A187A0ACE00D1691B /* UIView+Layout.m */; };
 		A638DB02187796E0002B0333 /* AutocompleteResults.m in Sources */ = {isa = PBXBuildFile; fileRef = A638DB01187796E0002B0333 /* AutocompleteResults.m */; };
 		A67BFCA1187E74A10059FCC0 /* StreamComposeView.m in Sources */ = {isa = PBXBuildFile; fileRef = A67BFCA0187E74A10059FCC0 /* StreamComposeView.m */; };
+		A65779211870F1F4006E648D /* SidebarUserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A65779201870F1F4006E648D /* SidebarUserCell.m */; };
+		A65779231870F225006E648D /* SidebarUserCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A65779221870F225006E648D /* SidebarUserCell.xib */; };
+		A67031AE186E759D001139D3 /* RightSidebarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A67031AD186E759D001139D3 /* RightSidebarViewController.m */; };
 		B30F55A217B2D432006DC735 /* LeftSidebarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B30F55A017B2D432006DC735 /* LeftSidebarViewController.m */; };
 		B30F55A317B2D432006DC735 /* LeftSidebarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B30F55A117B2D432006DC735 /* LeftSidebarViewController.xib */; };
 		B3107A0A17C55A33000F248E /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = B3107A0917C55A33000F248E /* MBProgressHUD.m */; };
@@ -110,14 +113,14 @@
 		B3F5629317A81C37004B185A /* SidebarStreamCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F5629217A81C37004B185A /* SidebarStreamCell.m */; };
 		B3F5629517A81C49004B185A /* SidebarStreamCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3F5629417A81C49004B185A /* SidebarStreamCell.xib */; };
 		B3F5629817A84FD5004B185A /* NarrowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F5629717A84FD5004B185A /* NarrowViewController.m */; };
-		B3F5629A17A8674B004B185A /* SidebarStreamsHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3F5629917A8674B004B185A /* SidebarStreamsHeader.xib */; };
+		B3F5629A17A8674B004B185A /* SidebarSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3F5629917A8674B004B185A /* SidebarSectionHeader.xib */; };
 		B3F5629D17A9A4EE004B185A /* RawMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F5629C17A9A4EE004B185A /* RawMessage.m */; };
 		B3F562A017AAAE5A004B185A /* NarrowOperators.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F5629F17AAAE59004B185A /* NarrowOperators.m */; };
 		B3F562AD17ABEA8D004B185A /* home.png in Resources */ = {isa = PBXBuildFile; fileRef = B3F562A917ABEA8D004B185A /* home.png */; };
 		B3F562AE17ABEA8D004B185A /* home@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B3F562AA17ABEA8D004B185A /* home@2x.png */; };
 		B3F562AF17ABEA8D004B185A /* user.png in Resources */ = {isa = PBXBuildFile; fileRef = B3F562AB17ABEA8D004B185A /* user.png */; };
 		B3F562B017ABEA8D004B185A /* user@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B3F562AC17ABEA8D004B185A /* user@2x.png */; };
-		B3F562B317ABEB85004B185A /* SidebarStreamsHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F562B217ABEB85004B185A /* SidebarStreamsHeader.m */; };
+		B3F562B317ABEB85004B185A /* SidebarSectionHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F562B217ABEB85004B185A /* SidebarSectionHeader.m */; };
 		B3F562B617ABFD5C004B185A /* my_avatar_placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = B3F562B417ABFD5C004B185A /* my_avatar_placeholder.png */; };
 		B3F562B717ABFD5C004B185A /* my_avatar_placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B3F562B517ABFD5C004B185A /* my_avatar_placeholder@2x.png */; };
 		B3F562BE17AC30BC004B185A /* ZMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F562BD17AC30BC004B185A /* ZMessage.m */; };
@@ -247,6 +250,11 @@
 		A638DB01187796E0002B0333 /* AutocompleteResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AutocompleteResults.m; sourceTree = "<group>"; };
 		A67BFC9F187E74A10059FCC0 /* StreamComposeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamComposeView.h; sourceTree = "<group>"; };
 		A67BFCA0187E74A10059FCC0 /* StreamComposeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreamComposeView.m; sourceTree = "<group>"; };
+		A657791F1870F1F4006E648D /* SidebarUserCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SidebarUserCell.h; sourceTree = "<group>"; };
+		A65779201870F1F4006E648D /* SidebarUserCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SidebarUserCell.m; sourceTree = "<group>"; };
+		A65779221870F225006E648D /* SidebarUserCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SidebarUserCell.xib; path = Views/SidebarUserCell.xib; sourceTree = "<group>"; };
+		A67031AC186E759D001139D3 /* RightSidebarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RightSidebarViewController.h; path = Controllers/ViewControllers/RightSidebarViewController.h; sourceTree = "<group>"; };
+		A67031AD186E759D001139D3 /* RightSidebarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RightSidebarViewController.m; path = Controllers/ViewControllers/RightSidebarViewController.m; sourceTree = "<group>"; };
 		B30F559F17B2D432006DC735 /* LeftSidebarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LeftSidebarViewController.h; path = Controllers/ViewControllers/LeftSidebarViewController.h; sourceTree = "<group>"; };
 		B30F55A017B2D432006DC735 /* LeftSidebarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LeftSidebarViewController.m; path = Controllers/ViewControllers/LeftSidebarViewController.m; sourceTree = "<group>"; };
 		B30F55A117B2D432006DC735 /* LeftSidebarViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LeftSidebarViewController.xib; path = Controllers/ViewControllers/LeftSidebarViewController.xib; sourceTree = "<group>"; };
@@ -348,7 +356,7 @@
 		B3F5629417A81C49004B185A /* SidebarStreamCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SidebarStreamCell.xib; path = Views/SidebarStreamCell.xib; sourceTree = "<group>"; };
 		B3F5629617A84FD5004B185A /* NarrowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NarrowViewController.h; path = Controllers/ViewControllers/NarrowViewController.h; sourceTree = "<group>"; };
 		B3F5629717A84FD5004B185A /* NarrowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NarrowViewController.m; path = Controllers/ViewControllers/NarrowViewController.m; sourceTree = "<group>"; };
-		B3F5629917A8674B004B185A /* SidebarStreamsHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SidebarStreamsHeader.xib; path = Views/SidebarStreamsHeader.xib; sourceTree = "<group>"; };
+		B3F5629917A8674B004B185A /* SidebarSectionHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SidebarSectionHeader.xib; path = Views/SidebarSectionHeader.xib; sourceTree = "<group>"; };
 		B3F5629B17A9A4EE004B185A /* RawMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RawMessage.h; path = Models/RawMessage.h; sourceTree = "<group>"; };
 		B3F5629C17A9A4EE004B185A /* RawMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RawMessage.m; path = Models/RawMessage.m; sourceTree = "<group>"; };
 		B3F5629E17AAAE59004B185A /* NarrowOperators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NarrowOperators.h; sourceTree = "<group>"; };
@@ -357,8 +365,8 @@
 		B3F562AA17ABEA8D004B185A /* home@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home@2x.png"; path = "Resources/home@2x.png"; sourceTree = "<group>"; };
 		B3F562AB17ABEA8D004B185A /* user.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = user.png; path = Resources/user.png; sourceTree = "<group>"; };
 		B3F562AC17ABEA8D004B185A /* user@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "user@2x.png"; path = "Resources/user@2x.png"; sourceTree = "<group>"; };
-		B3F562B117ABEB85004B185A /* SidebarStreamsHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SidebarStreamsHeader.h; path = Views/SidebarStreamsHeader.h; sourceTree = "<group>"; };
-		B3F562B217ABEB85004B185A /* SidebarStreamsHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SidebarStreamsHeader.m; path = Views/SidebarStreamsHeader.m; sourceTree = "<group>"; };
+		B3F562B117ABEB85004B185A /* SidebarSectionHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SidebarSectionHeader.h; path = Views/SidebarSectionHeader.h; sourceTree = "<group>"; };
+		B3F562B217ABEB85004B185A /* SidebarSectionHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SidebarSectionHeader.m; path = Views/SidebarSectionHeader.m; sourceTree = "<group>"; };
 		B3F562B417ABFD5C004B185A /* my_avatar_placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = my_avatar_placeholder.png; path = Resources/my_avatar_placeholder.png; sourceTree = "<group>"; };
 		B3F562B517ABFD5C004B185A /* my_avatar_placeholder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "my_avatar_placeholder@2x.png"; path = "Resources/my_avatar_placeholder@2x.png"; sourceTree = "<group>"; };
 		B3F562BC17AC30BC004B185A /* ZMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZMessage.h; path = Models/ZMessage.h; sourceTree = "<group>"; };
@@ -597,15 +605,18 @@
 				A67BFCA0187E74A10059FCC0 /* StreamComposeView.m */,
 				E577A74C16226AC4002D9651 /* MessageCell.m */,
 				E577A74E16226AFF002D9651 /* MessageCellView.xib */,
+				A65779221870F225006E648D /* SidebarUserCell.xib */,
 				B3F5629117A81C37004B185A /* SidebarStreamCell.h */,
 				B3F5629217A81C37004B185A /* SidebarStreamCell.m */,
 				B3F5629417A81C49004B185A /* SidebarStreamCell.xib */,
-				B3F5629917A8674B004B185A /* SidebarStreamsHeader.xib */,
-				B3F562B117ABEB85004B185A /* SidebarStreamsHeader.h */,
-				B3F562B217ABEB85004B185A /* SidebarStreamsHeader.m */,
+				B3F5629917A8674B004B185A /* SidebarSectionHeader.xib */,
+				B3F562B117ABEB85004B185A /* SidebarSectionHeader.h */,
+				B3F562B217ABEB85004B185A /* SidebarSectionHeader.m */,
 				78C6F29118159AEA00AFDF6C /* UserCellView.xib */,
 				78C6F29B18159CEC00AFDF6C /* UserCell.h */,
 				78C6F29C18159CEC00AFDF6C /* UserCell.m */,
+				A657791F1870F1F4006E648D /* SidebarUserCell.h */,
+				A65779201870F1F4006E648D /* SidebarUserCell.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -716,6 +727,8 @@
 				B30F55A117B2D432006DC735 /* LeftSidebarViewController.xib */,
 				B3174BDE17F47F92004C31E4 /* AboutViewController.h */,
 				B3174BDF17F47F92004C31E4 /* AboutViewController.m */,
+				A67031AC186E759D001139D3 /* RightSidebarViewController.h */,
+				A67031AD186E759D001139D3 /* RightSidebarViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -986,6 +999,7 @@
 				78BE8D3917C52D0100330433 /* SourceSansPro-Bold-webfont.ttf in Resources */,
 				78BE8D3A17C52D0100330433 /* SourceSansPro-BoldIt-webfont.ttf in Resources */,
 				78BE8D3B17C52D0100330433 /* SourceSansPro-ExtraLight-webfont.ttf in Resources */,
+				A65779231870F225006E648D /* SidebarUserCell.xib in Resources */,
 				78BE8D3C17C52D0100330433 /* SourceSansPro-ExtraLightIt-webfont.ttf in Resources */,
 				78BE8D3D17C52D0100330433 /* SourceSansPro-It-webfont.ttf in Resources */,
 				78BE8D3E17C52D0100330433 /* SourceSansPro-Light-webfont.ttf in Resources */,
@@ -1038,7 +1052,7 @@
 				B30F55A317B2D432006DC735 /* LeftSidebarViewController.xib in Resources */,
 				B376985117B56E8300D29D93 /* user-toolbar@2x.png in Resources */,
 				B3F5629517A81C49004B185A /* SidebarStreamCell.xib in Resources */,
-				B3F5629A17A8674B004B185A /* SidebarStreamsHeader.xib in Resources */,
+				B3F5629A17A8674B004B185A /* SidebarSectionHeader.xib in Resources */,
 				B376986617B56F0900D29D93 /* zulip-80.png in Resources */,
 				B376986D17B56F0900D29D93 /* zulip@2x.png in Resources */,
 				B3F562AD17ABEA8D004B185A /* home.png in Resources */,
@@ -1106,6 +1120,7 @@
 				C31673951620DB6B00CE9FE5 /* ZulipAppDelegate.m in Sources */,
 				A638DB02187796E0002B0333 /* AutocompleteResults.m in Sources */,
 				E577A74D16226AC4002D9651 /* MessageCell.m in Sources */,
+				A65779211870F1F4006E648D /* SidebarUserCell.m in Sources */,
 				B376987417B5857600D29D93 /* UIViewController+JASidePanel.m in Sources */,
 				B3C2E7D31873638F00BB15D7 /* PresenceManager.m in Sources */,
 				E5CDE07C162C88A800BBD773 /* LoginViewController.m in Sources */,
@@ -1127,6 +1142,7 @@
 				B3C2E7EB187389C200BB15D7 /* ZUserPresence.m in Sources */,
 				B3F50D70179DADE800F9DAE4 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				B338402D17C3B97A0083A529 /* RenderedMarkdownMunger.m in Sources */,
+				A67031AE186E759D001139D3 /* RightSidebarViewController.m in Sources */,
 				B3F50D71179DADE800F9DAE4 /* AFPropertyListRequestOperation.m in Sources */,
 				B3F50D72179DADE800F9DAE4 /* AFURLConnectionOperation.m in Sources */,
 				B3107A0A17C55A33000F248E /* MBProgressHUD.m in Sources */,
@@ -1143,7 +1159,7 @@
 				B3F5629817A84FD5004B185A /* NarrowViewController.m in Sources */,
 				B3F5629D17A9A4EE004B185A /* RawMessage.m in Sources */,
 				B3F562A017AAAE5A004B185A /* NarrowOperators.m in Sources */,
-				B3F562B317ABEB85004B185A /* SidebarStreamsHeader.m in Sources */,
+				B3F562B317ABEB85004B185A /* SidebarSectionHeader.m in Sources */,
 				B3F562BE17AC30BC004B185A /* ZMessage.m in Sources */,
 				B3F562C117AC3C65004B185A /* UnreadManager.m in Sources */,
 				B3DDD2F817B02A0800F8D387 /* LongPoller.m in Sources */,

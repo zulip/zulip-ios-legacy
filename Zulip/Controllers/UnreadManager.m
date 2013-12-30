@@ -13,6 +13,7 @@
 @interface UnreadManager ()
 
 @property (nonatomic, retain) NSMutableDictionary *stream_unread;
+@property (nonatomic, retain) NSMutableDictionary *users_unread;
 @property (nonatomic, retain) NSMutableSet *home_unread;
 @property (nonatomic, retain) NSMutableSet *pms_unread;
 
@@ -28,6 +29,7 @@ NSString * const ZUnreadCountChangeNotificationData = @"UnreadMessageCountNotifi
     self = [super init];
     if (self) {
         self.stream_unread = [[NSMutableDictionary alloc] init];
+        self.users_unread = [[NSMutableDictionary alloc] init];
         self.home_unread = [[NSMutableSet alloc] init];
         self.pms_unread = [[NSMutableSet alloc] init];
     }
@@ -55,6 +57,12 @@ NSString * const ZUnreadCountChangeNotificationData = @"UnreadMessageCountNotifi
         }
     } else {
         // PM
+        NSString *sender = message.sender.email;
+        if (!self.users_unread[sender]) {
+            self.users_unread[sender] = [[NSMutableSet alloc] init];
+        }
+
+        [self.users_unread[sender] addObject:message.messageID];
         [self.pms_unread addObject:message.messageID];
     }
 
@@ -75,7 +83,10 @@ NSString * const ZUnreadCountChangeNotificationData = @"UnreadMessageCountNotifi
         [stream_set removeObject:message.messageID];
         [self.stream_unread setObject:stream_set forKey:stream];
     } else {
+        NSString *sender = message.sender.email;
+
         [self.pms_unread removeObject:message.messageID];
+        [self.users_unread[sender] removeObject:message.messageID];
     }
 
     [self.home_unread removeObject:message.messageID];
@@ -104,7 +115,14 @@ NSString * const ZUnreadCountChangeNotificationData = @"UnreadMessageCountNotifi
         [stream_counts setObject:[NSNumber numberWithInt:[unread count]] forKey:streamName];
     }
     [unread_counts setObject:stream_counts forKey:@"streams"];
-    
+
+    NSMutableDictionary *user_counts = [[NSMutableDictionary alloc] init];
+    for (NSString *user in self.users_unread) {
+        NSMutableSet *unread = self.users_unread[user];
+        user_counts[user] = @(unread.count);
+    }
+    unread_counts[@"user"] = user_counts;
+
     _unreadCounts = unread_counts;
 
     NSNotification *unreadChanges = [NSNotification notificationWithName:ZUnreadCountChangeNotification

@@ -1,6 +1,8 @@
 #import <UIKit/UIKit.h>
 #import "ZulipAppDelegate.h"
 
+@class ZUser;
+
 @interface ComposeViewController : UIViewController <UITextFieldDelegate, UITextViewDelegate, UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UITextField *subject;
@@ -17,6 +19,7 @@
 @property (nonatomic, retain) NSArray *completionMatches;
 
 - (id)initWithReplyTo:(RawMessage *)message;
+- (id)initWithRecipient:(ZUser *)recipient;
 
 - (IBAction) send;
 

@@ -23,10 +23,18 @@
 
 - (id)initWithReplyTo:(RawMessage *)message
 {
-    self = [super initWithNibName:@"ComposeViewController" bundle:nil];
+    self = [self initWithNibName:@"ComposeViewController" bundle:nil];
     if (self) {
         self.replyTo = message;
-        [self sharedInit];
+    }
+    return self;
+}
+
+- (id)initWithRecipient:(ZUser *)recipient {
+    self = [self initWithNibName:@"ComposeViewController" bundle:nil];
+    if (self) {
+        self.recipientString = recipient.email;
+        self.type = @"private";
     }
     return self;
 }
@@ -35,16 +43,11 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        [self sharedInit];
+        self.completionMatches = [[NSMutableArray alloc] init];
+        self.fullNameLookupDict = [[ZulipAPIController sharedInstance] fullNameLookupDict];
+        self.streamLookup = [self fetchStreamNames];
     }
     return self;
-}
-
-- (void)sharedInit
-{
-    self.completionMatches = [[NSArray alloc] init];
-    self.fullNameLookupDict = [[ZulipAPIController sharedInstance] fullNameLookupDict];
-    self.streamLookup = [self fetchStreamNames];
 }
 
 
@@ -81,14 +84,19 @@
 
         self.privateRecipient.hidden = NO;
 
-        NSSet *recipients = self.replyTo.pm_recipients;
-        NSMutableArray *recipient_array = [[NSMutableArray alloc] init];
-        for (ZUser *recipient in recipients) {
-            if (![recipient.email isEqualToString:[[ZulipAPIController sharedInstance] email]]) {
-                [recipient_array addObject:recipient.email];
+        if (!self.recipientString) {
+            NSSet *recipients = self.replyTo.pm_recipients;
+            NSMutableArray *recipient_array = [[NSMutableArray alloc] init];
+            for (ZUser *recipient in recipients) {
+                if (![recipient.email isEqualToString:[[ZulipAPIController sharedInstance] email]]) {
+                    [recipient_array addObject:recipient.email];
+                }
             }
+
+            self.recipientString = [recipient_array componentsJoinedByString:@", "];
         }
-        self.privateRecipient.text = [recipient_array componentsJoinedByString:@", "];
+
+        self.privateRecipient.text = self.recipientString;
     }
 
 
