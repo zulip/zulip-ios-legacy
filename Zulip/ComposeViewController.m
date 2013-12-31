@@ -12,6 +12,8 @@
 @interface ComposeViewController ()
 
 @property (nonatomic, retain) RawMessage *replyTo;
+@property (nonatomic, strong) NSString *recipientString;
+@property (nonatomic, weak) UITextField *currentAutocompleteField;
 
 @end
 
@@ -42,6 +44,7 @@
 {
     self.completionMatches = [[NSMutableArray alloc] init];
     self.fullNameLookupDict = [[ZulipAPIController sharedInstance] fullNameLookupDict];
+    self.streamLookup = [[ZulipAPIController sharedInstance] streamLookup];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -144,7 +147,7 @@
     [self.delegate.navController popViewControllerAnimated:YES];
 }
 
-- (void)getCompletionResultsWithQuery:(NSString*)searchString
+- (void)getUserCompletionResultsWithQuery:(NSString*)searchString
 {
     static NSMutableOrderedSet *prefixEmailMatches;
     static NSMutableOrderedSet *prefixNameMatches;
@@ -235,6 +238,108 @@
     }
 }
 
+- (void)getStreamCompletionResultsWithQuery:(NSString *)searchString {
+    static NSMutableOrderedSet *prefixMatches;
+    static NSMutableOrderedSet *nonPrefixMatches;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        prefixMatches = [[NSMutableOrderedSet alloc] init];
+        nonPrefixMatches = [[NSMutableOrderedSet alloc] init];
+    });
+
+    searchString = [searchString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+
+    [prefixMatches removeAllObjects];
+    [nonPrefixMatches removeAllObjects];
+    [self.completionMatches removeAllObjects];
+
+    for(NSString *candidate in self.streamLookup)
+    {
+        NSUInteger index = [candidate rangeOfString:searchString options:NSCaseInsensitiveSearch].location;
+        if (index == 0) {
+            if ([[candidate lowercaseString] isEqualToString:[searchString lowercaseString]]) {
+                // got exact match: hide the completions
+                self.completionsTableView.hidden = YES;
+                return;
+            }
+            [prefixMatches addObject:candidate];
+        } else if (index != NSNotFound) {
+            [nonPrefixMatches addObject:candidate];
+        }
+    }
+
+    [prefixMatches addObjectsFromArray:[nonPrefixMatches array]];
+    self.completionMatches = [[prefixMatches array] mutableCopy];
+    if (self.completionMatches.count > 0)
+    {
+        self.completionsTableView.hidden = NO;
+        [self.completionsTableView reloadData];
+    } else {
+        self.completionsTableView.hidden = YES;
+    }
+}
+
+- (void)getTopicCompletionResultsWithQuery:(NSString *)searchString forStream:(NSString *)streamName {
+
+    searchString = [searchString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    streamName = [streamName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+
+    ZulipAppDelegate *appDelegate = (ZulipAppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ZSubscription"];
+    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@", streamName];
+    fetchRequest.fetchLimit = 1;
+
+    NSError *error = nil;
+    NSArray *results = [appDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    if (error || results.count != 1) {
+        // No stream found
+        return;
+    }
+
+    ZSubscription *subscription = results[0];
+    NSMutableSet *subjects = [[NSMutableSet alloc] init];
+    for (ZMessage *message in subscription.messages) {
+        [subjects addObject:message.subject];
+    }
+
+    static NSMutableOrderedSet *prefixMatches;
+    static NSMutableOrderedSet *nonPrefixMatches;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        prefixMatches = [[NSMutableOrderedSet alloc] init];
+        nonPrefixMatches = [[NSMutableOrderedSet alloc] init];
+    });
+
+    [prefixMatches removeAllObjects];
+    [nonPrefixMatches removeAllObjects];
+    [self.completionMatches removeAllObjects];
+
+    for(NSString *candidate in subjects)
+    {
+        NSUInteger index = [candidate rangeOfString:searchString options:NSCaseInsensitiveSearch].location;
+        if (index == 0) {
+            if ([[candidate lowercaseString] isEqualToString:[searchString lowercaseString]]) {
+                // got exact match: hide the completions
+                self.completionsTableView.hidden = YES;
+                return;
+            }
+            [prefixMatches addObject:candidate];
+        } else if (index != NSNotFound) {
+            [nonPrefixMatches addObject:candidate];
+        }
+    }
+
+    [prefixMatches addObjectsFromArray:[nonPrefixMatches array]];
+    self.completionMatches = [[prefixMatches array] mutableCopy];
+    if (self.completionMatches.count > 0)
+    {
+        self.completionsTableView.hidden = NO;
+        [self.completionsTableView reloadData];
+    } else {
+        self.completionsTableView.hidden = YES;
+    }
+}
+
 + (NSArray*)splitUpRecipientsInString:(NSString*)string
 {
     // as in the web app, we assume email addresses don't have "," or ";" in them
@@ -259,9 +364,9 @@
 {
     const int movementDistance = 140; // tweak as needed
     const float movementDuration = 0.3f; // tweak as needed
-    
+
     int movement = (up ? -movementDistance : movementDistance);
-    
+
     [UIView beginAnimations: @"anim" context: nil];
     [UIView setAnimationBeginsFromCurrentState: YES];
     [UIView setAnimationDuration: movementDuration];
@@ -291,11 +396,19 @@
 // called whenever characters are typed (or deleted)
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
+    self.currentAutocompleteField = textField;
+
     if (textField == self.privateRecipient)
     {
         NSString *searchString = [textField.text stringByReplacingCharactersInRange:range withString:string];
         searchString = [ComposeViewController splitUpRecipientsInString:searchString].lastObject;
-        [self getCompletionResultsWithQuery:searchString];
+        [self getUserCompletionResultsWithQuery:searchString];
+    } else if (textField == self.recipient) {
+        NSString *searchString = [textField.text stringByReplacingCharactersInRange:range withString:string];
+        [self getStreamCompletionResultsWithQuery:searchString];
+    } else if (textField == self.subject) {
+        NSString *searchString = [textField.text stringByReplacingCharactersInRange:range withString:string];
+        [self getTopicCompletionResultsWithQuery:searchString forStream:self.recipient.text];
     }
     return YES;
 }
@@ -331,10 +444,14 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     UserCell *selectedCell = (UserCell *)[tableView cellForRowAtIndexPath:indexPath];
-    self.privateRecipient.text = [NSString stringWithFormat:@"%@, ",
-                                  [ComposeViewController replaceLastItemInStringList:
+    self.currentAutocompleteField.text =                                   [ComposeViewController replaceLastItemInStringList:
                                    self.privateRecipient.text withString:
-                                   selectedCell.email]];
+                                   selectedCell.email];
+
+    if (self.currentAutocompleteField == self.privateRecipient) {
+        self.currentAutocompleteField.text = [NSString stringWithFormat:@"%@, ", self.currentAutocompleteField.text];
+    }
+
     self.completionsTableView.hidden = YES;
 }
 

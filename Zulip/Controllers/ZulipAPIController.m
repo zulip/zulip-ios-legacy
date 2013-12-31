@@ -118,6 +118,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
         self.email = @"";
         self.fullName = @"";
         self.fullNameLookupDict = [[NSMutableDictionary alloc] init];
+        self.streamLookup = [[NSMutableSet alloc] init];
     }
     self.backgrounded = NO;
     self.pointer = -1;
@@ -920,6 +921,8 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
         rawMsg.linkedZMessage = msg;
 
         [zmessages addObject:msg];
+
+        [self.streamLookup addObject:msg.stream_recipient];
     }
 
     error = nil;

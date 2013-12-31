@@ -13,6 +13,7 @@
 @property(nonatomic,retain) NSString *type;
 @property (nonatomic, retain) NSMutableArray *entryFields;
 @property (nonatomic, copy) NSDictionary *fullNameLookupDict;
+@property (nonatomic, copy) NSSet *streamLookup;
 @property (nonatomic, retain) NSMutableArray *completionMatches;
 
 - (id)initWithReplyTo:(RawMessage *)message;
