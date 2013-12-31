@@ -30,6 +30,16 @@
     return self;
 }
 
+- (id)copyWithZone:(NSZone *)zone
+{
+    NarrowOperators *narrow = [[self class] allocWithZone:zone];
+    if (narrow) {
+        narrow->_home_view = self.home_view;
+        narrow->_subpredicates = [self.subpredicates copyWithZone:zone];
+    }
+    return narrow;
+}
+
 + (NarrowOperators *)operatorsFromMessage:(RawMessage *)msg
 {
     NarrowOperators *narrow = [[NarrowOperators alloc] init];

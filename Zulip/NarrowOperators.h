@@ -13,7 +13,7 @@
  This represents a bunch of narrow operators, and can be converted into either an
  NSCompoundPredicate* for Core Data lookups or a Zulip-compatible JSON narrow blob
  */
-@interface NarrowOperators : NSObject
+@interface NarrowOperators : NSObject <NSCopying>
 
 + (NarrowOperators *) operatorsFromMessage:(RawMessage *)msg;
 
