@@ -37,6 +37,7 @@
     if (self) {
         self.wakingFromBackground = NO;
         self.notifiedWithMessages = @[];
+        self.narrows = [[NSMutableDictionary alloc] init];
     }
 
     return self;
