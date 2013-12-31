@@ -237,6 +237,12 @@
     // mark b64 as __block __weak so it sticks around after this method is done executing (since the block passed to NSNotification
     // references is).
     __block __weak NSString *b64 = [deviceToken base64Encoding];
+
+    if (![ZulipAPIClient sharedClient] || !b64) {
+        CLS_LOG(@"Got null ZulipAPIClient (%@) or b64 device token: %@, wtf?", [ZulipAPIClient sharedClient], b64);
+        return;
+    }
+
     [[ZulipAPIClient sharedClient] postPath:@"users/me/apns_device_token" parameters:@{@"token": b64} success:nil failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         CLS_LOG(@"Failed to send APNS device token to Zulip servers %@ %@", [error localizedDescription], [error userInfo]);
     }];
