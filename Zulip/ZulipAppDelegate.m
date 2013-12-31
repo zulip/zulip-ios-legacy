@@ -21,6 +21,7 @@
 @interface ZulipAppDelegate ()
 
 @property (nonatomic, retain) NSMutableDictionary *narrows;
+@property (nonatomic, retain) NSData *cachedAPNSToken;
 
 @end
 
@@ -61,6 +62,13 @@
 
     LeftSidebarViewController *sidebar = [[LeftSidebarViewController alloc] initWithNibName:@"LeftSidebarViewController" bundle:nil];
     self.sidePanelController.leftPanel = sidebar;
+
+    [[NSNotificationCenter defaultCenter] addObserverForName:kLoginNotification
+                                                      object:nil
+                                                       queue:[NSOperationQueue mainQueue]
+                                                  usingBlock:^(NSNotification *note) {
+                                                      [self sendCachedAPNSToken];
+                                                  }];
 
     // Connect the API controller to the home view, and connect to the Zulip API
     [[ZulipAPIController sharedInstance] setHomeViewController:self.homeViewController];
@@ -232,8 +240,24 @@
 
 #pragma mark - APNS
 
+- (void)sendCachedAPNSToken
+{
+    if (!self.cachedAPNSToken || ![[ZulipAPIController sharedInstance] loggedIn]) {
+        return;
+    }
+
+    [self application:[UIApplication sharedApplication] didRegisterForRemoteNotificationsWithDeviceToken:self.cachedAPNSToken];
+    self.cachedAPNSToken = nil;
+}
+
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
+    if (![[ZulipAPIController sharedInstance] loggedIn]) {
+        CLS_LOG(@"Got APNS token before login completed, storing");
+        self.cachedAPNSToken = deviceToken;
+        return;
+    }
+
     // mark b64 as __block __weak so it sticks around after this method is done executing (since the block passed to NSNotification
     // references is).
     __block __weak NSString *b64 = [deviceToken base64Encoding];
