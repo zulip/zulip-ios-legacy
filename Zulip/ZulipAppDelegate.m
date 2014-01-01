@@ -6,6 +6,7 @@
 #import "LeftSidebarViewController.h"
 #import "NarrowViewController.h"
 #import "AboutViewController.h"
+#import "PresenceManager.h"
 #import "NSArray+Blocks.h"
 
 // AFNetworking
@@ -101,6 +102,9 @@
 
     // Set the app badge to 0 when launching
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+
+    // Start presence poller
+    (void)[[PresenceManager alloc] init];
 
     [self.window makeKeyAndVisible];
 

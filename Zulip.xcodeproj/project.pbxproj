@@ -87,6 +87,8 @@
 		B39AC2C717F0ED9E00EB65B3 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = B39AC2BC17F0ED9E00EB65B3 /* Default.png */; };
 		B39AC2C817F0ED9E00EB65B3 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B39AC2BD17F0ED9E00EB65B3 /* Default@2x.png */; };
 		B3BA5B031816D1A000EFFC74 /* NSArray+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = B3BA5B021816D1A000EFFC74 /* NSArray+Blocks.m */; };
+		B3C2E7D31873638F00BB15D7 /* PresenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B3C2E7D21873638F00BB15D7 /* PresenceManager.m */; };
+		B3C2E7EB187389C200BB15D7 /* ZUserPresence.m in Sources */ = {isa = PBXBuildFile; fileRef = B3C2E7EA187389C200BB15D7 /* ZUserPresence.m */; };
 		B3CC438A17A6E2E200C8AF3F /* MainWindow~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = C31673961620DB6B00CE9FE5 /* MainWindow~iphone.xib */; };
 		B3CC438B17A6E2E200C8AF3F /* MainWindow~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681BE1795C513009F69F5 /* MainWindow~ipad.xib */; };
 		B3CC439217A701A900C8AF3F /* ZUser.m in Sources */ = {isa = PBXBuildFile; fileRef = B3CC439117A701A900C8AF3F /* ZUser.m */; };
@@ -304,6 +306,11 @@
 		B39AC2BD17F0ED9E00EB65B3 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Resources/Launch Images/Default@2x.png"; sourceTree = "<group>"; };
 		B3BA5B011816D1A000EFFC74 /* NSArray+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSArray+Blocks.h"; path = "Categories/NSArray+Blocks.h"; sourceTree = "<group>"; };
 		B3BA5B021816D1A000EFFC74 /* NSArray+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSArray+Blocks.m"; path = "Categories/NSArray+Blocks.m"; sourceTree = "<group>"; };
+		B3C2E7D11873638F00BB15D7 /* PresenceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PresenceManager.h; sourceTree = "<group>"; };
+		B3C2E7D21873638F00BB15D7 /* PresenceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PresenceManager.m; sourceTree = "<group>"; };
+		B3C2E7E018737A8300BB15D7 /* Zulip2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = file; path = Zulip2.xcdatamodel; sourceTree = "<group>"; };
+		B3C2E7E9187389C200BB15D7 /* ZUserPresence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZUserPresence.h; path = Models/ZUserPresence.h; sourceTree = "<group>"; };
+		B3C2E7EA187389C200BB15D7 /* ZUserPresence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZUserPresence.m; path = Models/ZUserPresence.m; sourceTree = "<group>"; };
 		B3CC439017A701A900C8AF3F /* ZUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZUser.h; path = Models/ZUser.h; sourceTree = "<group>"; };
 		B3CC439117A701A900C8AF3F /* ZUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZUser.m; path = Models/ZUser.m; sourceTree = "<group>"; };
 		B3CC439417A7F13700C8AF3F /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HomeViewController.h; path = Controllers/ViewControllers/HomeViewController.h; sourceTree = "<group>"; };
@@ -621,6 +628,8 @@
 				B3CC439117A701A900C8AF3F /* ZUser.m */,
 				B351822F17A1B20A00B41D75 /* ZSubscription.h */,
 				B351823017A1B20A00B41D75 /* ZSubscription.m */,
+				B3C2E7E9187389C200BB15D7 /* ZUserPresence.h */,
+				B3C2E7EA187389C200BB15D7 /* ZUserPresence.m */,
 				B3F5629B17A9A4EE004B185A /* RawMessage.h */,
 				B3F5629C17A9A4EE004B185A /* RawMessage.m */,
 				B3E8A76317B146090008EED7 /* RangePair.h */,
@@ -789,6 +798,8 @@
 				B376984817B52FD500D29D93 /* PreferencesWrapper.m */,
 				B3733CFC177A00D900714B6E /* ZulipAPIClient.h */,
 				B3733CFD177A00D900714B6E /* ZulipAPIClient.m */,
+				B3C2E7D11873638F00BB15D7 /* PresenceManager.h */,
+				B3C2E7D21873638F00BB15D7 /* PresenceManager.m */,
 				C316738B1620DB6B00CE9FE5 /* Supporting Files */,
 				B3766D31179DD6CF005FB0D4 /* Categories */,
 				B376985217B56EB100D29D93 /* Images.xcassets */,
@@ -1089,6 +1100,7 @@
 				A638DB02187796E0002B0333 /* AutocompleteResults.m in Sources */,
 				E577A74D16226AC4002D9651 /* MessageCell.m in Sources */,
 				B376987417B5857600D29D93 /* UIViewController+JASidePanel.m in Sources */,
+				B3C2E7D31873638F00BB15D7 /* PresenceManager.m in Sources */,
 				E5CDE07C162C88A800BBD773 /* LoginViewController.m in Sources */,
 				B376984917B52FD500D29D93 /* PreferencesWrapper.m in Sources */,
 				E50D757916331D7A00251D1F /* KeychainItemWrapper.m in Sources */,
@@ -1104,6 +1116,7 @@
 				78C6F29D18159CEC00AFDF6C /* UserCell.m in Sources */,
 				B3F50D6E179DADE800F9DAE4 /* AFImageRequestOperation.m in Sources */,
 				B3F50D6F179DADE800F9DAE4 /* AFJSONRequestOperation.m in Sources */,
+				B3C2E7EB187389C200BB15D7 /* ZUserPresence.m in Sources */,
 				B3F50D70179DADE800F9DAE4 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				B338402D17C3B97A0083A529 /* RenderedMarkdownMunger.m in Sources */,
 				B3F50D71179DADE800F9DAE4 /* AFPropertyListRequestOperation.m in Sources */,
@@ -1415,9 +1428,10 @@
 			isa = XCVersionGroup;
 			children = (
 				B376987517B5879300D29D93 /* Zulip 1.0.xcdatamodel */,
+				B3C2E7E018737A8300BB15D7 /* Zulip2.xcdatamodel */,
 				B3766D3D179DDBE2005FB0D4 /* Zulip.xcdatamodel */,
 			);
-			currentVersion = B376987517B5879300D29D93 /* Zulip 1.0.xcdatamodel */;
+			currentVersion = B3C2E7E018737A8300BB15D7 /* Zulip2.xcdatamodel */;
 			name = Zulip.xcdatamodeld;
 			path = Models/Zulip.xcdatamodeld;
 			sourceTree = "<group>";
