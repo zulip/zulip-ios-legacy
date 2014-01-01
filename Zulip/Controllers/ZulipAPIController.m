@@ -16,11 +16,11 @@
 #import "PreferencesWrapper.h"
 #import "ZUserPresence.h"
 
-#include "KeychainItemWrapper.h"
+#import "KeychainItemWrapper.h"
 
 // Models
 #import "ZSubscription.h"
-#include "ZUser.h"
+#import "ZUser.h"
 
 // AFNetworking
 #import "AFJSONRequestOperation.h"
