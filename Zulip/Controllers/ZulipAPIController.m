@@ -14,6 +14,7 @@
 #import "LongPoller.h"
 #import "RangePair.h"
 #import "PreferencesWrapper.h"
+#import "ZUserPresence.h"
 
 #include "KeychainItemWrapper.h"
 
@@ -589,6 +590,13 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
 
             long msgId = [[msg objectForKey:@"id"] longValue];
             self.maxServerMessageId = MAX(self.maxServerMessageId, msgId);
+        } else if ([eventType isEqualToString:@"presence"]) {
+            NSDictionary *presence = [event objectForKey:@"presence"];
+            NSString *email = event[@"email"];
+
+            for (NSString *client in presence) {
+                [self updatePresence:email withStatus:presence[client]];
+            }
         }
 
         // Insert batches of message update events as soon as we receive them, as
@@ -1053,6 +1061,43 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
     }
 
     return user;
+}
+
+- (void)updatePresence:(NSString *)email withStatus:(NSDictionary *)presence
+{
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ZUserPresence"];
+    request.predicate = [NSPredicate predicateWithFormat:@"user.email == %@ && client == %@", email, presence[@"client"]];
+
+    ZulipAppDelegate *delegate = (ZulipAppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSError *error = nil;
+    NSArray *results = [[delegate managedObjectContext] executeFetchRequest:request error:&error];
+    if (error) {
+        CLS_LOG(@"Error fetching ZUserPresences: %@ %@", [error localizedDescription], [error userInfo]);
+
+        return;
+    }
+
+    ZUserPresence *zpresence = nil;
+    if ([results count] > 0) {
+        if ([results count] > 1) {
+            CLS_LOG(@"Found more than one email/client row for %@!", email);
+        }
+
+        zpresence = [results objectAtIndex:0];
+    } else {
+        zpresence = [NSEntityDescription insertNewObjectForEntityForName:@"ZUserPresence" inManagedObjectContext:[delegate managedObjectContext]];
+        zpresence.client = presence[@"client"];
+    }
+
+    zpresence.status = presence[@"status"];
+    zpresence.timestamp = presence[@"timestamp"];
+
+    error = nil;
+    [[delegate managedObjectContext] save:&error];
+    if (error) {
+        CLS_LOG(@"Error saving ZUserPresences: %@ %@", [error localizedDescription], [error userInfo]);
+    }
+
 }
 
 - (NSString *)gravatarUrl:(NSString *)email
