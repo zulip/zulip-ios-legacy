@@ -601,6 +601,8 @@
 				78C6F29118159AEA00AFDF6C /* UserCellView.xib */,
 				78C6F29B18159CEC00AFDF6C /* UserCell.h */,
 				78C6F29C18159CEC00AFDF6C /* UserCell.m */,
+				A638DACD18774B45002B0333 /* StreamComposeView.h */,
+				A638DACE18774B45002B0333 /* StreamComposeView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1135,6 +1137,7 @@
 				B3F5629D17A9A4EE004B185A /* RawMessage.m in Sources */,
 				B3F562A017AAAE5A004B185A /* NarrowOperators.m in Sources */,
 				B3F562B317ABEB85004B185A /* SidebarStreamsHeader.m in Sources */,
+				A638DACF18774B45002B0333 /* StreamComposeView.m in Sources */,
 				B3F562BE17AC30BC004B185A /* ZMessage.m in Sources */,
 				B3F562C117AC3C65004B185A /* UnreadManager.m in Sources */,
 				B3DDD2F817B02A0800F8D387 /* LongPoller.m in Sources */,

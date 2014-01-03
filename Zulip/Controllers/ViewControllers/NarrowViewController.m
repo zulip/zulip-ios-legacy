@@ -8,7 +8,7 @@
 
 #import "NarrowViewController.h"
 #import "ZulipAPIController.h"
-
+#import "StreamComposeView.h"
 #import <Crashlytics/Crashlytics.h>
 
 typedef enum  {
@@ -45,6 +45,13 @@ typedef enum  {
     [super viewDidLoad];
 
     self.title = self.operators.title;
+
+    if ([self.title isEqualToString:@"Private Messages"]) {
+        self.composeView.isPrivate = YES;
+    } else {
+        self.composeView.recipient = self.title;
+    }
+
     [self initialPopulate];
 }
 

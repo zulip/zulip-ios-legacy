@@ -11,6 +11,7 @@
 
 #import "RenderedMarkdownMunger.h"
 #import "BrowserViewController.h"
+#import "StreamComposeView.h"
 
 @interface StreamViewController ()
 
@@ -27,39 +28,41 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
 
 @implementation StreamViewController
 
-- (id)initWithStyle:(UITableViewStyle)style
+- (id)init
 {
-    id ret = [super initWithStyle:style];
-    self.messages = [[NSMutableArray alloc] init];
-    self.msgIds = [[NSMutableSet alloc] init];
-    self.topRow = nil;
-    self.waitingForRefresh = NO;
+    if (self = [super initWithNibName:NSStringFromClass([StreamViewController class]) bundle:[NSBundle mainBundle]]) {
+        self.messages = [[NSMutableArray alloc] init];
+        self.msgIds = [[NSMutableSet alloc] init];
+        self.topRow = nil;
+        self.waitingForRefresh = NO;
 
-    // Listen to long polling messages
-    [[NSNotificationCenter defaultCenter] addObserverForName:kLongPollMessageNotification
-                                                      object:nil
-                                                       queue:[NSOperationQueue mainQueue]
-                                                  usingBlock:^(NSNotification *note) {
-                                                      NSArray *messages = [[note userInfo] objectForKey:kLongPollMessageData];
-                                                      [self handleLongPollMessages:messages];
-                                                  }];
+        // Listen to long polling messages
+        [[NSNotificationCenter defaultCenter] addObserverForName:kLongPollMessageNotification
+                                                          object:nil
+                                                           queue:[NSOperationQueue mainQueue]
+                                                      usingBlock:^(NSNotification *note) {
+                                                          NSArray *messages = [[note userInfo] objectForKey:kLongPollMessageData];
+                                                          [self handleLongPollMessages:messages];
+                                                      }];
 
-    // Reset on logout
-    [[NSNotificationCenter defaultCenter] addObserverForName:kLogoutNotification
-                                                      object:nil
-                                                       queue:[NSOperationQueue mainQueue]
-                                                  usingBlock:^(NSNotification *note) {
-                                                      [self clearMessages];
-                                                  }];
+        // Reset on logout
+        [[NSNotificationCenter defaultCenter] addObserverForName:kLogoutNotification
+                                                          object:nil
+                                                           queue:[NSOperationQueue mainQueue]
+                                                      usingBlock:^(NSNotification *note) {
+                                                          [self clearMessages];
+                                                      }];
 
-    // KVO watch for resume from background
-    [[ZulipAPIController sharedInstance] addObserver:self
-                                          forKeyPath:@"backgrounded"
-                                             options:(NSKeyValueObservingOptionNew |
-                                                      NSKeyValueObservingOptionOld)
-                                             context:nil];
-
-    return ret;
+        // KVO watch for resume from background
+        [[ZulipAPIController sharedInstance] addObserver:self
+                                              forKeyPath:@"backgrounded"
+                                                 options:(NSKeyValueObservingOptionNew |
+                                                          NSKeyValueObservingOptionOld)
+                                                 context:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    }
+    return self;
 }
 
 - (void)clearMessages
@@ -79,14 +82,18 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
 
     self.delegate = (ZulipAppDelegate *)[UIApplication sharedApplication].delegate;
 
+    //
+//    UITableViewController *tableViewController = [[UITableViewController alloc]initWithStyle:UITableViewStylePlain];
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    [self.refreshControl addTarget:self action:@selector(refreshControlRefreshRequested:) forControlEvents:UIControlEventValueChanged];
+    self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:kLoadingIndicatorDefaultMessage];
+    [self.tableView addSubview:self.refreshControl];
+
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 
     // Bottom padding so you can see new messages arrive.
     self.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, 200.0, 0.0);
 
-    self.refreshControl = [[UIRefreshControl alloc] init];
-    [self.refreshControl addTarget:self action:@selector(refreshControlRefreshRequested:) forControlEvents:UIControlEventValueChanged];
-    self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:kLoadingIndicatorDefaultMessage];
 
     // Always bounce vertically so that the UIRefreshController properly
     // occupies space above messages
@@ -106,6 +113,14 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
 
     UIBarButtonItem *rightBar = [[UIBarButtonItem alloc] initWithCustomView:self.composeButtons];
     self.navigationItem.rightBarButtonItem = rightBar;
+
+    if ([self.tableView respondsToSelector:@selector(setKeyboardDismissMode:)]) {
+        self.tableView.keyboardDismissMode =UIScrollViewKeyboardDismissModeOnDrag;
+    }
+
+    // Dismiss the keyboard by tapping on iOS 6 devices
+    UITapGestureRecognizer *dismissComposeView = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didDismissComposeView)];
+    [self.view addGestureRecognizer:dismissComposeView];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -391,6 +406,43 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
         if (old && !new) {
             [self resumePopulate];
         }
+    }
+}
+
+#pragma mark - Keyboard show/hide
+- (void)keyboardWillHide:(NSNotification *)notification {
+    [self.composeView hideSubjectBar];
+    [self moveComposeViewForNotification:notification];
+}
+
+- (void)keyboardWillShow:(NSNotification *)notification {
+    [self.composeView showSubjectBar];
+    [self moveComposeViewForNotification:notification];
+}
+
+- (void)moveComposeViewForNotification:(NSNotification *)notification {
+    NSDictionary *userInfo = notification.userInfo;
+    NSTimeInterval duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    UIViewAnimationCurve curve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] intValue];
+
+    CGRect keyboardFrame = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGRect keyboardFrameForTextField = [self.composeView.superview convertRect:keyboardFrame fromView:nil];
+
+    CGRect newTextFieldFrame = self.composeView.frame;
+    newTextFieldFrame.origin.y = keyboardFrameForTextField.origin.y - newTextFieldFrame.size.height;
+
+    [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionBeginFromCurrentState | curve animations:^{
+        self.composeView.frame = newTextFieldFrame;
+    } completion:nil];
+
+    UIEdgeInsets tableViewInset = self.tableView.contentInset;
+    tableViewInset.bottom = keyboardFrame.size.height + self.composeView.visibleHeight;
+    self.tableView.contentInset = tableViewInset;
+}
+
+- (void)didDismissComposeView {
+    if (self.composeView.isFirstResponder) {
+        [self.composeView resignFirstResponder];
     }
 }
 
