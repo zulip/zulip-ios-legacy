@@ -390,12 +390,15 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     UserCell *selectedCell = (UserCell *)[tableView cellForRowAtIndexPath:indexPath];
-    self.currentAutocompleteField.text =                                   [ComposeViewController replaceLastItemInStringList:
-                                   self.privateRecipient.text withString:
-                                   selectedCell.email];
 
     if (self.currentAutocompleteField == self.privateRecipient) {
+        self.currentAutocompleteField.text =                                   [ComposeViewController replaceLastItemInStringList:
+                                                                                self.privateRecipient.text withString:
+                                                                                selectedCell.email];
+
         self.currentAutocompleteField.text = [NSString stringWithFormat:@"%@, ", self.currentAutocompleteField.text];
+    } else {
+        self.currentAutocompleteField.text = selectedCell.email;
     }
 
     self.completionsTableView.hidden = YES;
