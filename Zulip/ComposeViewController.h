@@ -14,7 +14,7 @@
 @property (nonatomic, retain) NSMutableArray *entryFields;
 @property (nonatomic, copy) NSDictionary *fullNameLookupDict;
 @property (nonatomic, copy) NSSet *streamLookup;
-@property (nonatomic, retain) NSMutableArray *completionMatches;
+@property (nonatomic, retain) NSArray *completionMatches;
 
 - (id)initWithReplyTo:(RawMessage *)message;
 

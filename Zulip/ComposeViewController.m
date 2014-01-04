@@ -3,7 +3,7 @@
 #import "ZulipAPIClient.h"
 #import "ZulipAPIController.h"
 #import "UserCell.h"
-
+#import "AutocompleteResults.h"
 #import "UIImageView+AFNetworking.h"
 
 #import <QuartzCore/QuartzCore.h>
@@ -42,7 +42,7 @@
 
 - (void)sharedInit
 {
-    self.completionMatches = [[NSMutableArray alloc] init];
+    self.completionMatches = [[NSArray alloc] init];
     self.fullNameLookupDict = [[ZulipAPIController sharedInstance] fullNameLookupDict];
     self.streamLookup = [[ZulipAPIController sharedInstance] streamLookup];
 }
@@ -149,86 +149,61 @@
 
 - (void)getUserCompletionResultsWithQuery:(NSString*)searchString
 {
-    static NSMutableOrderedSet *prefixEmailMatches;
-    static NSMutableOrderedSet *prefixNameMatches;
-    static NSMutableOrderedSet *nonPrefixMatches;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        prefixEmailMatches = [[NSMutableOrderedSet alloc] init];
-        prefixNameMatches = [[NSMutableOrderedSet alloc] init];
-        nonPrefixMatches = [[NSMutableOrderedSet alloc] init];
-    });
-
     searchString = [searchString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 
-    [prefixEmailMatches removeAllObjects];
-    [prefixNameMatches removeAllObjects];
-    [nonPrefixMatches removeAllObjects];
-    [self.completionMatches removeAllObjects];
     // match by email
-    for(NSString *candidate in [self.fullNameLookupDict allKeys])
-    {
-        NSUInteger index = [candidate rangeOfString:searchString options:NSCaseInsensitiveSearch].location;
-        if (index == 0) {
-            if ([[candidate lowercaseString] isEqualToString:[searchString lowercaseString]]) {
-                // got exact match: hide the completions
-                self.completionsTableView.hidden = YES;
-                return;
-            }
-            [prefixEmailMatches addObject:candidate];
-        } else if (index != NSNotFound) {
-            [nonPrefixMatches addObject:candidate];
-        }
+    AutocompleteResults *emailResults = [[AutocompleteResults alloc] initWithArray:self.fullNameLookupDict.allKeys query:searchString];
+    if (emailResults.isExactMatch) {
+        self.completionsTableView.hidden = YES;
+        return;
     }
-    // match by full name
-    for(NSString *candidate in [self.fullNameLookupDict allKeys])
-    {
-        NSUInteger index = [self.fullNameLookupDict[candidate] rangeOfString:searchString options:NSCaseInsensitiveSearch].location;
-        if (index == 0) {
-            //cannot hide the completions table, because you cannot PM by full name.
-            [prefixNameMatches addObject:candidate];
-        } else if (index != NSNotFound) {
-            [nonPrefixMatches addObject:candidate];
-        }
-    }
+
+    AutocompleteResults *nameResults = [[AutocompleteResults alloc] initWithDictionary:self.fullNameLookupDict query:searchString];
+
+    NSMutableOrderedSet *prefixEmailMatches = [emailResults.prefixMatches mutableCopy];
+    NSMutableOrderedSet *prefixNameMatches = [nameResults.prefixMatches mutableCopy];
+
+    NSMutableOrderedSet *nonPrefixMatches = [emailResults.nonPrefixMatches mutableCopy];
+    [nonPrefixMatches addObjectsFromArray:[nameResults.nonPrefixMatches array]];
 
     [prefixEmailMatches removeObjectsInArray:[prefixNameMatches array]];
 
-
     // sorry Leo, I tried. This prioritizes by non-bots then bots in the categories of
     // prefix-matches (names first, then emails) and then non-prefix-matches
+    NSMutableArray *results = [[NSMutableArray alloc] init];
     for(NSString *result in prefixNameMatches)
     {
         if ([result rangeOfString:@"-bot@"].location == NSNotFound)
-            [self.completionMatches addObject:result];
+            [results addObject:result];
     }
     for(NSString *result in prefixNameMatches)
     {
         if ([result rangeOfString:@"-bot@"].location != NSNotFound)
-            [self.completionMatches addObject:result];
+            [results addObject:result];
     }
     for(NSString *result in prefixEmailMatches)
     {
         if ([result rangeOfString:@"-bot@"].location == NSNotFound)
-            [self.completionMatches addObject:result];
+            [results addObject:result];
     }
     for(NSString *result in prefixEmailMatches)
     {
         if ([result rangeOfString:@"-bot@"].location != NSNotFound)
-            [self.completionMatches addObject:result];
+            [results addObject:result];
     }
     for(NSString *result in nonPrefixMatches)
     {
         if ([result rangeOfString:@"-bot@"].location == NSNotFound)
-            [self.completionMatches addObject:result];
+            [results addObject:result];
     }
     for(NSString *result in nonPrefixMatches)
     {
         if ([result rangeOfString:@"-bot@"].location != NSNotFound)
-            [self.completionMatches addObject:result];
+            [results addObject:result];
     }
 
-    if ([self.completionMatches count])
+    self.completionMatches = [results copy];
+    if (self.completionMatches.count > 0)
     {
         self.completionsTableView.hidden = NO;
         [self.completionsTableView reloadData];
@@ -239,37 +214,16 @@
 }
 
 - (void)getStreamCompletionResultsWithQuery:(NSString *)searchString {
-    static NSMutableOrderedSet *prefixMatches;
-    static NSMutableOrderedSet *nonPrefixMatches;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        prefixMatches = [[NSMutableOrderedSet alloc] init];
-        nonPrefixMatches = [[NSMutableOrderedSet alloc] init];
-    });
-
     searchString = [searchString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 
-    [prefixMatches removeAllObjects];
-    [nonPrefixMatches removeAllObjects];
-    [self.completionMatches removeAllObjects];
 
-    for(NSString *candidate in self.streamLookup)
-    {
-        NSUInteger index = [candidate rangeOfString:searchString options:NSCaseInsensitiveSearch].location;
-        if (index == 0) {
-            if ([[candidate lowercaseString] isEqualToString:[searchString lowercaseString]]) {
-                // got exact match: hide the completions
-                self.completionsTableView.hidden = YES;
-                return;
-            }
-            [prefixMatches addObject:candidate];
-        } else if (index != NSNotFound) {
-            [nonPrefixMatches addObject:candidate];
-        }
+    AutocompleteResults *results = [[AutocompleteResults alloc] initWithSet:self.streamLookup query:searchString];
+    if (results.isExactMatch) {
+        self.completionsTableView.hidden = YES;
+        return;
     }
 
-    [prefixMatches addObjectsFromArray:[nonPrefixMatches array]];
-    self.completionMatches = [[prefixMatches array] mutableCopy];
+    self.completionMatches = results.orderedResults;
     if (self.completionMatches.count > 0)
     {
         self.completionsTableView.hidden = NO;
@@ -302,35 +256,13 @@
         [subjects addObject:message.subject];
     }
 
-    static NSMutableOrderedSet *prefixMatches;
-    static NSMutableOrderedSet *nonPrefixMatches;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        prefixMatches = [[NSMutableOrderedSet alloc] init];
-        nonPrefixMatches = [[NSMutableOrderedSet alloc] init];
-    });
-
-    [prefixMatches removeAllObjects];
-    [nonPrefixMatches removeAllObjects];
-    [self.completionMatches removeAllObjects];
-
-    for(NSString *candidate in subjects)
-    {
-        NSUInteger index = [candidate rangeOfString:searchString options:NSCaseInsensitiveSearch].location;
-        if (index == 0) {
-            if ([[candidate lowercaseString] isEqualToString:[searchString lowercaseString]]) {
-                // got exact match: hide the completions
-                self.completionsTableView.hidden = YES;
-                return;
-            }
-            [prefixMatches addObject:candidate];
-        } else if (index != NSNotFound) {
-            [nonPrefixMatches addObject:candidate];
-        }
+    AutocompleteResults *topicResults = [[AutocompleteResults alloc] initWithSet:subjects query:searchString];
+    if (topicResults.isExactMatch) {
+        self.completionsTableView.hidden = YES;
+        return;
     }
 
-    [prefixMatches addObjectsFromArray:[nonPrefixMatches array]];
-    self.completionMatches = [[prefixMatches array] mutableCopy];
+    self.completionMatches = topicResults.orderedResults;
     if (self.completionMatches.count > 0)
     {
         self.completionsTableView.hidden = NO;

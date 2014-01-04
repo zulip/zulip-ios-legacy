@@ -37,6 +37,8 @@
 		78BE8D4217C52D0100330433 /* SourceSansPro-SemiboldIt-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 78BE8D1917C5101A00330433 /* SourceSansPro-SemiboldIt-webfont.ttf */; };
 		78C6F29218159AEA00AFDF6C /* UserCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78C6F29118159AEA00AFDF6C /* UserCellView.xib */; };
 		78C6F29D18159CEC00AFDF6C /* UserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 78C6F29C18159CEC00AFDF6C /* UserCell.m */; };
+		A638DACF18774B45002B0333 /* StreamComposeView.m in Sources */ = {isa = PBXBuildFile; fileRef = A638DACE18774B45002B0333 /* StreamComposeView.m */; };
+		A638DB02187796E0002B0333 /* AutocompleteResults.m in Sources */ = {isa = PBXBuildFile; fileRef = A638DB01187796E0002B0333 /* AutocompleteResults.m */; };
 		B30F55A217B2D432006DC735 /* LeftSidebarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B30F55A017B2D432006DC735 /* LeftSidebarViewController.m */; };
 		B30F55A317B2D432006DC735 /* LeftSidebarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B30F55A117B2D432006DC735 /* LeftSidebarViewController.xib */; };
 		B3107A0A17C55A33000F248E /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = B3107A0917C55A33000F248E /* MBProgressHUD.m */; };
@@ -236,6 +238,10 @@
 		78C6F29118159AEA00AFDF6C /* UserCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = UserCellView.xib; path = Views/UserCellView.xib; sourceTree = "<group>"; };
 		78C6F29B18159CEC00AFDF6C /* UserCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserCell.h; path = Views/UserCell.h; sourceTree = "<group>"; };
 		78C6F29C18159CEC00AFDF6C /* UserCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserCell.m; path = Views/UserCell.m; sourceTree = "<group>"; };
+		A638DACD18774B45002B0333 /* StreamComposeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamComposeView.h; sourceTree = "<group>"; };
+		A638DACE18774B45002B0333 /* StreamComposeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreamComposeView.m; sourceTree = "<group>"; };
+		A638DB00187796E0002B0333 /* AutocompleteResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutocompleteResults.h; sourceTree = "<group>"; };
+		A638DB01187796E0002B0333 /* AutocompleteResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AutocompleteResults.m; sourceTree = "<group>"; };
 		B30F559F17B2D432006DC735 /* LeftSidebarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LeftSidebarViewController.h; path = Controllers/ViewControllers/LeftSidebarViewController.h; sourceTree = "<group>"; };
 		B30F55A017B2D432006DC735 /* LeftSidebarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LeftSidebarViewController.m; path = Controllers/ViewControllers/LeftSidebarViewController.m; sourceTree = "<group>"; };
 		B30F55A117B2D432006DC735 /* LeftSidebarViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LeftSidebarViewController.xib; path = Controllers/ViewControllers/LeftSidebarViewController.xib; sourceTree = "<group>"; };
@@ -786,6 +792,8 @@
 				C316738B1620DB6B00CE9FE5 /* Supporting Files */,
 				B3766D31179DD6CF005FB0D4 /* Categories */,
 				B376985217B56EB100D29D93 /* Images.xcassets */,
+				A638DB00187796E0002B0333 /* AutocompleteResults.h */,
+				A638DB01187796E0002B0333 /* AutocompleteResults.m */,
 			);
 			path = Zulip;
 			sourceTree = "<group>";
@@ -1078,6 +1086,7 @@
 				C31673911620DB6B00CE9FE5 /* main.m in Sources */,
 				B30F55A217B2D432006DC735 /* LeftSidebarViewController.m in Sources */,
 				C31673951620DB6B00CE9FE5 /* ZulipAppDelegate.m in Sources */,
+				A638DB02187796E0002B0333 /* AutocompleteResults.m in Sources */,
 				E577A74D16226AC4002D9651 /* MessageCell.m in Sources */,
 				B376987417B5857600D29D93 /* UIViewController+JASidePanel.m in Sources */,
 				E5CDE07C162C88A800BBD773 /* LoginViewController.m in Sources */,
