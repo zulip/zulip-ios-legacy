@@ -74,7 +74,6 @@ typedef void(^MessagesDelivered)(NSArray *messages);
 @property(nonatomic, retain) StreamViewController *homeViewController;
 @property(nonatomic, retain, readonly) UnreadManager *unreadManager;
 @property(nonatomic, retain) NSMutableDictionary *fullNameLookupDict;
-@property(nonatomic, retain) NSMutableSet *streamLookup;
 
 
 @end

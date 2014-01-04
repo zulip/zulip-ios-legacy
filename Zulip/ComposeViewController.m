@@ -44,12 +44,9 @@
 {
     self.completionMatches = [[NSArray alloc] init];
     self.fullNameLookupDict = [[ZulipAPIController sharedInstance] fullNameLookupDict];
-    self.streamLookup = [[ZulipAPIController sharedInstance] streamLookup];
+    self.streamLookup = [self fetchStreamNames];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-}
 
 - (void)viewDidLoad
 {
@@ -216,7 +213,6 @@
 - (void)getStreamCompletionResultsWithQuery:(NSString *)searchString {
     searchString = [searchString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 
-
     AutocompleteResults *results = [[AutocompleteResults alloc] initWithSet:self.streamLookup query:searchString];
     if (results.isExactMatch) {
         self.completionsTableView.hidden = YES;
@@ -287,6 +283,24 @@
     [components addObject:replacementString];
 
     return [components componentsJoinedByString:@", "];
+}
+
+- (NSSet *)fetchStreamNames {
+    NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"ZSubscription"];
+    NSError *error = NULL;
+    ZulipAppDelegate *appDelegate = (ZulipAppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSArray *subs = [appDelegate.managedObjectContext executeFetchRequest:req error:&error];
+    if (error) {
+        CLS_LOG(@"Failed to load subscriptions from database: %@", [error localizedDescription]);
+        return [NSSet set];
+    }
+
+    NSMutableSet *streamNames = [[NSMutableSet alloc] init];
+    for (ZSubscription *sub in subs) {
+        [streamNames addObject:sub.name];
+    }
+
+    return [streamNames copy];
 }
 
 // recipient/stream/topic textfields
