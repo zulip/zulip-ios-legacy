@@ -44,6 +44,7 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
         self.tableView.delegate = self;
         self.tableView.dataSource = self;
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        self.tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         [self.view addSubview:self.tableView];
 
         self.refreshControl = [[UIRefreshControl alloc] init];
@@ -68,6 +69,7 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
         // Add inline replies
         self.composeView = [[StreamComposeView alloc] init];
         [self.composeView moveToPoint:CGPointMake(0, self.view.bottom - self.composeView.height)];
+        self.composeView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
         [self.view addSubview:self.composeView];
 
         // Listen to long polling messages

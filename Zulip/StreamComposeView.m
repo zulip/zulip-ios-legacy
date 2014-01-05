@@ -11,9 +11,16 @@
 #import <Crashlytics/Crashlytics.h>
 #import "UIView+Layout.h"
 
-static const CGFloat StreamComposeViewToWidth = 121.f;
-static const CGFloat StreamComposeViewSubjectWidth = 166.f;
-static const CGFloat StreamComposeViewMessageWidth = 200.f;
+static const CGFloat StreamComposeViewToWidth_Phone = 121.f;
+static const CGFloat StreamComposeViewToWidth_Pad = 200.f;
+
+
+static const CGFloat StreamComposeViewSubjectWidth_Phone = 166.f;
+static const CGFloat StreamComposeViewSubjectWidth_Pad = 400;
+
+static const CGFloat StreamComposeViewMessageWidth_Phone = 200.f;
+static const CGFloat StreamComposeViewMessageWidth_Pad = 600.f;
+
 static const CGFloat StreamComposeViewInputHeight = 30.f;
 
 @interface StreamComposeView ()<UITextViewDelegate>
@@ -48,7 +55,8 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 
         UIBarButtonItem *sendButton = [[UIBarButtonItem alloc] initWithTitle:@"Send" style:UIBarButtonItemStyleDone target:self action:@selector(didTapSendButton)];
 
-        self.messageInput = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, StreamComposeViewMessageWidth, StreamComposeViewInputHeight)];
+        CGFloat messageWidth = (self.isPad ? StreamComposeViewMessageWidth_Pad : StreamComposeViewMessageWidth_Phone);
+        self.messageInput = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, messageWidth, StreamComposeViewInputHeight)];
         self.messageInput.layer.cornerRadius = 5.f;
         self.messageInput.layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1f].CGColor;
         self.messageInput.layer.borderWidth = 1.f;
@@ -69,14 +77,16 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
         self.subjectBar.hidden = YES;
         self.subjectBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 
-        self.to = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, StreamComposeViewToWidth, StreamComposeViewInputHeight)];
+        CGFloat toWidth = (self.isPad ? StreamComposeViewToWidth_Pad : StreamComposeViewToWidth_Phone);
+        self.to = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, toWidth, StreamComposeViewInputHeight)];
         self.to.placeholder = @"Stream";
         self.to.borderStyle = UITextBorderStyleRoundedRect;
         self.to.backgroundColor = [UIColor whiteColor];
         self.to.autocapitalizationType = UITextAutocapitalizationTypeNone;
         self.toItem = [[UIBarButtonItem alloc] initWithCustomView:self.to];
 
-        self.subject = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, StreamComposeViewSubjectWidth, StreamComposeViewInputHeight)];
+        CGFloat subjectWidth = (self.isPad ? StreamComposeViewSubjectWidth_Pad : StreamComposeViewSubjectWidth_Phone);
+        self.subject = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, subjectWidth, StreamComposeViewInputHeight)];
         self.subject.placeholder = @"Subject";
         self.subject.borderStyle = UITextBorderStyleRoundedRect;
         self.subject.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -84,7 +94,7 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
         self.subject.backgroundColor = [UIColor whiteColor];
         self.subjectItem = [[UIBarButtonItem alloc] initWithCustomView:self.subject];
 
-        self.subjectBar.items = @[self.toItem, fixedSpace, self.subjectItem];
+        self.subjectBar.items = @[flexibleSpace, self.toItem, fixedSpace, self.subjectItem, flexibleSpace];
         [self addSubview:self.subjectBar];
     }
     return self;
@@ -123,15 +133,14 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 
 
     if (isPrivate) {
-        self.to.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.to.placeholder = @"One or more people...";
-        [self.to sizeToFit];
+        [self.to resizeTo:self.messageInput.size];
         self.subjectBar.items = @[flexibleSpace, self.toItem, flexibleSpace];
     } else {
-        self.to.autoresizingMask = UIViewAutoresizingNone;
         self.to.placeholder = @"Stream";
-
-        self.subjectBar.items = @[self.toItem, fixedSpace, self.subjectItem];
+        CGFloat toWidth = (self.isPad ? StreamComposeViewToWidth_Pad : StreamComposeViewToWidth_Phone);
+        [self.to resizeTo:CGSizeMake(toWidth, self.messageInput.height)];
+        self.subjectBar.items = @[flexibleSpace, self.toItem, fixedSpace, self.subjectItem, flexibleSpace];
     }
 }
 
@@ -139,7 +148,6 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
     return self.messageInput.isFirstResponder || self.to.isFirstResponder || self.subject.isFirstResponder;
 }
 
-#pragma clang pop
 - (BOOL)resignFirstResponder {
     [super resignFirstResponder];
     [self.messageInput resignFirstResponder];
@@ -194,6 +202,11 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
         [self resizeTo:CGSizeMake(self.width, self.height + heightDifference)];
         [self moveBy:CGPointMake(0, -heightDifference)];
     }];
+}
+
+#pragma mark - Private
+- (BOOL)isPad {
+    return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad;
 }
 
 @end
