@@ -9,12 +9,12 @@
 #import "StreamComposeView.h"
 #import "ZulipAPIClient.h"
 #import <Crashlytics/Crashlytics.h>
+#import "UIView+Layout.h"
 
 static const CGFloat StreamComposeViewToWidth = 121.f;
 static const CGFloat StreamComposeViewSubjectWidth = 166.f;
 static const CGFloat StreamComposeViewMessageWidth = 200.f;
 static const CGFloat StreamComposeViewInputHeight = 30.f;
-
 
 @interface StreamComposeView ()<UITextViewDelegate>
 
@@ -31,19 +31,19 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 
 @implementation StreamComposeView
 
-- (id)initWithCoder:(NSCoder *)aDecoder
-{
-    if (self = [super initWithCoder:aDecoder]) {
-        CGSize toolbarSize = CGSizeMake(self.frame.size.width, self.frame.size.height/2);
+- (id)init {
+    if (self = [super init]) {
+        self.mainBar = [[UIToolbar alloc] init];
+        [self.mainBar sizeToFit];
+        CGSize toolbarSize = self.mainBar.frame.size;
+
+        [self resizeTo:CGSizeMake(toolbarSize.width, toolbarSize.height * 2)];
 
         UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
         UIBarButtonItem *fixedSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
 
 
-        CGRect mainBarFrame;
-        mainBarFrame.origin = CGPointMake(0, toolbarSize.height);
-        mainBarFrame.size = toolbarSize;
-        self.mainBar = [[UIToolbar alloc] initWithFrame:mainBarFrame];
+        [self.mainBar moveToPoint:CGPointMake(0, toolbarSize.height)];
         self.mainBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 
         UIBarButtonItem *sendButton = [[UIBarButtonItem alloc] initWithTitle:@"Send" style:UIBarButtonItemStyleDone target:self action:@selector(didTapSendButton)];

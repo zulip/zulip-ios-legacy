@@ -39,6 +39,7 @@
 		78C6F29D18159CEC00AFDF6C /* UserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 78C6F29C18159CEC00AFDF6C /* UserCell.m */; };
 		A638DACF18774B45002B0333 /* StreamComposeView.m in Sources */ = {isa = PBXBuildFile; fileRef = A638DACE18774B45002B0333 /* StreamComposeView.m */; };
 		A638DB02187796E0002B0333 /* AutocompleteResults.m in Sources */ = {isa = PBXBuildFile; fileRef = A638DB01187796E0002B0333 /* AutocompleteResults.m */; };
+		A62B8B5B187A0ACE00D1691B /* UIView+Layout.m in Sources */ = {isa = PBXBuildFile; fileRef = A62B8B5A187A0ACE00D1691B /* UIView+Layout.m */; };
 		B30F55A217B2D432006DC735 /* LeftSidebarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B30F55A017B2D432006DC735 /* LeftSidebarViewController.m */; };
 		B30F55A317B2D432006DC735 /* LeftSidebarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B30F55A117B2D432006DC735 /* LeftSidebarViewController.xib */; };
 		B3107A0A17C55A33000F248E /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = B3107A0917C55A33000F248E /* MBProgressHUD.m */; };
@@ -244,6 +245,8 @@
 		A638DACE18774B45002B0333 /* StreamComposeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreamComposeView.m; sourceTree = "<group>"; };
 		A638DB00187796E0002B0333 /* AutocompleteResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutocompleteResults.h; sourceTree = "<group>"; };
 		A638DB01187796E0002B0333 /* AutocompleteResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AutocompleteResults.m; sourceTree = "<group>"; };
+		A62B8B59187A0ACE00D1691B /* UIView+Layout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Layout.h"; sourceTree = "<group>"; };
+		A62B8B5A187A0ACE00D1691B /* UIView+Layout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Layout.m"; sourceTree = "<group>"; };
 		B30F559F17B2D432006DC735 /* LeftSidebarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LeftSidebarViewController.h; path = Controllers/ViewControllers/LeftSidebarViewController.h; sourceTree = "<group>"; };
 		B30F55A017B2D432006DC735 /* LeftSidebarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LeftSidebarViewController.m; path = Controllers/ViewControllers/LeftSidebarViewController.m; sourceTree = "<group>"; };
 		B30F55A117B2D432006DC735 /* LeftSidebarViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LeftSidebarViewController.xib; path = Controllers/ViewControllers/LeftSidebarViewController.xib; sourceTree = "<group>"; };
@@ -587,6 +590,8 @@
 		B3766D30179DD675005FB0D4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				A62B8B4E187A099B00D1691B /* StreamComposeView.h */,
+				A62B8B4F187A099B00D1691B /* StreamComposeView.m */,
 				782681CA1795CFD2009F69F5 /* iPhone */,
 				782681BD1795C512009F69F5 /* iPad */,
 				E577A74B16226AC4002D9651 /* MessageCell.h */,
@@ -601,8 +606,6 @@
 				78C6F29118159AEA00AFDF6C /* UserCellView.xib */,
 				78C6F29B18159CEC00AFDF6C /* UserCell.h */,
 				78C6F29C18159CEC00AFDF6C /* UserCell.m */,
-				A638DACD18774B45002B0333 /* StreamComposeView.h */,
-				A638DACE18774B45002B0333 /* StreamComposeView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -610,6 +613,8 @@
 		B3766D31179DD6CF005FB0D4 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				A62B8B59187A0ACE00D1691B /* UIView+Layout.h */,
+				A62B8B5A187A0ACE00D1691B /* UIView+Layout.m */,
 				E570A8BD169DF81E0072BC7E /* NSString+Encode.h */,
 				E570A8BE169DF81E0072BC7E /* NSString+Encode.m */,
 				B3733CD61778D5DD00714B6E /* UIColor+HexColor.h */,
@@ -1111,6 +1116,7 @@
 				51BA4F5517F6069300BBF48C /* BrowserViewController.m in Sources */,
 				E570A8BF169DF81E0072BC7E /* NSString+Encode.m in Sources */,
 				B376987317B5857600D29D93 /* JASidePanelController.m in Sources */,
+				A62B8B5B187A0ACE00D1691B /* UIView+Layout.m in Sources */,
 				B3733CD81778D5DD00714B6E /* UIColor+HexColor.m in Sources */,
 				B3733CFE177A00D900714B6E /* ZulipAPIClient.m in Sources */,
 				B3F50D6C179DADE800F9DAE4 /* AFHTTPClient.m in Sources */,
@@ -1137,7 +1143,7 @@
 				B3F5629D17A9A4EE004B185A /* RawMessage.m in Sources */,
 				B3F562A017AAAE5A004B185A /* NarrowOperators.m in Sources */,
 				B3F562B317ABEB85004B185A /* SidebarStreamsHeader.m in Sources */,
-				A638DACF18774B45002B0333 /* StreamComposeView.m in Sources */,
+				A62B8B50187A099B00D1691B /* StreamComposeView.m in Sources */,
 				B3F562BE17AC30BC004B185A /* ZMessage.m in Sources */,
 				B3F562C117AC3C65004B185A /* UnreadManager.m in Sources */,
 				B3DDD2F817B02A0800F8D387 /* LongPoller.m in Sources */,

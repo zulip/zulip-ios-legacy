@@ -3,7 +3,7 @@
 #import "ComposeViewController.h"
 #import "UIColor+HexColor.h"
 #include "ZulipAPIController.h"
-
+#import "UIView+Layout.h"
 #import "ZUser.h"
 #import "RawMessage.h"
 
@@ -30,11 +30,45 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
 
 - (id)init
 {
-    if (self = [super initWithNibName:NSStringFromClass([StreamViewController class]) bundle:[NSBundle mainBundle]]) {
+    if (self = [super init]) {
+        self.title = @"Zulip";
+
+        self.delegate = (ZulipAppDelegate *)[UIApplication sharedApplication].delegate;
         self.messages = [[NSMutableArray alloc] init];
         self.msgIds = [[NSMutableSet alloc] init];
         self.topRow = nil;
         self.waitingForRefresh = NO;
+
+        // Configure table view and pull-to-refresh
+        self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+        self.tableView.delegate = self;
+        self.tableView.dataSource = self;
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        [self.view addSubview:self.tableView];
+
+        self.refreshControl = [[UIRefreshControl alloc] init];
+        [self.refreshControl addTarget:self action:@selector(refreshControlRefreshRequested:) forControlEvents:UIControlEventValueChanged];
+        self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:kLoadingIndicatorDefaultMessage];
+        [self.tableView addSubview:self.refreshControl];
+
+        // Bottom padding so you can see new messages arrive.
+        self.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, 200.0, 0.0);
+
+        // TODO re-enable registerNib:forReuseIdentifier once we work out why it is
+        // breaking some message content layout on pre-1.4. It greatly speeds up scrolling
+        [self.tableView registerNib:[UINib nibWithNibName:@"MessageCellView"
+                                                   bundle:nil]
+             forCellReuseIdentifier:[MessageCell reuseIdentifier]];
+
+        // Always bounce vertically so that the UIRefreshController properly
+        // occupies space above messages
+        self.tableView.alwaysBounceVertical = YES;
+
+
+        // Add inline replies
+        self.composeView = [[StreamComposeView alloc] init];
+        [self.composeView moveToPoint:CGPointMake(0, self.view.bottom - self.composeView.height)];
+        [self.view addSubview:self.composeView];
 
         // Listen to long polling messages
         [[NSNotificationCenter defaultCenter] addObserverForName:kLongPollMessageNotification
@@ -61,6 +95,27 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
                                                  context:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+
+
+
+        self.composeButtons = [[UISegmentedControl alloc] initWithItems:@[[UIImage imageNamed:@"user-toolbar.png"],
+                                                                          [UIImage imageNamed:@"bullhorn.png"]]];
+        self.composeButtons.segmentedControlStyle = UISegmentedControlStyleBar;
+        self.composeButtons.momentary = YES;
+        [self.composeButtons addTarget:self action:@selector(composeButtonsPressed) forControlEvents:UIControlEventValueChanged];
+
+        UIBarButtonItem *rightBar = [[UIBarButtonItem alloc] initWithCustomView:self.composeButtons];
+        self.navigationItem.rightBarButtonItem = rightBar;
+
+        
+        if ([self.tableView respondsToSelector:@selector(setKeyboardDismissMode:)]) {
+            self.tableView.keyboardDismissMode =UIScrollViewKeyboardDismissModeOnDrag;
+        }
+
+        // Dismiss the keyboard by tapping on iOS 6 devices
+        UITapGestureRecognizer *dismissComposeView = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didDismissComposeView)];
+        [self.view addGestureRecognizer:dismissComposeView];
+
     }
     return self;
 }
@@ -71,56 +126,6 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
     [self.msgIds removeAllObjects];
     self.topRow = nil;
     [self.tableView reloadData];
-}
-
-#pragma mark - UIViewController
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    [self setTitle:@"Zulip"];
-
-    self.delegate = (ZulipAppDelegate *)[UIApplication sharedApplication].delegate;
-
-    //
-//    UITableViewController *tableViewController = [[UITableViewController alloc]initWithStyle:UITableViewStylePlain];
-    self.refreshControl = [[UIRefreshControl alloc] init];
-    [self.refreshControl addTarget:self action:@selector(refreshControlRefreshRequested:) forControlEvents:UIControlEventValueChanged];
-    self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:kLoadingIndicatorDefaultMessage];
-    [self.tableView addSubview:self.refreshControl];
-
-    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-
-    // Bottom padding so you can see new messages arrive.
-    self.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, 200.0, 0.0);
-
-
-    // Always bounce vertically so that the UIRefreshController properly
-    // occupies space above messages
-    self.tableView.alwaysBounceVertical = YES;
-
-    // TODO re-enable registerNib:forReuseIdentifier once we work out why it is
-    // breaking some message content layout on pre-1.4. It greatly speeds up scrolling
-    [self.tableView registerNib:[UINib nibWithNibName:@"MessageCellView"
-                                               bundle:nil]
-         forCellReuseIdentifier:[MessageCell reuseIdentifier]];
-
-    self.composeButtons = [[UISegmentedControl alloc] initWithItems:@[[UIImage imageNamed:@"user-toolbar.png"],
-                                                                      [UIImage imageNamed:@"bullhorn.png"]]];
-    self.composeButtons.segmentedControlStyle = UISegmentedControlStyleBar;
-    self.composeButtons.momentary = YES;
-    [self.composeButtons addTarget:self action:@selector(composeButtonsPressed) forControlEvents:UIControlEventValueChanged];
-
-    UIBarButtonItem *rightBar = [[UIBarButtonItem alloc] initWithCustomView:self.composeButtons];
-    self.navigationItem.rightBarButtonItem = rightBar;
-
-    if ([self.tableView respondsToSelector:@selector(setKeyboardDismissMode:)]) {
-        self.tableView.keyboardDismissMode =UIScrollViewKeyboardDismissModeOnDrag;
-    }
-
-    // Dismiss the keyboard by tapping on iOS 6 devices
-    UITapGestureRecognizer *dismissComposeView = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didDismissComposeView)];
-    [self.view addGestureRecognizer:dismissComposeView];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

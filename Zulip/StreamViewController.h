@@ -17,9 +17,9 @@
 @property (nonatomic, retain) NSMutableSet *msgIds;
 @property (nonatomic, retain) NarrowOperators *operators;
 
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
-@property (weak, nonatomic) IBOutlet StreamComposeView *composeView;
+@property (strong, nonatomic) StreamComposeView *composeView;
 
 // Generic message list implementations
 - (int)rowWithId:(int)messageId;

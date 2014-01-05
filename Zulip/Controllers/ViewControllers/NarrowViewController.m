@@ -34,25 +34,19 @@ typedef enum  {
         self.operators = operators;
         self.initialScrollSetting = NarrowScrollToFirstUnread;
         self.scrollMessageID = -1;
+
+        self.title = self.operators.title;
+
+        if ([self.title isEqualToString:@"Private Messages"]) {
+            self.composeView.isPrivate = YES;
+        } else {
+            self.composeView.recipient = self.title;
+        }
+
+        [self initialPopulate];
     }
 
     return self;
-}
-
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
-    self.title = self.operators.title;
-
-    if ([self.title isEqualToString:@"Private Messages"]) {
-        self.composeView.isPrivate = YES;
-    } else {
-        self.composeView.recipient = self.title;
-    }
-
-    [self initialPopulate];
 }
 
 - (void)scrollToMessageID:(long)messageId
