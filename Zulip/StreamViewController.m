@@ -114,7 +114,7 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
 
         // Dismiss the keyboard by tapping on iOS 6 devices
         UITapGestureRecognizer *dismissComposeView = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didDismissComposeView)];
-        [self.view addGestureRecognizer:dismissComposeView];
+        [self.tableView addGestureRecognizer:dismissComposeView];
 
     }
     return self;
