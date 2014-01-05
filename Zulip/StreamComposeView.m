@@ -35,7 +35,7 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
     if (self = [super init]) {
         self.mainBar = [[UIToolbar alloc] init];
         [self.mainBar sizeToFit];
-        CGSize toolbarSize = self.mainBar.frame.size;
+        CGSize toolbarSize = self.mainBar.size;
 
         [self resizeTo:CGSizeMake(toolbarSize.width, toolbarSize.height * 2)];
 
@@ -100,9 +100,9 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 
 - (CGFloat)visibleHeight {
     if (self.subjectBar.hidden) {
-        return self.mainBar.frame.size.height;
+        return self.mainBar.height;
     } else {
-        return self.frame.size.height;
+        return self.height;
     }
 }
 
@@ -181,24 +181,18 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 #pragma mark - UITextViewDelegate
 - (void)textViewDidChange:(UITextView *)textView
 {
-    CGFloat fixedWidth = textView.frame.size.width;
-    CGSize newSize = [textView sizeThatFits:CGSizeMake(fixedWidth, MAXFLOAT)];
+    CGSize newSize = [textView sizeThatFits:CGSizeMake(textView.width, MAXFLOAT)];
     CGRect newFrame = textView.frame;
-    newFrame.size = CGSizeMake(fmaxf(newSize.width, fixedWidth), newSize.height);
+    newFrame.size = CGSizeMake(fmaxf(newSize.width, textView.width), newSize.height);
 
     CGFloat heightDifference = newSize.height - textView.frame.size.height;
 
-    CGRect toolbarFrame = self.mainBar.frame;
-    toolbarFrame.size.height += heightDifference;
-
-    CGRect viewFrame = self.frame;
-    viewFrame.size.height += heightDifference;
-    viewFrame.origin.y -= heightDifference;
-
     [UIView animateWithDuration:0.1f animations:^{
         textView.frame = newFrame;
-        self.mainBar.frame = toolbarFrame;
-        self.frame = viewFrame;
+        [self.mainBar resizeTo:CGSizeMake(self.mainBar.width, self.mainBar.height + heightDifference)];
+
+        [self resizeTo:CGSizeMake(self.width, self.height + heightDifference)];
+        [self moveBy:CGPointMake(0, -heightDifference)];
     }];
 }
 

@@ -175,7 +175,7 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
 -(void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
 {
 //    NSLog(@"WIll end at %f, height is %f", targetContentOffset->y, );
-    CGFloat bottom = self.tableView.contentSize.height - CGRectGetHeight(self.tableView.frame);
+    CGFloat bottom = self.tableView.contentSize.height - self.tableView.height;
 
     CGFloat bottomPrefetchPadding = 100;
     if (targetContentOffset->y + bottomPrefetchPadding >= bottom) {
@@ -207,7 +207,7 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
         return;
     }
 
-    CGFloat bottom = self.tableView.contentSize.height - CGRectGetHeight(self.tableView.frame);
+    CGFloat bottom = self.tableView.contentSize.height - self.tableView.height;
 
     CGFloat bottomPrefetchPadding = 100;
     if (self.tableView.contentOffset.y + bottomPrefetchPadding >= bottom) {
@@ -371,7 +371,7 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
 
         // Maintain the same scroll position, and replace the "Loading more messages"
         // banner with the newly loaded messages
-        CGFloat peek_height =  CGRectGetHeight(self.refreshControl.bounds);
+        CGFloat peek_height =  self.refreshControl.height;
         CGRect peek = CGRectMake(0, offset.y - peek_height, self.tableView.bounds.size.width, peek_height);
         [self.tableView scrollRectToVisible:peek animated:NO];
     }
@@ -433,11 +433,9 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
     CGRect keyboardFrame = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGRect keyboardFrameForTextField = [self.composeView.superview convertRect:keyboardFrame fromView:nil];
 
-    CGRect newTextFieldFrame = self.composeView.frame;
-    newTextFieldFrame.origin.y = keyboardFrameForTextField.origin.y - newTextFieldFrame.size.height;
-
     [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionBeginFromCurrentState | curve animations:^{
-        self.composeView.frame = newTextFieldFrame;
+        CGFloat newTop = keyboardFrameForTextField.origin.y - self.composeView.height;
+        [self.composeView moveToPoint:CGPointMake(self.composeView.left, newTop)];
     } completion:nil];
 
     UIEdgeInsets tableViewInset = self.tableView.contentInset;
