@@ -392,9 +392,8 @@
     UserCell *selectedCell = (UserCell *)[tableView cellForRowAtIndexPath:indexPath];
 
     if (self.currentAutocompleteField == self.privateRecipient) {
-        self.currentAutocompleteField.text =                                   [ComposeViewController replaceLastItemInStringList:
-                                                                                self.privateRecipient.text withString:
-                                                                                selectedCell.email];
+        self.currentAutocompleteField.text = [ComposeViewController replaceLastItemInStringList: self.privateRecipient.text
+                                                                                     withString:selectedCell.email];
 
         self.currentAutocompleteField.text = [NSString stringWithFormat:@"%@, ", self.currentAutocompleteField.text];
     } else {

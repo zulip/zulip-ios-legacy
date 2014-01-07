@@ -12,8 +12,8 @@
 @property(nonatomic,retain) ZulipAppDelegate *delegate;
 @property(nonatomic,retain) NSString *type;
 @property (nonatomic, retain) NSMutableArray *entryFields;
-@property (nonatomic, copy) NSDictionary *fullNameLookupDict;
-@property (nonatomic, copy) NSSet *streamLookup;
+@property (nonatomic, strong) NSDictionary *fullNameLookupDict;
+@property (nonatomic, strong) NSSet *streamLookup;
 @property (nonatomic, retain) NSArray *completionMatches;
 
 - (id)initWithReplyTo:(RawMessage *)message;
