@@ -28,13 +28,12 @@
 
 const CGFloat RightSidebarViewControllerUserCellHeight = 26.f;
 const CGFloat RightSidebarViewControllerStatusBarOffset = 15.f;
-const CGFloat RightSidebarViewControllerLeftOffset = 70.f;
 
 @interface RightSidebarViewController () <NSFetchedResultsControllerDelegate>
 
 @property (nonatomic, strong) NSArray *userPresences;
 
-@property (nonatomic, retain) NSFetchedResultsController *streamController;
+@property (nonatomic, retain) NSFetchedResultsController *userController;
 @property (nonatomic, retain) SidebarSectionHeader *sidebarUsersHeader;
 
 @end
@@ -57,7 +56,6 @@ const CGFloat RightSidebarViewControllerLeftOffset = 70.f;
                                                       usingBlock:^(NSNotification *note) {
                                                           [self handleMessageCountChangedNotification:[[note userInfo] objectForKey:ZUnreadCountChangeNotificationData]];
                                                       }];
-
     }
     return self;
 }
@@ -87,15 +85,15 @@ const CGFloat RightSidebarViewControllerLeftOffset = 70.f;
 
     ZulipAppDelegate *appDelegate = (ZulipAppDelegate *)[[UIApplication sharedApplication] delegate];
 
-    self.streamController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+    self.userController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                 managedObjectContext:[appDelegate managedObjectContext]
                                                                   sectionNameKeyPath:nil
                                                                            cacheName:@"UserSidebarCache"];
 
-    self.streamController.delegate = self;
+    self.userController.delegate = self;
 
     NSError *error = nil;
-    [self.streamController performFetch:&error];
+    [self.userController performFetch:&error];
     if (error) {
         CLS_LOG(@"Failed to fetch Users from core data: %@ %@", [error localizedDescription], [error userInfo]);
     }
@@ -105,7 +103,7 @@ const CGFloat RightSidebarViewControllerLeftOffset = 70.f;
 
 - (void)viewDidUnload
 {
-    self.streamController = nil;
+    self.userController = nil;
 }
 
 #pragma mark - Private methods
@@ -116,7 +114,7 @@ const CGFloat RightSidebarViewControllerLeftOffset = 70.f;
                            ZUserPresenceStatusOffline: [[NSMutableOrderedSet alloc] init]
                            };
 
-    for (ZUserPresence *presence in self.streamController.fetchedObjects) {
+    for (ZUserPresence *presence in self.userController.fetchedObjects) {
         [sets[presence.currentStatus] addObject:presence];
     }
 
@@ -197,8 +195,8 @@ const CGFloat RightSidebarViewControllerLeftOffset = 70.f;
 {
     for (UITableViewCell *cell in [self.tableView visibleCells]) {
         if(cell && [cell isKindOfClass:[SidebarUserCell class]]) {
-            SidebarUserCell *streamCell = (SidebarUserCell *)cell;
-            [streamCell calculateUnreadCount];
+            SidebarUserCell *userCell = (SidebarUserCell *)cell;
+            [userCell calculateUnreadCount];
         }
     }
 }

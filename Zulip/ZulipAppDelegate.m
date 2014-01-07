@@ -63,8 +63,8 @@
 
     self.sidePanelController.centerPanel = self.navController;
 
-    LeftSidebarViewController *sidebar = [[LeftSidebarViewController alloc] initWithNibName:@"LeftSidebarViewController" bundle:nil];
-    self.sidePanelController.leftPanel = sidebar;
+    LeftSidebarViewController *leftSidebar = [[LeftSidebarViewController alloc] initWithNibName:@"LeftSidebarViewController" bundle:nil];
+    self.sidePanelController.leftPanel = leftSidebar;
 
     [[NSNotificationCenter defaultCenter] addObserverForName:kLoginNotification
                                                       object:nil
