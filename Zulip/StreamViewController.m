@@ -22,6 +22,8 @@
 
 @property (nonatomic, assign) BOOL waitingForRefresh;
 
+@property (nonatomic, strong) UITapGestureRecognizer *dismissComposeViewGestureRecognizer;
+
 @end
 
 static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
@@ -112,12 +114,9 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
         
         if ([self.tableView respondsToSelector:@selector(setKeyboardDismissMode:)]) {
             self.tableView.keyboardDismissMode =UIScrollViewKeyboardDismissModeOnDrag;
+        } else {
+            self.dismissComposeViewGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didDismissComposeView)];
         }
-
-        // Dismiss the keyboard by tapping on iOS 6 devices
-        UITapGestureRecognizer *dismissComposeView = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didDismissComposeView)];
-        [self.tableView addGestureRecognizer:dismissComposeView];
-
     }
     return self;
 }
@@ -418,11 +417,19 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
 
 #pragma mark - Keyboard show/hide
 - (void)keyboardWillHide:(NSNotification *)notification {
+    if (self.dismissComposeViewGestureRecognizer) {
+        [self.tableView removeGestureRecognizer:self.dismissComposeViewGestureRecognizer];
+    }
+
     [self.composeView hideSubjectBar];
     [self moveComposeViewForNotification:notification];
 }
 
 - (void)keyboardWillShow:(NSNotification *)notification {
+    if (self.dismissComposeViewGestureRecognizer) {
+        [self.tableView addGestureRecognizer:self.dismissComposeViewGestureRecognizer];
+    }
+
     [self.composeView showSubjectBar];
     [self moveComposeViewForNotification:notification];
 }
