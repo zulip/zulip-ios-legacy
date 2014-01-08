@@ -97,9 +97,6 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
                                                  options:(NSKeyValueObservingOptionNew |
                                                           NSKeyValueObservingOptionOld)
                                                  context:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-
 
 
         self.composeButtons = [[UISegmentedControl alloc] initWithItems:@[[UIImage imageNamed:@"user-toolbar.png"],
@@ -119,6 +116,20 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
         }
     }
     return self;
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 }
 
 - (void)clearMessages
