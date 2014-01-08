@@ -63,6 +63,12 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
         self.messageInput.delegate = self;
         self.messageInput.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 
+        // iOS 6 has a weird bug where vertical alignment is off in the text
+        // view because default font sizes different. This is a hacky workaround.
+        if ([[[UIDevice currentDevice] systemVersion] compare:@"7.0" options:NSNumericSearch] == NSOrderedAscending) {
+            self.messageInput.font = [UIFont systemFontOfSize:14.f];
+        }
+
         UIBarButtonItem *inputItem = [[UIBarButtonItem alloc] initWithCustomView:self.messageInput];
 
 

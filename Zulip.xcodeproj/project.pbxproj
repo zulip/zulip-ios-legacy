@@ -37,9 +37,9 @@
 		78BE8D4217C52D0100330433 /* SourceSansPro-SemiboldIt-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 78BE8D1917C5101A00330433 /* SourceSansPro-SemiboldIt-webfont.ttf */; };
 		78C6F29218159AEA00AFDF6C /* UserCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78C6F29118159AEA00AFDF6C /* UserCellView.xib */; };
 		78C6F29D18159CEC00AFDF6C /* UserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 78C6F29C18159CEC00AFDF6C /* UserCell.m */; };
-		A638DACF18774B45002B0333 /* StreamComposeView.m in Sources */ = {isa = PBXBuildFile; fileRef = A638DACE18774B45002B0333 /* StreamComposeView.m */; };
-		A638DB02187796E0002B0333 /* AutocompleteResults.m in Sources */ = {isa = PBXBuildFile; fileRef = A638DB01187796E0002B0333 /* AutocompleteResults.m */; };
 		A62B8B5B187A0ACE00D1691B /* UIView+Layout.m in Sources */ = {isa = PBXBuildFile; fileRef = A62B8B5A187A0ACE00D1691B /* UIView+Layout.m */; };
+		A638DB02187796E0002B0333 /* AutocompleteResults.m in Sources */ = {isa = PBXBuildFile; fileRef = A638DB01187796E0002B0333 /* AutocompleteResults.m */; };
+		A67BFCA1187E74A10059FCC0 /* StreamComposeView.m in Sources */ = {isa = PBXBuildFile; fileRef = A67BFCA0187E74A10059FCC0 /* StreamComposeView.m */; };
 		B30F55A217B2D432006DC735 /* LeftSidebarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B30F55A017B2D432006DC735 /* LeftSidebarViewController.m */; };
 		B30F55A317B2D432006DC735 /* LeftSidebarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B30F55A117B2D432006DC735 /* LeftSidebarViewController.xib */; };
 		B3107A0A17C55A33000F248E /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = B3107A0917C55A33000F248E /* MBProgressHUD.m */; };
@@ -241,12 +241,12 @@
 		78C6F29118159AEA00AFDF6C /* UserCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = UserCellView.xib; path = Views/UserCellView.xib; sourceTree = "<group>"; };
 		78C6F29B18159CEC00AFDF6C /* UserCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserCell.h; path = Views/UserCell.h; sourceTree = "<group>"; };
 		78C6F29C18159CEC00AFDF6C /* UserCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserCell.m; path = Views/UserCell.m; sourceTree = "<group>"; };
-		A638DACD18774B45002B0333 /* StreamComposeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamComposeView.h; sourceTree = "<group>"; };
-		A638DACE18774B45002B0333 /* StreamComposeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreamComposeView.m; sourceTree = "<group>"; };
-		A638DB00187796E0002B0333 /* AutocompleteResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutocompleteResults.h; sourceTree = "<group>"; };
-		A638DB01187796E0002B0333 /* AutocompleteResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AutocompleteResults.m; sourceTree = "<group>"; };
 		A62B8B59187A0ACE00D1691B /* UIView+Layout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Layout.h"; sourceTree = "<group>"; };
 		A62B8B5A187A0ACE00D1691B /* UIView+Layout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Layout.m"; sourceTree = "<group>"; };
+		A638DB00187796E0002B0333 /* AutocompleteResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutocompleteResults.h; sourceTree = "<group>"; };
+		A638DB01187796E0002B0333 /* AutocompleteResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AutocompleteResults.m; sourceTree = "<group>"; };
+		A67BFC9F187E74A10059FCC0 /* StreamComposeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamComposeView.h; sourceTree = "<group>"; };
+		A67BFCA0187E74A10059FCC0 /* StreamComposeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreamComposeView.m; sourceTree = "<group>"; };
 		B30F559F17B2D432006DC735 /* LeftSidebarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LeftSidebarViewController.h; path = Controllers/ViewControllers/LeftSidebarViewController.h; sourceTree = "<group>"; };
 		B30F55A017B2D432006DC735 /* LeftSidebarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LeftSidebarViewController.m; path = Controllers/ViewControllers/LeftSidebarViewController.m; sourceTree = "<group>"; };
 		B30F55A117B2D432006DC735 /* LeftSidebarViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LeftSidebarViewController.xib; path = Controllers/ViewControllers/LeftSidebarViewController.xib; sourceTree = "<group>"; };
@@ -311,7 +311,7 @@
 		B3BA5B021816D1A000EFFC74 /* NSArray+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSArray+Blocks.m"; path = "Categories/NSArray+Blocks.m"; sourceTree = "<group>"; };
 		B3C2E7D11873638F00BB15D7 /* PresenceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PresenceManager.h; sourceTree = "<group>"; };
 		B3C2E7D21873638F00BB15D7 /* PresenceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PresenceManager.m; sourceTree = "<group>"; };
-		B3C2E7E018737A8300BB15D7 /* Zulip2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = file; path = Zulip2.xcdatamodel; sourceTree = "<group>"; };
+		B3C2E7E018737A8300BB15D7 /* Zulip2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Zulip2.xcdatamodel; sourceTree = "<group>"; };
 		B3C2E7E9187389C200BB15D7 /* ZUserPresence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZUserPresence.h; path = Models/ZUserPresence.h; sourceTree = "<group>"; };
 		B3C2E7EA187389C200BB15D7 /* ZUserPresence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZUserPresence.m; path = Models/ZUserPresence.m; sourceTree = "<group>"; };
 		B3CC439017A701A900C8AF3F /* ZUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZUser.h; path = Models/ZUser.h; sourceTree = "<group>"; };
@@ -590,11 +590,11 @@
 		B3766D30179DD675005FB0D4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				A62B8B4E187A099B00D1691B /* StreamComposeView.h */,
-				A62B8B4F187A099B00D1691B /* StreamComposeView.m */,
 				782681CA1795CFD2009F69F5 /* iPhone */,
 				782681BD1795C512009F69F5 /* iPad */,
 				E577A74B16226AC4002D9651 /* MessageCell.h */,
+				A67BFC9F187E74A10059FCC0 /* StreamComposeView.h */,
+				A67BFCA0187E74A10059FCC0 /* StreamComposeView.m */,
 				E577A74C16226AC4002D9651 /* MessageCell.m */,
 				E577A74E16226AFF002D9651 /* MessageCellView.xib */,
 				B3F5629117A81C37004B185A /* SidebarStreamCell.h */,
@@ -1133,6 +1133,7 @@
 				B3F50D73179DADE800F9DAE4 /* AFXMLRequestOperation.m in Sources */,
 				B3F50D74179DADE800F9DAE4 /* UIImageView+AFNetworking.m in Sources */,
 				B3766D3E179DDBE2005FB0D4 /* Zulip.xcdatamodeld in Sources */,
+				A67BFCA1187E74A10059FCC0 /* StreamComposeView.m in Sources */,
 				B3174BE117F47F92004C31E4 /* AboutViewController.m in Sources */,
 				B34697C517A020D1006D0E9B /* ZulipAPIController.m in Sources */,
 				B351823117A1B20A00B41D75 /* ZSubscription.m in Sources */,
@@ -1143,7 +1144,6 @@
 				B3F5629D17A9A4EE004B185A /* RawMessage.m in Sources */,
 				B3F562A017AAAE5A004B185A /* NarrowOperators.m in Sources */,
 				B3F562B317ABEB85004B185A /* SidebarStreamsHeader.m in Sources */,
-				A62B8B50187A099B00D1691B /* StreamComposeView.m in Sources */,
 				B3F562BE17AC30BC004B185A /* ZMessage.m in Sources */,
 				B3F562C117AC3C65004B185A /* UnreadManager.m in Sources */,
 				B3DDD2F817B02A0800F8D387 /* LongPoller.m in Sources */,
