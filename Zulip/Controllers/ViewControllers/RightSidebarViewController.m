@@ -88,7 +88,7 @@ const CGFloat RightSidebarViewControllerStatusBarOffset = 15.f;
     self.userController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                 managedObjectContext:[appDelegate managedObjectContext]
                                                                   sectionNameKeyPath:nil
-                                                                           cacheName:@"UserSidebarCache"];
+                                                                         cacheName:nil];
 
     self.userController.delegate = self;
 
