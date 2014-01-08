@@ -182,8 +182,6 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
     }];
 
     self.messageInput.text = @"";
-    self.to.text = @"";
-    self.subject.text = @"";
 }
 
 #pragma mark - UITextViewDelegate
