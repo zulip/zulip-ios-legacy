@@ -88,7 +88,7 @@ static double POLL_INTERVAL_SECS = 50.0;
         return;
     }
 
-    NSDictionary *params = @{@"status": @"active"};
+    NSDictionary *params = @{@"status": @"active", @"new_user_input": @"true"};
     [[ZulipAPIClient sharedClient] postPath:@"users/me/presence" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *data = (NSDictionary *)responseObject;
 
