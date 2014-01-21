@@ -37,6 +37,7 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 @property (strong, nonatomic) UITextField *subject;
 @property (strong, nonatomic) UIBarButtonItem *toItem;
 @property (strong, nonatomic) UIBarButtonItem *subjectItem;
+@property (strong, nonatomic) UIView *tapHandlerShim;
 
 @end
 
@@ -106,6 +107,13 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 
         self.subjectBar.items = @[flexibleSpace, self.toItem, fixedSpace, self.subjectItem, flexibleSpace];
         [self addSubview:self.subjectBar];
+
+        // Tapping the compose view focuses the 'to' field, not the message field
+        self.tapHandlerShim = [[UIView alloc] initWithFrame:self.bounds];
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapComposeView)];
+        [self.tapHandlerShim addGestureRecognizer:tap];
+        [self addSubview:self.tapHandlerShim];
+
     }
     return self;
 }
@@ -135,10 +143,12 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 
 - (void)showSubjectBar {
     self.subjectBar.hidden = NO;
+    self.tapHandlerShim.hidden = YES;
 }
 
 - (void)hideSubjectBar {
     self.subjectBar.hidden = YES;
+    self.tapHandlerShim.hidden = NO;
 }
 
 - (CGFloat)visibleHeight {
@@ -215,6 +225,10 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
     }];
 
     self.messageInput.text = @"";
+}
+
+- (void)didTapComposeView {
+    [self.to becomeFirstResponder];
 }
 
 #pragma mark - UITextViewDelegate
