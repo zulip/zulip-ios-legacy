@@ -6,6 +6,7 @@
 #import "UIView+Layout.h"
 #import "ZUser.h"
 #import "RawMessage.h"
+#import "UIViewController+JASidePanel.h"
 
 #import "AFJSONRequestOperation.h"
 
@@ -97,7 +98,7 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
                                                  context:nil];
 
 
-        UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"user-toolbar"] style:UIBarButtonItemStylePlain target:self action:@selector(didTapNewMessageButton)];
+        UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"user-toolbar"] style:UIBarButtonItemStylePlain target:self action:@selector(didTapUsersButton)];
         self.navigationItem.rightBarButtonItem = rightButton;
 
         
@@ -297,10 +298,8 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
 
 #pragma mark - StreamViewController
 
--(void)didTapNewMessageButton {
-    ComposeViewController *composeView = [[ComposeViewController alloc] init];
-    composeView.type = @"private";
-    [[self navigationController] pushViewController:composeView animated:YES];
+-(void)didTapUsersButton {
+    [self.findSidePanelController showRightPanelAnimated:YES];
 }
 
 -(int)rowWithId:(int)messageId
