@@ -15,8 +15,6 @@
 
 @interface StreamViewController ()
 
-@property (nonatomic, retain) UISegmentedControl *composeButtons;
-
 @property (nonatomic, retain) RawMessage *topRow;
 @property (nonatomic, retain) ZulipAppDelegate *delegate;
 
@@ -99,14 +97,8 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
                                                  context:nil];
 
 
-        self.composeButtons = [[UISegmentedControl alloc] initWithItems:@[[UIImage imageNamed:@"user-toolbar.png"],
-                                                                          [UIImage imageNamed:@"bullhorn.png"]]];
-        self.composeButtons.segmentedControlStyle = UISegmentedControlStyleBar;
-        self.composeButtons.momentary = YES;
-        [self.composeButtons addTarget:self action:@selector(composeButtonsPressed) forControlEvents:UIControlEventValueChanged];
-
-        UIBarButtonItem *rightBar = [[UIBarButtonItem alloc] initWithCustomView:self.composeButtons];
-        self.navigationItem.rightBarButtonItem = rightBar;
+        UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"user-toolbar"] style:UIBarButtonItemStylePlain target:self action:@selector(didTapNewMessageButton)];
+        self.navigationItem.rightBarButtonItem = rightButton;
 
         
         if ([self.tableView respondsToSelector:@selector(setKeyboardDismissMode:)]) {
@@ -305,15 +297,11 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
 
 #pragma mark - StreamViewController
 
--(void)composeButtonsPressed {
+-(void)didTapNewMessageButton {
     ComposeViewController *composeView = [[ComposeViewController alloc]
                                           initWithNibName:@"ComposeViewController"
                                           bundle:nil];
-    if (self.composeButtons.selectedSegmentIndex == 0) { // PM button
-        composeView.type = @"private";
-    } else {
-        composeView.type = @"stream";
-    }
+    composeView.type = @"private";
     [[self navigationController] pushViewController:composeView animated:YES];
 }
 
