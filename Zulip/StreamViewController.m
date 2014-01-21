@@ -298,9 +298,7 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
 #pragma mark - StreamViewController
 
 -(void)didTapNewMessageButton {
-    ComposeViewController *composeView = [[ComposeViewController alloc]
-                                          initWithNibName:@"ComposeViewController"
-                                          bundle:nil];
+    ComposeViewController *composeView = [[ComposeViewController alloc] init];
     composeView.type = @"private";
     [[self navigationController] pushViewController:composeView animated:YES];
 }

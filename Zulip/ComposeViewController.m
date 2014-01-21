@@ -21,9 +21,20 @@
 
 #pragma mark Setup/Teardown methods
 
+- (id)init {
+    self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
+    if (self) {
+        self.completionMatches = [[NSMutableArray alloc] init];
+        self.fullNameLookupDict = [[ZulipAPIController sharedInstance] fullNameLookupDict];
+        self.streamLookup = [self fetchStreamNames];
+    }
+    return self;
+
+}
+
 - (id)initWithReplyTo:(RawMessage *)message
 {
-    self = [self initWithNibName:@"ComposeViewController" bundle:nil];
+    self = [self init];
     if (self) {
         self.replyTo = message;
     }
@@ -31,21 +42,10 @@
 }
 
 - (id)initWithRecipient:(ZUser *)recipient {
-    self = [self initWithNibName:@"ComposeViewController" bundle:nil];
+    self = [self init];
     if (self) {
         self.recipientString = recipient.email;
         self.type = @"private";
-    }
-    return self;
-}
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        self.completionMatches = [[NSMutableArray alloc] init];
-        self.fullNameLookupDict = [[ZulipAPIController sharedInstance] fullNameLookupDict];
-        self.streamLookup = [self fetchStreamNames];
     }
     return self;
 }
