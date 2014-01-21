@@ -411,6 +411,11 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
     }
 }
 
+#pragma mark - MessageComposing protocol
+- (void)showComposeViewForUser:(ZUser *)user {
+    [self.composeView showComposeViewForUser:user];
+}
+
 #pragma mark - Keyboard show/hide
 - (void)keyboardWillHide:(NSNotification *)notification {
     if (self.dismissComposeViewGestureRecognizer) {

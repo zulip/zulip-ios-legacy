@@ -13,6 +13,7 @@
 #import "ZUser.h"
 #import "ZUserPresence.h"
 #import "UnreadManager.h"
+#import "MessageComposing.h"
 
 // Various cells
 #import "SidebarUserCell.h"
@@ -173,8 +174,11 @@ const CGFloat RightSidebarViewControllerStatusBarOffset = 15.f;
 {
     SidebarUserCell *cell = (SidebarUserCell *)[self.tableView cellForRowAtIndexPath:indexPath];
 
-    ComposeViewController *composeView = [[ComposeViewController alloc] initWithRecipient:cell.user];
-    [(UINavigationController *)self.findSidePanelController.centerPanel pushViewController:composeView animated:YES];
+    id<MessageComposing> centerController = (id<MessageComposing>)[(UINavigationController *)self.findSidePanelController.centerPanel visibleViewController];
+    if ([centerController conformsToProtocol:@protocol(MessageComposing)]) {
+        [centerController showComposeViewForUser:cell.user];
+    }
+
     [self.findSidePanelController toggleRightPanel:self];
 
 }

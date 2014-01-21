@@ -8,6 +8,10 @@
 
 #import "StreamComposeView.h"
 #import "ZulipAPIClient.h"
+#import "RawMessage.h"
+#import "ZulipAPIController.h"
+#import "ZUser.h"
+
 #import <Crashlytics/Crashlytics.h>
 #import "UIView+Layout.h"
 
@@ -104,6 +108,29 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
         [self addSubview:self.subjectBar];
     }
     return self;
+}
+
+- (void)showComposeViewForMessage:(RawMessage *)message {
+    if ([message.type isEqualToString:@"private"]) {
+        NSMutableArray *emails = [[message.pm_recipients.allObjects valueForKey:@"email"] mutableCopy];
+        [emails removeObject:[[ZulipAPIController sharedInstance] email]];
+        NSString *recipientString = [emails componentsJoinedByString:@", "];
+
+        self.isPrivate = YES;
+        self.recipient = recipientString;
+    } else {
+        self.isPrivate = NO;
+        self.recipient = message.stream_recipient;
+        self.subject.text = message.subject;
+    }
+
+    [self.messageInput becomeFirstResponder];
+}
+
+- (void)showComposeViewForUser:(ZUser *)user {
+    self.isPrivate = YES;
+    self.recipient = user.email;
+    [self.messageInput becomeFirstResponder];
 }
 
 - (void)showSubjectBar {

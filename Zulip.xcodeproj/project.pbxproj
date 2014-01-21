@@ -39,10 +39,10 @@
 		78C6F29D18159CEC00AFDF6C /* UserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 78C6F29C18159CEC00AFDF6C /* UserCell.m */; };
 		A62B8B5B187A0ACE00D1691B /* UIView+Layout.m in Sources */ = {isa = PBXBuildFile; fileRef = A62B8B5A187A0ACE00D1691B /* UIView+Layout.m */; };
 		A638DB02187796E0002B0333 /* AutocompleteResults.m in Sources */ = {isa = PBXBuildFile; fileRef = A638DB01187796E0002B0333 /* AutocompleteResults.m */; };
-		A67BFCA1187E74A10059FCC0 /* StreamComposeView.m in Sources */ = {isa = PBXBuildFile; fileRef = A67BFCA0187E74A10059FCC0 /* StreamComposeView.m */; };
 		A65779211870F1F4006E648D /* SidebarUserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A65779201870F1F4006E648D /* SidebarUserCell.m */; };
 		A65779231870F225006E648D /* SidebarUserCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A65779221870F225006E648D /* SidebarUserCell.xib */; };
 		A67031AE186E759D001139D3 /* RightSidebarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A67031AD186E759D001139D3 /* RightSidebarViewController.m */; };
+		A67BFCA1187E74A10059FCC0 /* StreamComposeView.m in Sources */ = {isa = PBXBuildFile; fileRef = A67BFCA0187E74A10059FCC0 /* StreamComposeView.m */; };
 		B30F55A217B2D432006DC735 /* LeftSidebarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B30F55A017B2D432006DC735 /* LeftSidebarViewController.m */; };
 		B30F55A317B2D432006DC735 /* LeftSidebarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B30F55A117B2D432006DC735 /* LeftSidebarViewController.xib */; };
 		B3107A0A17C55A33000F248E /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = B3107A0917C55A33000F248E /* MBProgressHUD.m */; };
@@ -248,13 +248,14 @@
 		A62B8B5A187A0ACE00D1691B /* UIView+Layout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Layout.m"; sourceTree = "<group>"; };
 		A638DB00187796E0002B0333 /* AutocompleteResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutocompleteResults.h; sourceTree = "<group>"; };
 		A638DB01187796E0002B0333 /* AutocompleteResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AutocompleteResults.m; sourceTree = "<group>"; };
-		A67BFC9F187E74A10059FCC0 /* StreamComposeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamComposeView.h; sourceTree = "<group>"; };
-		A67BFCA0187E74A10059FCC0 /* StreamComposeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreamComposeView.m; sourceTree = "<group>"; };
+		A6528618188EDD280043FC4C /* MessageComposing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageComposing.h; path = Protocols/MessageComposing.h; sourceTree = "<group>"; };
 		A657791F1870F1F4006E648D /* SidebarUserCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SidebarUserCell.h; sourceTree = "<group>"; };
 		A65779201870F1F4006E648D /* SidebarUserCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SidebarUserCell.m; sourceTree = "<group>"; };
 		A65779221870F225006E648D /* SidebarUserCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SidebarUserCell.xib; path = Views/SidebarUserCell.xib; sourceTree = "<group>"; };
 		A67031AC186E759D001139D3 /* RightSidebarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RightSidebarViewController.h; path = Controllers/ViewControllers/RightSidebarViewController.h; sourceTree = "<group>"; };
 		A67031AD186E759D001139D3 /* RightSidebarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RightSidebarViewController.m; path = Controllers/ViewControllers/RightSidebarViewController.m; sourceTree = "<group>"; };
+		A67BFC9F187E74A10059FCC0 /* StreamComposeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamComposeView.h; sourceTree = "<group>"; };
+		A67BFCA0187E74A10059FCC0 /* StreamComposeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreamComposeView.m; sourceTree = "<group>"; };
 		B30F559F17B2D432006DC735 /* LeftSidebarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LeftSidebarViewController.h; path = Controllers/ViewControllers/LeftSidebarViewController.h; sourceTree = "<group>"; };
 		B30F55A017B2D432006DC735 /* LeftSidebarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LeftSidebarViewController.m; path = Controllers/ViewControllers/LeftSidebarViewController.m; sourceTree = "<group>"; };
 		B30F55A117B2D432006DC735 /* LeftSidebarViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LeftSidebarViewController.xib; path = Controllers/ViewControllers/LeftSidebarViewController.xib; sourceTree = "<group>"; };
@@ -526,6 +527,14 @@
 				78BE8D1917C5101A00330433 /* SourceSansPro-SemiboldIt-webfont.ttf */,
 			);
 			name = fonts;
+			sourceTree = "<group>";
+		};
+		A652860F188EDCBA0043FC4C /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				A6528618188EDD280043FC4C /* MessageComposing.h */,
+			);
+			name = Protocols;
 			sourceTree = "<group>";
 		};
 		B3107A0717C55A0A000F248E /* MBProgressHUD */ = {
@@ -804,6 +813,7 @@
 		C316738A1620DB6B00CE9FE5 /* Zulip */ = {
 			isa = PBXGroup;
 			children = (
+				A652860F188EDCBA0043FC4C /* Protocols */,
 				B338402217C3B9640083A529 /* Markdown */,
 				C31673931620DB6B00CE9FE5 /* ZulipAppDelegate.h */,
 				C31673941620DB6B00CE9FE5 /* ZulipAppDelegate.m */,
