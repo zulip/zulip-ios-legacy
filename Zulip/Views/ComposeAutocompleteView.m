@@ -63,8 +63,7 @@
 
 #pragma mark - UITextFieldDelegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    if (textField == self.privateRecipient && !self.hidden) {
-        [self tableView:self didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    if (textField == self.privateRecipient) {
         [self.messageBody becomeFirstResponder];
         self.hidden = YES;
     } else if (textField == self.recipient) {
