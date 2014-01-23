@@ -2,10 +2,12 @@
 #import "ZulipAppDelegate.h"
 #import "ZulipAPIController.h"
 
+#import "UIView+Layout.h"
+
 #import <Crashlytics/Crashlytics.h>
 
 @interface LoginViewController ()
-
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @end
 
 @implementation LoginViewController
@@ -17,7 +19,10 @@
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    }
     return self;
 }
 
@@ -41,6 +46,10 @@
 
     // Focus on email field.
     [self.email becomeFirstResponder];
+}
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    self.scrollView.frame = self.view.bounds;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -91,37 +100,18 @@
 	return NO;
 }
 
-- (void) animateTextField: (UITextField *) textField up: (BOOL) up
-{
-    const int movementDistance = 10; // tweak as needed
-    const float movementDuration = 0.3f; // tweak as needed
+#pragma mark - Keyboard functions
+- (void)keyboardWillShow:(NSNotification *)notification {
+    NSDictionary *userInfo = notification.userInfo;
+    CGRect keyboardFrame = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGRect keyboardFrameForTextField = [self.view convertRect:keyboardFrame fromView:nil];
 
-    int movement = (up ? -movementDistance : movementDistance);
-
-    [UIView beginAnimations: @"anim" context: nil];
-    [UIView setAnimationBeginsFromCurrentState: YES];
-    [UIView setAnimationDuration: movementDuration];
-    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
-    [UIView commitAnimations];
+    NSLog(@"%f, %f", keyboardFrameForTextField.size.height, self.view.height);
+    self.scrollView.contentSize = CGSizeMake(self.view.width, self.view.height);
+    [self.scrollView resizeTo:CGSizeMake(self.view.width, self.view.height - keyboardFrameForTextField.size.height)];
 }
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField
-{
-    if (textField == self.password && [self hasLessThanFourInchDisplay]) {
-        [self animateTextField: textField up: YES];
-    }
+- (void)keyboardWillHide:(NSNotification *)notification {
+    [self.scrollView resizeTo:self.view.size];
 }
-
-- (void)textFieldDidEndEditing:(UITextField *)textField
-{
-    if (textField == self.password && [self hasLessThanFourInchDisplay]) {
-        [self animateTextField: textField up: NO];
-    }
-}
-
-- (BOOL)hasLessThanFourInchDisplay {
-    return ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone &&
-            [UIScreen mainScreen].bounds.size.height < 568.0);
-}
-
 @end
