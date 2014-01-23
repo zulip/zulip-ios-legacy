@@ -18,7 +18,6 @@
 // Various cells
 #import "SidebarUserCell.h"
 #import "SidebarSectionHeader.h"
-#import "ComposeViewController.h"
 
 #import "JASidePanelController.h"
 #import "UIViewController+JASidePanel.h"

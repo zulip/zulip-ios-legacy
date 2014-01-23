@@ -13,7 +13,6 @@
 		51BA4F5817F6069300BBF48C /* left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 51BA4F5017F6069300BBF48C /* left@2x.png */; };
 		51BA4F5A17F6069300BBF48C /* right.png in Resources */ = {isa = PBXBuildFile; fileRef = 51BA4F5317F6069300BBF48C /* right.png */; };
 		51BA4F5B17F6069300BBF48C /* right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 51BA4F5417F6069300BBF48C /* right@2x.png */; };
-		780CF5E3179608FE0053481C /* ComposeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5DC806A165D347D008B53F9 /* ComposeViewController.m */; };
 		782681C91795CE08009F69F5 /* ComposeViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681C81795CE08009F69F5 /* ComposeViewController~ipad.xib */; };
 		782681CC1795D10C009F69F5 /* LoginViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681CB1795D10C009F69F5 /* LoginViewController~ipad.xib */; };
 		7882800D17B2E5D200D5DC42 /* Zulip.css in Resources */ = {isa = PBXBuildFile; fileRef = 7882800C17B2E2F300D5DC42 /* Zulip.css */; };
@@ -412,8 +411,6 @@
 		E5CDE079162C88A800BBD773 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		E5CDE07A162C88A800BBD773 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		E5CDE07B162C88A800BBD773 /* LoginViewController~iphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "LoginViewController~iphone.xib"; sourceTree = "<group>"; };
-		E5DC8069165D347D008B53F9 /* ComposeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComposeViewController.h; sourceTree = "<group>"; };
-		E5DC806A165D347D008B53F9 /* ComposeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComposeViewController.m; sourceTree = "<group>"; };
 		E5DC806B165D347D008B53F9 /* ComposeViewController~iphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "ComposeViewController~iphone.xib"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -732,8 +729,6 @@
 				B3CC439517A7F13700C8AF3F /* HomeViewController.m */,
 				B3F5629617A84FD5004B185A /* NarrowViewController.h */,
 				B3F5629717A84FD5004B185A /* NarrowViewController.m */,
-				E5DC8069165D347D008B53F9 /* ComposeViewController.h */,
-				E5DC806A165D347D008B53F9 /* ComposeViewController.m */,
 				E598E7871634A9940022BF4A /* ErrorViewController.h */,
 				E598E7881634A9940022BF4A /* ErrorViewController.m */,
 				B30F559F17B2D432006DC735 /* LeftSidebarViewController.h */,
@@ -1129,7 +1124,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				780CF5E3179608FE0053481C /* ComposeViewController.m in Sources */,
 				C31673911620DB6B00CE9FE5 /* main.m in Sources */,
 				B30F55A217B2D432006DC735 /* LeftSidebarViewController.m in Sources */,
 				C31673951620DB6B00CE9FE5 /* ZulipAppDelegate.m in Sources */,

@@ -1,6 +1,5 @@
 #import "ZulipAppDelegate.h"
 #import "ZulipAPIClient.h"
-#import "ComposeViewController.h"
 #import "UIColor+HexColor.h"
 #include "ZulipAPIController.h"
 #import "UIView+Layout.h"
