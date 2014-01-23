@@ -4,6 +4,7 @@
 #import "MessageComposing.h"
 
 @class StreamComposeView;
+@class ComposeAutocompleteView;
 @class ZUser;
 
 //@protocol StreamViewControllerDelegate <NSObject>
@@ -21,7 +22,9 @@
 
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
+
 @property (strong, nonatomic) StreamComposeView *composeView;
+@property (strong, nonatomic) ComposeAutocompleteView *autocompleteView;
 
 // Generic message list implementations
 - (int)rowWithId:(int)messageId;

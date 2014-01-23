@@ -11,6 +11,7 @@
 #import "RawMessage.h"
 #import "ZulipAPIController.h"
 #import "ZUser.h"
+#import "ComposeAutocompleteView.h"
 
 #import <Crashlytics/Crashlytics.h>
 #import "UIView+Layout.h"
@@ -43,13 +44,18 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 
 @implementation StreamComposeView
 
-- (id)init {
+- (id)initWithAutocompleteView:(ComposeAutocompleteView *)autocompleteView {
     if (self = [super init]) {
         [self commonInit];
+        self.autocompleteView = autocompleteView;
+        self.autocompleteView.messageBody = self.messageInput;
     }
     return self;
 }
 
+- (id)init {
+    if (self = [super init]) {
+        [self commonInit];
     }
     return self;
 }
@@ -73,10 +79,14 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 
         self.isPrivate = YES;
         self.recipient = recipientString;
+        [self.autocompleteView registerTextField:self.to forType:ComposeAutocompleteTypeUser];
     } else {
         self.isPrivate = NO;
         self.recipient = message.stream_recipient;
         self.subject.text = message.subject;
+
+        [self.autocompleteView registerTextField:self.to forType:ComposeAutocompleteTypeStream];
+        [self.autocompleteView registerTextField:self.subject forType:ComposeAutocompleteTypeTopic];
     }
 
     [self.messageInput becomeFirstResponder];
@@ -85,6 +95,7 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 - (void)showComposeViewForUser:(ZUser *)user {
     self.isPrivate = YES;
     self.recipient = user.email;
+    [self.autocompleteView registerTextField:self.to forType:ComposeAutocompleteTypeUser];
     [self.messageInput becomeFirstResponder];
 }
 
@@ -175,6 +186,8 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 }
 
 - (void)didTapComposeView {
+    [self.autocompleteView registerTextField:self.to forType:ComposeAutocompleteTypeStream];
+    [self.autocompleteView registerTextField:self.subject forType:ComposeAutocompleteTypeTopic];
     [self.to becomeFirstResponder];
 }
 

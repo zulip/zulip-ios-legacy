@@ -39,6 +39,7 @@
 		78C6F29D18159CEC00AFDF6C /* UserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 78C6F29C18159CEC00AFDF6C /* UserCell.m */; };
 		A62B8B5B187A0ACE00D1691B /* UIView+Layout.m in Sources */ = {isa = PBXBuildFile; fileRef = A62B8B5A187A0ACE00D1691B /* UIView+Layout.m */; };
 		A638DB02187796E0002B0333 /* AutocompleteResults.m in Sources */ = {isa = PBXBuildFile; fileRef = A638DB01187796E0002B0333 /* AutocompleteResults.m */; };
+		A652861B188EE2280043FC4C /* ComposeAutocompleteView.m in Sources */ = {isa = PBXBuildFile; fileRef = A652861A188EE2280043FC4C /* ComposeAutocompleteView.m */; };
 		A65779211870F1F4006E648D /* SidebarUserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A65779201870F1F4006E648D /* SidebarUserCell.m */; };
 		A65779231870F225006E648D /* SidebarUserCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A65779221870F225006E648D /* SidebarUserCell.xib */; };
 		A67031AE186E759D001139D3 /* RightSidebarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A67031AD186E759D001139D3 /* RightSidebarViewController.m */; };
@@ -249,6 +250,8 @@
 		A638DB00187796E0002B0333 /* AutocompleteResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutocompleteResults.h; sourceTree = "<group>"; };
 		A638DB01187796E0002B0333 /* AutocompleteResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AutocompleteResults.m; sourceTree = "<group>"; };
 		A6528618188EDD280043FC4C /* MessageComposing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageComposing.h; path = Protocols/MessageComposing.h; sourceTree = "<group>"; };
+		A6528619188EE2280043FC4C /* ComposeAutocompleteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ComposeAutocompleteView.h; path = Views/ComposeAutocompleteView.h; sourceTree = "<group>"; };
+		A652861A188EE2280043FC4C /* ComposeAutocompleteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ComposeAutocompleteView.m; path = Views/ComposeAutocompleteView.m; sourceTree = "<group>"; };
 		A657791F1870F1F4006E648D /* SidebarUserCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SidebarUserCell.h; sourceTree = "<group>"; };
 		A65779201870F1F4006E648D /* SidebarUserCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SidebarUserCell.m; sourceTree = "<group>"; };
 		A65779221870F225006E648D /* SidebarUserCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SidebarUserCell.xib; path = Views/SidebarUserCell.xib; sourceTree = "<group>"; };
@@ -626,6 +629,8 @@
 				78C6F29C18159CEC00AFDF6C /* UserCell.m */,
 				A657791F1870F1F4006E648D /* SidebarUserCell.h */,
 				A65779201870F1F4006E648D /* SidebarUserCell.m */,
+				A6528619188EE2280043FC4C /* ComposeAutocompleteView.h */,
+				A652861A188EE2280043FC4C /* ComposeAutocompleteView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1147,6 +1152,7 @@
 				B3F50D6C179DADE800F9DAE4 /* AFHTTPClient.m in Sources */,
 				B3F50D6D179DADE800F9DAE4 /* AFHTTPRequestOperation.m in Sources */,
 				78C6F29D18159CEC00AFDF6C /* UserCell.m in Sources */,
+				A652861B188EE2280043FC4C /* ComposeAutocompleteView.m in Sources */,
 				B3F50D6E179DADE800F9DAE4 /* AFImageRequestOperation.m in Sources */,
 				B3F50D6F179DADE800F9DAE4 /* AFJSONRequestOperation.m in Sources */,
 				B3C2E7EB187389C200BB15D7 /* ZUserPresence.m in Sources */,

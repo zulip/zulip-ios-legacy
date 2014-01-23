@@ -7,7 +7,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="StreamViewController">
             <connections>
-                <outlet property="composeView" destination="DJ2-c1-CMt" id="ZA3-69-Prw"/>
                 <outlet property="tableView" destination="4" id="G1T-0A-KrI"/>
                 <outlet property="view" destination="04x-7B-Jqm" id="Is9-4I-VtR"/>
             </connections>
@@ -27,10 +26,6 @@
                         <outlet property="delegate" destination="-1" id="7"/>
                     </connections>
                 </tableView>
-                <view contentMode="scaleToFill" id="DJ2-c1-CMt" customClass="StreamComposeView">
-                    <rect key="frame" x="0.0" y="480" width="320" height="88"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                </view>
             </subviews>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>

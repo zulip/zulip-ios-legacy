@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @class RawMessage;
+@class ComposeAutocompleteView;
 @class ZUser;
 
 @interface StreamComposeView : UIView
@@ -17,6 +18,9 @@
 
 @property (strong, nonatomic) NSString *recipient;
 @property (assign, nonatomic) BOOL isPrivate;
+@property (strong, nonatomic) ComposeAutocompleteView *autocompleteView;
+
+- (id)initWithAutocompleteView:(ComposeAutocompleteView *)autocompleteView;
 
 - (void)showComposeViewForMessage:(RawMessage *)message;
 - (void)showComposeViewForUser:(ZUser *)message;

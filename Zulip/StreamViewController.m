@@ -7,12 +7,12 @@
 #import "ZUser.h"
 #import "RawMessage.h"
 #import "UIViewController+JASidePanel.h"
+#import "StreamComposeView.h"
+#import "ComposeAutocompleteView.h"
 
 #import "AFJSONRequestOperation.h"
-
 #import "RenderedMarkdownMunger.h"
 #import "BrowserViewController.h"
-#import "StreamComposeView.h"
 
 @interface StreamViewController ()
 
@@ -68,10 +68,14 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
 
 
         // Add inline replies
-        self.composeView = [[StreamComposeView alloc] init];
+        self.autocompleteView = [[ComposeAutocompleteView alloc] initWithFrame:self.view.bounds];
+        [self.view addSubview:self.autocompleteView];
+
+        self.composeView = [[StreamComposeView alloc] initWithAutocompleteView:self.autocompleteView];
         [self.composeView moveToPoint:CGPointMake(0, self.view.bottom - self.composeView.height)];
         self.composeView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
         [self.view addSubview:self.composeView];
+        
 
         // Listen to long polling messages
         [[NSNotificationCenter defaultCenter] addObserverForName:kLongPollMessageNotification
