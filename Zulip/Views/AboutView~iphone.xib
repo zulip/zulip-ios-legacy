@@ -27,7 +27,6 @@
                     <rect key="frame" x="126" y="79" width="69" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="69" id="ITF-R4-XW1"/>
                         <constraint firstAttribute="height" constant="21" id="z7S-4n-Vg8"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
