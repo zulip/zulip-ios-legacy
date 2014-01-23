@@ -45,77 +45,24 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 
 - (id)init {
     if (self = [super init]) {
-        self.mainBar = [[UIToolbar alloc] init];
-        [self.mainBar sizeToFit];
-        CGSize toolbarSize = self.mainBar.size;
-
-        [self resizeTo:CGSizeMake(toolbarSize.width, toolbarSize.height * 2)];
-
-        UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-        UIBarButtonItem *fixedSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-
-
-        [self.mainBar moveToPoint:CGPointMake(0, toolbarSize.height)];
-        self.mainBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-
-        UIBarButtonItem *sendButton = [[UIBarButtonItem alloc] initWithTitle:@"Send" style:UIBarButtonItemStyleDone target:self action:@selector(didTapSendButton)];
-
-        CGFloat messageWidth = (self.isPad ? StreamComposeViewMessageWidth_Pad : StreamComposeViewMessageWidth_Phone);
-        self.messageInput = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, messageWidth, StreamComposeViewInputHeight)];
-        self.messageInput.layer.cornerRadius = 5.f;
-        self.messageInput.layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1f].CGColor;
-        self.messageInput.layer.borderWidth = 1.f;
-        self.messageInput.delegate = self;
-        self.messageInput.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-
-        // iOS 6 has a weird bug where vertical alignment is off in the text
-        // view because default font sizes different. This is a hacky workaround.
-        if ([[[UIDevice currentDevice] systemVersion] compare:@"7.0" options:NSNumericSearch] == NSOrderedAscending) {
-            self.messageInput.font = [UIFont systemFontOfSize:14.f];
-        }
-
-        UIBarButtonItem *inputItem = [[UIBarButtonItem alloc] initWithCustomView:self.messageInput];
-
-
-        self.mainBar.items = @[flexibleSpace, inputItem, flexibleSpace, sendButton, fixedSpace];
-        [self addSubview:self.mainBar];
-
-
-        // Subject bar
-        CGRect secondBarFrame = CGRectZero;
-        secondBarFrame.size = toolbarSize;
-        self.subjectBar = [[UIToolbar alloc] initWithFrame:secondBarFrame];
-        self.subjectBar.hidden = YES;
-        self.subjectBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-
-        CGFloat toWidth = (self.isPad ? StreamComposeViewToWidth_Pad : StreamComposeViewToWidth_Phone);
-        self.to = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, toWidth, StreamComposeViewInputHeight)];
-        self.to.placeholder = @"Stream";
-        self.to.borderStyle = UITextBorderStyleRoundedRect;
-        self.to.backgroundColor = [UIColor whiteColor];
-        self.to.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        self.toItem = [[UIBarButtonItem alloc] initWithCustomView:self.to];
-
-        CGFloat subjectWidth = (self.isPad ? StreamComposeViewSubjectWidth_Pad : StreamComposeViewSubjectWidth_Phone);
-        self.subject = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, subjectWidth, StreamComposeViewInputHeight)];
-        self.subject.placeholder = @"Subject";
-        self.subject.borderStyle = UITextBorderStyleRoundedRect;
-        self.subject.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        self.subject.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        self.subject.backgroundColor = [UIColor whiteColor];
-        self.subjectItem = [[UIBarButtonItem alloc] initWithCustomView:self.subject];
-
-        self.subjectBar.items = @[flexibleSpace, self.toItem, fixedSpace, self.subjectItem, flexibleSpace];
-        [self addSubview:self.subjectBar];
-
-        // Tapping the compose view focuses the 'to' field, not the message field
-        self.tapHandlerShim = [[UIView alloc] initWithFrame:self.bounds];
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapComposeView)];
-        [self.tapHandlerShim addGestureRecognizer:tap];
-        [self addSubview:self.tapHandlerShim];
+        [self commonInit];
+    }
+    return self;
+}
 
     }
     return self;
+}
+
+- (void)commonInit {
+    [self renderMainBar];
+    [self renderRecipientBar];
+
+    // Tapping the compose view focuses the 'to' field, not the message field
+    self.tapHandlerShim = [[UIView alloc] initWithFrame:self.bounds];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapComposeView)];
+    [self.tapHandlerShim addGestureRecognizer:tap];
+    [self addSubview:self.tapHandlerShim];
 }
 
 - (void)showComposeViewForMessage:(RawMessage *)message {
@@ -252,6 +199,73 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 #pragma mark - Private
 - (BOOL)isPad {
     return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad;
+}
+
+- (void)renderMainBar {
+    self.mainBar = [[UIToolbar alloc] init];
+    [self.mainBar sizeToFit];
+    CGSize toolbarSize = self.mainBar.size;
+
+    [self resizeTo:CGSizeMake(toolbarSize.width, toolbarSize.height * 2)];
+
+    [self.mainBar moveToPoint:CGPointMake(0, toolbarSize.height)];
+    self.mainBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+
+    UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    UIBarButtonItem *fixedSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+
+    UIBarButtonItem *sendButton = [[UIBarButtonItem alloc] initWithTitle:@"Send" style:UIBarButtonItemStyleDone target:self action:@selector(didTapSendButton)];
+
+    CGFloat messageWidth = (self.isPad ? StreamComposeViewMessageWidth_Pad : StreamComposeViewMessageWidth_Phone);
+    self.messageInput = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, messageWidth, StreamComposeViewInputHeight)];
+    self.messageInput.layer.cornerRadius = 5.f;
+    self.messageInput.layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1f].CGColor;
+    self.messageInput.layer.borderWidth = 1.f;
+    self.messageInput.delegate = self;
+    self.messageInput.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+
+    // iOS 6 has a weird bug where vertical alignment is off in the text
+    // view because default font sizes different. This is a hacky workaround.
+    if ([[[UIDevice currentDevice] systemVersion] compare:@"7.0" options:NSNumericSearch] == NSOrderedAscending) {
+        self.messageInput.font = [UIFont systemFontOfSize:14.f];
+    }
+
+    UIBarButtonItem *inputItem = [[UIBarButtonItem alloc] initWithCustomView:self.messageInput];
+
+
+    self.mainBar.items = @[flexibleSpace, inputItem, flexibleSpace, sendButton, fixedSpace];
+    [self addSubview:self.mainBar];
+}
+
+- (void)renderRecipientBar {
+    UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    UIBarButtonItem *fixedSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+
+    CGRect secondBarFrame = CGRectZero;
+    secondBarFrame.size = self.mainBar.size;
+    self.subjectBar = [[UIToolbar alloc] initWithFrame:secondBarFrame];
+    self.subjectBar.hidden = YES;
+    self.subjectBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+
+    CGFloat toWidth = (self.isPad ? StreamComposeViewToWidth_Pad : StreamComposeViewToWidth_Phone);
+    self.to = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, toWidth, StreamComposeViewInputHeight)];
+    self.to.placeholder = @"Stream";
+    self.to.borderStyle = UITextBorderStyleRoundedRect;
+    self.to.backgroundColor = [UIColor whiteColor];
+    self.to.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    self.toItem = [[UIBarButtonItem alloc] initWithCustomView:self.to];
+
+    CGFloat subjectWidth = (self.isPad ? StreamComposeViewSubjectWidth_Pad : StreamComposeViewSubjectWidth_Phone);
+    self.subject = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, subjectWidth, StreamComposeViewInputHeight)];
+    self.subject.placeholder = @"Subject";
+    self.subject.borderStyle = UITextBorderStyleRoundedRect;
+    self.subject.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    self.subject.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    self.subject.backgroundColor = [UIColor whiteColor];
+    self.subjectItem = [[UIBarButtonItem alloc] initWithCustomView:self.subject];
+
+    self.subjectBar.items = @[flexibleSpace, self.toItem, fixedSpace, self.subjectItem, flexibleSpace];
+    [self addSubview:self.subjectBar];
 }
 
 @end
