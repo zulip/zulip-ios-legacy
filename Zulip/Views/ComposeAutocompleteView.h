@@ -14,7 +14,7 @@ typedef NS_ENUM(NSUInteger, ComposeAutocompleteType) {
     ComposeAutocompleteTypeTopic
 };
 
-@interface ComposeAutocompleteView : UIView<UITextFieldDelegate>
+@interface ComposeAutocompleteView : UITableView<UITextFieldDelegate>
 
 @property (weak, nonatomic) UIView *messageBody;
 

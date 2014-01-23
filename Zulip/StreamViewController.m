@@ -128,6 +128,11 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 }
 
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+    [self.composeView resizeTo:CGSizeMake(self.view.width, self.composeView.height)];
+    [self.autocompleteView resizeTo:CGSizeMake(self.view.width, self.autocompleteView.height)];
+}
+
 - (void)clearMessages
 {
     [self.messages removeAllObjects];
@@ -425,6 +430,7 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
         [self.tableView removeGestureRecognizer:self.dismissComposeViewGestureRecognizer];
     }
 
+    self.autocompleteView.hidden = YES;
     [self.composeView hideSubjectBar];
     [self moveComposeViewForNotification:notification];
 }
@@ -436,6 +442,7 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
 
     [self.composeView showSubjectBar];
     [self moveComposeViewForNotification:notification];
+    [self resizeAutocompleteViewForNotification:notification];
 }
 
 - (void)moveComposeViewForNotification:(NSNotification *)notification {
@@ -454,6 +461,22 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
     UIEdgeInsets tableViewInset = self.tableView.contentInset;
     tableViewInset.bottom = keyboardFrame.size.height + self.composeView.visibleHeight;
     self.tableView.contentInset = tableViewInset;
+}
+
+- (void)resizeAutocompleteViewForNotification:(NSNotification *)notification {
+    NSDictionary *userInfo = notification.userInfo;
+    CGRect keyboardFrame = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGRect keyboardFrameForTextField = [self.composeView.superview convertRect:keyboardFrame fromView:nil];
+    CGFloat originY = 0;
+
+    if ([self respondsToSelector:@selector(topLayoutGuide)]) {
+        originY = self.topLayoutGuide.length;
+    }
+
+    CGFloat height = self.view.height - originY - keyboardFrameForTextField.size.height - self.composeView.visibleHeight;
+
+    [self.autocompleteView moveToPoint:CGPointMake(0, originY)];
+    [self.autocompleteView resizeTo:CGSizeMake(self.view.width, height)];
 }
 
 - (void)didDismissComposeView {

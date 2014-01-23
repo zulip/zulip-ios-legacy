@@ -24,8 +24,6 @@
 @property (weak, nonatomic) UITextField *recipient;
 @property (weak, nonatomic) UITextField *subject;
 
-@property (strong, nonatomic) IBOutlet UITableView *tableView;
-
 @end
 
 @implementation ComposeAutocompleteView
@@ -38,10 +36,8 @@
         self.fullNameLookupDict = [[ZulipAPIController sharedInstance] fullNameLookupDict];
         self.streamLookup = [self fetchStreamNames];
 
-        self.tableView = [[UITableView alloc] initWithFrame:frame style:UITableViewStylePlain];
-        self.tableView.delegate = self;
-        self.tableView.dataSource = self;
-        [self addSubview:self.tableView];
+        self.delegate = self;
+        self.dataSource = self;
 
         self.hidden = YES;
     }
@@ -69,7 +65,7 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     if (textField == self.privateRecipient && !self.hidden)
     {
-        [self tableView:self.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+        [self tableView:self didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
         [self.messageBody becomeFirstResponder];
     } else if (textField == self.recipient) {
         [self.subject becomeFirstResponder];
@@ -199,7 +195,7 @@
     if (self.completionMatches.count > 0)
     {
         self.hidden = NO;
-        [self.tableView reloadData];
+        [self reloadData];
     } else
     {
         self.hidden = YES;
@@ -219,7 +215,7 @@
     if (self.completionMatches.count > 0)
     {
         self.hidden = NO;
-        [self.tableView reloadData];
+        [self reloadData];
     } else {
         self.hidden = YES;
     }
@@ -258,7 +254,7 @@
     if (self.completionMatches.count > 0)
     {
         self.hidden = NO;
-        [self.tableView reloadData];
+        [self reloadData];
     } else {
         self.hidden = YES;
     }
