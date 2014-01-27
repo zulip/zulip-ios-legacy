@@ -292,10 +292,8 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     RawMessage *message = [self messageAtIndexPath:indexPath];
-    ComposeViewController *composeView = [[ComposeViewController alloc] initWithReplyTo:message];
-
-    composeView.type = message.type;
-    [[self navigationController] pushViewController:composeView animated:YES];
+    [self.composeView showComposeViewForMessage:message];
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (void)openLink:(NSURL *)URL
