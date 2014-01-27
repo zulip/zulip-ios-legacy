@@ -293,6 +293,7 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
 {
     RawMessage *message = [self messageAtIndexPath:indexPath];
     [self.composeView showComposeViewForMessage:message];
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
