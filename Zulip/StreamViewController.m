@@ -68,6 +68,7 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
 
         // Add inline replies
         self.autocompleteView = [[ComposeAutocompleteView alloc] initWithFrame:self.view.bounds];
+        self.autocompleteView.messageDelegate = self;
         [self.view addSubview:self.autocompleteView];
 
         self.composeView = [[StreamComposeView alloc] initWithAutocompleteView:self.autocompleteView];

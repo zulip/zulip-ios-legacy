@@ -227,22 +227,11 @@
     searchString = [searchString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     streamName = [streamName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 
-    ZulipAppDelegate *appDelegate = (ZulipAppDelegate *)[[UIApplication sharedApplication] delegate];
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ZSubscription"];
-    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@", streamName];
-    fetchRequest.fetchLimit = 1;
-
-    NSError *error = nil;
-    NSArray *results = [appDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&error];
-    if (error || results.count != 1) {
-        // No stream found
-        return;
-    }
-
-    ZSubscription *subscription = results[0];
     NSMutableSet *subjects = [[NSMutableSet alloc] init];
-    for (ZMessage *message in subscription.messages) {
-        [subjects addObject:message.subject];
+    for (RawMessage *message in self.messageDelegate.messages) {
+        if ([message.stream_recipient isEqualToString:streamName]) {
+            [subjects addObject:message.subject];
+        }
     }
 
     AutocompleteResults *topicResults = [[AutocompleteResults alloc] initWithSet:subjects query:searchString];
