@@ -8,13 +8,13 @@
 #import "ZulipAPIController.h"
 #import "ZulipAPIClient.h"
 #import "ZulipAppDelegate.h"
-#import "StreamViewController.h"
 #import "RawMessage.h"
 #import "UnreadManager.h"
 #import "LongPoller.h"
 #import "RangePair.h"
 #import "PreferencesWrapper.h"
 #import "ZUserPresence.h"
+#import "LeftSidebarViewController.h"
 
 #import "KeychainItemWrapper.h"
 
@@ -596,6 +596,54 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
 
             for (NSString *client in presence) {
                 [self updatePresence:email withStatus:presence[client]];
+            }
+        } else if ([eventType isEqualToString:@"subscriptions"]) {
+            BOOL needToSave = NO;
+            if ([event[@"op"] isEqualToString:@"add"]) {
+                needToSave = YES;
+
+                NSMutableArray *subscriptions = [NSMutableArray new];
+                for (NSDictionary *dict in event[@"subscriptions"]) {
+                    ZSubscription *subscription = [[ZSubscription alloc] initWithDictionary:dict];
+                    [subscriptions addObject:subscription];
+                }
+
+            } else if ([event[@"op"] isEqualToString:@"remove"]) {
+                needToSave = YES;
+
+                NSMutableArray *subscriptionNames = [NSMutableArray new];
+                for (NSDictionary *dict in event[@"subscriptions"]) {
+                    [subscriptionNames addObject:dict[@"name"]];
+                }
+
+                NSPredicate * predicate = [NSPredicate predicateWithFormat:@"name IN %@", subscriptionNames];
+                NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ZSubscription"];
+                fetchRequest.predicate = predicate;
+
+                NSError *error = nil;
+                NSArray *results = [self.appDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+                if (error) {
+                    CLS_LOG(@"Error fetching ZSubscriptions: %@, %@", [error localizedDescription], [error userInfo]);
+                    return;
+                }
+
+                for (ZSubscription *subscription in results) {
+                    [self.appDelegate.managedObjectContext deleteObject:subscription];
+                }
+            }
+
+            if (needToSave) {
+                NSError *error = nil;
+                [self.appDelegate.managedObjectContext save:&error];
+                if (error) {
+                    CLS_LOG(@"Error saving ZSubscription: %@ %@", [error localizedDescription], [error userInfo]);
+                    return;
+                }
+
+                LeftSidebarViewController *leftSidePanel = (LeftSidebarViewController *)self.appDelegate.sidePanelController.leftPanel;
+                if ([leftSidePanel isKindOfClass:[LeftSidebarViewController class]]) {
+                    [leftSidePanel reset];
+                }
             }
         }
 

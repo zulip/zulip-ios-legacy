@@ -24,6 +24,8 @@
 
 @interface ZSubscription (CoreDataGeneratedAccessors)
 
+- (id)initWithDictionary:(NSDictionary *)dict;
+
 - (void)addMessagesObject:(ZMessage *)value;
 - (void)removeMessagesObject:(ZMessage *)value;
 - (void)addMessages:(NSSet *)values;
