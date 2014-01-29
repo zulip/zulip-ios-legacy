@@ -10,4 +10,6 @@
 
 @interface LeftSidebarViewController : UITableViewController
 
+- (void)reset;
+
 @end
