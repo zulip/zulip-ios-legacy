@@ -23,5 +23,5 @@ typedef NS_ENUM(NSUInteger, ComposeAutocompleteType) {
 
 - (void)registerTextField:(UITextField *)textField
                   forType:(ComposeAutocompleteType)type;
-
+- (void)resetRegisteredTextFields;
 @end

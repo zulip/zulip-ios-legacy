@@ -81,14 +81,10 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 
         [self showPrivateCompose];
         self.recipient = recipientString;
-        [self.autocompleteView registerTextField:self.to forType:ComposeAutocompleteTypeUser];
     } else {
         [self showPublicCompose];
         self.recipient = message.stream_recipient;
         self.subject.text = message.subject;
-
-        [self.autocompleteView registerTextField:self.to forType:ComposeAutocompleteTypeStream];
-        [self.autocompleteView registerTextField:self.subject forType:ComposeAutocompleteTypeTopic];
     }
 
     [self.messageInput becomeFirstResponder];
@@ -97,7 +93,6 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 - (void)showComposeViewForUser:(ZUser *)user {
     [self showPrivateCompose];
     self.recipient = user.email;
-    [self.autocompleteView registerTextField:self.to forType:ComposeAutocompleteTypeUser];
     [self.messageInput becomeFirstResponder];
 }
 
@@ -146,6 +141,9 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
     self.to.placeholder = @"One or more people...";
     [self.to resizeTo:self.messageInput.size];
     self.subjectBar.items = @[flexibleSpace, self.toItem, flexibleSpace];
+
+    [self.autocompleteView resetRegisteredTextFields];
+    [self.autocompleteView registerTextField:self.to forType:ComposeAutocompleteTypeUser];
 }
 
 - (void)showPublicCompose {
@@ -160,6 +158,9 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
     [self.to resizeTo:CGSizeMake(toWidth, self.messageInput.height)];
     self.subjectBar.items = @[flexibleSpace, self.toItem, fixedSpace, self.subjectItem, flexibleSpace];
 
+    [self.autocompleteView resetRegisteredTextFields];
+    [self.autocompleteView registerTextField:self.to forType:ComposeAutocompleteTypeStream];
+    [self.autocompleteView registerTextField:self.subject forType:ComposeAutocompleteTypeTopic];
 }
 
 - (BOOL)isFirstResponder {

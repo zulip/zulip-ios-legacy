@@ -61,6 +61,12 @@
     }
 }
 
+- (void)resetRegisteredTextFields {
+    self.subject = nil;
+    self.recipient = nil;
+    self.privateRecipient = nil;
+}
+
 #pragma mark - UITextFieldDelegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     if (textField == self.privateRecipient) {
