@@ -170,7 +170,7 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 }
 
 - (BOOL)resignFirstResponder {
-    [super resignFirstResponder];t
+    [super resignFirstResponder];
     [self.messageInput resignFirstResponder];
     [self.to resignFirstResponder];
     [self.subject resignFirstResponder];
