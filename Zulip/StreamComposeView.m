@@ -207,6 +207,7 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 
 - (void)didTapComposeView {
     self.to.text = self.defaultRecipient;
+    self.subject.text = nil;
 
     if (self.isPrivate) {
         [self showPrivateCompose];
