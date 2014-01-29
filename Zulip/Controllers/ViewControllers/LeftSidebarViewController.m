@@ -95,7 +95,7 @@
     self.streamController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                 managedObjectContext:[appDelegate managedObjectContext]
                                                                   sectionNameKeyPath:nil
-                                                                           cacheName:@"StreamSidebarCache"];
+                                                                           cacheName:nil];
 
     self.streamController.delegate = self;
 
