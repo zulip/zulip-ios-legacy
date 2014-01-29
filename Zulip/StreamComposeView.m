@@ -40,6 +40,8 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 @property (strong, nonatomic) UIBarButtonItem *subjectItem;
 @property (strong, nonatomic) UIView *tapHandlerShim;
 
+@property (assign, nonatomic) BOOL isCurrentlyPrivate;
+
 @end
 
 @implementation StreamComposeView
@@ -77,11 +79,11 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
         [emails removeObject:[[ZulipAPIController sharedInstance] email]];
         NSString *recipientString = [emails componentsJoinedByString:@", "];
 
-        self.isPrivate = YES;
+        [self showPrivateCompose];
         self.recipient = recipientString;
         [self.autocompleteView registerTextField:self.to forType:ComposeAutocompleteTypeUser];
     } else {
-        self.isPrivate = NO;
+        [self showPublicCompose];
         self.recipient = message.stream_recipient;
         self.subject.text = message.subject;
 
@@ -93,7 +95,7 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 }
 
 - (void)showComposeViewForUser:(ZUser *)user {
-    self.isPrivate = YES;
+    [self showPrivateCompose];
     self.recipient = user.email;
     [self.autocompleteView registerTextField:self.to forType:ComposeAutocompleteTypeUser];
     [self.messageInput becomeFirstResponder];
@@ -127,22 +129,37 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 
 - (void)setIsPrivate:(BOOL)isPrivate {
     _isPrivate = isPrivate;
+    self.isCurrentlyPrivate = isPrivate;
+
+    if (isPrivate) {
+        [self showPrivateCompose];
+    } else {
+        [self showPublicCompose];
+    }
+}
+
+- (void)showPrivateCompose {
+    self.isCurrentlyPrivate = YES;
+
+    UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+
+    self.to.placeholder = @"One or more people...";
+    [self.to resizeTo:self.messageInput.size];
+    self.subjectBar.items = @[flexibleSpace, self.toItem, flexibleSpace];
+}
+
+- (void)showPublicCompose {
+    self.isCurrentlyPrivate = NO;
 
     UIBarButtonItem *fixedSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
 
     UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
 
+    self.to.placeholder = @"Stream";
+    CGFloat toWidth = (self.isPad ? StreamComposeViewToWidth_Pad : StreamComposeViewToWidth_Phone);
+    [self.to resizeTo:CGSizeMake(toWidth, self.messageInput.height)];
+    self.subjectBar.items = @[flexibleSpace, self.toItem, fixedSpace, self.subjectItem, flexibleSpace];
 
-    if (isPrivate) {
-        self.to.placeholder = @"One or more people...";
-        [self.to resizeTo:self.messageInput.size];
-        self.subjectBar.items = @[flexibleSpace, self.toItem, flexibleSpace];
-    } else {
-        self.to.placeholder = @"Stream";
-        CGFloat toWidth = (self.isPad ? StreamComposeViewToWidth_Pad : StreamComposeViewToWidth_Phone);
-        [self.to resizeTo:CGSizeMake(toWidth, self.messageInput.height)];
-        self.subjectBar.items = @[flexibleSpace, self.toItem, fixedSpace, self.subjectItem, flexibleSpace];
-    }
 }
 
 - (BOOL)isFirstResponder {
@@ -161,7 +178,7 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 #pragma mark - Event handlers
 - (void)didTapSendButton {
     NSDictionary *postFields;
-    if (self.isPrivate) {
+    if (self.isCurrentlyPrivate) {
         NSArray* recipientArray = [self.to.text componentsSeparatedByString: @","];
 
         NSError *error = nil;
@@ -186,8 +203,7 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 }
 
 - (void)didTapComposeView {
-    [self.autocompleteView registerTextField:self.to forType:ComposeAutocompleteTypeStream];
-    [self.autocompleteView registerTextField:self.subject forType:ComposeAutocompleteTypeTopic];
+    [self showPublicCompose];
     [self.to becomeFirstResponder];
 }
 
