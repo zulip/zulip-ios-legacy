@@ -16,7 +16,7 @@
 
 @property (readonly) CGFloat visibleHeight;
 
-@property (strong, nonatomic) NSString *recipient;
+@property (strong, nonatomic) NSString *defaultRecipient;
 @property (assign, nonatomic) BOOL isPrivate;
 @property (strong, nonatomic) ComposeAutocompleteView *autocompleteView;
 

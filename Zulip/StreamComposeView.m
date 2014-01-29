@@ -30,6 +30,8 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 
 @interface StreamComposeView ()<UITextViewDelegate>
 
+@property (strong, nonatomic) NSString *recipient;
+
 @property (strong, nonatomic) UIToolbar *mainBar;
 @property (strong, nonatomic) UITextView *messageInput;
 
@@ -204,6 +206,8 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 }
 
 - (void)didTapComposeView {
+    self.to.text = self.defaultRecipient;
+
     [self showPublicCompose];
     [self.to becomeFirstResponder];
 }
