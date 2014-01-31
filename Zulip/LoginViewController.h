@@ -1,14 +1,6 @@
 #import <UIKit/UIKit.h>
 
-@class ZulipAppDelegate;
-
 @interface LoginViewController : UIViewController
-{
-    IBOutlet UITextField *email;
-    IBOutlet UITextField *password;
-    IBOutlet UIButton *loginButton;
-    ZulipAppDelegate *appDelegate;
-}
 
 @property (strong, nonatomic) IBOutlet UITextField *email;
 @property (strong, nonatomic) IBOutlet UITextField *password;

@@ -8,14 +8,10 @@
 
 @interface LoginViewController ()
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (strong, nonatomic) ZulipAppDelegate *appDelegate;
 @end
 
 @implementation LoginViewController
-
-@synthesize email;
-@synthesize password;
-@synthesize loginButton;
-@synthesize entryFields;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -32,7 +28,7 @@
     [self.navigationController setNavigationBarHidden:YES animated:YES];
 
     self.password.secureTextEntry = YES;
-    appDelegate = (ZulipAppDelegate *)[[UIApplication sharedApplication] delegate];
+    self.appDelegate = (ZulipAppDelegate *)[[UIApplication sharedApplication] delegate];
 
     self.entryFields = [[NSMutableArray alloc] init];
     NSInteger tag = 1;
@@ -68,19 +64,19 @@
     [[ZulipAPIController sharedInstance] logout];
     [[ZulipAPIController sharedInstance] login:trimmedEmail password:password.text result:^(bool loggedIn) {
         if (loggedIn) {
-            [appDelegate dismissLoginScreen];
+            [self.appDelegate dismissLoginScreen];
         } else {
             CLS_LOG(@"Failed to login!");
             [self.email resignFirstResponder];
             [self.password resignFirstResponder];
-            [appDelegate showErrorScreen:@"Unable to login. Please try again."];
+            [self.appDelegate showErrorScreen:@"Unable to login. Please try again."];
         }
     }];
 }
 
 - (IBAction) about:(id)sender
 {
-    [appDelegate showAboutScreen];
+    [self.appDelegate showAboutScreen];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
