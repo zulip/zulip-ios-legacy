@@ -36,6 +36,7 @@
 		78BE8D4217C52D0100330433 /* SourceSansPro-SemiboldIt-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 78BE8D1917C5101A00330433 /* SourceSansPro-SemiboldIt-webfont.ttf */; };
 		78C6F29218159AEA00AFDF6C /* UserCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78C6F29118159AEA00AFDF6C /* UserCellView.xib */; };
 		78C6F29D18159CEC00AFDF6C /* UserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 78C6F29C18159CEC00AFDF6C /* UserCell.m */; };
+		A604CF0A189C5973009F0E3D /* GoogleOAuthManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A604CF09189C5973009F0E3D /* GoogleOAuthManager.m */; };
 		A62B8B5B187A0ACE00D1691B /* UIView+Layout.m in Sources */ = {isa = PBXBuildFile; fileRef = A62B8B5A187A0ACE00D1691B /* UIView+Layout.m */; };
 		A638DB02187796E0002B0333 /* AutocompleteResults.m in Sources */ = {isa = PBXBuildFile; fileRef = A638DB01187796E0002B0333 /* AutocompleteResults.m */; };
 		A652861B188EE2280043FC4C /* ComposeAutocompleteView.m in Sources */ = {isa = PBXBuildFile; fileRef = A652861A188EE2280043FC4C /* ComposeAutocompleteView.m */; };
@@ -244,6 +245,8 @@
 		78C6F29118159AEA00AFDF6C /* UserCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = UserCellView.xib; path = Views/UserCellView.xib; sourceTree = "<group>"; };
 		78C6F29B18159CEC00AFDF6C /* UserCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserCell.h; path = Views/UserCell.h; sourceTree = "<group>"; };
 		78C6F29C18159CEC00AFDF6C /* UserCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserCell.m; path = Views/UserCell.m; sourceTree = "<group>"; };
+		A604CF08189C5973009F0E3D /* GoogleOAuthManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleOAuthManager.h; sourceTree = "<group>"; };
+		A604CF09189C5973009F0E3D /* GoogleOAuthManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleOAuthManager.m; sourceTree = "<group>"; };
 		A62B8B59187A0ACE00D1691B /* UIView+Layout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Layout.h"; sourceTree = "<group>"; };
 		A62B8B5A187A0ACE00D1691B /* UIView+Layout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Layout.m"; sourceTree = "<group>"; };
 		A638DB00187796E0002B0333 /* AutocompleteResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutocompleteResults.h; sourceTree = "<group>"; };
@@ -835,6 +838,8 @@
 				B376985217B56EB100D29D93 /* Images.xcassets */,
 				A638DB00187796E0002B0333 /* AutocompleteResults.h */,
 				A638DB01187796E0002B0333 /* AutocompleteResults.m */,
+				A604CF08189C5973009F0E3D /* GoogleOAuthManager.h */,
+				A604CF09189C5973009F0E3D /* GoogleOAuthManager.m */,
 			);
 			path = Zulip;
 			sourceTree = "<group>";
@@ -1164,6 +1169,7 @@
 				B34697C517A020D1006D0E9B /* ZulipAPIController.m in Sources */,
 				B351823117A1B20A00B41D75 /* ZSubscription.m in Sources */,
 				B3CC439217A701A900C8AF3F /* ZUser.m in Sources */,
+				A604CF0A189C5973009F0E3D /* GoogleOAuthManager.m in Sources */,
 				B3CC439617A7F13700C8AF3F /* HomeViewController.m in Sources */,
 				B3F5629317A81C37004B185A /* SidebarStreamCell.m in Sources */,
 				B3F5629817A84FD5004B185A /* NarrowViewController.m in Sources */,

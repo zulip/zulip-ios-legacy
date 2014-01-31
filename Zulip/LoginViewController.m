@@ -2,6 +2,7 @@
 #import "ZulipAppDelegate.h"
 #import "ZulipAPIController.h"
 #import "ZulipAPIClient.h"
+#import "GoogleOAuthManager.h"
 
 #import "BrowserViewController.h"
 #import "UIView+Layout.h"
@@ -9,16 +10,10 @@
 #import <Crashlytics/Crashlytics.h>
 #import "MBProgressHUD.h"
 
-static NSString * const GoogleOAuthURLRoot = @"https://accounts.google.com/o/oauth2";
-static NSString * const GoogleOAuthClientId = @"835904834568-gs3ncqe5d182tsh2brcv37hfc4vvdk07.apps.googleusercontent.com";
-static NSString * const GoogleOAuthClientSecret = @"RVLTUT3UQrjJsYGjl-pha9bb";
-static NSString * const GoogleOAuthAudience = @"835904834568-77mtr5mtmpgspj9b051del9i9r5t4g4n.apps.googleusercontent.com";
-static NSString * const GoogleOAuthRedirectURI = @"http://localhost";
-static NSString * const GoogleOAuthScope = @"email";
-
-@interface LoginViewController ()<BrowserViewDelegate>
+@interface LoginViewController ()
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) ZulipAppDelegate *appDelegate;
+@property (strong, nonatomic) GoogleOAuthManager *googleManager;
 @end
 
 @implementation LoginViewController
@@ -70,58 +65,17 @@ static NSString * const GoogleOAuthScope = @"email";
 
 #pragma mark - Event handlers
 - (IBAction)didTapGoogleButton:(id)sender {
-    NSString *urlString = [NSString stringWithFormat:@"%@/auth?scope=%@&redirect_uri=%@&response_type=code&client_id=%@", GoogleOAuthURLRoot, GoogleOAuthScope, GoogleOAuthRedirectURI, GoogleOAuthClientId];
-    NSURL *url = [[NSURL alloc] initWithString:urlString];
-    BrowserViewController *browser = [[BrowserViewController alloc] initWithUrls:url];
-    browser.delegate = self;
-    [self.navigationController pushViewController:browser animated:YES];
-}
+    self.googleManager = [[GoogleOAuthManager alloc] init];
+    UIViewController *loginController = [self.googleManager showAuthScreenWithSuccess:^(NSDictionary *result) {
+        [self.navigationController popViewControllerAnimated:YES];
+        [self loginWithUsername:@"google-oauth2-token" password:result[@"id_token"]];
 
-- (BOOL)openURL:(NSURL *)url {
-    if ([url.host isEqualToString:@"localhost"]) {
-        NSArray *queryPairs = [url.query componentsSeparatedByString:@"&"];
-        NSMutableDictionary *queryArgs = [NSMutableDictionary new];
-        for (NSString *pair in queryPairs) {
-            NSArray *components = [pair componentsSeparatedByString:@"="];
-            queryArgs[components[0]] = components[1];
-        }
-
-        if (queryArgs[@"code"]) {
-            [self fetchTokenForCode:queryArgs[@"code"]];
-        } else {
-            [self.navigationController popViewControllerAnimated:YES];
-            [self.appDelegate showErrorScreen:@"Unable to login with Google. Please try again."];
-        }
-        return NO;
-    }
-    return YES;
-}
-
-- (void)fetchTokenForCode:(NSString *)code {
-    [self.navigationController popViewControllerAnimated:YES];
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    NSDictionary *params = @{@"code": code,
-                             @"client_id": GoogleOAuthClientId,
-                             @"client_secret": GoogleOAuthClientSecret,
-                             @"redirect_uri": GoogleOAuthRedirectURI,
-                             @"grant_type": @"authorization_code",
-                             @"audience": GoogleOAuthAudience,
-                             @"aud": GoogleOAuthAudience};
-    AFHTTPClient *client = [[AFHTTPClient alloc] initWithBaseURL:[NSURL URLWithString:GoogleOAuthURLRoot]];
-    [client postPath:@"token" parameters:params success:^(AFHTTPRequestOperation *operation, NSData *responseObject) {
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        NSError *jsonError;
-        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:&jsonError];
-        if (!jsonError && result[@"id_token"]) {
-            [self loginWithUsername:@"google-oauth2-token" password:result[@"id_token"]];
-        } else {
-            [self.appDelegate showErrorScreen:@"Unable to login with Google. Please try again."];
-        }
-
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+    } failure:^(NSError *error) {
+        [self.navigationController popViewControllerAnimated:YES];
         [self.appDelegate showErrorScreen:@"Unable to login with Google. Please try again."];
     }];
+
+    [self.navigationController pushViewController:loginController animated:YES];
 }
 
 - (void)loginWithUsername:(NSString *)email password:(NSString *)password {
