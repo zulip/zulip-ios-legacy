@@ -215,8 +215,8 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
             [self logout];
         }
 
-        self.apiKey = [jsonDict objectForKey:@"api_key"];
-        self.email = username;
+        self.apiKey = jsonDict[@"api_key"];
+        self.email = jsonDict[@"email"] ?: username;
 
         KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"ZulipLogin" accessGroup:nil];
         [keychainItem setObject:self.apiKey forKey:(__bridge id)kSecValueData];
