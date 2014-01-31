@@ -1,12 +1,22 @@
 #import "LoginViewController.h"
 #import "ZulipAppDelegate.h"
 #import "ZulipAPIController.h"
+#import "ZulipAPIClient.h"
 
+#import "BrowserViewController.h"
 #import "UIView+Layout.h"
-
 #import <Crashlytics/Crashlytics.h>
+#import <Crashlytics/Crashlytics.h>
+#import "MBProgressHUD.h"
 
-@interface LoginViewController ()
+static NSString * const GoogleOAuthURLRoot = @"https://accounts.google.com/o/oauth2";
+static NSString * const GoogleOAuthClientId = @"835904834568-gs3ncqe5d182tsh2brcv37hfc4vvdk07.apps.googleusercontent.com";
+static NSString * const GoogleOAuthClientSecret = @"RVLTUT3UQrjJsYGjl-pha9bb";
+static NSString * const GoogleOAuthAudience = @"835904834568-77mtr5mtmpgspj9b051del9i9r5t4g4n.apps.googleusercontent.com";
+static NSString * const GoogleOAuthRedirectURI = @"http://localhost";
+static NSString * const GoogleOAuthScope = @"email";
+
+@interface LoginViewController ()<BrowserViewDelegate>
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) ZulipAppDelegate *appDelegate;
 @end
@@ -58,11 +68,65 @@
     [super didReceiveMemoryWarning];
 }
 
-- (IBAction) login: (id) sender
-{
-    NSString *trimmedEmail = [email.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+#pragma mark - Event handlers
+- (IBAction)didTapGoogleButton:(id)sender {
+    NSString *urlString = [NSString stringWithFormat:@"%@/auth?scope=%@&redirect_uri=%@&response_type=code&client_id=%@", GoogleOAuthURLRoot, GoogleOAuthScope, GoogleOAuthRedirectURI, GoogleOAuthClientId];
+    NSURL *url = [[NSURL alloc] initWithString:urlString];
+    BrowserViewController *browser = [[BrowserViewController alloc] initWithUrls:url];
+    browser.delegate = self;
+    [self.navigationController pushViewController:browser animated:YES];
+}
+
+- (BOOL)openURL:(NSURL *)url {
+    if ([url.host isEqualToString:@"localhost"]) {
+        NSArray *queryPairs = [url.query componentsSeparatedByString:@"&"];
+        NSMutableDictionary *queryArgs = [NSMutableDictionary new];
+        for (NSString *pair in queryPairs) {
+            NSArray *components = [pair componentsSeparatedByString:@"="];
+            queryArgs[components[0]] = components[1];
+        }
+
+        if (queryArgs[@"code"]) {
+            [self fetchTokenForCode:queryArgs[@"code"]];
+        } else {
+            [self.navigationController popViewControllerAnimated:YES];
+            [self.appDelegate showErrorScreen:@"Unable to login with Google. Please try again."];
+        }
+        return NO;
+    }
+    return YES;
+}
+
+- (void)fetchTokenForCode:(NSString *)code {
+    [self.navigationController popViewControllerAnimated:YES];
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    NSDictionary *params = @{@"code": code,
+                             @"client_id": GoogleOAuthClientId,
+                             @"client_secret": GoogleOAuthClientSecret,
+                             @"redirect_uri": GoogleOAuthRedirectURI,
+                             @"grant_type": @"authorization_code",
+                             @"audience": GoogleOAuthAudience,
+                             @"aud": GoogleOAuthAudience};
+    AFHTTPClient *client = [[AFHTTPClient alloc] initWithBaseURL:[NSURL URLWithString:GoogleOAuthURLRoot]];
+    [client postPath:@"token" parameters:params success:^(AFHTTPRequestOperation *operation, NSData *responseObject) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        NSError *jsonError;
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:&jsonError];
+        if (!jsonError && result[@"id_token"]) {
+            [self loginWithUsername:@"google-oauth2-token" password:result[@"id_token"]];
+        } else {
+            [self.appDelegate showErrorScreen:@"Unable to login with Google. Please try again."];
+        }
+
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        [self.appDelegate showErrorScreen:@"Unable to login with Google. Please try again."];
+    }];
+}
+
+- (void)loginWithUsername:(NSString *)email password:(NSString *)password {
     [[ZulipAPIController sharedInstance] logout];
-    [[ZulipAPIController sharedInstance] login:trimmedEmail password:password.text result:^(bool loggedIn) {
+    [[ZulipAPIController sharedInstance] login:email password:password result:^(bool loggedIn) {
         if (loggedIn) {
             [self.appDelegate dismissLoginScreen];
         } else {
@@ -72,6 +136,11 @@
             [self.appDelegate showErrorScreen:@"Unable to login. Please try again."];
         }
     }];
+}
+
+- (IBAction) login: (id) sender {
+    NSString *trimmedEmail = [self.email.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    [self loginWithUsername:trimmedEmail password:self.password.text];
 }
 
 - (IBAction) about:(id)sender
@@ -110,4 +179,5 @@
 - (void)keyboardWillHide:(NSNotification *)notification {
     [self.scrollView resizeTo:self.view.size];
 }
+
 @end

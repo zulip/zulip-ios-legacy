@@ -19,7 +19,7 @@
             <rect key="frame" x="0.0" y="0.0" width="768" height="1004"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <scrollView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1">
+                <scrollView contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1">
                     <rect key="frame" x="0.0" y="-10" width="768" height="1024"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <subviews>
@@ -44,9 +44,10 @@
                                 <outlet property="delegate" destination="-1" id="34"/>
                             </connections>
                         </textField>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4">
-                            <rect key="frame" x="296" y="434" width="177" height="30"/>
+                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4">
+                            <rect key="frame" x="296" y="412" width="177" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                             <state key="normal" title="Login">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
@@ -84,6 +85,16 @@
                                 <action selector="about:" destination="-1" eventType="touchDown" id="dcS-Nv-Xjh"/>
                             </connections>
                         </button>
+                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xI3-Yp-H7U">
+                            <rect key="frame" x="322" y="468" width="125" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" title="Login with Google">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="didTapGoogleButton:" destination="-1" eventType="touchUpInside" id="O32-C5-ZnV"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     <constraints>
@@ -92,14 +103,13 @@
                         <constraint firstItem="1Hh-sG-W5z" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="20" symbolic="YES" id="8La-3f-XQi"/>
                         <constraint firstItem="5" firstAttribute="top" secondItem="1" secondAttribute="top" constant="84" id="EYj-gC-JNj"/>
                         <constraint firstItem="5" firstAttribute="trailing" secondItem="4" secondAttribute="trailing" id="F1N-zT-x11"/>
+                        <constraint firstAttribute="centerX" secondItem="xI3-Yp-H7U" secondAttribute="centerX" id="GMd-Kn-7D1"/>
                         <constraint firstItem="5" firstAttribute="leading" secondItem="4" secondAttribute="leading" id="MdY-wY-s6H"/>
                         <constraint firstAttribute="trailing" secondItem="7" secondAttribute="trailing" constant="255" id="RbK-7I-jv3"/>
                         <constraint firstItem="3" firstAttribute="trailing" secondItem="7" secondAttribute="trailing" id="UXd-Zv-2Ty"/>
                         <constraint firstItem="3" firstAttribute="centerX" secondItem="1" secondAttribute="centerX" id="XsX-1p-yb8"/>
                         <constraint firstItem="3" firstAttribute="top" secondItem="7" secondAttribute="bottom" constant="31" id="eIs-K9-wsl"/>
                         <constraint firstItem="7" firstAttribute="top" secondItem="6" secondAttribute="bottom" constant="58" id="fbu-SF-5tQ"/>
-                        <constraint firstItem="4" firstAttribute="top" secondItem="3" secondAttribute="bottom" constant="40" id="pK4-CL-1iQ"/>
-                        <constraint firstAttribute="bottom" secondItem="4" secondAttribute="bottom" constant="560" id="vlU-yC-0wA"/>
                         <constraint firstItem="4" firstAttribute="centerX" secondItem="3" secondAttribute="centerX" id="wQh-5g-4Aq"/>
                         <constraint firstItem="6" firstAttribute="top" secondItem="5" secondAttribute="bottom" constant="45" id="yC1-ps-bpo"/>
                         <constraint firstItem="5" firstAttribute="centerX" secondItem="6" secondAttribute="centerX" id="ywd-mW-CTB"/>

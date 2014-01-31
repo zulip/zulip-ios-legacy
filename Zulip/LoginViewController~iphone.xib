@@ -23,7 +23,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <subviews>
-                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="10">
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="10">
                             <rect key="frame" x="72" y="123" width="177" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
@@ -35,7 +35,7 @@
                                 <outlet property="delegate" destination="-1" id="67"/>
                             </connections>
                         </textField>
-                        <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="16">
+                        <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="16">
                             <rect key="frame" x="72" y="161" width="177" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
@@ -48,7 +48,7 @@
                             </connections>
                         </textField>
                         <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="21">
-                            <rect key="frame" x="72" y="201" width="177" height="30"/>
+                            <rect key="frame" x="72" y="199" width="177" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                             <state key="normal" title="Login">
@@ -84,6 +84,16 @@
                                 <action selector="about:" destination="-1" eventType="touchDown" id="fpq-sZ-gv0"/>
                             </connections>
                         </button>
+                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tJ7-5x-cUi">
+                            <rect key="frame" x="98" y="247" width="125" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" title="Login with Google">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="didTapGoogleButton:" destination="-1" eventType="touchUpInside" id="wK9-Yg-b4X"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     <constraints>
@@ -91,7 +101,6 @@
                         <constraint firstItem="c5I-x3-Mdy" firstAttribute="top" secondItem="92" secondAttribute="top" id="2rq-W5-ZeG"/>
                         <constraint firstItem="16" firstAttribute="leading" secondItem="10" secondAttribute="leading" id="3kc-3L-vAC"/>
                         <constraint firstAttribute="centerX" secondItem="78" secondAttribute="centerX" id="Ecp-9I-UNu"/>
-                        <constraint firstAttribute="bottom" secondItem="21" secondAttribute="bottom" constant="337" id="IYu-vf-2Fg"/>
                         <constraint firstItem="c5I-x3-Mdy" firstAttribute="leading" secondItem="78" secondAttribute="trailing" constant="63" id="Le9-PP-ejo"/>
                         <constraint firstItem="16" firstAttribute="top" secondItem="10" secondAttribute="bottom" constant="8" symbolic="YES" id="N9w-nr-VMV"/>
                         <constraint firstItem="78" firstAttribute="top" secondItem="1" secondAttribute="top" constant="36" id="Xmr-fd-f0g"/>
@@ -102,9 +111,9 @@
                         <constraint firstItem="78" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="127" id="dBv-iL-Gz2"/>
                         <constraint firstItem="92" firstAttribute="top" secondItem="1" secondAttribute="top" constant="14" id="dti-g1-dOi"/>
                         <constraint firstAttribute="bottom" secondItem="c5I-x3-Mdy" secondAttribute="bottom" constant="524" id="eG9-YT-gpx"/>
+                        <constraint firstAttribute="centerX" secondItem="tJ7-5x-cUi" secondAttribute="centerX" id="q7A-nh-8hJ"/>
                         <constraint firstItem="10" firstAttribute="top" secondItem="78" secondAttribute="bottom" constant="8" symbolic="YES" id="sRA-GW-1aA"/>
                         <constraint firstAttribute="centerX" secondItem="21" secondAttribute="centerX" id="u06-iI-jjg"/>
-                        <constraint firstItem="21" firstAttribute="top" secondItem="16" secondAttribute="bottom" constant="10" id="yyU-DJ-T3C"/>
                     </constraints>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
