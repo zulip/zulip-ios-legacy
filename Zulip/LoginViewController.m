@@ -67,14 +67,15 @@
 - (IBAction)didTapGoogleButton:(id)sender {
     self.googleManager = [[GoogleOAuthManager alloc] init];
     UIViewController *loginController = [self.googleManager showAuthScreenWithSuccess:^(NSDictionary *result) {
-        [self.navigationController popViewControllerAnimated:YES];
+        [self.navigationController popViewControllerAnimated:NO];
         [self loginWithUsername:@"google-oauth2-token" password:result[@"id_token"]];
-
     } failure:^(NSError *error) {
         [self.navigationController popViewControllerAnimated:YES];
         [self.appDelegate showErrorScreen:@"Unable to login with Google. Please try again."];
     }];
 
+    [self.email resignFirstResponder];
+    [self.password resignFirstResponder];
     [self.navigationController pushViewController:loginController animated:YES];
 }
 
