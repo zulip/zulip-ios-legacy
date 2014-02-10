@@ -173,13 +173,17 @@ const CGFloat RightSidebarViewControllerStatusBarOffset = 15.f;
 {
     SidebarUserCell *cell = (SidebarUserCell *)[self.tableView cellForRowAtIndexPath:indexPath];
 
+    ZulipAppDelegate *appDelegate = (ZulipAppDelegate *)[[UIApplication sharedApplication] delegate];
+    NarrowOperators *operators = [[NarrowOperators alloc] init];
+    [operators addUserNarrow:cell.user.email];
+    [appDelegate narrowWithOperators:operators];
+
+    [self.findSidePanelController toggleRightPanel:self];
+
     id<MessageComposing> centerController = (id<MessageComposing>)[(UINavigationController *)self.findSidePanelController.centerPanel visibleViewController];
     if ([centerController conformsToProtocol:@protocol(MessageComposing)]) {
         [centerController showComposeViewForUser:cell.user];
     }
-
-    [self.findSidePanelController toggleRightPanel:self];
-
 }
 
 
