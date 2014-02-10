@@ -97,6 +97,10 @@
     [self.subpredicates addObject:@[@"stream", streamName]];
 }
 
+- (void)addUserNarrow:(NSString *)email {
+    [self.subpredicates addObject:@[@"pm-with", email]];
+}
+
 - (NSString *)title
 {
     if (self.home_view) {
@@ -107,7 +111,7 @@
             if ([pred count] > 0) {
                 NSString *operator = [pred objectAtIndex:0];
                 NSString *operand = [pred objectAtIndex:1];
-                if ([operator isEqualToString:@"stream"]) {
+                if ([@[@"stream", @"pm-with"] containsObject:operator]) {
                     return operand;
                 } else if ([operator isEqualToString:@"is"] &&
                            [operand isEqualToString:@"private"]) {
@@ -143,6 +147,9 @@
                 [generated addObject:[NSPredicate predicateWithFormat:@"subscription == NIL"]];
             } else if ([operator isEqualToString:@"stream"]) {
                 [generated addObject:[NSPredicate predicateWithFormat:@"subscription.name LIKE %@", operand]];
+            } else if ([operator isEqualToString:@"pm-with"]) {
+                [generated addObject:[NSPredicate predicateWithFormat:@"subscription == NIL"]];
+                [generated addObject:[NSPredicate predicateWithFormat:@"sender.email LIKE %@", operand]];
             }
         }
     }
@@ -201,6 +208,10 @@
             }
         } else if ([operator isEqualToString:@"stream"]) {
             if (![operand isEqualToString:msg.stream_recipient]) {
+                return NO;
+            }
+        } else if ([operator isEqualToString:@"pm-with"]) {
+            if (![operand isEqualToString:msg.sender.email]) {
                 return NO;
             }
         }

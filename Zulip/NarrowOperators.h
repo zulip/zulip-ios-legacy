@@ -24,6 +24,7 @@
 - (void)setMentions;
 - (void)setStarred;
 - (void)addStreamNarrow:(NSString *)streamName;
+- (void)addUserNarrow:(NSString *)email;
 
 - (BOOL)isHomeView;
 - (BOOL)isPrivateMessages;
