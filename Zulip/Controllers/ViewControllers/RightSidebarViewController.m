@@ -180,10 +180,16 @@ const CGFloat RightSidebarViewControllerStatusBarOffset = 15.f;
 
     [self.findSidePanelController toggleRightPanel:self];
 
-    id<MessageComposing> centerController = (id<MessageComposing>)[(UINavigationController *)self.findSidePanelController.centerPanel visibleViewController];
-    if ([centerController conformsToProtocol:@protocol(MessageComposing)]) {
-        [centerController showComposeViewForUser:cell.user];
-    }
+    // Weird things happen if the compose view is shown before the view controller has loaded.
+    // Ideally, this would be solved by giving [JASidePanelController toggleRightPanel] a completion block.
+    double delayInSeconds = 1;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        id<MessageComposing> centerController = (id<MessageComposing>)[(UINavigationController *)self.findSidePanelController.centerPanel visibleViewController];
+        if ([centerController conformsToProtocol:@protocol(MessageComposing)]) {
+            [centerController showComposeViewForUser:cell.user];
+        }
+    });
 }
 
 
