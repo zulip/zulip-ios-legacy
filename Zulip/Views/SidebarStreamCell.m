@@ -85,6 +85,11 @@
 
     self.name.text = [op title];
     [self setBackgroundIfCurrent];
+
+    if (![self.stream.in_home_view boolValue]) {
+        self.name.textColor = [UIColor lightGrayColor];
+        self.gravatar.alpha = 0.4;
+    }
 }
 
 - (void)setCount:(int)count
