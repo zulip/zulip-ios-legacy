@@ -86,6 +86,10 @@
     self.name.text = [op title];
     [self setBackgroundIfCurrent];
 
+    if ([self.stream.invite_only boolValue]) {
+        [self addPrivateIcon];
+    }
+
     if (![self.stream.in_home_view boolValue]) {
         self.name.textColor = [UIColor lightGrayColor];
         self.gravatar.alpha = 0.4;
@@ -133,6 +137,14 @@
         }
     }
     [self setCount:count];
+}
+
+#pragma mark - Private
+- (void)addPrivateIcon {
+    FAKFontAwesome *lockIcon = [FAKFontAwesome lockIconWithSize:self.gravatar.height];
+    UIImageView *lock = [[UIImageView alloc] initWithImage:[lockIcon imageWithSize:self.gravatar.size]];
+    lock.frame = self.gravatar.frame;
+    [self addSubview:lock];
 }
 
 #pragma mark - Drawing Methods
