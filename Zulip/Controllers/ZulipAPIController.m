@@ -459,10 +459,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
     }
 
     // Fetch messages, since we were not able to fulfill the request locally
-    NSMutableDictionary *args = [[NSMutableDictionary alloc] initWithDictionary:@{@"anchor": @(anchor),
-                                                                                  @"num_before": @(before),
-                                                                                  @"num_after": @(after)}];
-    [self getOldMessages:args narrow:operators completionBlock:block];
+    [self getOldMessagesForNarrow:operators anchor:anchor before:before after:after completionBlock:block];
 }
 
 #pragma mark - Zulip API calls
@@ -470,9 +467,11 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
 /**
  Load messages from the Zulip API into Core Data
  */
-- (void) getOldMessages: (NSDictionary *)args narrow:(NarrowOperators *)narrow completionBlock:(MessagesDelivered)block
-{
-    long anchor = [[args objectForKey:@"anchor"] integerValue];
+- (void) getOldMessagesForNarrow:(NarrowOperators *)narrow
+                          anchor:(long)anchor
+                          before:(NSInteger)before
+                           after:(NSInteger)after
+                 completionBlock:(MessagesDelivered)block {
     if (!anchor) {
         anchor = self.pointer;
     }
@@ -483,8 +482,8 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
 
     NSDictionary *fields = @{@"apply_markdown": @"true",
                              @"anchor": @(anchor),
-                             @"num_before": @([[args objectForKey:@"num_before"] intValue]),
-                             @"num_after": @([[args objectForKey:@"num_after"] intValue]),
+                             @"num_before": @(before),
+                             @"num_after": @(after),
                              @"narrow": narrowParam
                              };
 

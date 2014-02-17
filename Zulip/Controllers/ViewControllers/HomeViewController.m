@@ -61,12 +61,12 @@
     self.initiallyPopulating = YES;
 
     // Load initial set of messages
-    NSDictionary *args = @{@"anchor": @([ZulipAPIController sharedInstance].pointer),
-                           @"num_before": @(12),
-                           @"num_after": @(0)};
-    [[ZulipAPIController sharedInstance] getOldMessages:args narrow:self.operators completionBlock:^(NSArray *messages) {
-
-        if (self.pointerUpdateRequiresRefetch) {
+    [[ZulipAPIController sharedInstance] getOldMessagesForNarrow:self.operators
+                                                          anchor:[[ZulipAPIController sharedInstance] pointer]
+                                                          before:12
+                                                           after:0
+                                                 completionBlock:^(NSArray *messages) {
+          if (self.pointerUpdateRequiresRefetch) {
             self.pointerUpdateRequiresRefetch = NO;
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self initialPopulate];
