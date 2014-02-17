@@ -17,6 +17,8 @@
 
 + (NarrowOperators *) operatorsFromMessage:(RawMessage *)msg;
 
+@property (assign, nonatomic) BOOL isServerOnly;
+
 - (void)setInHomeView;
 - (void)setPrivateMessages;
 - (void)addStreamNarrow:(NSString *)streamName;

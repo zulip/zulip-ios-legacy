@@ -392,6 +392,17 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
                     withOperators:(NarrowOperators *)operators
                   completionBlock:(MessagesDelivered)block
 {
+
+    if (operators.isServerOnly) {
+        [self getOldMessagesForNarrow:operators
+                               anchor:0
+                               before:before
+                                after:after
+                      completionBlock:block];
+
+        return;
+    }
+    
     // Try to load the desired messages, either from the cache or from the API
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ZMessage"];
     BOOL ascending;
