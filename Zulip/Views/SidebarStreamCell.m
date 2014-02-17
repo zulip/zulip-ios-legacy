@@ -9,8 +9,11 @@
 #import "SidebarStreamCell.h"
 #import "ZulipAppDelegate.h"
 #import "ZulipAPIController.h"
-#import "UIColor+HexColor.h"
 #import "UnreadManager.h"
+
+#import "UIColor+HexColor.h"
+#import "UIView+Layout.h"
+#import <FontAwesomeKit/FAKFontAwesome.h>
 
 @interface SidebarStreamCell ()
 @end
@@ -51,9 +54,8 @@
         case AT_MENTIONS:
         {
             [op setMentions];
-
-            UIImage *image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"user" ofType:@"png"]];
-            self.gravatar.image = image;
+            FAKFontAwesome *tagIcon = [FAKFontAwesome tagIconWithSize:self.gravatar.height];
+            self.gravatar.image = [tagIcon imageWithSize:self.gravatar.size];
             break;
         }
         default:
