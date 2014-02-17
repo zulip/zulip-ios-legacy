@@ -119,10 +119,6 @@
 		B3F5629A17A8674B004B185A /* SidebarSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3F5629917A8674B004B185A /* SidebarSectionHeader.xib */; };
 		B3F5629D17A9A4EE004B185A /* RawMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F5629C17A9A4EE004B185A /* RawMessage.m */; };
 		B3F562A017AAAE5A004B185A /* NarrowOperators.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F5629F17AAAE59004B185A /* NarrowOperators.m */; };
-		B3F562AD17ABEA8D004B185A /* home.png in Resources */ = {isa = PBXBuildFile; fileRef = B3F562A917ABEA8D004B185A /* home.png */; };
-		B3F562AE17ABEA8D004B185A /* home@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B3F562AA17ABEA8D004B185A /* home@2x.png */; };
-		B3F562AF17ABEA8D004B185A /* user.png in Resources */ = {isa = PBXBuildFile; fileRef = B3F562AB17ABEA8D004B185A /* user.png */; };
-		B3F562B017ABEA8D004B185A /* user@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B3F562AC17ABEA8D004B185A /* user@2x.png */; };
 		B3F562B317ABEB85004B185A /* SidebarSectionHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F562B217ABEB85004B185A /* SidebarSectionHeader.m */; };
 		B3F562B617ABFD5C004B185A /* my_avatar_placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = B3F562B417ABFD5C004B185A /* my_avatar_placeholder.png */; };
 		B3F562B717ABFD5C004B185A /* my_avatar_placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B3F562B517ABFD5C004B185A /* my_avatar_placeholder@2x.png */; };
@@ -372,10 +368,6 @@
 		B3F5629C17A9A4EE004B185A /* RawMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RawMessage.m; path = Models/RawMessage.m; sourceTree = "<group>"; };
 		B3F5629E17AAAE59004B185A /* NarrowOperators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NarrowOperators.h; sourceTree = "<group>"; };
 		B3F5629F17AAAE59004B185A /* NarrowOperators.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NarrowOperators.m; sourceTree = "<group>"; };
-		B3F562A917ABEA8D004B185A /* home.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = home.png; path = Resources/home.png; sourceTree = "<group>"; };
-		B3F562AA17ABEA8D004B185A /* home@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home@2x.png"; path = "Resources/home@2x.png"; sourceTree = "<group>"; };
-		B3F562AB17ABEA8D004B185A /* user.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = user.png; path = Resources/user.png; sourceTree = "<group>"; };
-		B3F562AC17ABEA8D004B185A /* user@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "user@2x.png"; path = "Resources/user@2x.png"; sourceTree = "<group>"; };
 		B3F562B117ABEB85004B185A /* SidebarSectionHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SidebarSectionHeader.h; path = Views/SidebarSectionHeader.h; sourceTree = "<group>"; };
 		B3F562B217ABEB85004B185A /* SidebarSectionHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SidebarSectionHeader.m; path = Views/SidebarSectionHeader.m; sourceTree = "<group>"; };
 		B3F562B417ABFD5C004B185A /* my_avatar_placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = my_avatar_placeholder.png; path = Resources/my_avatar_placeholder.png; sourceTree = "<group>"; };
@@ -1081,11 +1073,7 @@
 				B3F5629A17A8674B004B185A /* SidebarSectionHeader.xib in Resources */,
 				B376986617B56F0900D29D93 /* zulip-80.png in Resources */,
 				B376986D17B56F0900D29D93 /* zulip@2x.png in Resources */,
-				B3F562AD17ABEA8D004B185A /* home.png in Resources */,
 				B376986217B56F0900D29D93 /* zulip-50.png in Resources */,
-				B3F562AE17ABEA8D004B185A /* home@2x.png in Resources */,
-				B3F562AF17ABEA8D004B185A /* user.png in Resources */,
-				B3F562B017ABEA8D004B185A /* user@2x.png in Resources */,
 				51BA4F5817F6069300BBF48C /* left@2x.png in Resources */,
 				B3F562B617ABFD5C004B185A /* my_avatar_placeholder.png in Resources */,
 				B376986C17B56F0900D29D93 /* zulip.png in Resources */,

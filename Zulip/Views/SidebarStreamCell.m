@@ -37,18 +37,16 @@
     switch (shortcut) {
         case HOME:
         {
-            // Magic to go  back to the main view
             [op setInHomeView];
-            UIImage *image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"home" ofType:@"png"]];
-            self.gravatar.image = image;
+            FAKFontAwesome *homeIcon = [FAKFontAwesome homeIconWithSize:self.gravatar.height];
+            self.gravatar.image = [homeIcon imageWithSize:self.gravatar.size];
             break;
         }
         case PRIVATE_MESSAGES:
         {
             [op setPrivateMessages];
-
-            UIImage *image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"user" ofType:@"png"]];
-            self.gravatar.image = image;
+            FAKFontAwesome *userIcon = [FAKFontAwesome userIconWithSize:self.gravatar.height];
+            self.gravatar.image = [userIcon imageWithSize:self.gravatar.size];
             break;
         }
         case AT_MENTIONS:
