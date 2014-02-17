@@ -48,6 +48,14 @@
             self.gravatar.image = image;
             break;
         }
+        case AT_MENTIONS:
+        {
+            [op setMentions];
+
+            UIImage *image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"user" ofType:@"png"]];
+            self.gravatar.image = image;
+            break;
+        }
         default:
             break;
     }

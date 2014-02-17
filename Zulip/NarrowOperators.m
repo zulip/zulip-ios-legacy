@@ -72,6 +72,12 @@
     [self.subpredicates addObject:@[@"is", @"private"]];
 }
 
+- (void)setMentions
+{
+    [self.subpredicates addObject:@[@"is", @"mentioned"]];
+    self.isServerOnly = YES;
+}
+
 - (BOOL)isPrivateMessages
 {
     return ([self.subpredicates count] == 1) &&
@@ -100,6 +106,9 @@
                 } else if ([operator isEqualToString:@"is"] &&
                            [operand isEqualToString:@"private"]) {
                     return @"Private Messages";
+                } else if ([operator isEqualToString:@"is"] &&
+                           [operand isEqualToString:@"mentioned"]) {
+                    return @"@-mentions";
                 }
             }
         }

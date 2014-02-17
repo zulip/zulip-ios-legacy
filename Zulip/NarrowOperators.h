@@ -21,6 +21,7 @@
 
 - (void)setInHomeView;
 - (void)setPrivateMessages;
+- (void)setMentions;
 - (void)addStreamNarrow:(NSString *)streamName;
 
 - (BOOL)isHomeView;

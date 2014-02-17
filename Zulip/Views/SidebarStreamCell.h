@@ -13,7 +13,8 @@
 typedef enum {
     HOME,
     PRIVATE_MESSAGES,
-    STREAM
+    STREAM,
+    AT_MENTIONS
 } SIDEBAR_SHORTCUTS;
 
 @interface SidebarStreamCell : UITableViewCell
