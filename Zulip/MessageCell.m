@@ -34,7 +34,7 @@
     [self.starButton setImage:[emptyStar imageWithSize:starSize]
                      forState:UIControlStateNormal];
     [self.starButton setImage:[fullStar imageWithSize:starSize]
-                     forState:UIControlStateHighlighted];
+                     forState:UIControlStateSelected];
 }
 
 - (void)setMessage:(RawMessage *)message
@@ -85,7 +85,7 @@
     self.attributedTextView.attributedString = message.attributedString;
     self.attributedTextView.delegate = self;
 
-    self.starButton.highlighted = message.starred;
+    self.starButton.selected = message.starred;
 }
 
 - (void)willBeDisplayed
@@ -167,6 +167,12 @@
     [linkButton addTarget:self action:@selector(linkClicked:) forControlEvents:UIControlEventTouchDown];
 
     return linkButton;
+}
+
+#pragma mark - Event handlers
+- (IBAction)didTapStarButton:(id)sender {
+    self.message.starred = !self.message.starred;
+    self.starButton.selected = self.message.starred;
 }
 
 - (IBAction)linkClicked:(DTLinkButton *)sender

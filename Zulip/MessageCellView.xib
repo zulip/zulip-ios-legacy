@@ -58,6 +58,9 @@
                         <state key="normal">
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         </state>
+                        <connections>
+                            <action selector="didTapStarButton:" destination="3" eventType="touchUpInside" id="wyD-rz-aTX"/>
+                        </connections>
                     </button>
                 </subviews>
             </tableViewCellContentView>

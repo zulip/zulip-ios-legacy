@@ -15,7 +15,6 @@
 
 @interface MessageCell : UITableViewCell <DTAttributedTextContentViewDelegate>
 
-- (void)setMessage:(RawMessage *)message;
 - (void)willBeDisplayed;
 
 + (NSString *)reuseIdentifier;

@@ -92,6 +92,11 @@ static NSString * const MessageFlagStarred = @"starred";
     NSMutableSet *newFlags = [[NSMutableSet alloc] initWithSet:self.messageFlags];
     [newFlags removeObject:flag];
 
+    // Save back to the server if there is a change
+    if (![newFlags isEqualToSet:self.messageFlags] && !self.disableUpdates) {
+        [[ZulipAPIController sharedInstance] sendMessageFlagsUpdated:self withOperation:@"remove" andFlag:flag];
+    }
+
     self.messageFlags = newFlags;
 }
 
