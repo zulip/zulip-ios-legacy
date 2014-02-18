@@ -14,6 +14,8 @@
 
 #import <Crashlytics/Crashlytics.h>
 
+static NSString * const MessageFlagRead = @"read";
+
 @interface RawMessage ()
 
 @property (nonatomic, retain) NSMutableSet *changeHandlers;
@@ -38,7 +40,7 @@
 
 - (BOOL)read
 {
-    return [self.messageFlags containsObject:@"read"];
+    return [self.messageFlags containsObject:MessageFlagRead];
 }
 
 - (void)setRead:(BOOL)read
@@ -48,9 +50,9 @@
     }
 
     if (read) {
-        [self addMessageFlag:@"read"];
+        [self addMessageFlag:MessageFlagRead];
     } else {
-        [self removeMessageFlag:@"read"];
+        [self removeMessageFlag:MessageFlagRead];
     }
 
     if (read) {
