@@ -265,19 +265,15 @@
             SidebarStreamCell *my_cell = (SidebarStreamCell *)cell;
             switch (indexPath.row) {
                 case 0:
-                    my_cell.name.text = @"Home";
                     my_cell.shortcut = HOME;
                     break;
                 case 1:
-                    my_cell.name.text = @"Private Messages";
                     my_cell.shortcut = PRIVATE_MESSAGES;
                     break;
                 case 2:
-                    my_cell.name.text = @"Starred Messages";
                     my_cell.shortcut = STARRED;
                     break;
                 case 3:
-                    my_cell.name.text = @"@-mentions";
                     my_cell.shortcut = AT_MENTIONS;
                     break;
                 default:
