@@ -88,13 +88,13 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
         self.subject.text = message.subject;
     }
 
-    [self.messageInput becomeFirstResponder];
+    [self focusNextInput];
 }
 
 - (void)showComposeViewForUser:(ZUser *)user {
     [self showPrivateCompose];
     self.recipient = user.email;
-    [self.messageInput becomeFirstResponder];
+    [self focusNextInput];
 }
 
 - (void)showSubjectBar {
@@ -205,17 +205,30 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
     [self textViewDidChange:self.messageInput];
 }
 
-- (void)didTapComposeView {
-    self.to.text = self.defaultRecipient;
-    self.subject.text = nil;
+- (void)focusNextInput
+{
+    // Focuses input view that should get focus when opening the compose box
+    UIResponder *toFocus = nil;
+    if ([[self.to text] isEqualToString:@""]) {
+        toFocus = self.to;
+    } else {
+        if (!self.isPrivate && [[self.subject text] isEqualToString:@""]) {
+            toFocus = self.subject;
+        } else {
+            toFocus = self.messageInput;
+        }
+    }
+    [toFocus becomeFirstResponder];
+}
 
+- (void)didTapComposeView {
     if (self.isPrivate) {
         [self showPrivateCompose];
     } else {
         [self showPublicCompose];
     }
 
-    [self.to becomeFirstResponder];
+    [self focusNextInput];
 }
 
 #pragma mark - UITextViewDelegate
