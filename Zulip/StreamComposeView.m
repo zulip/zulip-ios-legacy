@@ -222,7 +222,7 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
     if ([[self.to text] isEqualToString:@""]) {
         toFocus = self.to;
     } else {
-        if (!self.isPrivate && [[self.subject text] isEqualToString:@""]) {
+        if (!self.isCurrentlyPrivate && [[self.subject text] isEqualToString:@""]) {
             toFocus = self.subject;
         } else {
             toFocus = self.messageInput;
