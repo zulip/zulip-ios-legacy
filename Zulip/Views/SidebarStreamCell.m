@@ -49,6 +49,13 @@
             self.gravatar.image = [userIcon imageWithSize:self.gravatar.size];
             break;
         }
+        case STARRED:
+        {
+            [op setStarred];
+            FAKFontAwesome *starIcon = [FAKFontAwesome starIconWithSize:self.gravatar.height];
+            self.gravatar.image = [starIcon imageWithSize:self.gravatar.size];
+            break;
+        }
         case AT_MENTIONS:
         {
             [op setMentions];

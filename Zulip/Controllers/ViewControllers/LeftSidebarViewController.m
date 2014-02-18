@@ -144,7 +144,7 @@
         case 0:
             return 1; // Name
         case 1:
-            return 3; // Misc Narrows
+            return 4; // Misc Narrows
         case 2:
         {
             // Streams
@@ -273,6 +273,10 @@
                     my_cell.shortcut = PRIVATE_MESSAGES;
                     break;
                 case 2:
+                    my_cell.name.text = @"Starred Messages";
+                    my_cell.shortcut = STARRED;
+                    break;
+                case 3:
                     my_cell.name.text = @"@-mentions";
                     my_cell.shortcut = AT_MENTIONS;
                     break;

@@ -14,6 +14,7 @@ typedef enum {
     HOME,
     PRIVATE_MESSAGES,
     STREAM,
+    STARRED,
     AT_MENTIONS
 } SIDEBAR_SHORTCUTS;
 

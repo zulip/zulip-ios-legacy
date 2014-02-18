@@ -78,6 +78,12 @@
     self.isServerOnly = YES;
 }
 
+- (void)setStarred
+{
+    [self.subpredicates addObject:@[@"is", @"starred"]];
+    self.isServerOnly = YES;
+}
+
 - (BOOL)isPrivateMessages
 {
     return ([self.subpredicates count] == 1) &&
@@ -109,6 +115,9 @@
                 } else if ([operator isEqualToString:@"is"] &&
                            [operand isEqualToString:@"mentioned"]) {
                     return @"@-mentions";
+                } else if ([operator isEqualToString:@"is"] &&
+                           [operand isEqualToString:@"starred"]) {
+                    return @"Starred Messages";
                 }
             }
         }
