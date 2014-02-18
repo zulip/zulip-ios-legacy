@@ -5,11 +5,13 @@
 #import "ZulipAPIController.h"
 #import "ZulipAPIClient.h"
 
-#include <QuartzCore/QuartzCore.h>
+#import "UIView+Layout.h"
+#import <FontAwesomeKit/FAKFontAwesome.h>
 
 @interface MessageCell ()
 
 @property (nonatomic, retain) NSDateFormatter *dateFormatter;
+@property (weak, nonatomic) IBOutlet UIButton *starButton;
 
 @end
 
@@ -20,6 +22,19 @@
     self.dateFormatter = [[NSDateFormatter alloc] init];
     [self.dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
     [self.dateFormatter setDateFormat:@"HH:mm"];
+
+    CGSize starSize = CGSizeMake(15, 15);
+    FAKFontAwesome *emptyStar = [FAKFontAwesome starOIconWithSize:starSize.height];
+    [emptyStar addAttribute:NSForegroundColorAttributeName value:[UIColor
+                                                                 lightGrayColor]];
+    FAKFontAwesome *fullStar = [FAKFontAwesome starIconWithSize:starSize.height];
+    [fullStar addAttribute:NSForegroundColorAttributeName value:[UIColor
+                                                                  lightGrayColor]];
+
+    [self.starButton setImage:[emptyStar imageWithSize:starSize]
+                     forState:UIControlStateNormal];
+    [self.starButton setImage:[fullStar imageWithSize:starSize]
+                     forState:UIControlStateHighlighted];
 }
 
 - (void)setMessage:(RawMessage *)message
@@ -69,6 +84,8 @@
     _message = message;
     self.attributedTextView.attributedString = message.attributedString;
     self.attributedTextView.delegate = self;
+
+    self.starButton.highlighted = message.starred;
 }
 
 - (void)willBeDisplayed
