@@ -20,10 +20,10 @@ static const CGFloat StreamComposeViewToWidth_Phone = 121.f;
 static const CGFloat StreamComposeViewToWidth_Pad = 200.f;
 
 static const CGFloat StreamComposeViewSubjectWidth_Phone = 166.f;
-static const CGFloat StreamComposeViewSubjectWidth_Pad = 400;
+static const CGFloat StreamComposeViewSubjectWidth_Pad = 525;
 
-static const CGFloat StreamComposeViewMessageWidth_Phone = 200.f;
-static const CGFloat StreamComposeViewMessageWidth_Pad = 600.f;
+static const CGFloat StreamComposeViewMessageWidth_Phone = 245.f;
+static const CGFloat StreamComposeViewMessageWidth_Pad = 670.f;
 
 static const CGFloat StreamComposeViewInputHeight = 30.f;
 
@@ -39,6 +39,7 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 @property (strong, nonatomic) UITextField *subject;
 @property (strong, nonatomic) UIBarButtonItem *toItem;
 @property (strong, nonatomic) UIBarButtonItem *subjectItem;
+@property (strong, nonatomic) UIBarButtonItem *sendButton;
 @property (strong, nonatomic) UIView *tapHandlerShim;
 
 @property (assign, nonatomic) BOOL isCurrentlyPrivate;
@@ -150,7 +151,17 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
     UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
 
     self.to.placeholder = @"One or more people...";
-    [self.to resizeTo:self.messageInput.size];
+
+    // PM bar goes from left edge of input field to right edge of send button
+    // We can't get a UIView from a bar buttom item directly, but we know the index
+    // (see https://stackoverflow.com/questions/2994354/figure-out-uibarbuttonitem-frame-in-window)
+    // So we get the correctly indexed view in the list of subviews
+    float rowPadding = 4.0f;
+    UIView *sendView = (UIView *)[self.mainBar.subviews objectAtIndex:3];
+    float width = (sendView.frame.origin.x + sendView.frame.size.width) - self.messageInput.frame.origin.x + rowPadding;
+    CGSize toSize = CGSizeMake(width, self.messageInput.frame.size.height);
+
+    [self.to resizeTo:toSize];
     self.subjectBar.items = @[flexibleSpace, self.toItem, flexibleSpace];
 
     [self.autocompleteView resetRegisteredTextFields];
@@ -272,8 +283,10 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 
     UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     UIBarButtonItem *fixedSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    UIBarButtonItem *fixedNegativeSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    fixedNegativeSpace.width = -4.0f;
 
-    UIBarButtonItem *sendButton = [[UIBarButtonItem alloc] initWithTitle:@"Send" style:UIBarButtonItemStyleDone target:self action:@selector(didTapSendButton)];
+    self.sendButton = [[UIBarButtonItem alloc] initWithTitle:@"Send" style:UIBarButtonItemStyleDone target:self action:@selector(didTapSendButton)];
 
     CGFloat messageWidth = (self.isPad ? StreamComposeViewMessageWidth_Pad : StreamComposeViewMessageWidth_Phone);
     self.messageInput = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, messageWidth, StreamComposeViewInputHeight)];
@@ -291,8 +304,9 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 
     UIBarButtonItem *inputItem = [[UIBarButtonItem alloc] initWithCustomView:self.messageInput];
 
-
-    self.mainBar.items = @[flexibleSpace, inputItem, flexibleSpace, sendButton, fixedSpace];
+    // NOTE: If you change the order or number of items in the mainBar, also update
+    // showPrivateCompose:
+    self.mainBar.items = @[fixedNegativeSpace, inputItem, flexibleSpace, self.sendButton, fixedSpace];
     [self addSubview:self.mainBar];
 }
 
