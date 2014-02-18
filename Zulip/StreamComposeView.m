@@ -227,12 +227,14 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 
     CGFloat heightDifference = newSize.height - textView.frame.size.height;
 
-    [UIView animateWithDuration:0.1f animations:^{
-        textView.frame = newFrame;
-        [self.mainBar resizeTo:CGSizeMake(self.mainBar.width, self.mainBar.height + heightDifference)];
+    // Immediately resize the mainBar and compose view to the new size, but animate
+    // the compose box growing and the overall compose area growing up
+    [self.mainBar resizeTo:CGSizeMake(self.mainBar.width, self.mainBar.height + heightDifference)];
+    [self resizeTo:CGSizeMake(self.width, self.height + heightDifference)];
 
-        [self resizeTo:CGSizeMake(self.width, self.height + heightDifference)];
+    [UIView animateWithDuration:0.1f animations:^{
         [self moveBy:CGPointMake(0, -heightDifference)];
+        textView.frame = newFrame;
     }];
 }
 
