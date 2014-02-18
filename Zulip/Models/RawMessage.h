@@ -46,6 +46,7 @@ typedef void(^RawMessageChangeHandler)(RawMessage *rawMsg);
 
 // Flag specific
 @property (nonatomic) BOOL read;
+@property (nonatomic) BOOL starred;
 
 - (void)addMessageFlag:(NSString *)flag;
 - (void)removeMessageFlag:(NSString *)flag;

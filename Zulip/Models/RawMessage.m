@@ -15,6 +15,7 @@
 #import <Crashlytics/Crashlytics.h>
 
 static NSString * const MessageFlagRead = @"read";
+static NSString * const MessageFlagStarred = @"starred";
 
 @interface RawMessage ()
 
@@ -57,6 +58,19 @@ static NSString * const MessageFlagRead = @"read";
 
     if (read) {
         [[[ZulipAPIController sharedInstance] unreadManager] markMessageRead:self];
+    }
+}
+
+- (BOOL)starred {
+    return [self.messageFlags containsObject:MessageFlagStarred];
+}
+
+- (void)setStarred:(BOOL)starred
+{
+    if (starred) {
+        [self addMessageFlag:MessageFlagStarred];
+    } else {
+        [self removeMessageFlag:MessageFlagStarred];
     }
 }
 
