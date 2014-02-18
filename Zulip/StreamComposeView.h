@@ -25,6 +25,9 @@
 - (void)showComposeViewForMessage:(RawMessage *)message;
 - (void)showComposeViewForUser:(ZUser *)message;
 
+// Shows the compose view as if the user tapped on the compose box
+- (void)showComposeView;
+
 - (void)showSubjectBar;
 - (void)hideSubjectBar;
 

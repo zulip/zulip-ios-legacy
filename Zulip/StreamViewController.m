@@ -308,7 +308,17 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
 #pragma mark - StreamViewController
 
 -(void)didTapUsersButton {
-    [self.findSidePanelController showRightPanelAnimated:YES];
+    // HACK for MIT. We don't have a user list for MIT, so:
+    // 1. There's no point in showing the empty sidebar
+    // 2. There's no way to start a new PM
+    // This hack repurposes the open-sidebar button to
+    // start a new PM compose instead.
+    if ([[[ZulipAPIController sharedInstance] email] rangeOfString:@"@mit.edu"].location != NSNotFound) {
+        self.composeView.isPrivate = YES;
+        [self.composeView showComposeView];
+    } else {
+        [self.findSidePanelController showRightPanelAnimated:YES];
+    }
 }
 
 -(int)rowWithId:(int)messageId

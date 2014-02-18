@@ -97,6 +97,16 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
     [self focusNextInput];
 }
 
+- (void)showComposeView {
+    if (self.isPrivate) {
+        [self showPrivateCompose];
+    } else {
+        [self showPublicCompose];
+    }
+
+    [self focusNextInput];
+}
+
 - (void)showSubjectBar {
     self.subjectBar.hidden = NO;
     self.tapHandlerShim.hidden = YES;
@@ -222,13 +232,7 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 }
 
 - (void)didTapComposeView {
-    if (self.isPrivate) {
-        [self showPrivateCompose];
-    } else {
-        [self showPublicCompose];
-    }
-
-    [self focusNextInput];
+    [self showComposeView];
 }
 
 #pragma mark - UITextViewDelegate
