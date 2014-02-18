@@ -19,7 +19,6 @@
 static const CGFloat StreamComposeViewToWidth_Phone = 121.f;
 static const CGFloat StreamComposeViewToWidth_Pad = 200.f;
 
-
 static const CGFloat StreamComposeViewSubjectWidth_Phone = 166.f;
 static const CGFloat StreamComposeViewSubjectWidth_Pad = 400;
 
