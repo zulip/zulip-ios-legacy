@@ -202,6 +202,7 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
     }];
 
     self.messageInput.text = @"";
+    [self textViewDidChange:self.messageInput];
 }
 
 - (void)didTapComposeView {
