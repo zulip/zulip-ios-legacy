@@ -331,7 +331,7 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 
     CGFloat subjectWidth = (self.isPad ? StreamComposeViewSubjectWidth_Pad : StreamComposeViewSubjectWidth_Phone);
     self.subject = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, subjectWidth, StreamComposeViewInputHeight)];
-    self.subject.placeholder = @"Subject";
+    self.subject.placeholder = @"Topic";
     self.subject.borderStyle = UITextBorderStyleRoundedRect;
     self.subject.font = [UIFont systemFontOfSize:14.f];
     self.subject.autocapitalizationType = UITextAutocapitalizationTypeNone;
