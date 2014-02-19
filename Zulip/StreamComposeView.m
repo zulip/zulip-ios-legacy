@@ -198,8 +198,25 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
     return YES;
 }
 
+- (BOOL)canSend
+{
+    if ([self.to.text isEqualToString:@""]) {
+        return NO;
+    }
+
+    return YES;
+}
+
 #pragma mark - Event handlers
 - (void)didTapSendButton {
+    if (![self canSend]) {
+        return;
+    }
+
+    NSString *subject = self.subject.text;
+    if (!self.isCurrentlyPrivate && [subject isEqualToString:@""]) {
+        subject = @"(no topic)";
+    }
     NSDictionary *postFields;
     if (self.isCurrentlyPrivate) {
         NSArray* recipientArray = [self.to.text componentsSeparatedByString: @","];
@@ -214,7 +231,7 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
     } else {
         postFields = @{ @"type": @"stream",
                         @"to": self.to.text,
-                        @"subject": self.subject.text,
+                        @"subject": subject,
                         @"content": self.messageInput.text };
     }
 
