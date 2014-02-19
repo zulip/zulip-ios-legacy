@@ -72,7 +72,6 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
         [self.view addSubview:self.autocompleteView];
 
         self.composeView = [[StreamComposeView alloc] initWithAutocompleteView:self.autocompleteView];
-        [self.composeView moveToPoint:CGPointMake(0, self.view.bottom - self.composeView.height)];
         self.composeView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
         [self.view addSubview:self.composeView];
         
@@ -117,6 +116,9 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+
+    // Position the inline compose at the bottom of the screen
+    [self.composeView moveToPoint:CGPointMake(0, self.view.bottom - self.composeView.height)];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
