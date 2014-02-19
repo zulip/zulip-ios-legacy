@@ -29,8 +29,6 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 
 @interface StreamComposeView ()<UITextViewDelegate>
 
-@property (strong, nonatomic) NSString *recipient;
-
 @property (strong, nonatomic) UIToolbar *mainBar;
 @property (strong, nonatomic) UITextView *messageInput;
 
