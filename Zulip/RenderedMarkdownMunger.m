@@ -56,7 +56,9 @@
                     DTDefaultFontSize: @"12pt"};
     });
     if (message.munged) {
-        NSLog(@"Tried to munge message %@, with content %@, that's already been munged. Ya done goofed, probably.", message, message.content);
+        // Munging is an idempotent operation. Each StreamViewController attempts to munge when adding messages, and if the user has a
+        // narrow loaded, two SVCs might each call mungeThis:. We only want to munge once.
+        return;
     }
     // munge the message some
     //TODO: make this regex more robust, or make the build script make static/third/gemoji/images/emoji exist.
