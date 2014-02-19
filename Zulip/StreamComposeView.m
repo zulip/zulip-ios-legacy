@@ -31,6 +31,7 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 
 @property (strong, nonatomic) UIToolbar *mainBar;
 @property (strong, nonatomic) UITextView *messageInput;
+@property (strong, nonatomic) NSString *recipient;
 
 @property (strong, nonatomic) UIToolbar *subjectBar;
 @property (strong, nonatomic) UITextField *to;
@@ -81,9 +82,11 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 
         [self showPrivateCompose];
         self.recipient = recipientString;
+        self.defaultRecipient = recipientString;
     } else {
         [self showPublicCompose];
         self.recipient = message.stream_recipient;
+        self.defaultRecipient = message.stream_recipient;
         self.subject.text = message.subject;
     }
 
@@ -103,6 +106,13 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
         [self showPublicCompose];
     }
 
+    [self focusNextInput];
+}
+
+- (void)showOneTimePrivateCompose
+{
+    self.defaultRecipient = @"";
+    [self showPrivateCompose];
     [self focusNextInput];
 }
 
@@ -149,6 +159,7 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
     UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
 
     self.to.placeholder = @"One or more people...";
+    self.to.text = self.defaultRecipient;
 
     // PM bar goes from left edge of input field to right edge of send button
     // We can't get a UIView from a bar buttom item directly, but we know the index
@@ -174,6 +185,8 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
     UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
 
     self.to.placeholder = @"Stream";
+    self.to.text = self.defaultRecipient;
+
     CGFloat toWidth = (self.isPad ? StreamComposeViewToWidth_Pad : StreamComposeViewToWidth_Phone);
     [self.to resizeTo:CGSizeMake(toWidth, self.messageInput.height)];
     self.subjectBar.items = @[flexibleSpace, self.toItem, fixedSpace, self.subjectItem, flexibleSpace];

@@ -40,7 +40,7 @@ typedef enum  {
         if ([self.title isEqualToString:@"Private Messages"]) {
             self.composeView.isPrivate = YES;
         } else {
-            self.composeView.recipient = self.title;
+            self.composeView.defaultRecipient = self.title;
         }
 
         [self initialPopulate];

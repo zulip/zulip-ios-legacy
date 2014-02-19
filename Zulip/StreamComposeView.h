@@ -16,7 +16,7 @@
 
 @property (readonly) CGFloat visibleHeight;
 
-@property (strong, nonatomic) NSString *recipient;
+@property (strong, nonatomic) NSString *defaultRecipient;
 @property (assign, nonatomic) BOOL isPrivate;
 @property (strong, nonatomic) ComposeAutocompleteView *autocompleteView;
 
@@ -26,7 +26,7 @@
 - (void)showComposeViewForUser:(ZUser *)message;
 
 // Shows the compose view as if the user tapped on the compose box
-- (void)showComposeView;
+- (void)showOneTimePrivateCompose;
 
 - (void)showSubjectBar;
 - (void)hideSubjectBar;
