@@ -16,7 +16,6 @@
 		782681C91795CE08009F69F5 /* ComposeViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681C81795CE08009F69F5 /* ComposeViewController~ipad.xib */; };
 		782681CC1795D10C009F69F5 /* LoginViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681CB1795D10C009F69F5 /* LoginViewController~ipad.xib */; };
 		7882800D17B2E5D200D5DC42 /* Zulip.css in Resources */ = {isa = PBXBuildFile; fileRef = 7882800C17B2E2F300D5DC42 /* Zulip.css */; };
-		7882870117B2EDF100D5DC42 /* emoji in Resources */ = {isa = PBXBuildFile; fileRef = 7882870017B2EDE100D5DC42 /* emoji */; };
 		7882F1B217BA9FE700A27601 /* libDTCoreText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7882F1A917BA9F6000A27601 /* libDTCoreText.a */; };
 		7882F1B417BA9FF300A27601 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7882F1B317BA9FF300A27601 /* libxml2.dylib */; };
 		7882F1B617BA9FFD00A27601 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7882F1B517BA9FFD00A27601 /* ImageIO.framework */; };
@@ -224,7 +223,6 @@
 		782681C81795CE08009F69F5 /* ComposeViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "ComposeViewController~ipad.xib"; sourceTree = "<group>"; };
 		782681CB1795D10C009F69F5 /* LoginViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "LoginViewController~ipad.xib"; sourceTree = "<group>"; };
 		7882800C17B2E2F300D5DC42 /* Zulip.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Zulip.css; sourceTree = SOURCE_ROOT; };
-		7882870017B2EDE100D5DC42 /* emoji */ = {isa = PBXFileReference; lastKnownFileType = folder; name = emoji; path = Resources/emoji; sourceTree = "<group>"; };
 		7882F19817BA9F5F00A27601 /* DTCoreText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = DTCoreText.xcodeproj; path = ThirdParty/DTCoreText/DTCoreText.xcodeproj; sourceTree = "<group>"; };
 		7882F1B317BA9FF300A27601 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		7882F1B517BA9FFD00A27601 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
@@ -562,7 +560,6 @@
 			isa = PBXGroup;
 			children = (
 				78BE8D0D17C5100800330433 /* fonts */,
-				7882870017B2EDE100D5DC42 /* emoji */,
 				B39AC2B217F0ED6300EB65B3 /* Launch Images */,
 				B3AA069E17B4357B009B06F0 /* zulip_icon */,
 				B3733CCB1778C75300714B6E /* Default-568h@2x.png */,
@@ -1026,7 +1023,6 @@
 				B3CC438A17A6E2E200C8AF3F /* MainWindow~iphone.xib in Resources */,
 				B3CC438B17A6E2E200C8AF3F /* MainWindow~ipad.xib in Resources */,
 				B376985317B56EB100D29D93 /* Images.xcassets in Resources */,
-				7882870117B2EDF100D5DC42 /* emoji in Resources */,
 				7882800D17B2E5D200D5DC42 /* Zulip.css in Resources */,
 				C316738F1620DB6B00CE9FE5 /* InfoPlist.strings in Resources */,
 				B3174BDB17F47B61004C31E4 /* AboutView~iphone.xib in Resources */,
