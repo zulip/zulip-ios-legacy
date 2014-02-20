@@ -13,9 +13,9 @@
 
 @implementation RenderedMarkdownMunger
 
-+ (NSDictionary *)loadEmojiTable
++ (NSDictionary *)loadEmojiTable:(NSString *)file
 {
-    NSString *jsonFile = [[NSBundle mainBundle] pathForResource:@"emoji_map.json" ofType:nil];
+    NSString *jsonFile = [[NSBundle mainBundle] pathForResource:file ofType:nil];
     if (!jsonFile) {
         return @{};
     }
@@ -55,6 +55,16 @@
         offset += [utfEmoji length] - range.length;
     }
     return replaced;
+}
+
++ (NSString *)emojiShortNameFromUnicode:(NSString *)unicode {
+    static NSDictionary *reverseEmojiTable;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        reverseEmojiTable = [RenderedMarkdownMunger loadEmojiTable:@"emoji_map_reverse.json"];
+    });
+
+    return [reverseEmojiTable objectForKey:unicode];
 }
 
 + (void)mungeThis:(RawMessage*)message {
@@ -98,7 +108,7 @@
                     DTDefaultFontFamily: @"Source Sans Pro",
                     DTDefaultFontSize: @"12pt"};
 
-        emojiTable = [RenderedMarkdownMunger loadEmojiTable];
+        emojiTable = [RenderedMarkdownMunger loadEmojiTable:@"emoji_map.json"];
 
         NSError *error = nil;
         emojiRegex = [NSRegularExpression

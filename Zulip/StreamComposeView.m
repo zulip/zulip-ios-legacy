@@ -12,6 +12,7 @@
 #import "ZulipAPIController.h"
 #import "ZUser.h"
 #import "ComposeAutocompleteView.h"
+#import "RenderedMarkdownMunger.h"
 
 #import <Crashlytics/Crashlytics.h>
 #import "UIView+Layout.h"
@@ -41,6 +42,8 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 @property (strong, nonatomic) UIBarButtonItem *sendButton;
 @property (strong, nonatomic) UIView *tapHandlerShim;
 
+@property (strong, nonatomic) NSMutableSet *foundEmoji;
+
 @property (assign, nonatomic) BOOL isCurrentlyPrivate;
 
 @end
@@ -66,6 +69,8 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 - (void)commonInit {
     [self renderMainBar];
     [self renderRecipientBar];
+
+    self.foundEmoji = [[NSMutableSet alloc] init];
 
     // Tapping the compose view focuses the 'to' field, not the message field
     self.tapHandlerShim = [[UIView alloc] initWithFrame:self.bounds];
@@ -228,6 +233,16 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
     if (!self.isCurrentlyPrivate && [subject isEqualToString:@""]) {
         subject = @"(no topic)";
     }
+
+    NSMutableString *msg = [self.messageInput.text mutableCopy];
+    if (self.foundEmoji.count > 0) {
+        for (NSDictionary *foundEmoji in self.foundEmoji) {
+            NSString *replacement = foundEmoji[@"shortname"];
+            [msg replaceOccurrencesOfString:foundEmoji[@"unicode"] withString:replacement options:0 range:NSMakeRange(0, msg.length)];
+        }
+        self.foundEmoji = [[NSMutableSet alloc] init];
+    }
+
     NSDictionary *postFields;
     if (self.isCurrentlyPrivate) {
         NSArray* recipientArray = [self.to.text componentsSeparatedByString: @","];
@@ -238,12 +253,12 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 
         postFields = @{ @"type": @"private",
                         @"to": jsonString,
-                        @"content": self.messageInput.text };
+                        @"content": msg };
     } else {
         postFields = @{ @"type": @"stream",
                         @"to": self.to.text,
                         @"subject": subject,
-                        @"content": self.messageInput.text };
+                        @"content": msg };
     }
 
     [[ZulipAPIClient sharedClient] postPath:@"messages" parameters:postFields success:nil failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -292,6 +307,20 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
         [self moveBy:CGPointMake(0, -heightDifference)];
         textView.frame = newFrame;
     }];
+
+    // Replace UTF8 emoji with :shortname: if found in the last 4 (wide) or 2 chars
+    NSArray *emojiUnicodeLengths = @[@(4), @(2)];
+    for (NSNumber *emojiLength in emojiUnicodeLengths) {
+        NSUInteger length = [emojiLength unsignedIntegerValue];
+        if (textView.text.length > length - 1) {
+            NSString *potentialEmoji = [textView.text substringFromIndex:(textView.text.length - length)];
+            NSString *shortname = [RenderedMarkdownMunger emojiShortNameFromUnicode:potentialEmoji];
+            if (shortname) {
+                [self.foundEmoji addObject:@{@"shortname": [NSString stringWithFormat:@" :%@: ", shortname],
+                                             @"unicode": potentialEmoji}];
+            }
+        }
+    }
 }
 
 #pragma mark - Private

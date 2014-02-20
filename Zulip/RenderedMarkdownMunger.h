@@ -12,5 +12,6 @@
 @interface RenderedMarkdownMunger : NSObject
 
 + (void)mungeThis:(RawMessage*)message;
++ (NSString *)emojiShortNameFromUnicode:(NSString *)unicode;
 
 @end
