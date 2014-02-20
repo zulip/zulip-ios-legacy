@@ -260,13 +260,22 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [(MessageCell *)cell willBeDisplayed];
+    [(MessageCell *)cell willBeDisplayedWithPreviousMessage:[self previousMessageForIndexPath:indexPath]];
 }
 
 - (RawMessage *)messageAtIndexPath:(NSIndexPath *)indexPath
 {
     return [self.messages objectAtIndex:indexPath.row];
 }
+
+ - (RawMessage *)previousMessageForIndexPath:(NSIndexPath *)indexPath {
+     if (indexPath.row > 0) {
+         NSIndexPath *previousIndexPath = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
+         return [self messageAtIndexPath:previousIndexPath];
+     } else {
+         return nil;
+     }
+ }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -289,8 +298,9 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    RawMessage * message = [self messageAtIndexPath:indexPath];
-    return [MessageCell heightForCellWithMessage:message];
+    RawMessage *message = [self messageAtIndexPath:indexPath];
+    RawMessage *previousMessage = [self previousMessageForIndexPath:indexPath];
+    return [MessageCell heightForCellWithMessage:message previousMessage:previousMessage];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

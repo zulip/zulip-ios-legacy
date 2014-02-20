@@ -61,5 +61,6 @@ typedef void(^RawMessageChangeHandler)(RawMessage *rawMsg);
 + (RawMessage *)allocFromZMessage:(ZMessage *)message;
 @property (nonatomic, weak) ZMessage *linkedZMessage;
 
-
+- (BOOL)isSameTopicAsMessage:(RawMessage *)otherMessage;
+- (BOOL)isSameSenderAsMessage:(RawMessage *)otherMessage;
 @end

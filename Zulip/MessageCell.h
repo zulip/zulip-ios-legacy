@@ -15,10 +15,11 @@
 
 @interface MessageCell : UITableViewCell <DTAttributedTextContentViewDelegate>
 
-- (void)willBeDisplayed;
+- (void)willBeDisplayedWithPreviousMessage:(RawMessage *)previousMessage;
 
 + (NSString *)reuseIdentifier;
-+ (CGFloat)heightForCellWithMessage:(RawMessage *)message;
++ (CGFloat)heightForCellWithMessage:(RawMessage *)message
+                    previousMessage:(RawMessage *)previousMessage;
 
 @property (strong, nonatomic) IBOutlet UILabel *header;
 @property (strong, nonatomic) IBOutlet UILabel *headerBar;

@@ -167,4 +167,13 @@ static NSString * const MessageFlagStarred = @"starred";
     return [NSString stringWithFormat:@"<ZMessage sender: %@ id:%li>", self.sender.full_name, [self.messageID longValue]];
 }
 
+- (BOOL)isSameTopicAsMessage:(RawMessage *)otherMessage {
+    return [self.stream_recipient isEqualToString:otherMessage.stream_recipient] && [self.subject isEqualToString:otherMessage.subject];
+}
+
+- (BOOL)isSameSenderAsMessage:(RawMessage *)otherMessage {
+    return [self.sender isEqual:otherMessage.sender];
+}
+
+
 @end

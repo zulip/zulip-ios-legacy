@@ -13,6 +13,12 @@
 @property (nonatomic, retain) NSDateFormatter *dateFormatter;
 @property (weak, nonatomic) IBOutlet UIButton *starButton;
 
+@property (weak, nonatomic) IBOutlet UIView *headerView;
+@property (weak, nonatomic) IBOutlet UIView *senderView;
+@property (weak, nonatomic) IBOutlet UIView *bodyView;
+
+@property (assign, nonatomic) CGFloat topOffset;
+
 @end
 
 @implementation MessageCell
@@ -35,6 +41,16 @@
                      forState:UIControlStateNormal];
     [self.starButton setImage:[fullStar imageWithSize:starSize]
                      forState:UIControlStateSelected];
+
+    self.topOffset = self.bodyView.top;
+
+    [self prepareForReuse];
+}
+
+- (void)prepareForReuse {
+    [super prepareForReuse];
+    self.senderView.hidden = NO;
+    self.headerView.hidden = NO;
 }
 
 - (void)setMessage:(RawMessage *)message
@@ -88,7 +104,7 @@
     self.starButton.selected = message.starred;
 }
 
-- (void)willBeDisplayed
+- (void)willBeDisplayedWithPreviousMessage:(RawMessage *)previousMessage
 {
     if ([self.type isEqualToString:@"stream"]) {
         self.headerBar.backgroundColor = [[ZulipAPIController sharedInstance] streamColor:self.recipient withDefault:[MessageCell defaultStreamColor]];
@@ -105,10 +121,24 @@
         self.header.textColor = [UIColor whiteColor];
     }
 
+    BOOL isSameTopic = [self.message isSameTopicAsMessage:previousMessage];
+    BOOL isSameSender = [self.message isSameSenderAsMessage:previousMessage];
 
+    if (isSameTopic) {
+        self.headerView.hidden = YES;
+        [self.bodyView moveToPoint:CGPointZero];
+        [self.bodyView resizeTo:self.size];
+
+        if (isSameSender) {
+            self.senderView.hidden = YES;
+        }
+    } else {
+        [self.bodyView resizeTo:CGSizeMake(self.width, self.height - self.headerView.height)];
+    }
 }
 
 + (CGFloat)heightForCellWithMessage:(RawMessage *)message
+                    previousMessage:(RawMessage *)previousMessage
 {
     static dispatch_once_t onceToken;
     static DTAttributedTextContentView *dummyContentViewPortrait;
@@ -116,10 +146,12 @@
     static CGFloat portraitContentWidth;
     static CGFloat landscapeContentWidth;
     dispatch_once(&onceToken, ^{
-        //53 "pixels" is the number of pixels to the left and right of the message content box.
-        portraitContentWidth = [[UIScreen mainScreen] bounds].size.width - 53.0f;
+        //The number of pixels to the left and right of the message content box.
+        CGFloat padding = 55.0 + 8.0;
+
+        portraitContentWidth = [[UIScreen mainScreen] bounds].size.width - padding;
         dummyContentViewPortrait = [[DTAttributedTextContentView alloc] initWithFrame:CGRectMake(0, 0, portraitContentWidth, 1)];
-        landscapeContentWidth = [[UIScreen mainScreen] bounds].size.height - 53.0f;
+        landscapeContentWidth = [[UIScreen mainScreen] bounds].size.height - padding;
         dummyContentViewLandscape = [[DTAttributedTextContentView alloc] initWithFrame:CGRectMake(0, 0, landscapeContentWidth, 1)];
     });
 
@@ -136,8 +168,14 @@
     }
 
     currentDummyContentView.attributedString = message.attributedString;
+    CGFloat textHeight = [currentDummyContentView suggestedFrameSizeToFitEntireStringConstraintedToWidth:contentWidth].height;
 
-    return fmaxf(77.0f, [currentDummyContentView suggestedFrameSizeToFitEntireStringConstraintedToWidth:contentWidth].height + 38.0f);
+    CGFloat bodyHeight = 60;
+
+    BOOL isSameTopic = [message isSameTopicAsMessage:previousMessage];
+
+    CGFloat headerHeight = isSameTopic ? 0 : 21.0;
+    return fmaxf(bodyHeight + headerHeight, textHeight + 36 + headerHeight);
 }
 
 #pragma mark - UITableViewCell
