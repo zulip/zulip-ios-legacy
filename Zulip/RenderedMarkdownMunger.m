@@ -9,11 +9,59 @@
 #import "RenderedMarkdownMunger.h"
 #import "DTCoreText.h"
 
+#import <Crashlytics/Crashlytics.h>
+
 @implementation RenderedMarkdownMunger
+
++ (NSDictionary *)loadEmojiTable
+{
+    NSString *jsonFile = [[NSBundle mainBundle] pathForResource:@"emoji_map.json" ofType:nil];
+    if (!jsonFile) {
+        return @{};
+    }
+
+    NSError *error = nil;
+    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:jsonFile]
+                                                         options:0
+                                                           error:&error];
+    if (error) {
+        CLS_LOG(@"Failed to parse emoji JSON map");
+        return @{};
+    }
+    return dict;
+}
+
+// Replace all occurrences of the emoji image tag with the UTF8 emoji character
+// If the emoji is not found in our lookup table, show the plain :emoji: shortname
++ (NSString *)replaceEmojiUTF8:(NSRegularExpression *)regex withDict:(NSDictionary *)emoji forMessage:(NSString *)msg {
+    NSMutableString *replaced = [msg mutableCopy];
+
+    NSInteger offset = 0;
+    for (NSTextCheckingResult *result in [regex matchesInString:msg options:0 range:NSMakeRange(0, [msg length])]) {
+        NSRange range = [result range];
+        range.location += offset;
+
+        // $1 is replaced by the first group that is matched
+        NSString *emojiShortName = [regex replacementStringForResult:result inString:replaced offset:offset template:@"$1"];
+
+        NSString *utfEmoji;
+        if ([emoji objectForKey:emojiShortName]) {
+            utfEmoji = [emoji objectForKey:emojiShortName];
+        } else {
+            utfEmoji = [NSString stringWithFormat:@":%@:", emojiShortName];
+        }
+
+        [replaced replaceCharactersInRange:range withString:utfEmoji];
+        offset += [utfEmoji length] - range.length;
+    }
+    return replaced;
+}
 
 + (void)mungeThis:(RawMessage*)message {
 
     static NSDictionary *options;
+    static NSDictionary *emojiTable;
+    static NSRegularExpression *emojiRegex;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         options = @{DTDefaultStyleSheet: [[DTCSSStylesheet alloc] initWithStyleBlock:@"pre {\n"
@@ -46,23 +94,30 @@
 
                                                                 "img {\n"
                                                                 "    max-height: 200px;\n"
-                                                                "}\n"
-
-                                                                "img.emoji {\n"
-                                                                "height: 1.4em;\n"
-                                                                "width: 1.4em;\n"
                                                                 "}\n"],
                     DTDefaultFontFamily: @"Source Sans Pro",
                     DTDefaultFontSize: @"12pt"};
+
+        emojiTable = [RenderedMarkdownMunger loadEmojiTable];
+
+        NSError *error = nil;
+        emojiRegex = [NSRegularExpression
+                      regularExpressionWithPattern:@"<img alt=\":([^:]+):\" class=\"emoji\" src=\"static/third/gemoji/images/emoji/[^.]+.png+\" title=\":[^:]+:\">"
+                                           options:NSRegularExpressionCaseInsensitive
+                                             error:&error];
+        if (error) {
+            CLS_LOG(@"Error building regex: %@", error);
+        }
     });
     if (message.munged) {
         // Munging is an idempotent operation. Each StreamViewController attempts to munge when adding messages, and if the user has a
         // narrow loaded, two SVCs might each call mungeThis:. We only want to munge once.
         return;
     }
-    // munge the message some
-    //TODO: make this regex more robust, or make the build script make static/third/gemoji/images/emoji exist.
-    message.content = [message.content stringByReplacingOccurrencesOfString:@"src=\"static/third/gemoji/images/emoji" withString:@"src=\"emoji"];
+    // Convert images of emoji into native apple UTF-8 emoji characters
+    if ([message.content rangeOfString:@"static/third/gemoji/images/emoji"].location != NSNotFound) {
+        message.content = [RenderedMarkdownMunger replaceEmojiUTF8:emojiRegex withDict:emojiTable forMessage:message.content];
+    }
     NSData *data = [message.content dataUsingEncoding:NSUTF8StringEncoding];
 
     message.attributedString = [[NSAttributedString alloc] initWithHTMLData:data options:options documentAttributes:NULL];

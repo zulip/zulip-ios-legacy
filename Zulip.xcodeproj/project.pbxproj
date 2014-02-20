@@ -53,6 +53,7 @@
 		B3469795179ED591006D0E9B /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3469794179ED591006D0E9B /* CoreData.framework */; };
 		B34697C517A020D1006D0E9B /* ZulipAPIController.m in Sources */ = {isa = PBXBuildFile; fileRef = B34697C417A020D1006D0E9B /* ZulipAPIController.m */; };
 		B351823117A1B20A00B41D75 /* ZSubscription.m in Sources */ = {isa = PBXBuildFile; fileRef = B351823017A1B20A00B41D75 /* ZSubscription.m */; };
+		B37049D718B665ED0034F165 /* emoji_map.json in Resources */ = {isa = PBXBuildFile; fileRef = B37049D618B665ED0034F165 /* emoji_map.json */; };
 		B3733CD81778D5DD00714B6E /* UIColor+HexColor.m in Sources */ = {isa = PBXBuildFile; fileRef = B3733CD71778D5DD00714B6E /* UIColor+HexColor.m */; };
 		B3733CFB1779F7FD00714B6E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3733CFA1779F7FD00714B6E /* SystemConfiguration.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		B3733CFE177A00D900714B6E /* ZulipAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = B3733CFD177A00D900714B6E /* ZulipAPIClient.m */; };
@@ -275,6 +276,7 @@
 		B34697C417A020D1006D0E9B /* ZulipAPIController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZulipAPIController.m; path = Controllers/ZulipAPIController.m; sourceTree = "<group>"; };
 		B351822F17A1B20A00B41D75 /* ZSubscription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZSubscription.h; path = Models/ZSubscription.h; sourceTree = "<group>"; };
 		B351823017A1B20A00B41D75 /* ZSubscription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZSubscription.m; path = Models/ZSubscription.m; sourceTree = "<group>"; };
+		B37049D618B665ED0034F165 /* emoji_map.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = emoji_map.json; path = Resources/emoji_map.json; sourceTree = "<group>"; };
 		B3733CCB1778C75300714B6E /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "Resources/Default-568h@2x.png"; sourceTree = "<group>"; };
 		B3733CD61778D5DD00714B6E /* UIColor+HexColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+HexColor.h"; sourceTree = "<group>"; };
 		B3733CD71778D5DD00714B6E /* UIColor+HexColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+HexColor.m"; sourceTree = "<group>"; };
@@ -563,6 +565,7 @@
 				B39AC2B217F0ED6300EB65B3 /* Launch Images */,
 				B3AA069E17B4357B009B06F0 /* zulip_icon */,
 				B3733CCB1778C75300714B6E /* Default-568h@2x.png */,
+				B37049D618B665ED0034F165 /* emoji_map.json */,
 				B3F562A917ABEA8D004B185A /* home.png */,
 				B3F562AA17ABEA8D004B185A /* home@2x.png */,
 				B3F562AB17ABEA8D004B185A /* user.png */,
@@ -1076,6 +1079,7 @@
 				B376986C17B56F0900D29D93 /* zulip.png in Resources */,
 				51BA4F5A17F6069300BBF48C /* right.png in Resources */,
 				B39AC2C017F0ED9E00EB65B3 /* Default-iOS7-Landscape@2x.png in Resources */,
+				B37049D718B665ED0034F165 /* emoji_map.json in Resources */,
 				B3F562B717ABFD5C004B185A /* my_avatar_placeholder@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
