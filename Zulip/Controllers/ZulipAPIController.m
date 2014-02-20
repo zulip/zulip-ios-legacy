@@ -74,6 +74,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
 // as we override the default getter/setters
 @synthesize pointer = _pointer;
 @synthesize backgrounded = _backgrounded;
+@synthesize realm = _realm;
 
 - (id) init
 {
@@ -301,7 +302,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
 - (void)registerForMetadata
 {
     // Metadata
-    NSArray *event_types = @[@"pointer", @"realm_user", @"subscription", @"update_message", @"update_message_flags"];
+    NSArray *event_types = @[@"pointer", @"realm_user", @"subscription", @"update_message", @"update_message_flags", @"realm_domain"];
     NSDictionary *messagesOpts = @{@"apply_markdown": @"true",
                                    @"event_types": [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:event_types options:0 error:nil]
                                                               encoding:NSUTF8StringEncoding],
@@ -533,6 +534,10 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
         [self loadSubscriptionData:subscriptions];
     }
 
+    if (json && [json objectForKey:@"realm_domain"]) {
+        _realm = [json objectForKey:@"realm_domain"];
+    }
+
     // Set up the home view
     [self.homeViewController initialPopulate];
 }
@@ -542,6 +547,10 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
     if (json && [json objectForKey:@"pointer"]) {
         [self setPointerFromServer:[[json objectForKey:@"pointer"] longValue]];
         [[PreferencesWrapper sharedInstance] setPointer:self.pointer];
+    }
+
+    if (json && [json objectForKey:@"realm_domain"]) {
+        _realm = [json objectForKey:@"realm_domain"];
     }
 
     self.maxServerMessageId = [[json objectForKey:@"max_message_id"] intValue];

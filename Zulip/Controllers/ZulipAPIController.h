@@ -71,6 +71,7 @@ typedef void(^MessagesDelivered)(NSArray *messages);
 @property(assign) long maxServerMessageId;
 @property(nonatomic, retain) NSString *email;
 @property(nonatomic, retain) NSString *fullName;
+@property(nonatomic, readonly, retain) NSString *realm;
 @property(nonatomic, retain) StreamViewController *homeViewController;
 @property(nonatomic, retain, readonly) UnreadManager *unreadManager;
 @property(nonatomic, retain) NSMutableDictionary *fullNameLookupDict;

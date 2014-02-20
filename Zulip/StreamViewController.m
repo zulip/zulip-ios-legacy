@@ -315,7 +315,7 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
     // 2. There's no way to start a new PM
     // This hack repurposes the open-sidebar button to
     // start a new PM compose instead.
-    if ([[[ZulipAPIController sharedInstance] email] rangeOfString:@"@mit.edu"].location != NSNotFound) {
+    if ([[[ZulipAPIController sharedInstance] realm] isEqualToString:@"mit.edu"]) {
         [self.composeView showOneTimePrivateCompose];
     } else {
         [self.findSidePanelController showRightPanelAnimated:YES];
