@@ -23,6 +23,58 @@
 
 @implementation MessageCell
 
++ (CGFloat)heightForCellWithMessage:(RawMessage *)message
+                    previousMessage:(RawMessage *)previousMessage
+{
+    static dispatch_once_t onceToken;
+    static DTAttributedTextContentView *dummyContentViewPortrait;
+    static DTAttributedTextContentView *dummyContentViewLandscape;
+    static CGFloat portraitContentWidth;
+    static CGFloat landscapeContentWidth;
+    dispatch_once(&onceToken, ^{
+        //The number of pixels to the left and right of the message content box.
+        CGFloat padding = 55.0 + 8.0;
+
+        portraitContentWidth = [[UIScreen mainScreen] bounds].size.width - padding;
+        dummyContentViewPortrait = [[DTAttributedTextContentView alloc] initWithFrame:CGRectMake(0, 0, portraitContentWidth, 1)];
+        landscapeContentWidth = [[UIScreen mainScreen] bounds].size.height - padding;
+        dummyContentViewLandscape = [[DTAttributedTextContentView alloc] initWithFrame:CGRectMake(0, 0, landscapeContentWidth, 1)];
+    });
+
+    DTAttributedTextContentView *currentDummyContentView;
+    CGFloat contentWidth;
+
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    if (orientation == UIInterfaceOrientationPortrait){
+        currentDummyContentView = dummyContentViewPortrait;
+        contentWidth = portraitContentWidth;
+    } else {
+        currentDummyContentView = dummyContentViewLandscape;
+        contentWidth = landscapeContentWidth;
+    }
+
+    currentDummyContentView.attributedString = message.attributedString;
+    CGFloat textHeight = [currentDummyContentView suggestedFrameSizeToFitEntireStringConstraintedToWidth:contentWidth].height;
+
+    CGFloat bodyHeight = 60;
+
+    BOOL isSameTopic = [message isSameTopicAsMessage:previousMessage];
+
+    CGFloat headerHeight = isSameTopic ? 0 : 21.0;
+    return fmaxf(bodyHeight + headerHeight, textHeight + 36 + headerHeight);
+}
+
++ (UIColor *)defaultStreamColor {
+    return [UIColor colorWithRed:187.0f/255
+                           green:187.0f/255
+                            blue:187.0f/255
+                           alpha:1];
+}
+
++ (NSString *)reuseIdentifier {
+    return @"CustomCellIdentifier";
+}
+
 - (void)awakeFromNib
 {
     self.dateFormatter = [[NSDateFormatter alloc] init];
@@ -128,68 +180,16 @@
         self.headerView.hidden = YES;
         [self.bodyView moveToPoint:CGPointZero];
         [self.bodyView resizeTo:self.size];
+        [self.attributedTextView resizeTo:CGSizeMake(self.attributedTextView.width, self.bodyView.height - self.headerView.height)];
 
         if (isSameSender) {
             self.senderView.hidden = YES;
         }
     } else {
+        [self.bodyView moveToPoint:CGPointMake(0, self.topOffset)];
         [self.bodyView resizeTo:CGSizeMake(self.width, self.height - self.headerView.height)];
+        [self.attributedTextView resizeTo:CGSizeMake(self.attributedTextView.width, self.bodyView.height - self.headerView.height)];
     }
-}
-
-+ (CGFloat)heightForCellWithMessage:(RawMessage *)message
-                    previousMessage:(RawMessage *)previousMessage
-{
-    static dispatch_once_t onceToken;
-    static DTAttributedTextContentView *dummyContentViewPortrait;
-    static DTAttributedTextContentView *dummyContentViewLandscape;
-    static CGFloat portraitContentWidth;
-    static CGFloat landscapeContentWidth;
-    dispatch_once(&onceToken, ^{
-        //The number of pixels to the left and right of the message content box.
-        CGFloat padding = 55.0 + 8.0;
-
-        portraitContentWidth = [[UIScreen mainScreen] bounds].size.width - padding;
-        dummyContentViewPortrait = [[DTAttributedTextContentView alloc] initWithFrame:CGRectMake(0, 0, portraitContentWidth, 1)];
-        landscapeContentWidth = [[UIScreen mainScreen] bounds].size.height - padding;
-        dummyContentViewLandscape = [[DTAttributedTextContentView alloc] initWithFrame:CGRectMake(0, 0, landscapeContentWidth, 1)];
-    });
-
-    DTAttributedTextContentView *currentDummyContentView;
-    CGFloat contentWidth;
-
-    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    if (orientation == UIInterfaceOrientationPortrait){
-        currentDummyContentView = dummyContentViewPortrait;
-        contentWidth = portraitContentWidth;
-    } else {
-        currentDummyContentView = dummyContentViewLandscape;
-        contentWidth = landscapeContentWidth;
-    }
-
-    currentDummyContentView.attributedString = message.attributedString;
-    CGFloat textHeight = [currentDummyContentView suggestedFrameSizeToFitEntireStringConstraintedToWidth:contentWidth].height;
-
-    CGFloat bodyHeight = 60;
-
-    BOOL isSameTopic = [message isSameTopicAsMessage:previousMessage];
-
-    CGFloat headerHeight = isSameTopic ? 0 : 21.0;
-    return fmaxf(bodyHeight + headerHeight, textHeight + 36 + headerHeight);
-}
-
-#pragma mark - UITableViewCell
-
-
-+ (UIColor *)defaultStreamColor {
-    return [UIColor colorWithRed:187.0f/255
-                           green:187.0f/255
-                            blue:187.0f/255
-                           alpha:1];
-}
-
-+ (NSString *)reuseIdentifier {
-    return @"CustomCellIdentifier";
 }
 
 #pragma mark - DTAttributedTextContentViewDelegate
