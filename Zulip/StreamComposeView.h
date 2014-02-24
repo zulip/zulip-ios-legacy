@@ -12,9 +12,15 @@
 @class ComposeAutocompleteView;
 @class ZUser;
 
+@protocol StreamComposeViewDelegate <NSObject>
+- (void)willShowComposeView;
+@end
+
 @interface StreamComposeView : UIView
 
 @property (readonly) CGFloat visibleHeight;
+
+@property (weak, nonatomic) id<StreamComposeViewDelegate> delegate;
 
 @property (strong, nonatomic) NSString *defaultRecipient;
 @property (assign, nonatomic) BOOL isPrivate;

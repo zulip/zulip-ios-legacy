@@ -22,6 +22,8 @@
 
 @property (nonatomic, strong) UITapGestureRecognizer *dismissComposeViewGestureRecognizer;
 
+@property (assign, nonatomic) BOOL aboutToShowComposeView;
+
 @end
 
 static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
@@ -72,6 +74,8 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
         [self.view addSubview:self.autocompleteView];
 
         self.composeView = [[StreamComposeView alloc] initWithAutocompleteView:self.autocompleteView];
+        self.composeView.delegate = self;
+        [self.composeView moveToPoint:CGPointMake(0, self.view.bottom - self.composeView.height)];
         self.composeView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
         [self.view addSubview:self.composeView];
         
@@ -458,6 +462,9 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
 }
 
 - (void)keyboardWillShow:(NSNotification *)notification {
+    if (!self.aboutToShowComposeView) return;
+    self.aboutToShowComposeView = NO;
+
     if (self.dismissComposeViewGestureRecognizer) {
         [self.tableView addGestureRecognizer:self.dismissComposeViewGestureRecognizer];
     }
@@ -505,6 +512,11 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
     if (self.composeView.isFirstResponder) {
         [self.composeView resignFirstResponder];
     }
+}
+
+#pragma mark - StreamComposeViewDelegate
+- (void)willShowComposeView {
+    self.aboutToShowComposeView = YES;
 }
 
 @end

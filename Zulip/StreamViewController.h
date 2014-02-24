@@ -2,8 +2,8 @@
 #import "MessageCell.h"
 #import "NarrowOperators.h"
 #import "MessageComposing.h"
+#import "StreamComposeView.h"
 
-@class StreamComposeView;
 @class ComposeAutocompleteView;
 @class ZUser;
 
@@ -14,7 +14,7 @@
 
 //@end
 
-@interface StreamViewController : UIViewController <MessageCellDelegate, UITableViewDataSource, UITableViewDelegate, MessageComposing>
+@interface StreamViewController : UIViewController <MessageCellDelegate, UITableViewDataSource, UITableViewDelegate, MessageComposing, UISearchBarDelegate, StreamComposeViewDelegate>
 
 @property (nonatomic, retain) NSMutableArray *messages;
 @property (nonatomic, retain) NSMutableSet *msgIds;

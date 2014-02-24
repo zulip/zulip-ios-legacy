@@ -89,6 +89,10 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 }
 
 - (void)showComposeViewForMessage:(RawMessage *)message {
+    if ([self.delegate respondsToSelector:@selector(willShowComposeView)]) {
+        [self.delegate willShowComposeView];
+    }
+
     if ([message.type isEqualToString:@"private"]) {
         NSMutableArray *emails = [[message.pm_recipients.allObjects valueForKey:@"email"] mutableCopy];
         [emails removeObject:[[ZulipAPIController sharedInstance] email]];
@@ -108,6 +112,10 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 }
 
 - (void)showComposeViewForUser:(ZUser *)user {
+    if ([self.delegate respondsToSelector:@selector(willShowComposeView)]) {
+        [self.delegate willShowComposeView];
+    }
+
     [self showPrivateCompose];
     self.recipient = user.email;
     [self focusNextInput];
@@ -296,6 +304,11 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 
 - (void)didTapComposeView {
     [self showComposeView];
+    if ([self.delegate respondsToSelector:@selector(willShowComposeView)]) {
+        [self.delegate willShowComposeView];
+    }
+
+    [self.to becomeFirstResponder];
 }
 
 #pragma mark - UITextViewDelegate
