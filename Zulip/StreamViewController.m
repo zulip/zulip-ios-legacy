@@ -25,6 +25,7 @@
 
 @property (strong, nonatomic) NarrowOperators *originalOperators;
 @property (strong, nonatomic) UIToolbar *searchBar;
+@property (assign, nonatomic) BOOL searchBarVisible;
 
 @property (assign, nonatomic) BOOL aboutToShowComposeView;
 
@@ -349,6 +350,9 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
 }
 
 - (void)didTapSearchButton {
+    if (self.searchBarVisible) return;
+    self.searchBarVisible = YES;
+
     self.searchBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 44)];
     self.searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 
@@ -377,6 +381,8 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
 }
 
 - (void)didTapSearchCloseButton {
+    self.searchBarVisible = NO;
+
     [UIView animateWithDuration:0.3 animations:^{
         [self.searchBar moveToPoint:CGPointMake(0, 0)];
         [self.tableView moveBy:CGPointMake(0, -44)];
