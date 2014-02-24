@@ -111,6 +111,13 @@
 
     [self.window makeKeyAndVisible];
 
+    [[NSNotificationCenter defaultCenter] addObserverForName:kLogoutNotification
+                                                      object:nil
+                                                       queue:[NSOperationQueue mainQueue]
+                                                  usingBlock:^(NSNotification *note) {
+                                                      [self loggedOut];
+                                                  }];
+
     return YES;
 }
 
@@ -146,6 +153,11 @@
     __managedObjectContext = 0;
     __managedObjectModel = 0;
     __persistentStoreCoordinator = 0;
+}
+
+- (void)loggedOut {
+    [self.navController setViewControllers:@[self.homeViewController] animated:NO];
+    self.narrows = [[NSMutableDictionary alloc] init];
 }
 
 #pragma mark - Narrowing
