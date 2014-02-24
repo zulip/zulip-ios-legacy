@@ -77,6 +77,15 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapComposeView)];
     [self.tapHandlerShim addGestureRecognizer:tap];
     [self addSubview:self.tapHandlerShim];
+
+    [[NSNotificationCenter defaultCenter] addObserverForName:kLogoutNotification
+                                                      object:nil
+                                                       queue:[NSOperationQueue mainQueue]
+                                                  usingBlock:^(NSNotification *note) {
+                                                      self.to.text = @"";
+                                                      self.subject.text = @"";
+                                                      self.messageInput.text = @"";
+                                                  }];
 }
 
 - (void)showComposeViewForMessage:(RawMessage *)message {
