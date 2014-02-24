@@ -84,6 +84,11 @@
     self.isServerOnly = YES;
 }
 
+- (void)searchFor:(NSString *)query {
+    [self.subpredicates addObject:@[@"search", query]];
+    self.isServerOnly = YES;
+}
+
 - (BOOL)isPrivateMessages
 {
     return ([self.subpredicates count] == 1) &&
@@ -122,6 +127,8 @@
                 } else if ([operator isEqualToString:@"is"] &&
                            [operand isEqualToString:@"starred"]) {
                     return @"Starred Messages";
+                } else if ([operator isEqualToString:@"search"]) {
+                    return @"Search Results";
                 }
             }
         }

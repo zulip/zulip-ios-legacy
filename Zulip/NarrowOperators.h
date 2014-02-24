@@ -23,6 +23,7 @@
 - (void)setPrivateMessages;
 - (void)setMentions;
 - (void)setStarred;
+- (void)searchFor:(NSString *)query;
 - (void)addStreamNarrow:(NSString *)streamName;
 - (void)addUserNarrow:(NSString *)email;
 
