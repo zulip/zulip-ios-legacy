@@ -40,7 +40,11 @@
             }
         }
         self.recipient = [recipient_array componentsJoinedByString:@", "];
-        self.header.text = [@"You and " stringByAppendingString:self.recipient];
+        if ([recipient_array count]) {
+            self.header.text = [@"You and " stringByAppendingString:self.recipient];
+        } else {
+            self.header.text = [NSString stringWithFormat:@"You and %@", [[ZulipAPIController sharedInstance] fullName]];
+        }
     }
 
     self.sender.text = message.sender.full_name;
