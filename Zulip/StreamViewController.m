@@ -12,6 +12,7 @@
 #import "AFJSONRequestOperation.h"
 #import "RenderedMarkdownMunger.h"
 #import "BrowserViewController.h"
+#import <FontAwesomeKit/FAKFontAwesome.h>
 
 @interface StreamViewController ()
 
@@ -21,6 +22,9 @@
 @property (nonatomic, assign) BOOL waitingForRefresh;
 
 @property (nonatomic, strong) UITapGestureRecognizer *dismissComposeViewGestureRecognizer;
+
+@property (strong, nonatomic) NarrowOperators *originalOperators;
+@property (strong, nonatomic) UIToolbar *searchBar;
 
 @property (assign, nonatomic) BOOL aboutToShowComposeView;
 
@@ -105,8 +109,12 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
                                                  context:nil];
 
 
-        UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"user-toolbar"] style:UIBarButtonItemStylePlain target:self action:@selector(didTapUsersButton)];
-        self.navigationItem.rightBarButtonItem = rightButton;
+        FAKFontAwesome *searchIcon = [FAKFontAwesome searchIconWithSize:25.0];
+
+        UIBarButtonItem *usersButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"user-toolbar"] style:UIBarButtonItemStylePlain target:self action:@selector(didTapUsersButton)];
+        UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithImage:[searchIcon imageWithSize:CGSizeMake(25.0, 25.0)] style:UIBarButtonItemStylePlain target:self action:@selector(didTapSearchButton)];
+
+        self.navigationItem.rightBarButtonItems = @[usersButton, searchButton];
 
         
         if ([self.tableView respondsToSelector:@selector(setKeyboardDismissMode:)]) {
@@ -336,6 +344,43 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
     }
 }
 
+- (void)didTapSearchButton {
+    self.searchBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 60, self.view.width, 44)];
+    self.searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+
+    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
+    searchBar.placeholder = @"Search";
+    searchBar.delegate = self;
+    searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    UIBarButtonItem *searchItem = [[UIBarButtonItem alloc] initWithCustomView:searchBar];
+
+    FAKFontAwesome *closeIcon = [FAKFontAwesome timesIconWithSize:22.0];
+
+    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc] initWithImage:[closeIcon imageWithSize:CGSizeMake(25, 25)] style:UIBarButtonItemStyleDone target:self action:@selector(didTapSearchCloseButton)];
+
+    UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+
+    self.searchBar.items = @[searchItem, flexibleSpace, closeButton];
+
+    [self.view addSubview:self.searchBar];
+    [self.tableView moveBy:CGPointMake(0, 44)];
+
+    [searchBar becomeFirstResponder];
+}
+
+- (void)didTapSearchCloseButton {
+    [self.searchBar removeFromSuperview];
+    [self.tableView moveBy:CGPointMake(0, -44)];
+
+    if (self.originalOperators) {
+        self.operators = self.originalOperators;
+        self.originalOperators = nil;
+    }
+
+    [self clearMessages];
+    [self initialPopulate];
+}
+
 -(int)rowWithId:(int)messageId
 {
     NSUInteger i = 0;
@@ -512,6 +557,16 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
     if (self.composeView.isFirstResponder) {
         [self.composeView resignFirstResponder];
     }
+}
+
+#pragma mark - UISearchBarDelegate
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    self.originalOperators = self.operators;
+
+    self.operators = [[NarrowOperators alloc] init];
+    [self.operators searchFor:searchBar.text];
+    [self clearMessages];
+    [self initialPopulate];
 }
 
 #pragma mark - StreamComposeViewDelegate
