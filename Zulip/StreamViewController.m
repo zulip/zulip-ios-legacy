@@ -147,6 +147,10 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     [self.composeView resizeTo:CGSizeMake(self.view.width, self.composeView.height)];
     [self.autocompleteView resizeTo:CGSizeMake(self.view.width, self.autocompleteView.height)];
+
+    if (self.searchBar.top > 0) {
+        [self.searchBar moveToPoint:CGPointMake(0, self.topOffset)];
+    }
 }
 
 - (void)clearMessages
@@ -348,28 +352,28 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
     self.searchBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 44)];
     self.searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 
-    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
-    searchBar.placeholder = @"Search";
-    searchBar.delegate = self;
-    searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    UIBarButtonItem *searchItem = [[UIBarButtonItem alloc] initWithCustomView:searchBar];
-
     FAKFontAwesome *closeIcon = [FAKFontAwesome timesIconWithSize:22.0];
-
     UIBarButtonItem *closeButton = [[UIBarButtonItem alloc] initWithImage:[closeIcon imageWithSize:CGSizeMake(25, 25)] style:UIBarButtonItemStyleDone target:self action:@selector(didTapSearchCloseButton)];
 
     UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+
+    UISearchBar *searchBox = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.width - closeButton.width - 60, 44)];
+    searchBox.placeholder = @"Search";
+    searchBox.delegate = self;
+    searchBox.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    UIBarButtonItem *searchItem = [[UIBarButtonItem alloc] initWithCustomView:searchBox];
+
 
     self.searchBar.items = @[searchItem, flexibleSpace, closeButton];
 
     [self.view addSubview:self.searchBar];
 
     [UIView animateWithDuration:0.2 animations:^{
-        [self.searchBar moveToPoint:CGPointMake(0, 60)];
-        [self.tableView moveBy:CGPointMake(0, 44)];
+        [self.searchBar moveToPoint:CGPointMake(0, self.topOffset)];
+        [self.tableView moveBy:CGPointMake(0, self.searchBar.height)];
     }];
 
-    [searchBar becomeFirstResponder];
+    [searchBox becomeFirstResponder];
 }
 
 - (void)didTapSearchCloseButton {
@@ -580,6 +584,12 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
 #pragma mark - StreamComposeViewDelegate
 - (void)willShowComposeView {
     self.aboutToShowComposeView = YES;
+}
+
+- (CGFloat)topOffset {
+    // On iOS <= 6, a y-value of "0" is below the navbar. That's not the case in 7.
+    BOOL iOS7 = [[[UIDevice currentDevice] systemVersion] compare:@"7.0" options:NSNumericSearch] != NSOrderedAscending;
+    return iOS7 ? self.navigationController.navigationBar.height + 20 : 0;
 }
 
 @end
