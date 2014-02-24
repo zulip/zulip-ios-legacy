@@ -345,7 +345,7 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
 }
 
 - (void)didTapSearchButton {
-    self.searchBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 60, self.view.width, 44)];
+    self.searchBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 44)];
     self.searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 
     UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
@@ -363,14 +363,22 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
     self.searchBar.items = @[searchItem, flexibleSpace, closeButton];
 
     [self.view addSubview:self.searchBar];
-    [self.tableView moveBy:CGPointMake(0, 44)];
+
+    [UIView animateWithDuration:0.2 animations:^{
+        [self.searchBar moveToPoint:CGPointMake(0, 60)];
+        [self.tableView moveBy:CGPointMake(0, 44)];
+    }];
 
     [searchBar becomeFirstResponder];
 }
 
 - (void)didTapSearchCloseButton {
-    [self.searchBar removeFromSuperview];
-    [self.tableView moveBy:CGPointMake(0, -44)];
+    [UIView animateWithDuration:0.3 animations:^{
+        [self.searchBar moveToPoint:CGPointMake(0, 0)];
+        [self.tableView moveBy:CGPointMake(0, -44)];
+    } completion:^(BOOL finished) {
+        [self.searchBar removeFromSuperview];
+    }];
 
     if (self.originalOperators) {
         self.operators = self.originalOperators;
