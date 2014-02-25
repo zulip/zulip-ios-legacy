@@ -10,9 +10,9 @@
 #import "ZulipAPIController.h"
 #import "ZulipAppDelegate.h"
 #import "NSArray+Blocks.h"
+#import "StreamProgressView.h"
 
-#import "MBProgressHUD.h"
-
+#import "UIView+Layout.h"
 #import <Crashlytics/Crashlytics.h>
 
 @interface HomeViewController ()
@@ -54,17 +54,15 @@
         [self clearMessages];
     }
 
-    if (![MBProgressHUD HUDForView:self.view]) {
-        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    }
+    self.tableView.tableFooterView = [[StreamProgressView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, [StreamProgressView height])];
 
     self.initiallyPopulating = YES;
 
     // Load initial set of messages
-    [[ZulipAPIController sharedInstance] getOldMessagesForNarrow:self.operators
-                                                          anchor:[[ZulipAPIController sharedInstance] pointer]
-                                                          before:12
+    [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[[ZulipAPIController sharedInstance] pointer]
+                                                           before:12
                                                            after:0
+                                                    withOperators:self.operators
                                                  completionBlock:^(NSArray *messages) {
           if (self.pointerUpdateRequiresRefetch) {
             self.pointerUpdateRequiresRefetch = NO;
@@ -74,7 +72,7 @@
             return;
         }
 
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        self.tableView.tableFooterView = nil;
         [self loadMessages:messages];
         [self initiallyLoadedMessages];
 

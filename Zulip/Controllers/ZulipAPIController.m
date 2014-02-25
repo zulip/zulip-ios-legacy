@@ -463,13 +463,10 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
     }
 
 
-    // If we got enough messages, return them directly from local cache
-    if (!needsServerFetch && [results count] >= fetchRequest.fetchLimit) {
-        block([self rawMessagesFromManaged:results]);
-        return;
-    }
+    block([self rawMessagesFromManaged:results]);
 
-    // Fetch messages, since we were not able to fulfill the request locally
+    if (!needsServerFetch) return;
+
     [self getOldMessagesForNarrow:operators anchor:anchor before:before after:after completionBlock:block];
 }
 
