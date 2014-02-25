@@ -463,7 +463,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
     }
 
 
-    block([self rawMessagesFromManaged:results]);
+    block([self rawMessagesFromManaged:results], !needsServerFetch);
 
     if (!needsServerFetch) return;
 
@@ -687,7 +687,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
         return;
     }
 
-    [self insertMessages:messages saveToCoreData:YES withCompletionBlock:^(NSArray *finishedMessages) {
+    [self insertMessages:messages saveToCoreData:YES withCompletionBlock:^(NSArray *finishedMessages, BOOL isFinished) {
         NSNotification *longPollMessages = [NSNotification notificationWithName:kLongPollMessageNotification
                                                                          object:self
                                                                        userInfo:@{kLongPollMessageData: finishedMessages}];
@@ -928,7 +928,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
     }
 
     // Pass the downloaded messages back to whichever message list asked for it
-    block(rawMessages);
+    block(rawMessages, YES);
 
     if (!saveToCD) {
         return;

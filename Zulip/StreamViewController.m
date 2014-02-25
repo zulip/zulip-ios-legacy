@@ -229,7 +229,7 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
                                                                    before:15
                                                                     after:0
                                                             withOperators:self.operators
-                                                          completionBlock:^(NSArray *messages) {
+                                                          completionBlock:^(NSArray *messages, BOOL isFinished) {
                   [self.refreshControl endRefreshing];
                   self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:kLoadingIndicatorDefaultMessage];
 
@@ -258,7 +258,7 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
                                                                before:0
                                                                 after:40
                                                         withOperators:self.operators
-                                                      completionBlock:^(NSArray *newerMessages) {
+                                                      completionBlock:^(NSArray *newerMessages, BOOL isFinished) {
               NSLog(@"Initially loaded forward %i messages!", [newerMessages count]);
               [self loadMessages:newerMessages];
           }];

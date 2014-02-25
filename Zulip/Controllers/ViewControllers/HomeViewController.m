@@ -63,8 +63,8 @@
                                                            before:12
                                                            after:0
                                                     withOperators:self.operators
-                                                 completionBlock:^(NSArray *messages) {
-          if (self.pointerUpdateRequiresRefetch) {
+                                                 completionBlock:^(NSArray *messages, BOOL isFinished) {
+        if (self.pointerUpdateRequiresRefetch) {
             self.pointerUpdateRequiresRefetch = NO;
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self initialPopulate];
@@ -72,7 +72,10 @@
             return;
         }
 
-        self.tableView.tableFooterView = nil;
+        if (isFinished) {
+            self.tableView.tableFooterView = nil;
+        }
+
         [self loadMessages:messages];
         [self initiallyLoadedMessages];
 
@@ -93,7 +96,7 @@
                                                                    before:0
                                                                     after:20
                                                             withOperators:self.operators
-                                                          completionBlock:^(NSArray *newerMessages) {
+                                                          completionBlock:^(NSArray *newerMessages, BOOL isFinishedLoading) {
                 CLS_LOG(@"Initially loaded forward %i messages!", [newerMessages count]);
                 [self loadMessages:newerMessages];
             }];

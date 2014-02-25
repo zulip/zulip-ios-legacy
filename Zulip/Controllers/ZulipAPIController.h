@@ -40,7 +40,7 @@ extern NSString * const kPushNotificationMessagePayloadNotification;
 extern NSString * const kPushNotificationMessagePayloadData;
 
 // Callback with resulting RawMessage* from desired query
-typedef void(^MessagesDelivered)(NSArray *messages);
+typedef void(^MessagesDelivered)(NSArray *messages, BOOL isFinished);
 
 @interface ZulipAPIController : NSObject
 
