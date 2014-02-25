@@ -394,12 +394,11 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
 {
 
     if (operators.isServerOnly) {
-        [self getOldMessagesForNarrow:operators
-                               anchor:anchor
-                               before:before
-                                after:after
-                      completionBlock:block];
-
+        [self loadServerMessagesAroundAnchor:anchor
+                                      before:before
+                                       after:after
+                               withOperators:operators
+                             completionBlock:block];
         return;
     }
 
@@ -467,7 +466,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
 
     if (!needsServerFetch) return;
 
-    [self getOldMessagesForNarrow:operators anchor:anchor before:before after:after completionBlock:block];
+    [self loadServerMessagesAroundAnchor:anchor before:before after:after withOperators:operators completionBlock:block];
 }
 
 #pragma mark - Zulip API calls
@@ -475,10 +474,10 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
 /**
  Load messages from the Zulip API into Core Data
  */
-- (void) getOldMessagesForNarrow:(NarrowOperators *)narrow
-                          anchor:(long)anchor
+- (void) loadServerMessagesAroundAnchor:(long)anchor
                           before:(NSInteger)before
                            after:(NSInteger)after
+                          withOperators:(NarrowOperators *)narrow
                  completionBlock:(MessagesDelivered)block {
     if (!anchor) {
         anchor = self.pointer;

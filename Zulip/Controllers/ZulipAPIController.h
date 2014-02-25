@@ -58,10 +58,10 @@ typedef void(^MessagesDelivered)(NSArray *messages, BOOL isFinished);
 - (void)loadMessagesAroundAnchor:(int)anchor before:(int)before after:(int)after withOperators:(NarrowOperators *)operators completionBlock:(MessagesDelivered)block;
 
 // Use this to force a network request to fetch messages. They will be inserted in core data if the narrow is a Home View narrow
-- (void) getOldMessagesForNarrow:(NarrowOperators *)narrow
-                          anchor:(long)anchor
+- (void)loadServerMessagesAroundAnchor:(long)anchor
                           before:(NSInteger)before
                            after:(NSInteger)after
+                            withOperators:(NarrowOperators *)narrow
                  completionBlock:(MessagesDelivered)block;
 
 - (void)sendMessageFlagsUpdated:(RawMessage *)message withOperation:(NSString *)operation andFlag:(NSString *)flag;
