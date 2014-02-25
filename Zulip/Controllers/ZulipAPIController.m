@@ -395,7 +395,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
 
     if (operators.isServerOnly) {
         [self getOldMessagesForNarrow:operators
-                               anchor:self.pointer
+                               anchor:anchor
                                before:before
                                 after:after
                       completionBlock:block];
