@@ -184,7 +184,7 @@
     if (isSameTopic) {
         self.headerView.hidden = YES;
         [self.bodyView moveToPoint:CGPointZero];
-        [self.bodyView resizeTo:self.size];
+        [self.bodyView resizeTo:self.contentView.size];
         [self.attributedTextView resizeTo:CGSizeMake(self.attributedTextView.width, self.bodyView.height - self.headerView.height)];
 
         if (isSameSender) {
@@ -192,7 +192,7 @@
         }
     } else {
         [self.bodyView moveToPoint:CGPointMake(0, self.topOffset)];
-        [self.bodyView resizeTo:CGSizeMake(self.width, self.height - self.headerView.height)];
+        [self.bodyView resizeTo:CGSizeMake(self.width, self.contentView.height - self.headerView.height)];
         [self.attributedTextView resizeTo:CGSizeMake(self.attributedTextView.width, self.bodyView.height - self.headerView.height)];
     }
 }
