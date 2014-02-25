@@ -246,6 +246,10 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     self.wakingFromBackground = NO;
+
+    if ([self.navController.topViewController isKindOfClass:[HomeViewController class]]) {
+        [(StreamViewController *)self.navController.topViewController initialPopulate];
+    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
