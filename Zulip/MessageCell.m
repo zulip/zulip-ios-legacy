@@ -59,9 +59,14 @@
     CGFloat bodyHeight = 60;
 
     BOOL isSameTopic = [message isSameTopicAsMessage:previousMessage];
+    BOOL isSameSender = [message isSameSenderAsMessage:previousMessage];
+
+    if (isSameTopic && isSameSender) {
+        return textHeight + 26; // Room for the timestamp + some bottom padding
+    }
 
     CGFloat headerHeight = isSameTopic ? 0 : 21.0;
-    return fmaxf(bodyHeight + headerHeight, textHeight + 36 + headerHeight);
+    return fmaxf(bodyHeight + headerHeight, textHeight + 26 + headerHeight);
 }
 
 + (UIColor *)defaultStreamColor {
