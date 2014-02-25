@@ -458,11 +458,15 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
                 CLS_LOG(@"No extra fetching required, using Core Data messages");
                 needsServerFetch = NO;
             }
+        } else if (results.count == 0) {
+            needsServerFetch = YES;
         }
     }
 
 
-    block([self rawMessagesFromManaged:results], !needsServerFetch);
+    if (results.count > 0) {
+        block([self rawMessagesFromManaged:results], !needsServerFetch);
+    }
 
     if (!needsServerFetch) return;
 
