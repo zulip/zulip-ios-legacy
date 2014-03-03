@@ -254,7 +254,7 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
     RawMessage *last = [self.messages lastObject];
     if (last && [last.messageID longValue] < [ZulipAPIController sharedInstance].maxServerMessageId) {
         NSLog(@"Scrolling to bottom and fetching more messages");
-        [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[last.messageID longValue]
+        [[ZulipAPIController sharedInstance] loadServerMessagesAroundAnchor:[last.messageID longValue]
                                                                before:0
                                                                 after:40
                                                         withOperators:self.operators
