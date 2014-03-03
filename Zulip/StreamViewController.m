@@ -233,7 +233,10 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
                   [self.refreshControl endRefreshing];
                   self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:kLoadingIndicatorDefaultMessage];
 
-                  [self loadMessages: messages];
+
+                  if (isFinished) {
+                      [self loadMessages: messages];
+                  }
 
               }];
         }
