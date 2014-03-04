@@ -9,7 +9,9 @@
 #import "NarrowViewController.h"
 #import "ZulipAPIController.h"
 #import "StreamComposeView.h"
+#import "StreamProgressView.h"
 #import <Crashlytics/Crashlytics.h>
+#import "UIView+Layout.h"
 
 typedef enum  {
     // Ugh Obj-C at making enum values globally visible
@@ -70,6 +72,8 @@ typedef enum  {
         [self clearMessages];
     }
 
+    self.tableView.tableFooterView = [[StreamProgressView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, [StreamProgressView height])];
+
     [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[[ZulipAPIController sharedInstance] pointer]
                                                            before:12
                                                             after:0
@@ -81,6 +85,10 @@ typedef enum  {
 
       if ([self.messages count] == 0)
           return;
+
+      if (isFinished) {
+          self.tableView.tableFooterView = nil;
+      }
 
       // TODO: This is very similar (but not exactly the same as) HomeViewController.m:60
       //       We should find a way to consolidate the ugly loadMessageAroundAnchor: method call

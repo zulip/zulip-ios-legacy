@@ -247,7 +247,7 @@
 {
     self.wakingFromBackground = NO;
 
-    if ([self.navController.topViewController isKindOfClass:[HomeViewController class]]) {
+    if ([self.navController.topViewController respondsToSelector:@selector(initialPopulate)]) {
         [(StreamViewController *)self.navController.topViewController initialPopulate];
     }
 }
