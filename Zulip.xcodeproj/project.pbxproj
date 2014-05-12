@@ -93,6 +93,7 @@
 		B39AC2C717F0ED9E00EB65B3 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = B39AC2BC17F0ED9E00EB65B3 /* Default.png */; };
 		B39AC2C817F0ED9E00EB65B3 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B39AC2BD17F0ED9E00EB65B3 /* Default@2x.png */; };
 		B3BA5B031816D1A000EFFC74 /* NSArray+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = B3BA5B021816D1A000EFFC74 /* NSArray+Blocks.m */; };
+		B3C111B4192151920087DAF2 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3C111B3192151920087DAF2 /* Crashlytics.framework */; };
 		B3C2E7D31873638F00BB15D7 /* PresenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B3C2E7D21873638F00BB15D7 /* PresenceManager.m */; };
 		B3C2E7EB187389C200BB15D7 /* ZUserPresence.m in Sources */ = {isa = PBXBuildFile; fileRef = B3C2E7EA187389C200BB15D7 /* ZUserPresence.m */; };
 		B3CC438A17A6E2E200C8AF3F /* MainWindow~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = C31673961620DB6B00CE9FE5 /* MainWindow~iphone.xib */; };
@@ -110,7 +111,6 @@
 		B3F50D72179DADE800F9DAE4 /* AFURLConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F50D67179DADE800F9DAE4 /* AFURLConnectionOperation.m */; };
 		B3F50D73179DADE800F9DAE4 /* AFXMLRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F50D69179DADE800F9DAE4 /* AFXMLRequestOperation.m */; };
 		B3F50D74179DADE800F9DAE4 /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F50D6B179DADE800F9DAE4 /* UIImageView+AFNetworking.m */; };
-		B3F50D76179DADF200F9DAE4 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3F50D75179DADF200F9DAE4 /* Crashlytics.framework */; };
 		B3F5628B17A8074C004B185A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3F5628A17A8074C004B185A /* QuartzCore.framework */; };
 		B3F5629317A81C37004B185A /* SidebarStreamCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F5629217A81C37004B185A /* SidebarStreamCell.m */; };
 		B3F5629517A81C49004B185A /* SidebarStreamCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3F5629417A81C49004B185A /* SidebarStreamCell.xib */; };
@@ -325,6 +325,7 @@
 		B39AC2BD17F0ED9E00EB65B3 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Resources/Launch Images/Default@2x.png"; sourceTree = "<group>"; };
 		B3BA5B011816D1A000EFFC74 /* NSArray+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSArray+Blocks.h"; path = "Categories/NSArray+Blocks.h"; sourceTree = "<group>"; };
 		B3BA5B021816D1A000EFFC74 /* NSArray+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSArray+Blocks.m"; path = "Categories/NSArray+Blocks.m"; sourceTree = "<group>"; };
+		B3C111B3192151920087DAF2 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		B3C2E7D11873638F00BB15D7 /* PresenceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PresenceManager.h; sourceTree = "<group>"; };
 		B3C2E7D21873638F00BB15D7 /* PresenceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PresenceManager.m; sourceTree = "<group>"; };
 		B3C2E7E018737A8300BB15D7 /* Zulip2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Zulip2.xcdatamodel; sourceTree = "<group>"; };
@@ -357,7 +358,6 @@
 		B3F50D69179DADE800F9DAE4 /* AFXMLRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFXMLRequestOperation.m; sourceTree = "<group>"; };
 		B3F50D6A179DADE800F9DAE4 /* UIImageView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+AFNetworking.h"; sourceTree = "<group>"; };
 		B3F50D6B179DADE800F9DAE4 /* UIImageView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+AFNetworking.m"; sourceTree = "<group>"; };
-		B3F50D75179DADF200F9DAE4 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = ThirdParty/Crashlytics.framework; sourceTree = "<group>"; };
 		B3F5628A17A8074C004B185A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		B3F5629117A81C37004B185A /* SidebarStreamCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SidebarStreamCell.h; path = Views/SidebarStreamCell.h; sourceTree = "<group>"; };
 		B3F5629217A81C37004B185A /* SidebarStreamCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SidebarStreamCell.m; path = Views/SidebarStreamCell.m; sourceTree = "<group>"; };
@@ -426,6 +426,7 @@
 			files = (
 				7882F1B817BAA01600A27601 /* CoreText.framework in Frameworks */,
 				7882F1B617BA9FFD00A27601 /* ImageIO.framework in Frameworks */,
+				B3C111B4192151920087DAF2 /* Crashlytics.framework in Frameworks */,
 				7882F1B417BA9FF300A27601 /* libxml2.dylib in Frameworks */,
 				7882F1B217BA9FE700A27601 /* libDTCoreText.a in Frameworks */,
 				B3F5628B17A8074C004B185A /* QuartzCore.framework in Frameworks */,
@@ -436,7 +437,6 @@
 				C31673851620DB6B00CE9FE5 /* UIKit.framework in Frameworks */,
 				C31673871620DB6B00CE9FE5 /* Foundation.framework in Frameworks */,
 				C31673891620DB6B00CE9FE5 /* CoreGraphics.framework in Frameworks */,
-				B3F50D76179DADF200F9DAE4 /* Crashlytics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -586,11 +586,11 @@
 		B3733CDC1779E9F800714B6E /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
+				B3C111B3192151920087DAF2 /* Crashlytics.framework */,
 				51BA4F4B17F6069300BBF48C /* BrowserViewController (Copy to your App) */,
 				B3107A0717C55A0A000F248E /* MBProgressHUD */,
 				B376986E17B5857600D29D93 /* JASidePanels */,
 				7882F19717BA9EC700A27601 /* DTCoreText */,
-				B3F50D75179DADF200F9DAE4 /* Crashlytics.framework */,
 				B3F50D58179DADE800F9DAE4 /* AFNetworking */,
 			);
 			name = ThirdParty;
@@ -1111,7 +1111,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "./ThirdParty/Crashlytics.framework/run 7c523eb4efdbd264d6d4a7403ee7a683b733a9bd";
+			shellScript = "./Crashlytics.framework/run 7c523eb4efdbd264d6d4a7403ee7a683b733a9bd c761c9e93f7d5bb9c2e0b3386f98b7b139d71b97f435e7459e5db9165fb80af6\n";
 		};
 		C31673A81620DB6C00CE9FE5 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
