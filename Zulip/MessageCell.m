@@ -66,7 +66,7 @@
     }
 
     CGFloat headerHeight = isSameTopic ? 0 : 21.0;
-    return fmaxf(bodyHeight + headerHeight, textHeight + 26 + headerHeight);
+    return fmaxf((float)(bodyHeight + headerHeight), (float)(textHeight + 26.0 + headerHeight));
 }
 
 + (UIColor *)defaultStreamColor {

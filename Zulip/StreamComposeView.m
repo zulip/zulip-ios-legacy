@@ -189,7 +189,7 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
     // So we get the correctly indexed view in the list of subviews
     float rowPadding = 4.0f;
     UIView *sendView = (UIView *)[self.mainBar.subviews objectAtIndex:3];
-    float width = (sendView.frame.origin.x + sendView.frame.size.width) - self.messageInput.frame.origin.x + rowPadding;
+    float width = ((float)sendView.frame.origin.x + (float)sendView.frame.size.width) - (float)self.messageInput.frame.origin.x + rowPadding;
     CGSize toSize = CGSizeMake(width, self.messageInput.frame.size.height);
 
     [self.to resizeTo:toSize];
@@ -316,7 +316,7 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
 {
     CGSize newSize = [textView sizeThatFits:CGSizeMake(textView.width, MAXFLOAT)];
     CGRect newFrame = textView.frame;
-    newFrame.size = CGSizeMake(fmaxf(newSize.width, textView.width), newSize.height);
+    newFrame.size = CGSizeMake(fmaxf((float)newSize.width, (float)textView.width), newSize.height);
 
     CGFloat heightDifference = newSize.height - textView.frame.size.height;
 

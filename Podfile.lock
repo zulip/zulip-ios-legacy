@@ -7,6 +7,6 @@ DEPENDENCIES:
   - FontAwesomeKit/FontAwesome
 
 SPEC CHECKSUMS:
-  FontAwesomeKit: 082a427b37f26cd535b7f295cb686f8ab0da707e
+  FontAwesomeKit: 02d5bd328b64b22434d4970370a9e8ae32e5dbec
 
-COCOAPODS: 0.29.0
+COCOAPODS: 0.33.1

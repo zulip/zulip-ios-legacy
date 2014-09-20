@@ -85,7 +85,7 @@
     _narrow = op;
 
     CGFloat size = CGRectGetHeight(self.gravatar.bounds);
-    self.gravatar.image = [self streamColorSwatchWithSize:size andColor:subscription.color];
+    self.gravatar.image = [self streamColorSwatchWithSize:(int)size andColor:subscription.color];
 
     NSDictionary *unread_counts = [[[ZulipAPIController sharedInstance] unreadManager] unreadCounts];
     [self setUnreadCount:unread_counts];

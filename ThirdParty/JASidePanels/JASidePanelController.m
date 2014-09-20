@@ -463,7 +463,7 @@ static char ja_kvoContext;
         if (translate.x > 0 && ! self.allowLeftSwipe) {
             return NO;
         }
-        BOOL possible = translate.x != 0 && ((fabsf(translate.y) / fabsf(translate.x)) < 1.0f);
+        BOOL possible = translate.x != 0 && ((fabsf((float)translate.y) / fabsf((float)translate.x)) < 1.0f);
         if (possible && ((translate.x > 0 && self.leftPanel) || (translate.x < 0 && self.rightPanel))) {
             return YES;
         }
@@ -495,7 +495,7 @@ static char ja_kvoContext;
         
         CGPoint translate = [pan translationInView:self.centerPanelContainer];
         CGRect frame = _centerPanelRestingFrame;
-        frame.origin.x += roundf([self _correctMovement:translate.x]);
+        frame.origin.x += roundf((float)[self _correctMovement:translate.x]);
         
         if (self.style == JASidePanelMultipleActive) {
             frame.size.width = self.view.bounds.size.width - frame.origin.x;
@@ -625,13 +625,13 @@ static char ja_kvoContext;
 }
 
 - (BOOL)_validateThreshold:(CGFloat)movement {
-    CGFloat minimum = floorf(self.view.bounds.size.width * self.minimumMovePercentage);
+    CGFloat minimum = floorf((float)(self.view.bounds.size.width * self.minimumMovePercentage));
     switch (self.state) {
         case JASidePanelLeftVisible: {
             return movement <= -minimum;
 		}
         case JASidePanelCenterVisible: {
-            return fabsf(movement) >= minimum;
+            return fabsf((float)movement) >= minimum;
 		}
         case JASidePanelRightVisible: {
             return movement >= minimum;
@@ -724,8 +724,8 @@ static char ja_kvoContext;
 #pragma mark - Animation
 
 - (CGFloat)_calculatedDuration {
-    CGFloat remaining = fabsf(self.centerPanelContainer.frame.origin.x - _centerPanelRestingFrame.origin.x);	
-    CGFloat max = _locationBeforePan.x == _centerPanelRestingFrame.origin.x ? remaining : fabsf(_locationBeforePan.x - _centerPanelRestingFrame.origin.x);
+    CGFloat remaining = fabsf((float)(self.centerPanelContainer.frame.origin.x - _centerPanelRestingFrame.origin.x));
+    CGFloat max = _locationBeforePan.x == _centerPanelRestingFrame.origin.x ? remaining : fabsf((float)(_locationBeforePan.x - _centerPanelRestingFrame.origin.x));
     return max > 0.0f ? self.maximumAnimationDuration * (remaining / max) : self.maximumAnimationDuration;
 }
 
@@ -806,7 +806,7 @@ static char ja_kvoContext;
     if (self.centerPanelHidden && self.shouldResizeLeftPanel) {
         return self.view.bounds.size.width;
     } else {
-        return self.leftFixedWidth ? self.leftFixedWidth : floorf(self.view.bounds.size.width * self.leftGapPercentage);
+        return self.leftFixedWidth ? self.leftFixedWidth : floorf((float)(self.view.bounds.size.width * self.leftGapPercentage));
     }
 }
 
@@ -814,7 +814,7 @@ static char ja_kvoContext;
     if (self.centerPanelHidden && self.shouldResizeRightPanel) {
         return self.view.bounds.size.width;
     } else {
-        return self.rightFixedWidth ? self.rightFixedWidth : floorf(self.view.bounds.size.width * self.rightGapPercentage);
+        return self.rightFixedWidth ? self.rightFixedWidth : floorf((float)(self.view.bounds.size.width * self.rightGapPercentage));
     }    
 }
 

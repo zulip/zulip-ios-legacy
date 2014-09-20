@@ -262,7 +262,7 @@ static NSString *kLoadingIndicatorDefaultMessage = @"Load older messages...";
                                                                 after:40
                                                         withOperators:self.operators
                                                       completionBlock:^(NSArray *newerMessages, BOOL isFinished) {
-              NSLog(@"Initially loaded forward %i messages!", [newerMessages count]);
+              NSLog(@"Initially loaded forward %i messages!", (int)[newerMessages count]);
               [self loadMessages:newerMessages];
           }];
     }

@@ -48,7 +48,7 @@
 - (void)setCount:(NSInteger)count
 {
     if (count > 0) {
-        self.unreadCount.text = [NSString stringWithFormat:@"%i", count];
+        self.unreadCount.text = [NSString stringWithFormat:@"%i", (int)count];
     } else {
         self.unreadCount.text = @"";
     }
