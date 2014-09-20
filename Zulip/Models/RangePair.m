@@ -19,8 +19,8 @@
         self.left = theStart;
         self.right = theEnd;
         if (self.left >= self.right) {
-            CLS_LOG(@"Invalid range given to RangePair: [%i, %i]", self.left, self.right);
-            NSAssert2(self.left < self.right, @"invalid range given: [%i, %i]", self.left, self.right);
+            CLS_LOG(@"Invalid range given to RangePair: [%i, %i]", (int)self.left, (int)self.right);
+            NSAssert2(self.left < self.right, @"invalid range given: [%i, %i]", (int)self.left, (int)self.right);
         }
 
     }
@@ -121,7 +121,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<RangePair [%i, %i]>", self.left, self.right];
+    return [NSString stringWithFormat:@"<RangePair [%i, %i]>", (int)self.left, (int)self.right];
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder

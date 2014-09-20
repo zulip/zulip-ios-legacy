@@ -127,6 +127,8 @@
 		B3F562B717ABFD5C004B185A /* my_avatar_placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B3F562B517ABFD5C004B185A /* my_avatar_placeholder@2x.png */; };
 		B3F562BE17AC30BC004B185A /* ZMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F562BD17AC30BC004B185A /* ZMessage.m */; };
 		B3F562C117AC3C65004B185A /* UnreadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F562C017AC3C65004B185A /* UnreadManager.m */; };
+		BA41F3A219CD2CAD009CF719 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA41F3A119CD2CAD009CF719 /* Crashlytics.framework */; };
+		BA41F3A619CD2EEE009CF719 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA41F3A519CD2EEE009CF719 /* Crashlytics.framework */; };
 		C31673851620DB6B00CE9FE5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673841620DB6B00CE9FE5 /* UIKit.framework */; };
 		C31673871620DB6B00CE9FE5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673861620DB6B00CE9FE5 /* Foundation.framework */; };
 		C31673891620DB6B00CE9FE5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673881620DB6B00CE9FE5 /* CoreGraphics.framework */; };
@@ -381,6 +383,8 @@
 		B3F562BD17AC30BC004B185A /* ZMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZMessage.m; path = Models/ZMessage.m; sourceTree = "<group>"; };
 		B3F562BF17AC3C65004B185A /* UnreadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UnreadManager.h; path = Controllers/UnreadManager.h; sourceTree = "<group>"; };
 		B3F562C017AC3C65004B185A /* UnreadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UnreadManager.m; path = Controllers/UnreadManager.m; sourceTree = "<group>"; };
+		BA41F3A119CD2CAD009CF719 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		BA41F3A519CD2EEE009CF719 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		C31673801620DB6B00CE9FE5 /* Zulip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Zulip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C31673841620DB6B00CE9FE5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C31673861620DB6B00CE9FE5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -424,6 +428,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BA41F3A219CD2CAD009CF719 /* Crashlytics.framework in Frameworks */,
+				BA41F3A619CD2EEE009CF719 /* Crashlytics.framework in Frameworks */,
 				7882F1B817BAA01600A27601 /* CoreText.framework in Frameworks */,
 				7882F1B617BA9FFD00A27601 /* ImageIO.framework in Frameworks */,
 				B3C111B4192151920087DAF2 /* Crashlytics.framework in Frameworks */,
@@ -586,7 +592,7 @@
 		B3733CDC1779E9F800714B6E /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
-				B3C111B3192151920087DAF2 /* Crashlytics.framework */,
+				BA41F3A519CD2EEE009CF719 /* Crashlytics.framework */,
 				51BA4F4B17F6069300BBF48C /* BrowserViewController (Copy to your App) */,
 				B3107A0717C55A0A000F248E /* MBProgressHUD */,
 				B376986E17B5857600D29D93 /* JASidePanels */,
@@ -799,6 +805,7 @@
 		C31673831620DB6B00CE9FE5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BA41F3A119CD2CAD009CF719 /* Crashlytics.framework */,
 				7882F1B717BAA01600A27601 /* CoreText.framework */,
 				7882F1B517BA9FFD00A27601 /* ImageIO.framework */,
 				7882F1B317BA9FF300A27601 /* libxml2.dylib */,
@@ -916,7 +923,7 @@
 			name = ZulipTests;
 			productName = ZulipTests;
 			productReference = C31673AA1620DB6C00CE9FE5 /* ZulipTests.octest */;
-			productType = "com.apple.product-type.bundle";
+			productType = "com.apple.product-type.bundle.ocunit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -1111,7 +1118,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "./Crashlytics.framework/run 7c523eb4efdbd264d6d4a7403ee7a683b733a9bd c761c9e93f7d5bb9c2e0b3386f98b7b139d71b97f435e7459e5db9165fb80af6\n";
+			shellScript = "./Crashlytics.framework/run 7c523eb4efdbd264d6d4a7403ee7a683b733a9bd";
 		};
 		C31673A81620DB6C00CE9FE5 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1298,27 +1305,29 @@
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = NO;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = NO;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = NO;
 				CLANG_WARN_OBJC_RECEIVER_WEAK = NO;
-				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)\"",
+					"$(SRCROOT)",
 					"\"$(SRCROOT)/ThirdParty\"",
+					"$(PROJECT_DIR)/ThirdParty",
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Zulip/Zulip-Prefix.pch";
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
@@ -1352,28 +1361,30 @@
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = NO;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = NO;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = NO;
 				CLANG_WARN_OBJC_RECEIVER_WEAK = NO;
-				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Zulip, Inc. (3LFBS647PP)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Zulip, Inc. (3LFBS647PP)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)\"",
+					"$(SRCROOT)",
 					"\"$(SRCROOT)/ThirdParty\"",
+					"$(PROJECT_DIR)/ThirdParty",
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Zulip/Zulip-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = NS_BLOCK_ASSERTIONS;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;

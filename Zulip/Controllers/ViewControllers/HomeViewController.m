@@ -83,7 +83,7 @@
         if ([self.messages count] == 0)
             return;
 
-        NSLog(@"Loaded %i initial messages", [self.messages count]);
+        NSLog(@"Loaded %i initial messages", (int)[self.messages count]);
         RawMessage *last = [self.messages lastObject];
 
         NSLog(@"More messages to load?, last id is %li and max server id is %li",
@@ -91,7 +91,7 @@
               [ZulipAPIController sharedInstance].maxServerMessageId);
         if ([last.messageID longValue] < [ZulipAPIController sharedInstance].maxServerMessageId) {
             // More messages to load
-            [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:[[ZulipAPIController sharedInstance] pointer]
+            [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:(int)[[ZulipAPIController sharedInstance] pointer]
                                                                    before:0
                                                                     after:20
                                                             withOperators:self.operators
@@ -171,12 +171,12 @@
 
 - (BOOL)hasMessageIDLoaded:(long)messageId
 {
-    return [self rowWithId:messageId] > -1;
+    return [self rowWithId:(int)messageId] > -1;
 }
 
 - (void)scrollToPointer:(long)newPointer animated:(BOOL)animated
 {
-    int pointerRowNum = [self rowWithId:newPointer];
+    int pointerRowNum = [self rowWithId:(int)newPointer];
     if (pointerRowNum > -1) {
         // If the pointer is already in our table, but not visible, scroll to it
         // but don't try to clear and refetch messages.
@@ -201,7 +201,7 @@
 {
     long pointer = [[ZulipAPIController sharedInstance] pointer];
 //    CLS_LOG(@"Pointer is %li and rowWithID is %i", pointer, [self rowWithId:pointer]);
-    if ([self rowWithId:pointer] > -1) {
+    if ([self rowWithId:(int)pointer] > -1) {
         CLS_LOG(@"Done with initial load, scrolling to pointer");
         self.initiallyPopulating = NO;
         [self scrollToPointer:pointer animated:NO];
