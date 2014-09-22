@@ -513,8 +513,8 @@
 				7882F1A517BA9F6000A27601 /* RTDemoApp.app */,
 				7882F1A717BA9F6000A27601 /* DTCoreText.framework */,
 				7882F1A917BA9F6000A27601 /* libDTCoreText.a */,
-				7882F1AB17BA9F6000A27601 /* UnitTest.octest */,
-				7882F1AD17BA9F6000A27601 /* MacUnitTest.octest */,
+				7882F1AB17BA9F6000A27601 /* UnitTest.xctest */,
+				7882F1AD17BA9F6000A27601 /* MacUnitTest.xctest */,
 				7882F1AF17BA9F6000A27601 /* libDTCoreText_no_DTFoundation.a */,
 				7882F1B117BA9F6000A27601 /* DTCoreText.framework */,
 			);
@@ -984,17 +984,17 @@
 			remoteRef = 7882F1A817BA9F6000A27601 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		7882F1AB17BA9F6000A27601 /* UnitTest.octest */ = {
+		7882F1AB17BA9F6000A27601 /* UnitTest.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = UnitTest.octest;
+			path = UnitTest.xctest;
 			remoteRef = 7882F1AA17BA9F6000A27601 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		7882F1AD17BA9F6000A27601 /* MacUnitTest.octest */ = {
+		7882F1AD17BA9F6000A27601 /* MacUnitTest.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = MacUnitTest.octest;
+			path = MacUnitTest.xctest;
 			remoteRef = 7882F1AC17BA9F6000A27601 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -1314,8 +1314,8 @@
 				CLANG_WARN_OBJC_RECEIVER_WEAK = NO;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Zulip, Inc. (3LFBS647PP)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Zulip, Inc. (3LFBS647PP)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
@@ -1345,7 +1345,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = Zulip;
-				PROVISIONING_PROFILE = "9724D016-372D-44DE-8DC8-ECBB8DA7ABA6";
+				PROVISIONING_PROFILE = "FCF99900-2BD8-44AE-8C9E-4C76925B2BBB";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "ThirdParty/DTCoreText/Core/**";
@@ -1402,8 +1402,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = Zulip;
-				PROVISIONING_PROFILE = "9724D016-372D-44DE-8DC8-ECBB8DA7ABA6";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9724D016-372D-44DE-8DC8-ECBB8DA7ABA6";
+				PROVISIONING_PROFILE = "FCF99900-2BD8-44AE-8C9E-4C76925B2BBB";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "FCF99900-2BD8-44AE-8C9E-4C76925B2BBB";
 				RUN_CLANG_STATIC_ANALYZER = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "ThirdParty/DTCoreText/Core/**";
