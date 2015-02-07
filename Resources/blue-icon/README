@@ -1,0 +1,5 @@
+to generate these again, from zsh do:
+
+
+for i in 29 40 57 60 50 72 76 512; do ((j=i*2));convert zulip-1024-blue.png -resize $jx$j zulip-blue-$i@2x.png; done
+for i in 29 40 57 60 50 72 76 512; do convert zulip-1024-blue.png -resize $jx$j zulip-blue-$i.png; done
