@@ -20,6 +20,9 @@
 // JASidePanels
 #import "JASidePanelController.h"
 
+// HockeySDK
+#import <HockeySDK/HockeySDK.h>
+
 @interface ZulipAppDelegate ()
 
 @property (nonatomic, retain) NSMutableDictionary *narrows;
@@ -49,6 +52,10 @@
 {
     [Crashlytics startWithAPIKey:@"7c523eb4efdbd264d6d4a7403ee7a683b733a9bd"];
 
+    [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"8568832c4be84968884d77c7a27cb6d7"];
+    [[BITHockeyManager sharedHockeyManager] startManager];
+    [[BITHockeyManager sharedHockeyManager].authenticator authenticateInstallation];
+    
     // Set up our views
     self.errorViewController = [[ErrorViewController alloc] init];
 
