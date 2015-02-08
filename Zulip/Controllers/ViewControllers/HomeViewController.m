@@ -60,7 +60,7 @@
 
     // Load initial set of messages
     [[ZulipAPIController sharedInstance] loadMessagesAroundAnchor:(int)[[ZulipAPIController sharedInstance] pointer]
-                                                           before:12
+                                                           before:30
                                                            after:0
                                                     withOperators:self.operators
                                                  completionBlock:^(NSArray *messages, BOOL isFinished) {
