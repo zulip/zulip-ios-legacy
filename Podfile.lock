@@ -2,11 +2,14 @@ PODS:
   - FontAwesomeKit/Core (2.1.4)
   - FontAwesomeKit/FontAwesome (2.1.4):
     - FontAwesomeKit/Core
+  - HockeySDK (3.6.2)
 
 DEPENDENCIES:
   - FontAwesomeKit/FontAwesome
+  - HockeySDK
 
 SPEC CHECKSUMS:
   FontAwesomeKit: 02d5bd328b64b22434d4970370a9e8ae32e5dbec
+  HockeySDK: bfd1f5ac75938b07499c4ac12932244b72a2e70b
 
 COCOAPODS: 0.35.0
