@@ -33,8 +33,6 @@ static dispatch_once_t *onceTokenPointer;
 
         if (debug == YES) {
             apiURLString = @"http://localhost:9991/api/v1";
-        } else if (email != nil && [[email lowercaseString] hasSuffix:@"@zulip.com"]) {
-            apiURLString = @"https://staging.zulip.com/api/v1/";
         } else {
             apiURLString = @"https://api.zulip.com/v1/";
         }
