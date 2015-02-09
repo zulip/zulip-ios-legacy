@@ -298,7 +298,7 @@
         return;
     }
 
-    [[ZulipAPIClient sharedClient] postPath:@"users/me/apns_device_token" parameters:@{@"token": b64} success:nil failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    [[ZulipAPIClient sharedClient] postPath:@"users/me/apns_device_token" parameters:@{@"token": b64, @"appid": [[NSBundle mainBundle] bundleIdentifier]} success:nil failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         CLS_LOG(@"Failed to send APNS device token to Zulip servers %@ %@", [error localizedDescription], [error userInfo]);
     }];
 
