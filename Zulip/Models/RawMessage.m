@@ -168,7 +168,14 @@ static NSString * const MessageFlagStarred = @"starred";
 }
 
 - (BOOL)isSameTopicAsMessage:(RawMessage *)otherMessage {
-    return [self.stream_recipient isEqualToString:otherMessage.stream_recipient] && [self.subject isEqualToString:otherMessage.subject];
+    if ([self.type isEqualToString:@"stream"]) {
+        return [self.stream_recipient isEqualToString:otherMessage.stream_recipient] && [self.subject isEqualToString:otherMessage.subject];
+    } else if ([self.type isEqualToString:@"private"]) {
+        return [self.pm_recipients isEqualToSet:otherMessage.pm_recipients];
+    }
+
+    return NO;
+
 }
 
 - (BOOL)isSameSenderAsMessage:(RawMessage *)otherMessage {
