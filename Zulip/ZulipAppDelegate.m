@@ -102,7 +102,15 @@
     UIRemoteNotificationType allowedNotifications = UIRemoteNotificationTypeAlert |
                                                     UIRemoteNotificationTypeSound |
                                                     UIRemoteNotificationTypeBadge;
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:allowedNotifications];
+
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
+    {
+        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationType)allowedNotifications categories:nil]];
+    }
+    else
+    {
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:allowedNotifications];
+    }
 
     if ([launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey]) {
         // We were launched from a push notification
@@ -280,6 +288,14 @@
     [self application:[UIApplication sharedApplication] didRegisterForRemoteNotificationsWithDeviceToken:self.cachedAPNSToken];
     self.cachedAPNSToken = nil;
 }
+
+#ifdef __IPHONE_8_0
+- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
+{
+    //register to receive notifications
+    [application registerForRemoteNotifications];
+}
+#endif
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
