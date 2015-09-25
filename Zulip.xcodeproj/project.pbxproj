@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		32A8C49906E898B2F4AD5029 /* libPods-Zulip.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18388D9F30519298D48A36F6 /* libPods-Zulip.a */; };
 		51BA4F5517F6069300BBF48C /* BrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51BA4F4D17F6069300BBF48C /* BrowserViewController.m */; };
 		51BA4F5617F6069300BBF48C /* BrowserViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 51BA4F4E17F6069300BBF48C /* BrowserViewController.xib */; };
 		51BA4F5717F6069300BBF48C /* left.png in Resources */ = {isa = PBXBuildFile; fileRef = 51BA4F4F17F6069300BBF48C /* left.png */; };
@@ -92,7 +93,6 @@
 		B39AC2C717F0ED9E00EB65B3 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = B39AC2BC17F0ED9E00EB65B3 /* Default.png */; };
 		B39AC2C817F0ED9E00EB65B3 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B39AC2BD17F0ED9E00EB65B3 /* Default@2x.png */; };
 		B3BA5B031816D1A000EFFC74 /* NSArray+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = B3BA5B021816D1A000EFFC74 /* NSArray+Blocks.m */; };
-		B3C111B4192151920087DAF2 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3C111B3192151920087DAF2 /* Crashlytics.framework */; };
 		B3C2E7D31873638F00BB15D7 /* PresenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B3C2E7D21873638F00BB15D7 /* PresenceManager.m */; };
 		B3C2E7EB187389C200BB15D7 /* ZUserPresence.m in Sources */ = {isa = PBXBuildFile; fileRef = B3C2E7EA187389C200BB15D7 /* ZUserPresence.m */; };
 		B3CC438A17A6E2E200C8AF3F /* MainWindow~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = C31673961620DB6B00CE9FE5 /* MainWindow~iphone.xib */; };
@@ -127,7 +127,6 @@
 		B3F562BE17AC30BC004B185A /* ZMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F562BD17AC30BC004B185A /* ZMessage.m */; };
 		B3F562C117AC3C65004B185A /* UnreadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F562C017AC3C65004B185A /* UnreadManager.m */; };
 		BA41F3A219CD2CAD009CF719 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA41F3A119CD2CAD009CF719 /* Crashlytics.framework */; };
-		BA41F3A619CD2EEE009CF719 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA41F3A519CD2EEE009CF719 /* Crashlytics.framework */; };
 		C31673851620DB6B00CE9FE5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673841620DB6B00CE9FE5 /* UIKit.framework */; };
 		C31673871620DB6B00CE9FE5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673861620DB6B00CE9FE5 /* Foundation.framework */; };
 		C31673891620DB6B00CE9FE5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673881620DB6B00CE9FE5 /* CoreGraphics.framework */; };
@@ -215,6 +214,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		18388D9F30519298D48A36F6 /* libPods-Zulip.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Zulip.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		51BA4F4C17F6069300BBF48C /* BrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrowserViewController.h; sourceTree = "<group>"; };
 		51BA4F4D17F6069300BBF48C /* BrowserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrowserViewController.m; sourceTree = "<group>"; };
 		51BA4F4E17F6069300BBF48C /* BrowserViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BrowserViewController.xib; sourceTree = "<group>"; };
@@ -327,7 +327,6 @@
 		B39AC2BD17F0ED9E00EB65B3 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Resources/Launch Images/Default@2x.png"; sourceTree = "<group>"; };
 		B3BA5B011816D1A000EFFC74 /* NSArray+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSArray+Blocks.h"; path = "Categories/NSArray+Blocks.h"; sourceTree = "<group>"; };
 		B3BA5B021816D1A000EFFC74 /* NSArray+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSArray+Blocks.m"; path = "Categories/NSArray+Blocks.m"; sourceTree = "<group>"; };
-		B3C111B3192151920087DAF2 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		B3C2E7D11873638F00BB15D7 /* PresenceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PresenceManager.h; sourceTree = "<group>"; };
 		B3C2E7D21873638F00BB15D7 /* PresenceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PresenceManager.m; sourceTree = "<group>"; };
 		B3C2E7E018737A8300BB15D7 /* Zulip2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Zulip2.xcdatamodel; sourceTree = "<group>"; };
@@ -430,10 +429,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				BA41F3A219CD2CAD009CF719 /* Crashlytics.framework in Frameworks */,
-				BA41F3A619CD2EEE009CF719 /* Crashlytics.framework in Frameworks */,
 				7882F1B817BAA01600A27601 /* CoreText.framework in Frameworks */,
 				7882F1B617BA9FFD00A27601 /* ImageIO.framework in Frameworks */,
-				B3C111B4192151920087DAF2 /* Crashlytics.framework in Frameworks */,
 				7882F1B417BA9FF300A27601 /* libxml2.dylib in Frameworks */,
 				B3F5628B17A8074C004B185A /* QuartzCore.framework in Frameworks */,
 				B3469795179ED591006D0E9B /* CoreData.framework in Frameworks */,
@@ -443,6 +440,7 @@
 				C31673851620DB6B00CE9FE5 /* UIKit.framework in Frameworks */,
 				C31673871620DB6B00CE9FE5 /* Foundation.framework in Frameworks */,
 				C31673891620DB6B00CE9FE5 /* CoreGraphics.framework in Frameworks */,
+				32A8C49906E898B2F4AD5029 /* libPods-Zulip.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -829,6 +827,7 @@
 				C31673861620DB6B00CE9FE5 /* Foundation.framework */,
 				C31673881620DB6B00CE9FE5 /* CoreGraphics.framework */,
 				C31673AB1620DB6C00CE9FE5 /* SenTestingKit.framework */,
+				18388D9F30519298D48A36F6 /* libPods-Zulip.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -943,7 +942,7 @@
 		C31673771620DB6A00CE9FE5 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0620;
 				TargetAttributes = {
 					C316737F1620DB6B00CE9FE5 = {
 						DevelopmentTeam = 3LFBS647PP;
@@ -1311,7 +1310,7 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "BF07EDC8-DDDB-4D74-BF8C-67CDBA82A75F";
 				SDKROOT = iphoneos;
@@ -1331,7 +1330,7 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "BF07EDC8-DDDB-4D74-BF8C-67CDBA82A75F";
 				SDKROOT = iphoneos;
@@ -1357,8 +1356,8 @@
 				CLANG_WARN_OBJC_RECEIVER_WEAK = NO;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Zulip, Inc. (3LFBS647PP)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Zulip, Inc. (3LFBS647PP)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
@@ -1391,7 +1390,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = Zulip;
-				PROVISIONING_PROFILE = "FCF99900-2BD8-44AE-8C9E-4C76925B2BBB";
+				PROVISIONING_PROFILE = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "ThirdParty/DTCoreText/Core/**";
@@ -1417,8 +1416,8 @@
 				CLANG_WARN_OBJC_RECEIVER_WEAK = NO;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Zulip, Inc. (3LFBS647PP)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Zulip, Inc. (3LFBS647PP)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
@@ -1455,8 +1454,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = Zulip;
-				PROVISIONING_PROFILE = "FCF99900-2BD8-44AE-8C9E-4C76925B2BBB";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "FCF99900-2BD8-44AE-8C9E-4C76925B2BBB";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				RUN_CLANG_STATIC_ANALYZER = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "ThirdParty/DTCoreText/Core/**";
