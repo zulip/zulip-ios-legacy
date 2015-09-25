@@ -29,6 +29,4 @@
 - (void)setFullName:(NSString *)name;
 - (NSString *)fullName;
 
-@property (nonatomic, retain) NSString *domain;
-
 @end

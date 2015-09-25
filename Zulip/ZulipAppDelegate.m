@@ -378,7 +378,7 @@
 
     __persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
 
-    NSString *sqliteDb = [NSString stringWithFormat:@"Zulip-%@.sqlite", [[ZulipAPIController sharedInstance] domain]];
+    NSString *sqliteDb = [NSString stringWithFormat:@"Zulip-%@.sqlite", [ZulipAPIController sharedInstance].email];
     NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:sqliteDb];
 
     NSDictionary *options = @{

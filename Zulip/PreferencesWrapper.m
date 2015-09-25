@@ -18,9 +18,6 @@ static dispatch_once_t *onceTokenPointer;
 - (id)init
 {
     self = [super init];
-    if (self) {
-        self.domain = @"";
-    }
     return self;
 }
 
@@ -65,7 +62,7 @@ static dispatch_once_t *onceTokenPointer;
 
 - (NSString *)keyWithPrefix:(NSString *)key
 {
-    return [NSString stringWithFormat:@"%@-%@", self.domain, key];
+    return [NSString stringWithFormat:@"%@", key];
 }
 
 // Singleton

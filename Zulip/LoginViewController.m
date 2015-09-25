@@ -68,7 +68,7 @@
     self.googleManager = [[GoogleOAuthManager alloc] init];
     UIViewController *loginController = [self.googleManager showAuthScreenWithSuccess:^(NSDictionary *result) {
         [self.navigationController popViewControllerAnimated:NO];
-        [self loginWithUsername:@"google-oauth2-token" password:result[@"id_token"]];
+        [self loginToDomain:self.serverDomain.text WithUsername:@"google-oauth2-token" password:result[@"id_token"]];
     } failure:^(NSError *error) {
         [self.navigationController popViewControllerAnimated:YES];
         [self.appDelegate showErrorScreen:@"Unable to login with Google. Please try again."];
@@ -79,9 +79,9 @@
     [self.navigationController pushViewController:loginController animated:YES];
 }
 
-- (void)loginWithUsername:(NSString *)email password:(NSString *)password {
+- (void)loginToDomain:(NSString *)domain WithUsername:(NSString *)email password:(NSString *)password {
     [[ZulipAPIController sharedInstance] logout];
-    [[ZulipAPIController sharedInstance] login:email password:password result:^(bool loggedIn) {
+    [[ZulipAPIController sharedInstance] login:domain email:email password:password result:^(bool loggedIn) {
         if (loggedIn) {
             [self.appDelegate dismissLoginScreen];
         } else {
@@ -95,7 +95,7 @@
 
 - (IBAction) login: (id) sender {
     NSString *trimmedEmail = [self.email.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    [self loginWithUsername:trimmedEmail password:self.password.text];
+    [self loginToDomain:self.serverDomain.text WithUsername:trimmedEmail password:self.password.text];
 }
 
 - (IBAction) about:(id)sender

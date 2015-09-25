@@ -91,6 +91,9 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
                                              initWithIdentifier:@"ZulipLogin" accessGroup:nil];
         NSString *storedApiKey = [keychainItem objectForKey:(__bridge id)kSecValueData];
         NSString *storedEmail = [keychainItem objectForKey:(__bridge id)kSecAttrAccount];
+        NSString *storedServer = [keychainItem objectForKey:(__bridge id)kSecAttrLabel];
+
+        [ZulipAPIClient setEmailForDomain:storedEmail domain:storedServer];
 
         [self initPollers];
 
@@ -101,7 +104,6 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
 
             [ZulipAPIClient setCredentials:self.email withAPIKey:self.apiKey];
 
-            [[PreferencesWrapper sharedInstance] setDomain:[self domain]];
             _pointer = [[PreferencesWrapper sharedInstance] pointer];
             _fullName = [[PreferencesWrapper sharedInstance] fullName];
 
@@ -196,17 +198,17 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
     // Load initial activity status, etc
 }
 
-- (void)login:(NSString *)username password:(NSString *)password result:(void (^) (bool success))result;
+- (void)login:(NSString *)serverDomain email:(NSString *)email password:(NSString *)password result:(void (^) (bool success))result;
 {
-    if (!username || !password) {
+    if (!email || !password) {
         result(NO);
         return;
     }
 
-    NSDictionary *postFields =  @{@"username": username,
+    NSDictionary *postFields =  @{@"username": email,
                                   @"password": password};
 
-    [ZulipAPIClient setEmailForDomain:username];
+    [ZulipAPIClient setEmailForDomain:email domain:serverDomain];
 
     [[ZulipAPIClient sharedClient] postPath:@"fetch_api_key" parameters:postFields success:^(AFHTTPRequestOperation *operation , id responseObject) {
         NSDictionary *jsonDict = (NSDictionary *)responseObject;
@@ -217,14 +219,15 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
         }
 
         self.apiKey = jsonDict[@"api_key"];
-        self.email = jsonDict[@"email"] ?: username;
+        self.email = jsonDict[@"email"] ?: email;
+        self.domain = serverDomain;
 
         KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"ZulipLogin" accessGroup:nil];
         [keychainItem setObject:self.apiKey forKey:(__bridge id)kSecValueData];
         [keychainItem setObject:self.email forKey:(__bridge id)kSecAttrAccount];
+        [keychainItem setObject:self.domain forKey:(__bridge id)kSecAttrLabel];
 
         [ZulipAPIClient setCredentials:self.email withAPIKey:self.apiKey];
-        [[PreferencesWrapper sharedInstance] setDomain:[self domain]];
 
         [self registerForMessages];
         [self registerForMetadata];
@@ -276,7 +279,8 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
     return ![self.apiKey isEqualToString:@""];
 }
 
-- (NSString *)domain
+/****deprecated
+ - (NSString *) domain
 {
     NSString *host = [[[ZulipAPIClient sharedClient] baseURL] host];
     NSString *domainPart;
@@ -290,6 +294,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
 
     return [NSString stringWithFormat:@"%@-%@", self.email, domainPart];
 }
+****/
 
 - (void)registerForMessages
 {
@@ -722,9 +727,10 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
     KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"ZulipLogin" accessGroup:nil];
     [keychainItem setObject:self.apiKey forKey:(__bridge id)kSecValueData];
     [keychainItem setObject:self.email forKey:(__bridge id)kSecAttrAccount];
+    [keychainItem setObject:self.domain forKey:(__bridge id)kSecAttrLabel];
 
+    [ZulipAPIClient setEmailForDomain:self.email domain:self.domain];
     [ZulipAPIClient setCredentials:self.email withAPIKey:self.apiKey];
-    [[PreferencesWrapper sharedInstance] setDomain:[self domain]];
 
     [self registerForMessages];
     [self registerForMetadata];

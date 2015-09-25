@@ -7,6 +7,7 @@
 @implementation ZulipAPIClient
 
 static NSString *email = nil;
+static NSString *domain = nil;
 static BOOL debug = NO;
 
 + (void)setCredentials:(NSString *)userEmail withAPIKey:(NSString *)key {
@@ -16,9 +17,10 @@ static BOOL debug = NO;
 
 }
 
-+ (void)setEmailForDomain:(NSString *)userEmail
++ (void)setEmailForDomain:(NSString *)userEmail domain:(NSString *)userDomain
 {
     email = userEmail;
+    domain = userDomain;
 }
 
 static dispatch_once_t *onceTokenPointer;
@@ -26,19 +28,28 @@ static dispatch_once_t *onceTokenPointer;
 // Singleton
 + (ZulipAPIClient *)sharedClient {
     static ZulipAPIClient *_sharedClient = nil;
+    if (domain == nil) {
+        CLS_LOG(@"We need a domain set. Skipping network stack initialization until we have one");
+        return nil;
+    }
     static dispatch_once_t onceToken;
     onceTokenPointer = &onceToken;
     dispatch_once(&onceToken, ^{
         NSString *apiURLString;
 
-        if (debug == YES) {
-            apiURLString = @"http://localhost:9991/api/v1";
-        } else if (email != nil && ([[email lowercaseString] hasSuffix:@"@zulip.com"] ||
-                                    [[email lowercaseString] hasSuffix:@"@dropbox.com"])) {
-            apiURLString = @"https://staging.zulip.com/api/v1/";
-        } else {
-            apiURLString = @"https://api.zulip.com/v1/";
-        }
+
+
+//        if (debug == YES) {
+//            apiURLString = @"http://localhost:9991/api/v1";
+//        } else if (email != nil && ([[email lowercaseString] hasSuffix:@"@zulip.com"] ||
+//                                    [[email lowercaseString] hasSuffix:@"@dropbox.com"])) {
+//            apiURLString = @"https://staging.zulip.com/api/v1/";
+//        } else {
+//            apiURLString = @"https://api.zulip.com/v1/";
+//        }
+
+        apiURLString = [NSString stringWithFormat:@"https://%@/api/v1/", domain];
+
 
         CLS_LOG(@"Loading URL: %@", apiURLString);
         NSURL *apiURL = [NSURL URLWithString:apiURLString];
