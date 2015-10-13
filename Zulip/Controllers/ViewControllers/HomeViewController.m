@@ -96,7 +96,7 @@
                                                                     after:20
                                                             withOperators:self.operators
                                                           completionBlock:^(NSArray *newerMessages) {
-                CLS_LOG(@"Initially loaded forward %i messages!", [newerMessages count]);
+                CLS_LOG(@"Initially loaded forward %lu messages!", (unsigned long)[newerMessages count]);
                 [self loadMessages:newerMessages];
             }];
         }

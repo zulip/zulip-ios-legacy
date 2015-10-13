@@ -56,6 +56,7 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [self.navigationController setNavigationBarHidden:NO animated:YES];
+    [super viewWillDisappear:animated];
 }
 
 - (void)didReceiveMemoryWarning

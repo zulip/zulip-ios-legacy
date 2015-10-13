@@ -75,7 +75,7 @@ typedef enum  {
                                                             after:0
                                                     withOperators:self.operators
                                                   completionBlock:^(NSArray *messages) {
-      CLS_LOG(@"Initially loaded %i messages!", [messages count]);
+      CLS_LOG(@"Initially loaded %lu messages!", [messages count]);
 
       [self loadMessages:messages];
 
@@ -92,7 +92,7 @@ typedef enum  {
                                                                   after:20
                                                           withOperators:self.operators
                                                         completionBlock:^(NSArray *newerMessages) {
-            CLS_LOG(@"Initially loaded forward %i messages!", [newerMessages count]);
+            CLS_LOG(@"Initially loaded forward %lu messages!", (unsigned long)[newerMessages count]);
             [self loadMessages:newerMessages];
             [self newMessagesLoaded];
         }];

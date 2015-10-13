@@ -82,6 +82,7 @@
     }
 
     [self setupFetchedResultsController];
+    [super viewDidLoad];
 }
 
 - (void)setupFetchedResultsController
@@ -116,6 +117,7 @@
 - (void)viewDidUnload
 {
     self.streamController = 0;
+    [super viewDidUnload];
 }
 
 - (void)reset

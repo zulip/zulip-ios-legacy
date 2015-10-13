@@ -104,6 +104,7 @@ const CGFloat RightSidebarViewControllerStatusBarOffset = 15.f;
 - (void)viewDidUnload
 {
     self.userController = nil;
+    [super viewDidUnload];
 }
 
 #pragma mark - Private methods

@@ -20,6 +20,9 @@
     self.dateFormatter = [[NSDateFormatter alloc] init];
     [self.dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
     [self.dateFormatter setDateFormat:@"HH:mm"];
+    self.attributedTextView.textContainer.lineFragmentPadding = 0;
+    self.attributedTextView.textContainerInset = UIEdgeInsetsZero;
+    
 }
 
 - (void)setMessage:(RawMessage *)message
@@ -70,6 +73,7 @@
     // this line crashes the app??
     self.attributedTextView.attributedText = message.attributedString;
     self.attributedTextView.delegate = self;
+
 }
 
 - (void)willBeDisplayed
@@ -120,8 +124,13 @@
     }
 
     currentDummyContentView.attributedText = message.attributedString;
-
-    return fmaxf(77.0f, [message.attributedString boundingRectWithSize:CGSizeMake(contentWidth, 0) options:0 context:nil].size.height + 38.0f);
+//(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)
+    float calcHeight = [message.attributedString boundingRectWithSize:CGSizeMake(contentWidth, CGFLOAT_MAX) options: (NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) context:nil].size.height + 38.0f;
+    float retHeight = fmaxf(77.0f, calcHeight);
+    
+    NSLog(@"calcHeight: %f, retHeight: %f", calcHeight, retHeight);
+    
+    return ceilf(retHeight);
 }
 
 #pragma mark - UITableViewCell
