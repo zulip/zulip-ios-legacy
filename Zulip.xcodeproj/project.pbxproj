@@ -16,7 +16,6 @@
 		782681C91795CE08009F69F5 /* ComposeViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681C81795CE08009F69F5 /* ComposeViewController~ipad.xib */; };
 		782681CC1795D10C009F69F5 /* LoginViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681CB1795D10C009F69F5 /* LoginViewController~ipad.xib */; };
 		7882800D17B2E5D200D5DC42 /* Zulip.css in Resources */ = {isa = PBXBuildFile; fileRef = 7882800C17B2E2F300D5DC42 /* Zulip.css */; };
-		7882F1B217BA9FE700A27601 /* libDTCoreText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7882F1A917BA9F6000A27601 /* libDTCoreText.a */; };
 		7882F1B417BA9FF300A27601 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7882F1B317BA9FF300A27601 /* libxml2.dylib */; };
 		7882F1B617BA9FFD00A27601 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7882F1B517BA9FFD00A27601 /* ImageIO.framework */; };
 		7882F1B817BAA01600A27601 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7882F1B717BAA01600A27601 /* CoreText.framework */; };
@@ -93,7 +92,6 @@
 		B39AC2C717F0ED9E00EB65B3 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = B39AC2BC17F0ED9E00EB65B3 /* Default.png */; };
 		B39AC2C817F0ED9E00EB65B3 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B39AC2BD17F0ED9E00EB65B3 /* Default@2x.png */; };
 		B3BA5B031816D1A000EFFC74 /* NSArray+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = B3BA5B021816D1A000EFFC74 /* NSArray+Blocks.m */; };
-		B3C111B4192151920087DAF2 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3C111B3192151920087DAF2 /* Crashlytics.framework */; };
 		B3C2E7D31873638F00BB15D7 /* PresenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B3C2E7D21873638F00BB15D7 /* PresenceManager.m */; };
 		B3C2E7EB187389C200BB15D7 /* ZUserPresence.m in Sources */ = {isa = PBXBuildFile; fileRef = B3C2E7EA187389C200BB15D7 /* ZUserPresence.m */; };
 		B3CC438A17A6E2E200C8AF3F /* MainWindow~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = C31673961620DB6B00CE9FE5 /* MainWindow~iphone.xib */; };
@@ -128,7 +126,6 @@
 		B3F562BE17AC30BC004B185A /* ZMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F562BD17AC30BC004B185A /* ZMessage.m */; };
 		B3F562C117AC3C65004B185A /* UnreadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F562C017AC3C65004B185A /* UnreadManager.m */; };
 		BA41F3A219CD2CAD009CF719 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA41F3A119CD2CAD009CF719 /* Crashlytics.framework */; };
-		BA41F3A619CD2EEE009CF719 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA41F3A519CD2EEE009CF719 /* Crashlytics.framework */; };
 		C31673851620DB6B00CE9FE5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673841620DB6B00CE9FE5 /* UIKit.framework */; };
 		C31673871620DB6B00CE9FE5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673861620DB6B00CE9FE5 /* Foundation.framework */; };
 		C31673891620DB6B00CE9FE5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673881620DB6B00CE9FE5 /* CoreGraphics.framework */; };
@@ -327,7 +324,6 @@
 		B39AC2BD17F0ED9E00EB65B3 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Resources/Launch Images/Default@2x.png"; sourceTree = "<group>"; };
 		B3BA5B011816D1A000EFFC74 /* NSArray+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSArray+Blocks.h"; path = "Categories/NSArray+Blocks.h"; sourceTree = "<group>"; };
 		B3BA5B021816D1A000EFFC74 /* NSArray+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSArray+Blocks.m"; path = "Categories/NSArray+Blocks.m"; sourceTree = "<group>"; };
-		B3C111B3192151920087DAF2 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		B3C2E7D11873638F00BB15D7 /* PresenceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PresenceManager.h; sourceTree = "<group>"; };
 		B3C2E7D21873638F00BB15D7 /* PresenceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PresenceManager.m; sourceTree = "<group>"; };
 		B3C2E7E018737A8300BB15D7 /* Zulip2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Zulip2.xcdatamodel; sourceTree = "<group>"; };
@@ -429,12 +425,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				BA41F3A219CD2CAD009CF719 /* Crashlytics.framework in Frameworks */,
-				BA41F3A619CD2EEE009CF719 /* Crashlytics.framework in Frameworks */,
 				7882F1B817BAA01600A27601 /* CoreText.framework in Frameworks */,
 				7882F1B617BA9FFD00A27601 /* ImageIO.framework in Frameworks */,
-				B3C111B4192151920087DAF2 /* Crashlytics.framework in Frameworks */,
 				7882F1B417BA9FF300A27601 /* libxml2.dylib in Frameworks */,
-				7882F1B217BA9FE700A27601 /* libDTCoreText.a in Frameworks */,
 				B3F5628B17A8074C004B185A /* QuartzCore.framework in Frameworks */,
 				B3469795179ED591006D0E9B /* CoreData.framework in Frameworks */,
 				B3766D2E179DD1DF005FB0D4 /* MobileCoreServices.framework in Frameworks */,
@@ -931,7 +924,8 @@
 		C31673771620DB6A00CE9FE5 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastTestingUpgradeCheck = 0700;
+				LastUpgradeCheck = 0700;
 				TargetAttributes = {
 					C316737F1620DB6B00CE9FE5 = {
 						DevelopmentTeam = 3LFBS647PP;
@@ -1257,6 +1251,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: Jessica McKellar (9QY7MX763F)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1344,6 +1339,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Zulip/Zulip-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.zulip.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = Zulip;
 				PROVISIONING_PROFILE = "FCF99900-2BD8-44AE-8C9E-4C76925B2BBB";
 				RUN_CLANG_STATIC_ANALYZER = YES;
@@ -1401,6 +1397,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Zulip/Zulip-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.zulip.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = Zulip;
 				PROVISIONING_PROFILE = "FCF99900-2BD8-44AE-8C9E-4C76925B2BBB";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "FCF99900-2BD8-44AE-8C9E-4C76925B2BBB";
@@ -1423,6 +1420,7 @@
 				GCC_PREFIX_HEADER = "Zulip/Zulip-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "ZulipTests/ZulipTests-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "Zulip.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = ZulipTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
@@ -1441,6 +1439,7 @@
 				GCC_PREFIX_HEADER = "Zulip/Zulip-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "ZulipTests/ZulipTests-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "Zulip.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = ZulipTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
