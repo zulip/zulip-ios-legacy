@@ -67,7 +67,8 @@
     message.read = YES;
 
     _message = message;
-    self.attributedTextView.attributedString = message.attributedString;
+    // this line crashes the app??
+    self.attributedTextView.attributedText = message.attributedString;
     self.attributedTextView.delegate = self;
 }
 
@@ -94,19 +95,19 @@
 + (CGFloat)heightForCellWithMessage:(RawMessage *)message
 {
     static dispatch_once_t onceToken;
-    static DTAttributedTextContentView *dummyContentViewPortrait;
-    static DTAttributedTextContentView *dummyContentViewLandscape;
+    static UITextView *dummyContentViewPortrait;
+    static UITextView *dummyContentViewLandscape;
     static CGFloat portraitContentWidth;
     static CGFloat landscapeContentWidth;
     dispatch_once(&onceToken, ^{
         //53 "pixels" is the number of pixels to the left and right of the message content box.
         portraitContentWidth = [[UIScreen mainScreen] bounds].size.width - 53.0f;
-        dummyContentViewPortrait = [[DTAttributedTextContentView alloc] initWithFrame:CGRectMake(0, 0, portraitContentWidth, 1)];
+        dummyContentViewPortrait = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, portraitContentWidth, 1)];
         landscapeContentWidth = [[UIScreen mainScreen] bounds].size.height - 53.0f;
-        dummyContentViewLandscape = [[DTAttributedTextContentView alloc] initWithFrame:CGRectMake(0, 0, landscapeContentWidth, 1)];
+        dummyContentViewLandscape = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, landscapeContentWidth, 1)];
     });
 
-    DTAttributedTextContentView *currentDummyContentView;
+    UITextView *currentDummyContentView;
     CGFloat contentWidth;
 
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
@@ -118,9 +119,9 @@
         contentWidth = landscapeContentWidth;
     }
 
-    currentDummyContentView.attributedString = message.attributedString;
+    currentDummyContentView.attributedText = message.attributedString;
 
-    return fmaxf(77.0f, [currentDummyContentView suggestedFrameSizeToFitEntireStringConstraintedToWidth:contentWidth].height + 38.0f);
+    return fmaxf(77.0f, [message.attributedString boundingRectWithSize:CGSizeMake(contentWidth, 0) options:0 context:nil].size.height + 38.0f);
 }
 
 #pragma mark - UITableViewCell
@@ -136,36 +137,36 @@
 + (NSString *)reuseIdentifier {
     return @"CustomCellIdentifier";
 }
-
-#pragma mark - DTAttributedTextContentViewDelegate
-// Derived from example snippet from
-// http://blog.smartlogicsolutions.com/2013/04/02/ios-development-dtattributedtextview-instead-of-uiwebview/
-- (UIView *)attributedTextContentView:(DTAttributedTextContentView *)attributedTextContentView
-                          viewForLink:(NSURL *)url
-                           identifier:(NSString *)identifier
-                                frame:(CGRect)frame
-{
-    DTLinkButton *linkButton = [[DTLinkButton alloc] initWithFrame:frame];
-    linkButton.URL = url;
-    [linkButton addTarget:self action:@selector(linkClicked:) forControlEvents:UIControlEventTouchDown];
-
-    return linkButton;
-}
-
-- (IBAction)linkClicked:(DTLinkButton *)sender
-{
-    if ([_delegate respondsToSelector:@selector(openLink:)])
-    {
-        [sender.URL baseURL];
-        if (([[sender.URL host] isEqual:[[[ZulipAPIClient sharedClient] apiURL] host]])
-            && ([[sender.URL path]  isEqual: @"/"]))
-        {
-            NSLog(@"FIXME: this application cannot yet open narrows");
-        } else
-        {
-            [_delegate openLink:sender.URL];
-        }
-    }
-}
+//
+//#pragma mark - DTAttributedTextContentViewDelegate
+//// Derived from example snippet from
+//// http://blog.smartlogicsolutions.com/2013/04/02/ios-development-dtattributedtextview-instead-of-uiwebview/
+//- (UIView *)attributedTextContentView:(UITextView *)attributedTextContentView
+//                          viewForLink:(NSURL *)url
+//                           identifier:(NSString *)identifier
+//                                frame:(CGRect)frame
+//{
+//    UIButton *linkButton = [[UIButton alloc] initWithFrame:frame];
+//    linkButton.URL = url;
+//    [linkButton addTarget:self action:@selector(linkClicked:) forControlEvents:UIControlEventTouchDown];
+//
+//    return linkButton;
+//}
+//
+//- (IBAction)linkClicked:(DTLinkButton *)sender
+//{
+//    if ([_delegate respondsToSelector:@selector(openLink:)])
+//    {
+//        [sender.URL baseURL];
+//        if (([[sender.URL host] isEqual:[[[ZulipAPIClient sharedClient] apiURL] host]])
+//            && ([[sender.URL path]  isEqual: @"/"]))
+//        {
+//            NSLog(@"FIXME: this application cannot yet open narrows");
+//        } else
+//        {
+//            [_delegate openLink:sender.URL];
+//        }
+//    }
+//}
 
 @end

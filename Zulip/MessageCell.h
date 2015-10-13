@@ -1,8 +1,5 @@
 #import <UIKit/UIKit.h>
 
-#import "DTAttributedTextContentView.h"
-#import "DTCoreText.h"
-
 #import "RawMessage.h"
 
 @protocol MessageCellDelegate <NSObject>
@@ -13,7 +10,7 @@
 @end
 
 
-@interface MessageCell : UITableViewCell <DTAttributedTextContentViewDelegate>
+@interface MessageCell : UITableViewCell <UITextViewDelegate>
 
 - (void)setMessage:(RawMessage *)message;
 - (void)willBeDisplayed;
@@ -26,7 +23,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *sender;
 @property (strong, nonatomic) IBOutlet UILabel *timestamp;
 @property (strong, nonatomic) IBOutlet UIImageView *gravatar;
-@property (strong, nonatomic) IBOutlet DTAttributedTextContentView *attributedTextView;
+@property (strong, nonatomic) IBOutlet UITextView *attributedTextView;
 
 @property (strong, nonatomic) NSString *type;
 @property (strong, nonatomic) NSString *recipient;
