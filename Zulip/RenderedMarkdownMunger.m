@@ -9,8 +9,6 @@
 #import "RenderedMarkdownMunger.h"
 #import "DTCoreText.h"
 
-#import <Crashlytics/Crashlytics.h>
-
 @implementation RenderedMarkdownMunger
 
 + (NSDictionary *)loadEmojiTable:(NSString *)file
@@ -25,7 +23,7 @@
                                                          options:0
                                                            error:&error];
     if (error) {
-        CLS_LOG(@"Failed to parse emoji JSON map");
+        NSLog(@"Failed to parse emoji JSON map");
         return @{};
     }
     return dict;
@@ -116,7 +114,7 @@
                                            options:NSRegularExpressionCaseInsensitive
                                              error:&error];
         if (error) {
-            CLS_LOG(@"Error building regex: %@", error);
+            NSLog(@"Error building regex: %@", error);
         }
     });
     if (message.munged) {

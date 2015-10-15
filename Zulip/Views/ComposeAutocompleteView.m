@@ -12,8 +12,6 @@
 #import "ZulipAppDelegate.h"
 #import "UserCell.h"
 
-#import <Crashlytics/Crashlytics.h>
-
 @interface ComposeAutocompleteView ()<UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) NSDictionary *fullNameLookupDict;
 @property (nonatomic, strong) NSSet *streamLookup;
@@ -278,7 +276,7 @@
     ZulipAppDelegate *appDelegate = (ZulipAppDelegate *)[[UIApplication sharedApplication] delegate];
     NSArray *subs = [appDelegate.managedObjectContext executeFetchRequest:req error:&error];
     if (error) {
-        CLS_LOG(@"Failed to load subscriptions from database: %@", [error localizedDescription]);
+        NSLog(@"Failed to load subscriptions from database: %@", [error localizedDescription]);
         return [NSSet set];
     }
 

@@ -28,6 +28,7 @@
 
 - (void)viewDidLoad
 {
+    [super viewDidLoad];
     // Draw a nice bottom border for the section header
     UIView *bottomBorder = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.view.bounds) - 2.0f, CGRectGetWidth(self.view.bounds), 0.5f)];
     bottomBorder.backgroundColor = [UIColor colorWithRed:(200.0f/255.0f) green:(200.0f/255.0f) blue:(200.0f/255.0f) alpha:1.0f];

@@ -15,8 +15,6 @@
 #import "AFHTTPRequestOperation.h"
 #import "AFJSONRequestOperation.h"
 
-#import <Crashlytics/Crashlytics.h>
-
 @interface LongPoller ()
 
 @property (assign) int lastEventId;
@@ -145,7 +143,7 @@
         [self start];
 
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        CLS_LOG(@"Failure doing registerWithOptions...retrying %@", [error localizedDescription]);
+        NSLog(@"Failure doing registerWithOptions...retrying %@", [error localizedDescription]);
 
         if (self.pollFailures > 5) {
             [self.appDelegate showErrorScreen:@"Unable to connect to Zulip."];
@@ -204,7 +202,7 @@
 
       [self performSelectorInBackground:@selector(longPoll) withObject: nil];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-      CLS_LOG(@"Failed to do long poll: %@", [error localizedDescription]);
+      NSLog(@"Failed to do long poll: %@", [error localizedDescription]);
 
       if (self.pollRequest == nil)  {
           // We were aborted by calling [reset], so stop the poll loop

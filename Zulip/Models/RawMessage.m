@@ -12,8 +12,6 @@
 #import "ZulipAPIController.h"
 #import "UnreadManager.h"
 
-#import <Crashlytics/Crashlytics.h>
-
 static NSString * const MessageFlagRead = @"read";
 static NSString * const MessageFlagStarred = @"starred";
 
@@ -124,7 +122,7 @@ static NSString * const MessageFlagStarred = @"starred";
             NSError *error = nil;
             [[appDelegate managedObjectContext] save:&error];
             if (error) {
-                CLS_LOG(@"Error saving flags from RawMessage to ZMessage: %@ %@", [error localizedDescription], [error userInfo]);
+                NSLog(@"Error saving flags from RawMessage to ZMessage: %@ %@", [error localizedDescription], [error userInfo]);
             }
         }
     }

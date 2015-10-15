@@ -13,7 +13,6 @@
 #import "StreamProgressView.h"
 
 #import "UIView+Layout.h"
-#import <Crashlytics/Crashlytics.h>
 
 @interface HomeViewController ()
 
@@ -97,7 +96,7 @@
                                                                     after:20
                                                             withOperators:self.operators
                                                           completionBlock:^(NSArray *newerMessages, BOOL isFinishedLoading) {
-                CLS_LOG(@"Initially loaded forward %i messages!", (int)[newerMessages count]);
+                NSLog(@"Initially loaded forward %i messages!", (int)[newerMessages count]);
                 [self loadMessages:newerMessages];
             }];
         }
@@ -201,9 +200,9 @@
 - (void)initiallyLoadedMessages
 {
     long pointer = [[ZulipAPIController sharedInstance] pointer];
-//    CLS_LOG(@"Pointer is %li and rowWithID is %i", pointer, [self rowWithId:pointer]);
+//    NSLog(@"Pointer is %li and rowWithID is %i", pointer, [self rowWithId:pointer]);
     if ([self rowWithId:(int)pointer] > -1) {
-        CLS_LOG(@"Done with initial load, scrolling to pointer");
+        NSLog(@"Done with initial load, scrolling to pointer");
         self.initiallyPopulating = NO;
         [self scrollToPointer:pointer animated:NO];
     }

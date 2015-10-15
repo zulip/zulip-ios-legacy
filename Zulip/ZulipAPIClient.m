@@ -2,8 +2,6 @@
 
 #import "AFJSONRequestOperation.h"
 
-#import <Crashlytics/Crashlytics.h>
-
 @implementation ZulipAPIClient
 
 static NSString *email = nil;
@@ -37,7 +35,7 @@ static dispatch_once_t *onceTokenPointer;
             apiURLString = @"https://api.zulip.com/v1/";
         }
 
-        CLS_LOG(@"Loading URL: %@", apiURLString);
+        NSLog(@"Loading URL: %@", apiURLString);
         NSURL *apiURL = [NSURL URLWithString:apiURLString];
         _sharedClient = [[ZulipAPIClient alloc] initWithBaseURL:apiURL];
 
@@ -86,7 +84,7 @@ static dispatch_once_t *onceTokenPointer;
             NSDictionary *json = (NSDictionary *)[(AFJSONRequestOperation *)operation responseJSON];
             NSString *errorMsg = [json objectForKey:@"msg"];
             if (errorMsg) {
-                CLS_LOG(@"Zulip API Error Message: %@", errorMsg);
+                NSLog(@"Zulip API Error Message: %@", errorMsg);
             }
         }
     };

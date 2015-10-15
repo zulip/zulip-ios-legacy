@@ -14,9 +14,6 @@
 #import "AFNetworkActivityIndicatorManager.h"
 #import "AFJSONRequestOperation.h"
 
-// Crashlytics
-#import <Crashlytics/Crashlytics.h>
-
 // JASidePanels
 #import "JASidePanelController.h"
 
@@ -50,8 +47,6 @@
 
 -(BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [Crashlytics startWithAPIKey:@"7c523eb4efdbd264d6d4a7403ee7a683b733a9bd"];
-
     [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"8568832c4be84968884d77c7a27cb6d7"];
     [[BITHockeyManager sharedHockeyManager] startManager];
     [[BITHockeyManager sharedHockeyManager].authenticator authenticateInstallation];
@@ -300,7 +295,7 @@
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
     if (![[ZulipAPIController sharedInstance] loggedIn]) {
-        CLS_LOG(@"Got APNS token before login completed, storing");
+        NSLog(@"Got APNS token before login completed, storing");
         self.cachedAPNSToken = deviceToken;
         return;
     }
@@ -310,12 +305,12 @@
     __block __weak NSString *b64 = [deviceToken base64Encoding];
 
     if (![ZulipAPIClient sharedClient] || !b64) {
-        CLS_LOG(@"Got null ZulipAPIClient (%@) or b64 device token: %@, wtf?", [ZulipAPIClient sharedClient], b64);
+        NSLog(@"Got null ZulipAPIClient (%@) or b64 device token: %@, wtf?", [ZulipAPIClient sharedClient], b64);
         return;
     }
 
     [[ZulipAPIClient sharedClient] postPath:@"users/me/apns_device_token" parameters:@{@"token": b64, @"appid": [[NSBundle mainBundle] bundleIdentifier]} success:nil failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        CLS_LOG(@"Failed to send APNS device token to Zulip servers %@ %@", [error localizedDescription], [error userInfo]);
+        NSLog(@"Failed to send APNS device token to Zulip servers %@ %@", [error localizedDescription], [error userInfo]);
     }];
 
     // Remove our token from the server when logging out
@@ -333,7 +328,7 @@
                         }
 
                         [[ZulipAPIClient sharedClient] deletePath:@"/users/me/apns_device_token" parameters:@{@"token": b64} success:nil failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                  CLS_LOG(@"Failed to delete APNS token from Zulip servers %@ %@", [error localizedDescription], [error userInfo]);
+                                  NSLog(@"Failed to delete APNS token from Zulip servers %@ %@", [error localizedDescription], [error userInfo]);
                               }];
 
                         [[NSNotificationCenter defaultCenter] removeObserver:observer name:kLogoutNotification object:nil];
@@ -342,7 +337,7 @@
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
-    CLS_LOG(@"Failed to register for remote notifications: %@ %@", [error localizedDescription], [error userInfo]);
+    NSLog(@"Failed to register for remote notifications: %@ %@", [error localizedDescription], [error userInfo]);
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
@@ -422,22 +417,22 @@
         error = nil;
         if ([[NSFileManager defaultManager] fileExistsAtPath:[storeURL path]]) {
             if (![[NSFileManager defaultManager] removeItemAtPath:[storeURL path] error:&error]) {
-                CLS_LOG(@"Failed deleting sqlite file at %@: %@, %@", [storeURL path], error, [error userInfo]);
+                NSLog(@"Failed deleting sqlite file at %@: %@, %@", [storeURL path], error, [error userInfo]);
                 abort();
             }
 
-            CLS_LOG(@"Failed to migrate, removed SQLite file and trying again");
+            NSLog(@"Failed to migrate, removed SQLite file and trying again");
         }
 
         // Try once more to open our persistent store coordinator
         [__persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error];
         if (error) {
-            CLS_LOG(@"Error initializing persistent sqlite store! %@, %@", [error localizedDescription], [error userInfo]);
+            NSLog(@"Error initializing persistent sqlite store! %@, %@", [error localizedDescription], [error userInfo]);
             abort();
         }
     }
 
-    CLS_LOG(@"SQLite URL: %@", storeURL);
+    NSLog(@"SQLite URL: %@", storeURL);
 
     return __persistentStoreCoordinator;
 }
