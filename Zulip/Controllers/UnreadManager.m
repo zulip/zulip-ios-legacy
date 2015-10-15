@@ -8,8 +8,6 @@
 
 #import "UnreadManager.h"
 
-#import <Crashlytics/Crashlytics.h>
-
 @interface UnreadManager ()
 
 @property (nonatomic, retain) NSMutableDictionary *stream_unread;
@@ -53,7 +51,7 @@ NSString * const ZUnreadCountChangeNotificationData = @"UnreadMessageCountNotifi
         } else {
             // FIXME: Send log message to server once we have a runtime
             //        logging system.
-            CLS_LOG(@"Found ZSubscription in message without name: %@", message);
+            NSLog(@"Found ZSubscription in message without name: %@", message);
         }
     } else {
         // PM

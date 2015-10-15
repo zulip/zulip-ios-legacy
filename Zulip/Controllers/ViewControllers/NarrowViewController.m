@@ -10,7 +10,6 @@
 #import "ZulipAPIController.h"
 #import "StreamComposeView.h"
 #import "StreamProgressView.h"
-#import <Crashlytics/Crashlytics.h>
 #import "UIView+Layout.h"
 
 typedef enum  {
@@ -79,7 +78,7 @@ typedef enum  {
                                                             after:0
                                                     withOperators:self.operators
                                                   completionBlock:^(NSArray *messages, BOOL isFinished) {
-      CLS_LOG(@"Initially loaded %i messages!", (int)[messages count]);
+      NSLog(@"Initially loaded %i messages!", (int)[messages count]);
 
       [self loadMessages:messages];
 
@@ -100,7 +99,7 @@ typedef enum  {
                                                                   after:20
                                                           withOperators:self.operators
                                                         completionBlock:^(NSArray *newerMessages, BOOL isFinishedLoading) {
-            CLS_LOG(@"Initially loaded forward %i messages!", (int)[newerMessages count]);
+            NSLog(@"Initially loaded forward %i messages!", (int)[newerMessages count]);
             [self loadMessages:newerMessages];
             [self newMessagesLoaded];
         }];
@@ -134,7 +133,7 @@ typedef enum  {
 {
     int rowToScroll = [self rowWithId:self.scrollMessageID];
     if (rowToScroll == -1) {
-        CLS_LOG(@"Narrow initially loaded messages but DID NOT FIND scroll-to message id %li", self.scrollMessageID);
+        NSLog(@"Narrow initially loaded messages but DID NOT FIND scroll-to message id %li", self.scrollMessageID);
         return nil;
     }
     return[NSIndexPath indexPathForRow:rowToScroll inSection:0];
@@ -153,7 +152,7 @@ typedef enum  {
                self.scrollMessageID > -1) {
         target = [self indexOfScrollToMessage:self.scrollMessageID];
     } else {
-        CLS_LOG(@"New messages loaded in narrow but BAD scroll data!");
+        NSLog(@"New messages loaded in narrow but BAD scroll data!");
         return;
     }
 
@@ -161,7 +160,7 @@ typedef enum  {
         target = [NSIndexPath indexPathForRow:[self.messages count] - 1 inSection:0];
     }
     // Scroll to desired message in the middle of the screen
-    CLS_LOG(@"Scrolling to desired row on narrow, with setting %i and target %@", self.initialScrollSetting, target);
+    NSLog(@"Scrolling to desired row on narrow, with setting %i and target %@", self.initialScrollSetting, target);
     [self.tableView scrollToRowAtIndexPath:target atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
 }
 

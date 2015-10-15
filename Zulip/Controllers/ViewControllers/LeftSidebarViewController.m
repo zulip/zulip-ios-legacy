@@ -20,7 +20,6 @@
 #import "UIColor+HexColor.h"
 
 #import <QuartzCore/QuartzCore.h>
-#import <Crashlytics/Crashlytics.h>
 
 @interface LeftSidebarViewController () <NSFetchedResultsControllerDelegate>
 
@@ -71,6 +70,7 @@
 
 - (void)viewDidLoad
 {
+    [super viewDidLoad];
     self.tableView.backgroundColor = [UIColor colorWithHexString:@"#F4F5F4" defaultColor:[UIColor whiteColor]];
 
     self.sidebarStreamsHeader = [[SidebarSectionHeader alloc] initWithTitle:@"Streams"];
@@ -102,7 +102,7 @@
     NSError *error = nil;
     [self.streamController performFetch:&error];
     if (error) {
-        CLS_LOG(@"Failed to fetch Subscriptions from core data: %@ %@", [error localizedDescription], [error userInfo]);
+        NSLog(@"Failed to fetch Subscriptions from core data: %@ %@", [error localizedDescription], [error userInfo]);
     }
 
     // Fetch user's gravatar if it's there
@@ -115,6 +115,7 @@
 
 - (void)viewDidUnload
 {
+    [super viewDidUnload];
     self.streamController = 0;
 }
 
@@ -200,7 +201,7 @@
             break;
         }
         default:
-            CLS_LOG(@"MISSING TABLE VIEW CELL!? %@", indexPath);
+            NSLog(@"MISSING TABLE VIEW CELL!? %@", indexPath);
             break;
     }
     [self configureCell:cell atIndexPath:indexPath];
@@ -298,7 +299,7 @@
             break;
         }
         default:
-            CLS_LOG(@"MISSING TABLE VIEW CELL!? %@", indexPath);
+            NSLog(@"MISSING TABLE VIEW CELL!? %@", indexPath);
     }
 }
 
@@ -348,7 +349,7 @@
             if (cell.narrow) {
                 [appDelegate narrowWithOperators:cell.narrow];
             } else {
-                CLS_LOG(@"ERROR: Trying to narrow but have a null NarrowOperators!!");
+                NSLog(@"ERROR: Trying to narrow but have a null NarrowOperators!!");
             }
         }
     } else if (indexPath.section == 3) {

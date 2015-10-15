@@ -14,7 +14,6 @@
 #import "ComposeAutocompleteView.h"
 #import "RenderedMarkdownMunger.h"
 
-#import <Crashlytics/Crashlytics.h>
 #import "UIView+Layout.h"
 
 static const CGFloat StreamComposeViewToWidth_Phone = 121.f;
@@ -279,7 +278,7 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
     }
 
     [[ZulipAPIClient sharedClient] postPath:@"messages" parameters:postFields success:nil failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        CLS_LOG(@"Error posting message: %@", [error localizedDescription]);
+        NSLog(@"Error posting message: %@", [error localizedDescription]);
     }];
 
     self.messageInput.text = @"";

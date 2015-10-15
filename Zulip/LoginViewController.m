@@ -6,8 +6,6 @@
 
 #import "BrowserViewController.h"
 #import "UIView+Layout.h"
-#import <Crashlytics/Crashlytics.h>
-#import <Crashlytics/Crashlytics.h>
 #import "MBProgressHUD.h"
 
 @interface LoginViewController ()
@@ -55,6 +53,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [super viewWillDisappear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
@@ -85,7 +84,7 @@
         if (loggedIn) {
             [self.appDelegate dismissLoginScreen];
         } else {
-            CLS_LOG(@"Failed to login!");
+            NSLog(@"Failed to login!");
             [self.email resignFirstResponder];
             [self.password resignFirstResponder];
             [self.appDelegate showErrorScreen:@"Unable to login. Please try again."];

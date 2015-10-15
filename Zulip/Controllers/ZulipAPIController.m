@@ -28,8 +28,6 @@
 // Categories
 #import "UIColor+HexColor.h"
 
-#import <Crashlytics/Crashlytics.h>
-
 // for md5
 #import <CommonCrypto/CommonDigest.h>
 
@@ -237,7 +235,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
         [[NSNotificationCenter defaultCenter] postNotification:loginNotification];
 
     } failure: ^( AFHTTPRequestOperation *operation , NSError *error ){
-        CLS_LOG(@"Failed to fetch_api_key %@", [error localizedDescription]);
+        NSLog(@"Failed to fetch_api_key %@", [error localizedDescription]);
 
         result(NO);
     }];
@@ -377,7 +375,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
     }
 
     if (_backgrounded && !backgrounded) {
-        CLS_LOG(@"Coming to the foreground!!");
+        NSLog(@"Coming to the foreground!!");
         [self loadRangesFromFile];
         [self loadUsersListFromCoreData];
     }
@@ -440,7 +438,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
     BOOL needsServerFetch = NO;
 
     if (error) {
-        CLS_LOG(@"Error fetching results from Core Data for message request! %@ %@", [error localizedDescription], [error userInfo]);
+        NSLog(@"Error fetching results from Core Data for message request! %@ %@", [error localizedDescription], [error userInfo]);
     } else {
         if ([results count] == fetchRequest.fetchLimit) {
             ZMessage *first = [results objectAtIndex:0];
@@ -449,13 +447,13 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
             RangePair *firstRange = [RangePair getCurrentRangeOf:[first.messageID intValue] inRangePairs:self.rangePairs];
             RangePair *lastRange = [RangePair getCurrentRangeOf:[last.messageID intValue] inRangePairs:self.rangePairs];
 
-            CLS_LOG(@"Got first %@ and last %@ ranges for first fetched message and last fetched message", firstRange, lastRange);
+            NSLog(@"Got first %@ and last %@ ranges for first fetched message and last fetched message", firstRange, lastRange);
 
             if (!firstRange || !lastRange || ![firstRange isEqual:lastRange]) {
-                CLS_LOG(@"Got messages across range boundaries, refetching");
+                NSLog(@"Got messages across range boundaries, refetching");
                 needsServerFetch = YES;
             } else {
-                CLS_LOG(@"No extra fetching required, using Core Data messages");
+                NSLog(@"No extra fetching required, using Core Data messages");
                 needsServerFetch = NO;
             }
         } else if (results.count == 0) {
@@ -511,7 +509,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
             });
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        CLS_LOG(@"Failed to load old messages: %@", [error localizedDescription]);
+        NSLog(@"Failed to load old messages: %@", [error localizedDescription]);
     }];
 }
 
@@ -539,7 +537,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
     }
 
     if (json && [json objectForKey:@"subscriptions"]) {
-        CLS_LOG(@"Registered for queue, pointer is %li", self.pointer);
+        NSLog(@"Registered for queue, pointer is %li", self.pointer);
         NSArray *subscriptions = [json objectForKey:@"subscriptions"];
         [self loadSubscriptionData:subscriptions];
     }
@@ -642,7 +640,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
                 NSError *error = nil;
                 NSArray *results = [self.appDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&error];
                 if (error) {
-                    CLS_LOG(@"Error fetching ZSubscriptions: %@, %@", [error localizedDescription], [error userInfo]);
+                    NSLog(@"Error fetching ZSubscriptions: %@, %@", [error localizedDescription], [error userInfo]);
                     return;
                 }
 
@@ -655,7 +653,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
                 NSError *error = nil;
                 [self.appDelegate.managedObjectContext save:&error];
                 if (error) {
-                    CLS_LOG(@"Error saving ZSubscription: %@ %@", [error localizedDescription], [error userInfo]);
+                    NSLog(@"Error saving ZSubscription: %@ %@", [error localizedDescription], [error userInfo]);
                     return;
                 }
 
@@ -707,7 +705,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
 
     self.messagesPollFailed = YES;
 
-    CLS_LOG(@"Doing messages reset");
+    NSLog(@"Doing messages reset");
     [self.appDelegate clearNarrowWithAnimation:NO];
 
     [self.homeViewController initialPopulate];
@@ -722,7 +720,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
     NSString *email = self.email;
     NSString *apiKey = self.apiKey;
 
-    CLS_LOG(@"Doing full reset");
+    NSLog(@"Doing full reset");
     [self.metadataPoller reset];
     [self logout];
 
@@ -753,7 +751,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
     NSError *error = nil;
     NSArray *messages = [[self.appDelegate managedObjectContext] executeFetchRequest:fetchRequest error:&error];
     if (error) {
-        CLS_LOG(@"Error fetching messages to update from Core Data: %@ %@", [error localizedDescription], [error userInfo]);
+        NSLog(@"Error fetching messages to update from Core Data: %@ %@", [error localizedDescription], [error userInfo]);
         return;
     }
 
@@ -796,7 +794,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
         error = nil;
         [[self.appDelegate managedObjectContext] save:&error];
         if (error) {
-            CLS_LOG(@"Failed to save flag updates: %@ %@", [error localizedDescription], [error userInfo]);
+            NSLog(@"Failed to save flag updates: %@ %@", [error localizedDescription], [error userInfo]);
         }
     }
 }
@@ -842,7 +840,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
                                        @"flag": flag,
                                        @"op": op};
                 [[ZulipAPIClient sharedClient] postPath:@"messages/flags" parameters:opts success:nil failure:^(AFHTTPRequestOperation *afop, NSError *error) {
-                    CLS_LOG(@"Failed to update message flags %@ %@", [error localizedDescription], [error userInfo]);
+                    NSLog(@"Failed to update message flags %@ %@", [error localizedDescription], [error userInfo]);
                 }];
             }
         }
@@ -862,7 +860,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
     NSError *error = NULL;
     NSArray *subs = [[self.appDelegate managedObjectContext] executeFetchRequest:req error:&error];
     if (error) {
-        CLS_LOG(@"Failed to load subscriptions from database: %@", [error localizedDescription]);
+        NSLog(@"Failed to load subscriptions from database: %@", [error localizedDescription]);
         return;
     }
 
@@ -899,7 +897,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
     for (NSString *subName in removed) {
         ZSubscription *sub = [oldSubsDict objectForKey:subName];
         if (!sub) {
-            CLS_LOG(@"Got invalid subscription that we are trying to remove!");
+            NSLog(@"Got invalid subscription that we are trying to remove!");
             NSAssert2(NO, @"Invalid subscription to remove: %@, %@", subName, oldSubsDict);
             continue;
         }
@@ -909,7 +907,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
     error = NULL;
     [[self.appDelegate managedObjectContext] save:&error];
     if (error) {
-        CLS_LOG(@"Failed to save subscription updates: %@", [error localizedDescription]);
+        NSLog(@"Failed to save subscription updates: %@", [error localizedDescription]);
     }
 }
 
@@ -952,7 +950,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
     NSError *error = nil;
     NSArray *existing = [[self.appDelegate managedObjectContext] executeFetchRequest:fetchRequest error:&error];
     if (error) {
-        CLS_LOG(@"Error fetching existing messages in insertMessages: %@ %@", [error localizedDescription], [error userInfo]);
+        NSLog(@"Error fetching existing messages in insertMessages: %@ %@", [error localizedDescription], [error userInfo]);
         return;
     }
 
@@ -1000,7 +998,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
     error = nil;
     [[self.appDelegate managedObjectContext] save:&error];
     if (error) {
-        CLS_LOG(@"Error saving new messages: %@ %@", [error localizedDescription], [error userInfo]);
+        NSLog(@"Error saving new messages: %@ %@", [error localizedDescription], [error userInfo]);
     }
 
     if ([rawMessages count] > 0) {
@@ -1088,7 +1086,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
     NSError *error = nil;
     NSArray *results = [[self.appDelegate managedObjectContext] executeFetchRequest:request error:&error];
     if (error) {
-        CLS_LOG(@"Error fetching ZUser: %@ %@", [error localizedDescription], [error userInfo]);
+        NSLog(@"Error fetching ZUser: %@ %@", [error localizedDescription], [error userInfo]);
 
         return nil;
     }
@@ -1098,7 +1096,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
         user = (ZUser *)[results objectAtIndex:0];
     } else {
         if (![personDict objectForKey:@"email"]) {
-            CLS_LOG(@"Tried to add a new person without an email?! %@", personDict);
+            NSLog(@"Tried to add a new person without an email?! %@", personDict);
             return nil;
         }
 
@@ -1121,7 +1119,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
         error = nil;
         [[self.appDelegate managedObjectContext] save:&error];
         if (error) {
-            CLS_LOG(@"Error saving ZUser: %@ %@", [error localizedDescription], [error userInfo]);
+            NSLog(@"Error saving ZUser: %@ %@", [error localizedDescription], [error userInfo]);
 
             return nil;
         }
@@ -1139,7 +1137,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
     NSError *error = nil;
     NSArray *results = [[delegate managedObjectContext] executeFetchRequest:request error:&error];
     if (error) {
-        CLS_LOG(@"Error fetching ZUserPresences: %@ %@", [error localizedDescription], [error userInfo]);
+        NSLog(@"Error fetching ZUserPresences: %@ %@", [error localizedDescription], [error userInfo]);
 
         return;
     }
@@ -1147,7 +1145,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
     ZUserPresence *zpresence = nil;
     if ([results count] > 0) {
         if ([results count] > 1) {
-            CLS_LOG(@"Found more than one email/client row for %@!", email);
+            NSLog(@"Found more than one email/client row for %@!", email);
         }
 
         zpresence = [results objectAtIndex:0];
@@ -1162,7 +1160,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
     error = nil;
     [[delegate managedObjectContext] save:&error];
     if (error) {
-        CLS_LOG(@"Error saving ZUserPresences: %@ %@", [error localizedDescription], [error userInfo]);
+        NSLog(@"Error saving ZUserPresences: %@ %@", [error localizedDescription], [error userInfo]);
     }
 
 }
@@ -1193,7 +1191,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
     NSError *error = nil;
     NSArray *results = [[self.appDelegate managedObjectContext] executeFetchRequest:fetchRequest error:&error];
     if (error) {
-        CLS_LOG(@"Failed to fetch user profile: %@ %@", [error localizedDescription], [error userInfo]);
+        NSLog(@"Failed to fetch user profile: %@ %@", [error localizedDescription], [error userInfo]);
     }
     if ([results count] > 0) {
         return [results objectAtIndex:0];
@@ -1208,7 +1206,7 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
     NSError *error = nil;
     NSArray *results = [[self.appDelegate managedObjectContext] executeFetchRequest:fetchRequest error:&error];
     if (error) {
-        CLS_LOG(@"Failed to fetch user list: %@ %@", [error localizedDescription], [error userInfo]);
+        NSLog(@"Failed to fetch user list: %@ %@", [error localizedDescription], [error userInfo]);
     }
     if ([results count] > 0) {
         for (ZUser *result in results)
@@ -1248,11 +1246,11 @@ NSString * const kPushNotificationMessagePayloadData = @"PushNotificationMessage
         NSError *error = nil;
         NSArray *results = [[self.appDelegate managedObjectContext] executeFetchRequest:request error:&error];
         if (error) {
-            CLS_LOG(@"Error fetching subscription to get color: %@, %@", [error localizedDescription], [error userInfo]);
+            NSLog(@"Error fetching subscription to get color: %@, %@", [error localizedDescription], [error userInfo]);
             color = defaultColor;
             return;
         } else if ([results count] == 0) {
-            CLS_LOG(@"Error loading stream data to fetch color, %@", name);
+            NSLog(@"Error loading stream data to fetch color, %@", name);
             color = defaultColor;
             return;
         }

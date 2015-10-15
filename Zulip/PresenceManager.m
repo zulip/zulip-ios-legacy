@@ -13,8 +13,6 @@
 #import "ZulipAppDelegate.h"
 #import "ZUserPresence.h"
 
-#import <Crashlytics/Crashlytics.h>
-
 static double POLL_INTERVAL_SECS = 50.0;
 
 @interface PresenceManager ()
@@ -96,7 +94,7 @@ static double POLL_INTERVAL_SECS = 50.0;
         [self updateUserPresences:[data objectForKey:@"presences"]];
 
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        CLS_LOG(@"Failed to send presence information: %@, %@", [error localizedDescription], [error userInfo]);
+        NSLog(@"Failed to send presence information: %@, %@", [error localizedDescription], [error userInfo]);
     }];
 
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(POLL_INTERVAL_SECS * NSEC_PER_SEC));
@@ -122,7 +120,7 @@ static double POLL_INTERVAL_SECS = 50.0;
     NSError *error = nil;
     NSArray *results = [[delegate managedObjectContext] executeFetchRequest:request error:&error];
     if (error) {
-        CLS_LOG(@"Error fetching ZUserProfiles: %@ %@", [error localizedDescription], [error userInfo]);
+        NSLog(@"Error fetching ZUserProfiles: %@ %@", [error localizedDescription], [error userInfo]);
 
         return;
     }
@@ -170,7 +168,7 @@ static double POLL_INTERVAL_SECS = 50.0;
     error = nil;
     [[delegate managedObjectContext] save:&error];
     if (error) {
-        CLS_LOG(@"Error saving ZUserPresences: %@ %@", [error localizedDescription], [error userInfo]);
+        NSLog(@"Error saving ZUserPresences: %@ %@", [error localizedDescription], [error userInfo]);
     }
 }
 

@@ -24,7 +24,6 @@
 #import "UIColor+HexColor.h"
 
 #import <QuartzCore/QuartzCore.h>
-#import <Crashlytics/Crashlytics.h>
 
 const CGFloat RightSidebarViewControllerUserCellHeight = 26.f;
 const CGFloat RightSidebarViewControllerStatusBarOffset = 15.f;
@@ -95,7 +94,7 @@ const CGFloat RightSidebarViewControllerStatusBarOffset = 15.f;
     NSError *error = nil;
     [self.userController performFetch:&error];
     if (error) {
-        CLS_LOG(@"Failed to fetch Users from core data: %@ %@", [error localizedDescription], [error userInfo]);
+        NSLog(@"Failed to fetch Users from core data: %@ %@", [error localizedDescription], [error userInfo]);
     }
 
     [self calculatePresences];
@@ -103,6 +102,7 @@ const CGFloat RightSidebarViewControllerStatusBarOffset = 15.f;
 
 - (void)viewDidUnload
 {
+    [super viewDidUnload];
     self.userController = nil;
 }
 
