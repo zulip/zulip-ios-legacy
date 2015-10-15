@@ -16,7 +16,6 @@
 		782681C91795CE08009F69F5 /* ComposeViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681C81795CE08009F69F5 /* ComposeViewController~ipad.xib */; };
 		782681CC1795D10C009F69F5 /* LoginViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782681CB1795D10C009F69F5 /* LoginViewController~ipad.xib */; };
 		7882800D17B2E5D200D5DC42 /* Zulip.css in Resources */ = {isa = PBXBuildFile; fileRef = 7882800C17B2E2F300D5DC42 /* Zulip.css */; };
-		7882F1B217BA9FE700A27601 /* libDTCoreText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7882F1A917BA9F6000A27601 /* libDTCoreText.a */; };
 		7882F1B417BA9FF300A27601 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7882F1B317BA9FF300A27601 /* libxml2.dylib */; };
 		7882F1B617BA9FFD00A27601 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7882F1B517BA9FFD00A27601 /* ImageIO.framework */; };
 		7882F1B817BAA01600A27601 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7882F1B717BAA01600A27601 /* CoreText.framework */; };
@@ -125,7 +124,6 @@
 		B3F562BE17AC30BC004B185A /* ZMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F562BD17AC30BC004B185A /* ZMessage.m */; };
 		B3F562C117AC3C65004B185A /* UnreadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F562C017AC3C65004B185A /* UnreadManager.m */; };
 		BA41F3A219CD2CAD009CF719 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA41F3A119CD2CAD009CF719 /* Crashlytics.framework */; };
-		BA41F3A619CD2EEE009CF719 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA41F3A519CD2EEE009CF719 /* Crashlytics.framework */; };
 		C31673851620DB6B00CE9FE5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673841620DB6B00CE9FE5 /* UIKit.framework */; };
 		C31673871620DB6B00CE9FE5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673861620DB6B00CE9FE5 /* Foundation.framework */; };
 		C31673891620DB6B00CE9FE5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C31673881620DB6B00CE9FE5 /* CoreGraphics.framework */; };
@@ -154,55 +152,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		7882F1A417BA9F6000A27601 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7882F19817BA9F5F00A27601 /* DTCoreText.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 1D6058910D05DD3D006BFB54;
-			remoteInfo = DemoApp;
-		};
-		7882F1A617BA9F6000A27601 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7882F19817BA9F5F00A27601 /* DTCoreText.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = A70F119B14863198009202BF;
-			remoteInfo = "Static Framework";
-		};
-		7882F1A817BA9F6000A27601 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7882F19817BA9F5F00A27601 /* DTCoreText.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = A70F11DE148632CD009202BF;
-			remoteInfo = "Static Library";
-		};
-		7882F1AA17BA9F6000A27601 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7882F19817BA9F5F00A27601 /* DTCoreText.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = A788CA681486456100E1AFD9;
-			remoteInfo = UnitTest;
-		};
-		7882F1AC17BA9F6000A27601 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7882F19817BA9F5F00A27601 /* DTCoreText.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = A7949A5814CC456000A8CCDE;
-			remoteInfo = MacUnitTest;
-		};
-		7882F1AE17BA9F6000A27601 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7882F19817BA9F5F00A27601 /* DTCoreText.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = A7F7EFCD1573603100F5A4D0;
-			remoteInfo = "Static Library (no DTFoundation)";
-		};
-		7882F1B017BA9F6000A27601 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7882F19817BA9F5F00A27601 /* DTCoreText.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = E2262DC61638331500BFDAD7;
-			remoteInfo = "Mac Framework";
-		};
 		C31673B01620DB6C00CE9FE5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C31673771620DB6A00CE9FE5 /* Project object */;
@@ -224,7 +173,6 @@
 		782681C81795CE08009F69F5 /* ComposeViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "ComposeViewController~ipad.xib"; sourceTree = "<group>"; };
 		782681CB1795D10C009F69F5 /* LoginViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "LoginViewController~ipad.xib"; sourceTree = "<group>"; };
 		7882800C17B2E2F300D5DC42 /* Zulip.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Zulip.css; sourceTree = SOURCE_ROOT; };
-		7882F19817BA9F5F00A27601 /* DTCoreText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = DTCoreText.xcodeproj; path = ThirdParty/DTCoreText/DTCoreText.xcodeproj; sourceTree = "<group>"; };
 		7882F1B317BA9FF300A27601 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		7882F1B517BA9FFD00A27601 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		7882F1B717BAA01600A27601 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
@@ -426,11 +374,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				BA41F3A219CD2CAD009CF719 /* Crashlytics.framework in Frameworks */,
-				BA41F3A619CD2EEE009CF719 /* Crashlytics.framework in Frameworks */,
 				7882F1B817BAA01600A27601 /* CoreText.framework in Frameworks */,
 				7882F1B617BA9FFD00A27601 /* ImageIO.framework in Frameworks */,
 				7882F1B417BA9FF300A27601 /* libxml2.dylib in Frameworks */,
-				7882F1B217BA9FE700A27601 /* libDTCoreText.a in Frameworks */,
 				B3F5628B17A8074C004B185A /* QuartzCore.framework in Frameworks */,
 				B3469795179ED591006D0E9B /* CoreData.framework in Frameworks */,
 				B3766D2E179DD1DF005FB0D4 /* MobileCoreServices.framework in Frameworks */,
@@ -505,28 +451,6 @@
 			name = iPhone;
 			sourceTree = "<group>";
 		};
-		7882F19717BA9EC700A27601 /* DTCoreText */ = {
-			isa = PBXGroup;
-			children = (
-				7882F19817BA9F5F00A27601 /* DTCoreText.xcodeproj */,
-			);
-			name = DTCoreText;
-			sourceTree = "<group>";
-		};
-		7882F19917BA9F5F00A27601 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				7882F1A517BA9F6000A27601 /* RTDemoApp.app */,
-				7882F1A717BA9F6000A27601 /* DTCoreText.framework */,
-				7882F1A917BA9F6000A27601 /* libDTCoreText.a */,
-				7882F1AB17BA9F6000A27601 /* UnitTest.xctest */,
-				7882F1AD17BA9F6000A27601 /* MacUnitTest.xctest */,
-				7882F1AF17BA9F6000A27601 /* libDTCoreText_no_DTFoundation.a */,
-				7882F1B117BA9F6000A27601 /* DTCoreText.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		78BE8D0D17C5100800330433 /* fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -598,7 +522,6 @@
 				51BA4F4B17F6069300BBF48C /* BrowserViewController (Copy to your App) */,
 				B3107A0717C55A0A000F248E /* MBProgressHUD */,
 				B376986E17B5857600D29D93 /* JASidePanels */,
-				7882F19717BA9EC700A27601 /* DTCoreText */,
 				B3F50D58179DADE800F9DAE4 /* AFNetworking */,
 			);
 			name = ThirdParty;
@@ -902,7 +825,6 @@
 				C316737C1620DB6B00CE9FE5 /* Sources */,
 				C316737D1620DB6B00CE9FE5 /* Frameworks */,
 				C316737E1620DB6B00CE9FE5 /* Resources */,
-				B3F50D55179DAD1A00F9DAE4 /* Run Script */,
 				0D7945DE9F934D1095A116F5 /* Copy Pods Resources */,
 				B398BE0F1A8707A3000890CE /* ShellScript */,
 			);
@@ -940,7 +862,8 @@
 		C31673771620DB6A00CE9FE5 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastTestingUpgradeCheck = 0700;
+				LastUpgradeCheck = 0700;
 				TargetAttributes = {
 					C316737F1620DB6B00CE9FE5 = {
 						DevelopmentTeam = 3LFBS647PP;
@@ -957,12 +880,6 @@
 			mainGroup = C31673751620DB6A00CE9FE5;
 			productRefGroup = C31673811620DB6B00CE9FE5 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 7882F19917BA9F5F00A27601 /* Products */;
-					ProjectRef = 7882F19817BA9F5F00A27601 /* DTCoreText.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				C316737F1620DB6B00CE9FE5 /* Zulip */,
@@ -970,58 +887,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		7882F1A517BA9F6000A27601 /* RTDemoApp.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = RTDemoApp.app;
-			remoteRef = 7882F1A417BA9F6000A27601 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		7882F1A717BA9F6000A27601 /* DTCoreText.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = DTCoreText.framework;
-			remoteRef = 7882F1A617BA9F6000A27601 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		7882F1A917BA9F6000A27601 /* libDTCoreText.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libDTCoreText.a;
-			remoteRef = 7882F1A817BA9F6000A27601 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		7882F1AB17BA9F6000A27601 /* UnitTest.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = UnitTest.xctest;
-			remoteRef = 7882F1AA17BA9F6000A27601 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		7882F1AD17BA9F6000A27601 /* MacUnitTest.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = MacUnitTest.xctest;
-			remoteRef = 7882F1AC17BA9F6000A27601 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		7882F1AF17BA9F6000A27601 /* libDTCoreText_no_DTFoundation.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libDTCoreText_no_DTFoundation.a;
-			remoteRef = 7882F1AE17BA9F6000A27601 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		7882F1B117BA9F6000A27601 /* DTCoreText.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = DTCoreText.framework;
-			remoteRef = 7882F1B017BA9F6000A27601 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		C316737E1620DB6B00CE9FE5 /* Resources */ = {
@@ -1154,20 +1019,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "FILE=\"${SRCROOT}/HockeySDK-iOS/BuildAgent\"\nif [ -f \"$FILE\" ]; then\n\"$FILE\"\nfi";
-		};
-		B3F50D55179DAD1A00F9DAE4 /* Run Script */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Run Script";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "./Crashlytics.framework/run 7c523eb4efdbd264d6d4a7403ee7a683b733a9bd";
 		};
 		C31673A81620DB6C00CE9FE5 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1307,6 +1158,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1398,6 +1250,7 @@
 					"$(inherited)",
 					"-ObjC",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.dropbox.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Zulip;
 				PROVISIONING_PROFILE = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
@@ -1462,6 +1315,7 @@
 					"$(inherited)",
 					"-ObjC",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.dropbox.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Zulip;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
@@ -1484,6 +1338,7 @@
 				GCC_PREFIX_HEADER = "Zulip/Zulip-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "ZulipTests/ZulipTests-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "Zulip.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = ZulipTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
@@ -1502,6 +1357,7 @@
 				GCC_PREFIX_HEADER = "Zulip/Zulip-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "ZulipTests/ZulipTests-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "Zulip.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = ZulipTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
