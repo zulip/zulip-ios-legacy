@@ -1,9 +1,6 @@
 [submodule "ThirdParty/MBProgressHUD"]
 	path = ThirdParty/MBProgressHUD
 	url = https://github.com/lfranchi/MBProgressHUD.git
-[submodule "ThirdParty/DTCoreText"]
-	path = ThirdParty/DTCoreText
-	url = https://github.com/zulip/DTCoreText.git
 [submodule "ThirdParty/WebViewController"]
 	path = ThirdParty/WebViewController
 	url = https://github.com/Zulip/Browser-View-Controller--iPhone-.git

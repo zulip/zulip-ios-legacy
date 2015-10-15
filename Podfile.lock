@@ -1,15 +1,29 @@
 PODS:
+  - DTCoreText (1.6.16):
+    - DTFoundation/Core (~> 1.7.5)
+    - DTFoundation/DTAnimatedGIF (~> 1.7.5)
+    - DTFoundation/DTHTMLParser (~> 1.7.5)
+    - DTFoundation/UIKit (~> 1.7.5)
+  - DTFoundation/Core (1.7.8)
+  - DTFoundation/DTAnimatedGIF (1.7.8)
+  - DTFoundation/DTHTMLParser (1.7.8):
+    - DTFoundation/Core
+  - DTFoundation/UIKit (1.7.8):
+    - DTFoundation/Core
   - FontAwesomeKit/Core (2.1.4)
   - FontAwesomeKit/FontAwesome (2.1.4):
     - FontAwesomeKit/Core
   - HockeySDK (3.6.2)
 
 DEPENDENCIES:
+  - DTCoreText
   - FontAwesomeKit/FontAwesome
   - HockeySDK
 
 SPEC CHECKSUMS:
-  FontAwesomeKit: 02d5bd328b64b22434d4970370a9e8ae32e5dbec
-  HockeySDK: bfd1f5ac75938b07499c4ac12932244b72a2e70b
+  DTCoreText: 934a16fe9ffdd169c96261721b39dc312b75713d
+  DTFoundation: 46e2b2fafe78d67febfd8d1f85fe9845a093f00e
+  FontAwesomeKit: b02e4e9bf2d12b757b924c2ad2cc3782be530636
+  HockeySDK: 51ade1aff04463137e852797d2eb4dfb2511d6a9
 
-COCOAPODS: 0.35.0
+COCOAPODS: 0.38.2
