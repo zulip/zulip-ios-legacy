@@ -3,6 +3,7 @@
 #import "ZulipAPIController.h"
 #import "ZulipAPIClient.h"
 #import "GoogleOAuthManager.h"
+#import "AboutViewController.h"
 
 #import "BrowserViewController.h"
 #import "UIView+Layout.h"
@@ -28,7 +29,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
 
     self.password.secureTextEntry = YES;
     self.appDelegate = (ZulipAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -45,6 +45,11 @@
 
     // Focus on email field.
     [self.email becomeFirstResponder];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
@@ -99,7 +104,8 @@
 
 - (IBAction) about:(id)sender
 {
-    [self.appDelegate showAboutScreen];
+    AboutViewController *about = [[AboutViewController alloc] initWithNibName:@"AboutView" bundle:nil];
+    [self.navigationController pushViewController:about animated:YES];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {

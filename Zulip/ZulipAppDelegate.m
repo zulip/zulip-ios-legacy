@@ -6,7 +6,6 @@
 #import "LeftSidebarViewController.h"
 #import "RightSidebarViewController.h"
 #import "NarrowViewController.h"
-#import "AboutViewController.h"
 #import "PresenceManager.h"
 #import "NSArray+Blocks.h"
 
@@ -80,14 +79,12 @@
     // Connect the API controller to the home view, and connect to the Zulip API
     [[ZulipAPIController sharedInstance] setHomeViewController:self.homeViewController];
 
+    [[self window] setRootViewController:self.sidePanelController];
+
     if (![[ZulipAPIController sharedInstance] loggedIn]) {
         // No credentials stored; we need to log in.
-        self.loginViewController = [[LoginViewController alloc] init];
-        self.sidePanelController.recognizesPanGesture = NO;
-        [self.navController pushViewController:self.loginViewController animated:YES];
+        [self showLoginScreen];
     }
-
-    [[self window] setRootViewController:self.sidePanelController];
 
     // Set out NSURLCache settings
     NSURLCache *URLCache = [[NSURLCache alloc] initWithMemoryCapacity:4 * 1024 * 1024 diskCapacity:20 * 1024 * 1024 diskPath:nil];
@@ -131,10 +128,18 @@
     return YES;
 }
 
+- (void)showLoginScreen
+{
+    self.loginViewController = [[LoginViewController alloc] init];
+    self.loginNavController = [[UINavigationController alloc] initWithRootViewController:self.loginViewController];
+    [self.sidePanelController presentViewController:self.loginNavController animated:YES completion:nil];
+    self.sidePanelController.recognizesPanGesture = NO;
+}
+
 - (void)dismissLoginScreen
 {
     self.sidePanelController.recognizesPanGesture = YES;
-    [self.navController popViewControllerAnimated:YES];
+    [self.sidePanelController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)showErrorScreen:(NSString *)errorMessage
@@ -142,7 +147,6 @@
     if ([self.window.subviews containsObject:self.errorViewController.view]) {
         return;
     }
-
     [self.window addSubview:self.errorViewController.view];
     self.errorViewController.errorMessage.text = errorMessage;
 }
@@ -150,12 +154,6 @@
 - (void)dismissErrorScreen
 {
     [self.errorViewController.view removeFromSuperview];
-}
-
--(void)showAboutScreen
-{
-    AboutViewController *about = [[AboutViewController alloc] initWithNibName:@"AboutView" bundle:nil];
-    [self.navController pushViewController:about animated:YES];
 }
 
 - (void)reloadCoreData

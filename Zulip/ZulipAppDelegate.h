@@ -11,6 +11,7 @@
 @property (nonatomic, retain) UIWindow *window;
 @property (nonatomic, retain) UITabBarController *tabBarController;
 @property (nonatomic, retain) UINavigationController *navController;
+@property (nonatomic, retain) UINavigationController *loginNavController;
 @property (nonatomic, retain) JASidePanelController *sidePanelController;
 @property (nonatomic, retain) LoginViewController *loginViewController;
 @property (nonatomic, retain) HomeViewController *homeViewController;
@@ -28,8 +29,8 @@
 
 - (void) showErrorScreen:(NSString *)errorMessage;
 - (void) dismissErrorScreen;
+- (void) showLoginScreen;
 - (void) dismissLoginScreen;
-- (void) showAboutScreen;
 
 // Narrowing
 - (void) narrowWithOperators:(NarrowOperators *)narrow;
