@@ -82,8 +82,10 @@ typedef enum  {
 
       [self loadMessages:messages];
 
-      if ([self.messages count] == 0)
+      if ([self.messages count] == 0) {
+          self.tableView.tableFooterView = nil;
           return;
+      }
 
       if (isFinished) {
           self.tableView.tableFooterView = nil;
