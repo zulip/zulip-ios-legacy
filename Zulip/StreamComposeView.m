@@ -76,6 +76,7 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapComposeView)];
     [self.tapHandlerShim addGestureRecognizer:tap];
     [self addSubview:self.tapHandlerShim];
+    
 
     [[NSNotificationCenter defaultCenter] addObserverForName:kLogoutNotification
                                                       object:nil
@@ -373,6 +374,9 @@ static const CGFloat StreamComposeViewInputHeight = 30.f;
     self.messageInput.layer.borderWidth = 1.f;
     self.messageInput.delegate = self;
     self.messageInput.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    UITextInputAssistantItem *inputAssistantItem = [self.messageInput inputAssistantItem];
+    inputAssistantItem.leadingBarButtonGroups = @[];
+    inputAssistantItem.trailingBarButtonGroups = @[];
 
     // iOS 6 has a weird bug where vertical alignment is off in the text
     // view because default font sizes different. This is a hacky workaround.
