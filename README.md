@@ -1,4 +1,4 @@
-The following steps may be needed to build and run Zulip iOS:
+The following steps are needed to build and run Zulip iOS:
 
 ```
 git submodule init
@@ -7,3 +7,5 @@ pod install
 
 open Zulip.xcworkspace
 ```
+
+There's a mailing for discussing Zulip on iOS: https://groups.google.com/forum/#!forum/zulip-ios
