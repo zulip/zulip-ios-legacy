@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment defaultVersion="1552" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LoginViewController">
@@ -21,11 +21,10 @@
             <subviews>
                 <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" keyboardDismissMode="interactive" translatesAutoresizingMaskIntoConstraints="NO" id="1">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <subviews>
-                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="10">
-                            <rect key="frame" x="72" y="123" width="177" height="30"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="10">
+                            <rect key="frame" x="72" y="114" width="177" height="30"/>
+                            <animations/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="177" id="9Z9-XC-pEu"/>
                             </constraints>
@@ -35,9 +34,9 @@
                                 <outlet property="delegate" destination="-1" id="67"/>
                             </connections>
                         </textField>
-                        <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="16">
-                            <rect key="frame" x="72" y="161" width="177" height="30"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="16">
+                            <rect key="frame" x="72" y="152" width="177" height="30"/>
+                            <animations/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="177" id="4A4-aH-yTc"/>
                             </constraints>
@@ -47,9 +46,9 @@
                                 <outlet property="delegate" destination="-1" id="68"/>
                             </connections>
                         </textField>
-                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="21">
-                            <rect key="frame" x="72" y="199" width="177" height="30"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="21">
+                            <rect key="frame" x="140" y="199" width="41" height="30"/>
+                            <animations/>
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                             <state key="normal" title="Login">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -58,20 +57,20 @@
                                 <action selector="login:" destination="-1" eventType="touchDown" id="62"/>
                             </connections>
                         </button>
-                        <imageView userInteractionEnabled="NO" contentMode="center" misplaced="YES" image="zulip.png" translatesAutoresizingMaskIntoConstraints="NO" id="78">
-                            <rect key="frame" x="127" y="36" width="67" height="79"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <imageView userInteractionEnabled="NO" contentMode="center" image="zulip.png" translatesAutoresizingMaskIntoConstraints="NO" id="78">
+                            <rect key="frame" x="127" y="36" width="67" height="70"/>
+                            <animations/>
                         </imageView>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Zulip" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="92">
-                            <rect key="frame" x="138" y="14" width="44" height="24"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <rect key="frame" x="138" y="14" width="45" height="24"/>
+                            <animations/>
                             <fontDescription key="fontDescription" type="system" pointSize="20"/>
                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c5I-x3-Mdy">
                             <rect key="frame" x="257" y="14" width="42" height="30"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <animations/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="30" id="EcC-mz-Vdq"/>
                                 <constraint firstAttribute="width" constant="42" id="kBw-AB-mam"/>
@@ -84,9 +83,9 @@
                                 <action selector="about:" destination="-1" eventType="touchDown" id="fpq-sZ-gv0"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tJ7-5x-cUi">
-                            <rect key="frame" x="98" y="247" width="125" height="30"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tJ7-5x-cUi">
+                            <rect key="frame" x="98" y="247" width="124" height="30"/>
+                            <animations/>
                             <state key="normal" title="Login with Google">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
@@ -95,12 +94,14 @@
                             </connections>
                         </button>
                     </subviews>
+                    <animations/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="c5I-x3-Mdy" secondAttribute="trailing" constant="21" id="1k2-aL-Eft"/>
                         <constraint firstItem="c5I-x3-Mdy" firstAttribute="top" secondItem="92" secondAttribute="top" id="2rq-W5-ZeG"/>
                         <constraint firstItem="16" firstAttribute="leading" secondItem="10" secondAttribute="leading" id="3kc-3L-vAC"/>
                         <constraint firstAttribute="centerX" secondItem="78" secondAttribute="centerX" id="Ecp-9I-UNu"/>
+                        <constraint firstItem="21" firstAttribute="top" secondItem="16" secondAttribute="bottom" constant="17" id="JNf-Ci-3Zt"/>
                         <constraint firstItem="c5I-x3-Mdy" firstAttribute="leading" secondItem="78" secondAttribute="trailing" constant="63" id="Le9-PP-ejo"/>
                         <constraint firstItem="16" firstAttribute="top" secondItem="10" secondAttribute="bottom" constant="8" symbolic="YES" id="N9w-nr-VMV"/>
                         <constraint firstItem="78" firstAttribute="top" secondItem="1" secondAttribute="top" constant="36" id="Xmr-fd-f0g"/>
@@ -114,11 +115,11 @@
                         <constraint firstAttribute="centerX" secondItem="tJ7-5x-cUi" secondAttribute="centerX" id="q7A-nh-8hJ"/>
                         <constraint firstItem="10" firstAttribute="top" secondItem="78" secondAttribute="bottom" constant="8" symbolic="YES" id="sRA-GW-1aA"/>
                         <constraint firstAttribute="centerX" secondItem="21" secondAttribute="centerX" id="u06-iI-jjg"/>
+                        <constraint firstItem="tJ7-5x-cUi" firstAttribute="top" secondItem="21" secondAttribute="bottom" constant="18" id="vm8-kV-g3E"/>
                     </constraints>
-                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                 </scrollView>
             </subviews>
+            <animations/>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="1" secondAttribute="trailing" id="YjA-DL-pAB"/>
@@ -126,10 +127,10 @@
                 <constraint firstItem="1" firstAttribute="leading" secondItem="7R3-Um-784" secondAttribute="leading" id="fHU-Eo-0HV"/>
                 <constraint firstAttribute="bottom" secondItem="1" secondAttribute="bottom" id="mQn-3J-HGk"/>
             </constraints>
-            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+            <nil key="simulatedStatusBarMetrics"/>
         </view>
     </objects>
     <resources>
-        <image name="zulip.png" width="64" height="64"/>
+        <image name="zulip.png" width="57" height="57"/>
     </resources>
 </document>
