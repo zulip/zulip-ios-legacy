@@ -356,12 +356,8 @@
         // Logout
         [[ZulipAPIController sharedInstance] logout];
 
-        LoginViewController *loginView = [[LoginViewController alloc] initWithNibName:@"LoginViewController"
-                                                                               bundle:nil];
-        [self.findSidePanelController toggleLeftPanel:self];
-
         ZulipAppDelegate *delegate = (ZulipAppDelegate *)[[UIApplication sharedApplication] delegate];
-        [[delegate navController] pushViewController:loginView animated:YES];
+        [delegate showLoginScreen];
     }
 
     // Update selected state of all rows
